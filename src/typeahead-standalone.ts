@@ -4,7 +4,7 @@
  * MIT License
  */
 
-import "./style.less";
+import './style.less';
 
 export const enum EventTrigger {
   Keyboard = 0,
@@ -37,7 +37,12 @@ export interface typeaheadSettings<T extends typeaheadItem> {
    * @param {HTMLDivElement} container - container with suggestions
    * @param {number} maxHeight - max height that can be used by typeahead
    */
-  customize?: (input: HTMLInputElement, inputRect: ClientRect | DOMRect, container: HTMLDivElement, maxHeight: number) => void;
+  customize?: (
+    input: HTMLInputElement,
+    inputRect: ClientRect | DOMRect,
+    container: HTMLDivElement,
+    maxHeight: number
+  ) => void;
   /**
    * Prevents automatic form submit when ENTER is pressed
    */
@@ -62,26 +67,25 @@ const enum Keys {
   WindowsKey = 91,
   Tab = 9,
   F1 = 112,
-  F12 = 123
+  F12 = 123,
 }
 
 export default function typeaheadStandalone<T extends typeaheadItem>(settings: typeaheadSettings<T>): typeaheadResult {
-
   // just an alias to minimize JS file size
   const doc = document;
 
-  const container: HTMLDivElement = doc.createElement("div");
+  const container: HTMLDivElement = doc.createElement('div');
   const containerStyle = container.style;
   const userAgent = navigator.userAgent;
-  const mobileFirefox = userAgent.indexOf("Firefox") !== -1 && userAgent.indexOf("Mobile") !== -1;
+  const mobileFirefox = userAgent.indexOf('Firefox') !== -1 && userAgent.indexOf('Mobile') !== -1;
   const debounceWaitMs = settings.debounceWaitMs || 0;
   const preventSubmit = settings.preventSubmit || false;
 
   // 'keyup' event will not be fired on Mobile Firefox, so we have to use 'input' event instead
-  const keyUpEventName = mobileFirefox ? "input" : "keyup";
+  const keyUpEventName = mobileFirefox ? 'input' : 'keyup';
 
   let items: T[] = [];
-  let inputValue = "";
+  let inputValue = '';
   let minLen = 2;
   const showOnFocus = settings.showOnFocus;
   let selected: T | undefined;
@@ -93,15 +97,15 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
   }
 
   if (!settings.input) {
-    throw new Error("input undefined");
+    throw new Error('input undefined');
   }
 
   const input: HTMLInputElement = settings.input;
 
-  container.className = "typeahead-standalone " + (settings.className || "");
+  container.className = 'typeahead-standalone ' + (settings.className || '');
 
   // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
-  containerStyle.position = "absolute";
+  containerStyle.position = 'absolute';
 
   /**
    * Detach the container from DOM
@@ -146,7 +150,7 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
     keypressCounter++;
 
     items = [];
-    inputValue = "";
+    inputValue = '';
     selected = undefined;
     detach();
   }
@@ -159,8 +163,8 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
       return;
     }
 
-    containerStyle.height = "auto";
-    containerStyle.width = input.offsetWidth + "px";
+    containerStyle.height = 'auto';
+    containerStyle.width = input.offsetWidth + 'px';
 
     let maxHeight = 0;
     let inputRect: ClientRect | DOMRect | undefined;
@@ -177,8 +181,8 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
       const top = inputRect.top + input.offsetHeight + scrollTop - clientTop;
       const left = inputRect.left + scrollLeft - clientLeft;
 
-      containerStyle.top = top + "px";
-      containerStyle.left = left + "px";
+      containerStyle.top = top + 'px';
+      containerStyle.left = left + 'px';
 
       maxHeight = window.innerHeight - (inputRect.top + input.offsetHeight);
 
@@ -186,10 +190,10 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
         maxHeight = 0;
       }
 
-      containerStyle.top = top + "px";
-      containerStyle.bottom = "";
-      containerStyle.left = left + "px";
-      containerStyle.maxHeight = maxHeight + "px";
+      containerStyle.top = top + 'px';
+      containerStyle.bottom = '';
+      containerStyle.left = left + 'px';
+      containerStyle.maxHeight = maxHeight + 'px';
     }
 
     // the calc method must be called twice, otherwise the calculation may be wrong on resize event (chrome browser)
@@ -205,7 +209,6 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
    * Redraw the typeahead div element with suggestions
    */
   function update(): void {
-
     // delete all children from typeahead DOM container
     while (container.firstChild) {
       container.removeChild(container.firstChild);
@@ -213,8 +216,8 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
 
     // function for rendering typeahead suggestions
     let render = function (item: T, currentValue: string): HTMLDivElement | undefined {
-      const itemElement = doc.createElement("div");
-      itemElement.textContent = item.label || "";
+      const itemElement = doc.createElement('div');
+      itemElement.textContent = item.label || '';
       return itemElement;
     };
     if (settings.render) {
@@ -223,7 +226,7 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
 
     // function to render typeahead groups
     let renderGroup = function (groupName: string, currentValue: string): HTMLDivElement | undefined {
-      const groupDiv = doc.createElement("div");
+      const groupDiv = doc.createElement('div');
       groupDiv.textContent = groupName;
       return groupDiv;
     };
@@ -232,27 +235,27 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
     }
 
     const fragment = doc.createDocumentFragment();
-    let prevGroup = "#9?$";
+    let prevGroup = '#9?$';
 
     items.forEach(function (item: T): void {
       if (item.group && item.group !== prevGroup) {
         prevGroup = item.group;
         const groupDiv = renderGroup(item.group, inputValue);
         if (groupDiv) {
-          groupDiv.className += " group";
+          groupDiv.className += ' group';
           fragment.appendChild(groupDiv);
         }
       }
       const div = render(item, inputValue);
       if (div) {
-        div.addEventListener("click", function (ev: MouseEvent): void {
+        div.addEventListener('click', function (ev: MouseEvent): void {
           settings.onSelect(item, input);
           clear();
           ev.preventDefault();
           ev.stopPropagation();
         });
         if (item === selected) {
-          div.className += " selected";
+          div.className += ' selected';
         }
         fragment.appendChild(div);
       }
@@ -260,8 +263,8 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
     container.appendChild(fragment);
     if (items.length < 1) {
       if (settings.emptyMsg) {
-        const empty = doc.createElement("div");
-        empty.className = "empty";
+        const empty = doc.createElement('div');
+        empty.className = 'empty';
         empty.textContent = settings.emptyMsg;
         container.appendChild(empty);
       } else {
@@ -297,7 +300,19 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
   function keyupEventHandler(ev: KeyboardEvent): void {
     const keyCode = ev.which || ev.keyCode || 0;
 
-    const ignore = [Keys.Up, Keys.Enter, Keys.Esc, Keys.Right, Keys.Left, Keys.Shift, Keys.Ctrl, Keys.Alt, Keys.CapsLock, Keys.WindowsKey, Keys.Tab];
+    const ignore = [
+      Keys.Up,
+      Keys.Enter,
+      Keys.Esc,
+      Keys.Right,
+      Keys.Left,
+      Keys.Shift,
+      Keys.Ctrl,
+      Keys.Alt,
+      Keys.CapsLock,
+      Keys.WindowsKey,
+      Keys.Tab,
+    ];
     for (const key of ignore) {
       if (keyCode === key) {
         return;
@@ -320,13 +335,13 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
    * Automatically move scroll bar if selected item is not visible
    */
   function updateScroll(): void {
-    const elements = container.getElementsByClassName("selected");
+    const elements = container.getElementsByClassName('selected');
     if (elements.length > 0) {
       let element = elements[0] as HTMLDivElement;
 
       // make group visible
       const previous = element.previousElementSibling as HTMLDivElement;
-      if (previous && previous.className.indexOf("group") !== -1 && !previous.previousElementSibling) {
+      if (previous && previous.className.indexOf('group') !== -1 && !previous.previousElementSibling) {
         element = previous;
       }
 
@@ -373,7 +388,7 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
       selected = items[0];
       return;
     }
-    for (let i = 0; i < (items.length - 1); i++) {
+    for (let i = 0; i < items.length - 1; i++) {
       if (selected === items[i]) {
         selected = items[i + 1];
         break;
@@ -393,9 +408,7 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
         if (!containerDisplayed || items.length < 1) {
           return;
         }
-        keyCode === Keys.Up
-          ? selectPrev()
-          : selectNext();
+        keyCode === Keys.Up ? selectPrev() : selectNext();
         update();
       }
 
@@ -435,16 +448,23 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
     const val = input.value;
     if (val.length >= minLen || trigger === EventTrigger.Focus) {
       clearDebounceTimer();
-      debounceTimer = window.setTimeout(function (): void {
-        settings.fetch(val, function (elements: T[] | false): void {
-          if (keypressCounter === savedKeypressCounter && elements) {
-            items = elements;
-            inputValue = val;
-            selected = items.length > 0 ? items[0] : undefined;
-            update();
-          }
-        }, EventTrigger.Keyboard);
-      }, trigger === EventTrigger.Keyboard ? debounceWaitMs : 0);
+      debounceTimer = window.setTimeout(
+        function (): void {
+          settings.fetch(
+            val,
+            function (elements: T[] | false): void {
+              if (keypressCounter === savedKeypressCounter && elements) {
+                items = elements;
+                inputValue = val;
+                selected = items.length > 0 ? items[0] : undefined;
+                update();
+              }
+            },
+            EventTrigger.Keyboard
+          );
+        },
+        trigger === EventTrigger.Keyboard ? debounceWaitMs : 0
+      );
     } else {
       clear();
     }
@@ -462,7 +482,7 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
   /**
    * Fixes #26: on long clicks focus will be lost and onSelect method will not be called
    */
-  container.addEventListener("mousedown", function (evt: Event) {
+  container.addEventListener('mousedown', function (evt: Event) {
     evt.stopPropagation();
     evt.preventDefault();
   });
@@ -471,31 +491,31 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
    * Fixes #30: typeahead closes when scrollbar is clicked in IE
    * See: https://stackoverflow.com/a/9210267/13172349
    */
-  container.addEventListener("focus", () => input.focus());
+  container.addEventListener('focus', () => input.focus());
 
   /**
    * This function will remove DOM elements and clear event handlers
    */
   function destroy(): void {
-    input.removeEventListener("focus", focusEventHandler);
-    input.removeEventListener("keydown", keydownEventHandler);
+    input.removeEventListener('focus', focusEventHandler);
+    input.removeEventListener('keydown', keydownEventHandler);
     input.removeEventListener(keyUpEventName, keyupEventHandler as EventListenerOrEventListenerObject);
-    input.removeEventListener("blur", blurEventHandler);
-    window.removeEventListener("resize", resizeEventHandler);
-    doc.removeEventListener("scroll", scrollEventHandler, true);
+    input.removeEventListener('blur', blurEventHandler);
+    window.removeEventListener('resize', resizeEventHandler);
+    doc.removeEventListener('scroll', scrollEventHandler, true);
     clearDebounceTimer();
     clear();
   }
 
   // setup event handlers
-  input.addEventListener("keydown", keydownEventHandler);
+  input.addEventListener('keydown', keydownEventHandler);
   input.addEventListener(keyUpEventName, keyupEventHandler as EventListenerOrEventListenerObject);
-  input.addEventListener("blur", blurEventHandler);
-  input.addEventListener("focus", focusEventHandler);
-  window.addEventListener("resize", resizeEventHandler);
-  doc.addEventListener("scroll", scrollEventHandler, true);
+  input.addEventListener('blur', blurEventHandler);
+  input.addEventListener('focus', focusEventHandler);
+  window.addEventListener('resize', resizeEventHandler);
+  doc.addEventListener('scroll', scrollEventHandler, true);
 
   return {
-    destroy
+    destroy,
   };
 }
