@@ -2,11 +2,11 @@ const path = require('path');
 
 module.exports = {
   "mode": "production",
-  "entry": "./src/typeahead.js",
+  "entry": "./src/typeahead-standalone.ts",
   "output": {
     "path": path.resolve(__dirname, "dist"),
-    "filename": "typeahead.js",
-    "library": "typeahead",
+    "filename": "typeahead-standalone.js",
+    "library": "typeahead-standalone",
     "libraryExport": "default" ,   // to export only the default fn
     "libraryTarget": "umd",
     "globalObject": "this"
@@ -15,24 +15,29 @@ module.exports = {
   "module": {
     "rules": [
       {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
         "enforce": "pre",
         "test": /\.(js|jsx)$/,
         "exclude": /node_modules/,
         "use": "eslint-loader"
       },
-      {
-        "test": /\.js$/,
-        "exclude": /node_modules/,
-        "use": {
-          "loader": "babel-loader",
-          "options": {
-            "presets": [
-              "@babel/preset-env"
-            ],
-            plugins: ["@babel/plugin-transform-runtime"],
-          }
-        }
-      },
+      // {
+      //   "test": /\.js$/,
+      //   "exclude": /node_modules/,
+      //   "use": {
+      //     "loader": "babel-loader",
+      //     "options": {
+      //       "presets": [
+      //         "@babel/preset-env"
+      //       ],
+      //       plugins: ["@babel/plugin-transform-runtime"],
+      //     }
+      //   }
+      // },
       {
         "test": /\.less$/,
         "use": [
@@ -42,5 +47,8 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  resolve: {
+    extensions: [ '.tsx', '.ts', '.js' ],
+  },
 }
