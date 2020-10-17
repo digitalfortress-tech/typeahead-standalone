@@ -6,7 +6,7 @@ module.exports = {
   "output": {
     "path": path.resolve(__dirname, "dist"),
     "filename": "typeahead-standalone.js",
-    "library": "typeahead-standalone",
+    "library": "typeaheadStandalone",
     "libraryExport": "default" ,   // to export only the default fn
     "libraryTarget": "umd",
     "globalObject": "this"

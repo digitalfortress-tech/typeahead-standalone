@@ -4,6 +4,8 @@
  * MIT License
  */
 
+import "./style.less";
+
 export const enum EventTrigger {
   Keyboard = 0,
   Focus = 1,
