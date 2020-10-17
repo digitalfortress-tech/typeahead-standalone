@@ -1,0 +1,64 @@
+{
+  "name": "typeahead-standalone",
+  "title": "typeahead-standalone",
+  "description": "A fast fully-featured standalone autocomplete library",
+  "version": "0.0.1",
+  "homepage": "https://github.com/niketpathak/typeahead-standalone",
+  "license": "MIT",
+  "scripts": {
+    "dev": "npm run server -- --mode development --progress",
+    "prod": "npm run server -- --mode production",
+    "watch": "npm run dev -- --watch",
+    "server": "webpack --hide-modules",
+    "tag": "npm version minor --no-git-tag-version && npm run prod && PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git commit -am \"$PACKAGE_VERSION release\" && git tag v$PACKAGE_VERSION",
+    "test": "echo 'Tests coming soon' && exit 0",
+    "lint": "eslint --fix ./src"
+  },
+  "author": {
+    "name": "Niket Pathak",
+    "email": "contact@niketpathak.com",
+    "url": "https://niketpathak.com"
+  },
+  "browser": "dist/typeahead-standalone.min.js",
+  "main": "dist/typeahead-standalone.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/niketpathak/typeahead-standalone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/niketpathak/typeahead-standalone/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/niketpathak/typeahead-standalone/blob/master/LICENSE"
+    }
+  ],
+  "files": [
+    "dist/"
+  ],
+  "keywords": [
+    "typeahead",
+    "autocomplete",
+    "autosuggest",
+    "search",
+    "word completion",
+    "twitter typeahead",
+    "typeahead-standalone.js"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-transform-runtime": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.6.0",
+    "eslint": "^6.8.0",
+    "eslint-loader": "^3.0.4",
+    "less": "^3.12.2",
+    "less-loader": "^5.0.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
+  }
+}
