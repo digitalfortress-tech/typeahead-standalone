@@ -176,6 +176,7 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
     // function for rendering typeahead suggestions
     let render = function (item: T, currentValue: string): HTMLDivElement | undefined {
       const itemElement = doc.createElement('div');
+      itemElement.classList.add('tt-suggestion');
       itemElement.textContent = item.label || '';
       return itemElement;
     };
@@ -201,7 +202,7 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
         prevGroup = item.group;
         const groupDiv = renderGroup(item.group, inputValue);
         if (groupDiv) {
-          groupDiv.className += ' group';
+          groupDiv.classList.add('tt-group');
           fragment.appendChild(groupDiv);
         }
       }
@@ -214,7 +215,7 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
           ev.stopPropagation();
         });
         if (item === selected) {
-          div.className += ' selected';
+          div.classList.add('selected');
         }
         fragment.appendChild(div);
       }
@@ -223,7 +224,7 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
     if (items.length < 1) {
       if (settings.emptyMsg) {
         const empty = doc.createElement('div');
-        empty.className = 'empty';
+        empty.classList.add('empty');
         empty.textContent = settings.emptyMsg;
         container.appendChild(empty);
       } else {
@@ -300,7 +301,7 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
 
       // make group visible
       const previous = element.previousElementSibling as HTMLDivElement;
-      if (previous && previous.className.indexOf('group') !== -1 && !previous.previousElementSibling) {
+      if (previous && previous.className.indexOf('tt-group') !== -1 && !previous.previousElementSibling) {
         element = previous;
       }
 

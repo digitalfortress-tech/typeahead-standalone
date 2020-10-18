@@ -1,22 +1,23 @@
 .typeahead-standalone {
-    background: white;
+    background: #fff;
     z-index: 1000;
-    font: 14px/22px "-apple-system", BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    overflow: auto;
     box-sizing: border-box;
+    overflow: auto;
     border: 1px solid rgba(50, 50, 50, 0.6);
-}
 
-.typeahead-standalone > div {
-    padding: 0 4px;
-}
+    .tt-suggestion, .tt-group {
+        padding: 0 4px;
+    }
 
-.typeahead-standalone .group {
-    background: #eee;
-}
+    .tt-suggestion {
+        &:hover:not(.group),
+        &.selected {
+            background: #55acee;
+            cursor: pointer;
+        }
+    }
 
-.typeahead-standalone > div:hover:not(.group),
-.typeahead-standalone > div.selected {
-    background: #81ca91;
-    cursor: pointer;
+    .tt-group {
+        background: #eee;
+    }
 }
