@@ -1,12 +1,11 @@
-# Typeahead-standalone.js
+# Typeahead-standalone.js [![npm version](https://badge.fury.io/js/typeahead-standalone.svg)](https://badge.fury.io/js/typeahead-standalone) [![Build Status](https://travis-ci.org/niketpathak/typeaheadStandalone.svg?branch=master)](https://travis-ci.org/niketpathak/typeaheadStandalone) ![Downloads](https://img.shields.io/npm/dt/typeahead-standalone) ![maintained](https://img.shields.io/maintenance/yes/2020) [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
 A fast fully-featured standalone autocomplete library
 
 **Typeahead-standalone.js**
 
-- is a vastly performant autocomplete library in pure Javascript
-- has **NO DEPENDENCIES** :D 
-- is a light-weight library
+- is a vastly performant blazing fast autocomplete library in pure Javascript
+- has **NO DEPENDENCIES** :D  and is a light-weight library
 - it is a highly customizable library
 - is completely free and open source
 ---
@@ -30,7 +29,7 @@ Then include the library in your App/Page.
 **As a module,** 
 ```javascript
 // using ES6 modules
-import typeaheadStandalone from 'typeahead-standalone'
+import typeahead from 'typeahead-standalone'
 
 // using CommonJS modules
 var typeahead = require("typeahead-standalone")
@@ -44,7 +43,7 @@ var typeahead = require("typeahead-standalone")
 <!-- Alternatively, you can use a CDN -->
 <script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"></script>
 ```
-The library will be available as a global object at `window.typeaheadStandalone`
+The library will be available as a global object at `window.typeahead`
 
 ## Usage
 
@@ -75,7 +74,7 @@ var colors = [
 // input element to attach to
 var input = document.getElementById("searchInput");
 
-typeaheadStandalone({
+typeahead({
     input: input,
     fetch: function(text, update) {
         text = text.toLowerCase();
@@ -108,14 +107,14 @@ You can pass the following options to `typeahead-standalone`:
 
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
-|`input`|DOM input element must be passed with this parameter and typeahead-standalone will attach itself to this field. |`-`|
+|`input`|DOM input element must be passed with this parameter and typeahead will attach itself to this field. |`-`|
 |`onSelect`|This method will be called when the user chooses an item from the suggestions. The selected item will be passed as first parameter.|`-`|
-|`minLength`|Specify the minimum length, when suggestions should appear on the screen.|`2`|
+|`minLength`|Specify the minimum length, when suggestions should appear on the screen.|`1`|
 |`emptyMsg`|The message that will be showed when there are no suggestions that match the entered value.|`undefined`|
 |`render`|This method allows you to override the rendering function. It will be called for each suggestion and the suggestion object will be passed as first parameter. The current input field value will be passed as second parameter. This function must return a DIV element or `undefined` to skip rendering.|`undefined`|
 |`renderGroup`|The same as `render`, but will be called for each group. The first parameter of the function will be the group name. The current input field value will be passed as second parameter. This function must return a `DIV` element or `undefined` to skip rendering.|`undefined`|
 |`className`|The typeahead-standalone container will have this class name if specified.|`undefined`|
-|`fetch`|This method will be called to prepare suggestions and then pass them to typeahead-standalone. The first parameter is the text in the input field. The second parameter is a callback function that must be called after suggestions are prepared with an array as parameter. If you pass `false` to the callback function, previous suggestions would be shown.|`-`|
+|`fetch`|This method will be called to prepare suggestions and then pass them to typeahead. The first parameter is the text in the input field. The second parameter is a callback function that must be called after suggestions are prepared with an array as parameter. If you pass `false` to the callback function, previous suggestions would be shown.|`-`|
 |`debounceWaitMs`|Enforces that the `fetch` function will only be called once within the specified time frame (in milliseconds) and delays execution. This prevents flooding your server with AJAX requests.|`0`|
 |`customize`|Callback for additional customization after rendering is finished. Use this function if you want to change the default position of the list of suggestions.|`undefined`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
@@ -130,8 +129,8 @@ You can pass the following options to `typeahead-standalone`:
 Destroys the typeahead instance, removes all event handlers and cleans up the DOM. Can be used once when you no more want to have suggestions.
 
 ```javascript
-var typeahead = typeaheadStandalone({ /* options */ });
-typeahead.destroy();
+var typeaheadInstance = typeahead({ /* options */ });
+typeaheadInstance.destroy();
 ```
 
 ### Contribute

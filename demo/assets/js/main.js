@@ -65,7 +65,7 @@ var colors = [
 var input = document.getElementById('searchInput');
 
 // eslint-disable-next-line no-undef
-typeaheadStandalone({
+typeahead({
   input: input,
   fetch: function (text, update) {
     text = text.toLowerCase();

@@ -8,8 +8,7 @@ import type { typeaheadItem, typeaheadResult, typeaheadSettings } from './types'
 import { EventTrigger, Keys } from './constants';
 import './style.less';
 
-export default function typeaheadStandalone<T extends typeaheadItem>(settings: typeaheadSettings<T>): typeaheadResult {
-  // just an alias to minimize JS file size
+export default function typeahead<T extends typeaheadItem>(settings: typeaheadSettings<T>): typeaheadResult {
   const doc = document;
 
   const container: HTMLDivElement = doc.createElement('div');
@@ -24,7 +23,7 @@ export default function typeaheadStandalone<T extends typeaheadItem>(settings: t
 
   let items: T[] = [];
   let inputValue = '';
-  let minLen = 2;
+  let minLen = 1;
   const showOnFocus = settings.showOnFocus;
   let selected: T | undefined;
   let keypressCounter = 0;
