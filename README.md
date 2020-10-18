@@ -4,16 +4,15 @@ A fast fully-featured standalone autocomplete library
 
 **Typeahead-standalone.js**
 
-- is a vastly performant blazing fast autocomplete library in pure Javascript
+- is a vastly performant blazing fast autocomplete library in pure javascript
 - has **NO DEPENDENCIES** :D  and is a light-weight library
 - it is a highly customizable library
 - is completely free and open source
 ---
+
 ### Demo
 
-Coming soon...
-
----
+Here is a **[Live Demo](https://typeahead.niketpathak.com/)** of **typeahead-standalone.js** in action.
 
 ## Install
 
@@ -97,7 +96,7 @@ Some basic styling is added to typeahead by default. However the UI is completel
 
 ```css
 .typeahead-standalone .tt-suggestion:hover {
-  color: red;
+  background: red;
 }
 ```
 
