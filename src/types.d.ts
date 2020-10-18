@@ -1,3 +1,5 @@
+import type { EventTrigger } from './constants';
+
 export interface typeaheadItem {
   label?: string;
   group?: string;
