@@ -17,7 +17,7 @@ Here is a **[Live Demo](https://typeahead.niketpathak.com/)** of **typeahead-sta
 ## Install
 
 ```shell script
-# you can install ad-rotator with npm
+# you can install typeahead with npm
 $ npm install --save typeahead-standalone
 
 # Alternatively you can use Yarn
@@ -95,6 +95,7 @@ Some basic styling is added to typeahead by default. However the UI is completel
 - Each group has a `tt-group` class
 
 ```css
+/* override background on hover */
 .typeahead-standalone .tt-suggestion:hover {
   background: red;
 }
