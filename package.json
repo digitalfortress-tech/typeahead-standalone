@@ -2,7 +2,7 @@
   "name": "typeahead-standalone",
   "title": "typeahead-standalone",
   "description": "A fast fully-featured standalone autocomplete library",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/niketpathak/typeahead-standalone",
   "license": "MIT",
   "scripts": {
