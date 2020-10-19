@@ -227,13 +227,13 @@ header.masthead .site-heading {
 
 header.masthead .page-heading h1,
 header.masthead .site-heading h1 {
-  font-size: 50px;
+  font-size: 25px;
   margin-top: 0;
 }
 
 header.masthead .page-heading .subheading,
 header.masthead .site-heading .subheading {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 300;
   line-height: 1.1;
   display: block;
@@ -244,7 +244,7 @@ header.masthead .site-heading .subheading {
 @media only screen and (min-width: 768px) {
   header.masthead .page-heading h1,
   header.masthead .site-heading h1 {
-    font-size: 80px;
+    font-size: 40px;
   }
 }
 
@@ -259,7 +259,7 @@ header.masthead .post-heading .subheading {
 }
 
 header.masthead .post-heading .subheading {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   margin: 10px 0 30px;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -282,7 +282,7 @@ header.masthead .post-heading .meta a {
   }
 
   header.masthead .post-heading .subheading {
-    font-size: 30px;
+    font-size: 24px;
   }
 }
 

@@ -5,7 +5,7 @@ A fast fully-featured standalone autocomplete library
 **Typeahead-standalone.js**
 
 - is a vastly performant blazing fast autocomplete library in pure javascript
-- has **NO DEPENDENCIES** :D  and is a light-weight library
+- has **NO DEPENDENCIES** :D  and is a light-weight library [![](http://img.badgesize.io/https://cdn.jsdelivr.net/npm/typeahead-standalone?compression=gzip)](https://cdn.jsdelivr.net/npm/typeahead-standalone)
 - it is a highly customizable library
 - is completely free and open source
 ---
