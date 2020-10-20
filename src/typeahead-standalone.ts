@@ -163,6 +163,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     // function to render typeahead groups
     let renderGroup = function (groupName: string, currentValue: string): HTMLDivElement | undefined {
       const groupDiv = doc.createElement('div');
+      groupDiv.classList.add('tt-group');
       groupDiv.textContent = groupName;
       return groupDiv;
     };
@@ -185,7 +186,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         prevGroup = item.group;
         const groupDiv = renderGroup(item.group, inputValue);
         if (groupDiv) {
-          groupDiv.classList.add('tt-group');
           fragment.appendChild(groupDiv);
         }
       }
@@ -198,16 +198,17 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
           ev.stopPropagation();
         });
         if (item === selected) {
-          div.classList.add('selected');
+          div.classList.add('tt-selected');
         }
         fragment.appendChild(div);
       }
     });
+
     container.appendChild(fragment);
     if (items.length < 1) {
       if (config.emptyMsg) {
         const empty = doc.createElement('div');
-        empty.classList.add('empty');
+        empty.classList.add('tt-empty');
         empty.textContent = config.emptyMsg;
         container.appendChild(empty);
       } else {
@@ -218,7 +219,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
     attach();
     updatePosition();
-
     updateScroll();
   }
 
@@ -278,7 +278,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
    * Automatically move scroll bar if selected item is not visible
    */
   function updateScroll(): void {
-    const elements = container.getElementsByClassName('selected');
+    const elements = container.getElementsByClassName('tt-selected');
     if (elements.length > 0) {
       let element = elements[0] as HTMLDivElement;
 
@@ -343,12 +343,12 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     const keyCode = ev.which || ev.keyCode || 0;
 
     if (keyCode === Keys.Up || keyCode === Keys.Down || keyCode === Keys.Esc) {
-      const containerIsDisplayed = containerDisplayed();
+      const containerVisible = containerDisplayed();
 
       if (keyCode === Keys.Esc) {
         clear();
       } else {
-        if (!containerDisplayed || items.length < 1) {
+        if (!containerVisible || items.length < 1) {
           return;
         }
         keyCode === Keys.Up ? selectPrev() : selectNext();
@@ -356,7 +356,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       }
 
       ev.preventDefault();
-      if (containerIsDisplayed) {
+      if (containerVisible) {
         ev.stopPropagation();
       }
 
