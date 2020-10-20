@@ -1,5 +1,14 @@
-# Typeahead-standalone.js [![npm version](https://badge.fury.io/js/typeahead-standalone.svg)](https://badge.fury.io/js/typeahead-standalone) [![Build Status](https://travis-ci.org/niketpathak/typeahead-standalone.svg?branch=master)](https://travis-ci.org/niketpathak/typeahead-standalone) ![Downloads](https://img.shields.io/npm/dt/typeahead-standalone) ![maintained](https://img.shields.io/maintenance/yes/2020) [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
+# Typeahead-standalone.js 
 
+[![npm version](https://img.shields.io/npm/v/typeahead-standalone.svg)](https://www.npmjs.com/package/typeahead-standalone)
+[![Build Status](https://travis-ci.org/niketpathak/typeahead-standalone.svg?branch=master)](https://travis-ci.org/niketpathak/typeahead-standalone) 
+[![code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+![Downloads](https://img.shields.io/npm/dt/typeahead-standalone) 
+![maintained](https://img.shields.io/badge/maintained-yes-blueviolet) 
+[![License](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![speed blazing](https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-9cf.svg)](https://twitter.com/acdlite/status/974390255393505280)
+
+---
 A fast fully-featured standalone autocomplete library
 
 **Typeahead-standalone.js**
@@ -39,8 +48,10 @@ var typeahead = require("typeahead-standalone");
 <!-- Include the library -->
 <script src="./node_modules/typeahead-standalone/dist/typeahead-standalone.js"></script>
 
-<!-- Alternatively, you can use a CDN -->
+<!-- Alternatively, you can use a CDN with jsdelivr -->
 <script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"></script>
+<!-- or with unpkg.com -->
+<script src="https://unpkg.com/typeahead-standalone@1.2.0/dist/typeahead-standalone.js"></script>
 ```
 The library will be available as a global object at `window.typeahead`
 
