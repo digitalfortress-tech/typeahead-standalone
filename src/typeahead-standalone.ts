@@ -29,7 +29,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   let selected: T | undefined;
   let keypressCounter = 0;
   let debounceTimer: number | undefined;
-  let onSelect: Function = NOOP;
+  let onSelect: (item: T, input: HTMLInputElement) => void = NOOP;
 
   if (!config.input) {
     throw new Error('input undefined');
@@ -173,7 +173,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
     onSelect = function (item: T, input: HTMLInputElement) {
       input.value = item.label || '';
-    }
+    };
     if (config.onSelect) {
       onSelect = config.onSelect;
     }
@@ -399,7 +399,8 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
               if (keypressCounter === savedKeypressCounter && elements) {
                 items = elements;
                 inputValue = val;
-                selected = items.length > 0 ? items[0] : undefined;
+                // select when only 1 suggestion is available, (@todo: else highlight)
+                selected = items.length === 1 ? items[0] : undefined;
                 update();
               }
             },
