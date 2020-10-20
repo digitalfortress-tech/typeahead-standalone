@@ -4,44 +4,40 @@
  * MIT License
  */
 
-import type { typeaheadItem, typeaheadResult, typeaheadSettings } from './types';
+import type { typeaheadItem, typeaheadResult, typeaheadConfig } from './types';
 import { EventTrigger, Keys } from './constants';
 import { NOOP } from './helpers';
 import './style.less';
 
-export default function typeahead<T extends typeaheadItem>(settings: typeaheadSettings<T>): typeaheadResult {
+export default function typeahead<T extends typeaheadItem>(config: typeaheadConfig<T>): typeaheadResult {
   const doc = document;
 
   const container: HTMLDivElement = doc.createElement('div');
   const containerStyle = container.style;
   const userAgent = navigator.userAgent;
   const mobileFirefox = userAgent.indexOf('Firefox') !== -1 && userAgent.indexOf('Mobile') !== -1;
-  const debounceWaitMs = settings.debounceWaitMs || 0;
-  const preventSubmit = settings.preventSubmit || false;
+  const debounceWaitMs = config.debounceWaitMs || 0;
+  const preventSubmit = config.preventSubmit || false;
+  const minLen = config.minLength || 1;
 
   // 'keyup' event will not be fired on Mobile Firefox, so we have to use 'input' event instead
   const keyUpEventName = mobileFirefox ? 'input' : 'keyup';
 
   let items: T[] = [];
   let inputValue = '';
-  let minLen = 1;
-  const showOnFocus = settings.showOnFocus;
+  const showOnFocus = config.showOnFocus;
   let selected: T | undefined;
   let keypressCounter = 0;
   let debounceTimer: number | undefined;
   let onSelect: Function = NOOP;
 
-  if (settings.minLength !== undefined) {
-    minLen = settings.minLength;
-  }
-
-  if (!settings.input) {
+  if (!config.input) {
     throw new Error('input undefined');
   }
 
-  const input: HTMLInputElement = settings.input;
+  const input: HTMLInputElement = config.input;
 
-  container.className = 'typeahead-standalone ' + (settings.className || '');
+  container.className = 'typeahead-standalone ' + (config.className || '');
 
   // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
   containerStyle.position = 'absolute';
@@ -139,8 +135,8 @@ export default function typeahead<T extends typeaheadItem>(settings: typeaheadSe
     calc();
     calc();
 
-    if (settings.customize && inputRect) {
-      settings.customize(input, inputRect, container, maxHeight);
+    if (config.customize && inputRect) {
+      config.customize(input, inputRect, container, maxHeight);
     }
   }
 
@@ -160,8 +156,8 @@ export default function typeahead<T extends typeaheadItem>(settings: typeaheadSe
       itemElement.textContent = item.label || '';
       return itemElement;
     };
-    if (settings.render) {
-      render = settings.render;
+    if (config.render) {
+      render = config.render;
     }
 
     // function to render typeahead groups
@@ -170,15 +166,15 @@ export default function typeahead<T extends typeaheadItem>(settings: typeaheadSe
       groupDiv.textContent = groupName;
       return groupDiv;
     };
-    if (settings.renderGroup) {
-      renderGroup = settings.renderGroup;
+    if (config.renderGroup) {
+      renderGroup = config.renderGroup;
     }
 
     onSelect = function (item: T, input: HTMLInputElement) {
       input.value = item.label || '';
     }
-    if (settings.onSelect) {
-      onSelect = settings.onSelect;
+    if (config.onSelect) {
+      onSelect = config.onSelect;
     }
 
     const fragment = doc.createDocumentFragment();
@@ -209,10 +205,10 @@ export default function typeahead<T extends typeaheadItem>(settings: typeaheadSe
     });
     container.appendChild(fragment);
     if (items.length < 1) {
-      if (settings.emptyMsg) {
+      if (config.emptyMsg) {
         const empty = doc.createElement('div');
         empty.classList.add('empty');
-        empty.textContent = settings.emptyMsg;
+        empty.textContent = config.emptyMsg;
         container.appendChild(empty);
       } else {
         clear();
@@ -397,7 +393,7 @@ export default function typeahead<T extends typeaheadItem>(settings: typeaheadSe
       clearDebounceTimer();
       debounceTimer = window.setTimeout(
         function (): void {
-          settings.fetch(
+          config.fetch(
             val,
             function (elements: T[] | false): void {
               if (keypressCounter === savedKeypressCounter && elements) {

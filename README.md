@@ -103,7 +103,7 @@ Some basic styling is added to typeahead by default. However the UI is completel
 
 ## Configuration
 
-You can pass the following options to `typeahead-standalone`:
+You can pass the following config options to `typeahead-standalone`:
 
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |

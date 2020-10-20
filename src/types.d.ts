@@ -5,14 +5,14 @@ export interface typeaheadItem {
   group?: string;
 }
 
-export interface typeaheadSettings<T extends typeaheadItem> {
+export interface typeaheadConfig<T extends typeaheadItem> {
   input: HTMLInputElement;
   render?: (item: T, currentValue: string) => HTMLDivElement | undefined;
   renderGroup?: (name: string, currentValue: string) => HTMLDivElement | undefined;
   className?: string;
   minLength?: number;
   emptyMsg?: string;
-  onSelect: (item: T, input: HTMLInputElement) => void;
+  onSelect?: (item: T, input: HTMLInputElement) => void;
   /**
    * Show typeahead on focus event. Focus event will ignore the `minLength` property and will always call `fetch`.
    */
