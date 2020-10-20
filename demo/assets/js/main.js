@@ -72,8 +72,5 @@ typeahead({
     // you can also use AJAX requests instead of preloaded data
     var suggestions = colors.filter((n) => n.label.toLowerCase().startsWith(text));
     update(suggestions);
-  },
-  onSelect: function (item) {
-    input.value = item.label;
-  },
+  }
 });

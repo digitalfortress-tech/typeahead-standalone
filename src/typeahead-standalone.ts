@@ -6,6 +6,7 @@
 
 import type { typeaheadItem, typeaheadResult, typeaheadSettings } from './types';
 import { EventTrigger, Keys } from './constants';
+import { NOOP } from './helpers';
 import './style.less';
 
 export default function typeahead<T extends typeaheadItem>(settings: typeaheadSettings<T>): typeaheadResult {
@@ -28,6 +29,7 @@ export default function typeahead<T extends typeaheadItem>(settings: typeaheadSe
   let selected: T | undefined;
   let keypressCounter = 0;
   let debounceTimer: number | undefined;
+  let onSelect: Function = NOOP;
 
   if (settings.minLength !== undefined) {
     minLen = settings.minLength;
@@ -172,6 +174,13 @@ export default function typeahead<T extends typeaheadItem>(settings: typeaheadSe
       renderGroup = settings.renderGroup;
     }
 
+    onSelect = function (item: T, input: HTMLInputElement) {
+      input.value = item.label || '';
+    }
+    if (settings.onSelect) {
+      onSelect = settings.onSelect;
+    }
+
     const fragment = doc.createDocumentFragment();
     let prevGroup = '#9?$';
 
@@ -187,7 +196,7 @@ export default function typeahead<T extends typeaheadItem>(settings: typeaheadSe
       const div = render(item, inputValue);
       if (div) {
         div.addEventListener('click', function (ev: MouseEvent): void {
-          settings.onSelect(item, input);
+          onSelect(item, input);
           clear();
           ev.preventDefault();
           ev.stopPropagation();
@@ -360,7 +369,7 @@ export default function typeahead<T extends typeaheadItem>(settings: typeaheadSe
 
     if (keyCode === Keys.Enter) {
       if (selected) {
-        settings.onSelect(selected, input);
+        onSelect(selected, input);
         clear();
       }
 

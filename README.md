@@ -28,10 +28,10 @@ Then include the library in your App/Page.
 **As a module,** 
 ```javascript
 // using ES6 modules
-import typeahead from 'typeahead-standalone'
+import { typeahead } from 'typeahead-standalone';
 
 // using CommonJS modules
-var typeahead = require("typeahead-standalone")
+var typeahead = require("typeahead-standalone");
 ```
 
 **In the browser context,**
@@ -90,7 +90,7 @@ typeahead({
 
 Some basic styling is added to typeahead by default. However the UI is completely upto you and is customizable to the very pixel. You can override styling using the following classes.
 
-- The container has a `typeahead-standalone` class added to it
+- The container has a `typeahead-standalone`. A custom class may be used as well. (See config option `className`)
 - Each suggestion has a `tt-suggestion` class
 - Each group has a `tt-group` class
 
@@ -108,13 +108,13 @@ You can pass the following options to `typeahead-standalone`:
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
 |`input`|DOM input element must be passed with this parameter and typeahead will attach itself to this field. |`-`|
-|`onSelect`|This method will be called when the user chooses an item from the suggestions. The selected item will be passed as first parameter.|`-`|
+|`fetch`|This method will be called to prepare suggestions and then pass them to typeahead. The first parameter is the text in the input field. The second parameter is a callback function that must be called after suggestions are prepared with an array as parameter. If you pass `false` to the callback function, previous suggestions would be shown.|`-`|
+|`onSelect`|This method will be called when the user chooses an item from the suggestions. The selected item will be passed as first parameter.|Sets labels text as input's value|
 |`minLength`|Specify the minimum length, when suggestions should appear on the screen.|`1`|
 |`emptyMsg`|The message that will be showed when there are no suggestions that match the entered value.|`undefined`|
 |`render`|This method allows you to override the rendering function. It will be called for each suggestion and the suggestion object will be passed as first parameter. The current input field value will be passed as second parameter. This function must return a DIV element or `undefined` to skip rendering.|`undefined`|
 |`renderGroup`|The same as `render`, but will be called for each group. The first parameter of the function will be the group name. The current input field value will be passed as second parameter. This function must return a `DIV` element or `undefined` to skip rendering.|`undefined`|
 |`className`|The typeahead-standalone container will have this class name if specified.|`undefined`|
-|`fetch`|This method will be called to prepare suggestions and then pass them to typeahead. The first parameter is the text in the input field. The second parameter is a callback function that must be called after suggestions are prepared with an array as parameter. If you pass `false` to the callback function, previous suggestions would be shown.|`-`|
 |`debounceWaitMs`|Enforces that the `fetch` function will only be called once within the specified time frame (in milliseconds) and delays execution. This prevents flooding your server with AJAX requests.|`0`|
 |`customize`|Callback for additional customization after rendering is finished. Use this function if you want to change the default position of the list of suggestions.|`undefined`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|

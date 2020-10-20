@@ -1,0 +1,1 @@
+export const NOOP = (...args: unknown[]): void => undefined;
