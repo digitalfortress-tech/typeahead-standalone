@@ -11,6 +11,7 @@ export interface typeaheadConfig<T extends typeaheadItem> {
   renderGroup?: (name: string, currentValue: string) => HTMLDivElement | undefined;
   className?: string;
   minLength?: number;
+  limit?: number;
   emptyMsg?: string;
   onSelect?: (item: T, input: HTMLInputElement) => void;
   /**

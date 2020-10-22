@@ -19,6 +19,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const debounceWaitMs = config.debounceWaitMs || 0;
   const preventSubmit = config.preventSubmit || false;
   const minLen = config.minLength || 1;
+  const limitSuggestions = config.limit || 5;
 
   // 'keyup' event will not be fired on Mobile Firefox, so we have to use 'input' event instead
   const keyUpEventName = mobileFirefox ? 'input' : 'keyup';
@@ -181,7 +182,10 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     const fragment = doc.createDocumentFragment();
     let prevGroup = '#9?$';
 
-    items.forEach(function (item: T): void {
+    const iterable = Array.from(new Set(items)); // remove duplicates
+
+    for (const [index, item] of iterable.entries()) {
+      if (index === limitSuggestions) break;
       if (item.group && item.group !== prevGroup) {
         prevGroup = item.group;
         const groupDiv = renderGroup(item.group, inputValue);
@@ -202,7 +206,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         }
         fragment.appendChild(div);
       }
-    });
+    }
 
     container.appendChild(fragment);
     if (items.length < 1) {
