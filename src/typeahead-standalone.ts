@@ -404,8 +404,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
               if (keypressCounter === savedKeypressCounter && elements) {
                 items = elements;
                 inputValue = val;
-                // select when only 1 suggestion is available, (@todo: else highlight)
-                selected = items.length === 1 ? items[0] : undefined;
+                selected = items.length > 0 ? items[0] : undefined;
                 update();
               }
             },
