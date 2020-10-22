@@ -84,7 +84,6 @@
             </p>
             <div class="live-examples-wrapper">
               <input type="text" id="searchInput" autocomplete="off" placeholder="Search...">
-              <!-- <a class="btn btn-success" href="./live-examples.html">Live Examples</a> -->
             </div>
           </div>
         </div>
@@ -124,6 +123,7 @@
                 var suggestions = colours.filter((n) => n.label.toLowerCase().startsWith(text));
                 update(suggestions);
               },
+              highlight: true,
             });
           </div>
         </section>

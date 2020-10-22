@@ -6,7 +6,7 @@
 
 import type { typeaheadItem, typeaheadResult, typeaheadConfig } from './types';
 import { EventTrigger, Keys } from './constants';
-import { NOOP } from './helpers';
+import { NOOP, escapeRegExp } from './helpers';
 import './style.less';
 
 export default function typeahead<T extends typeaheadItem>(config: typeaheadConfig<T>): typeaheadResult {
@@ -205,6 +205,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
           div.classList.add('tt-selected');
         }
         fragment.appendChild(div);
+        config.highlight && hightlight(div, [inputValue]);
       }
     }
 
@@ -416,6 +417,63 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     } else {
       clear();
     }
+  }
+
+  /**
+   * Highlights a given text by its pattern
+   * @param Elm The container element
+   * @param pattern the string to highlight
+   */
+  function hightlight(Elm: HTMLElement, pattern: string[]) {
+    const getRegex = function (patterns: string[], wordsOnly: boolean) {
+      const escapedPatterns = [];
+
+      for (let i = 0, len = patterns.length; i < len; i++) {
+        const escapedWord = escapeRegExp(patterns[i]);
+        // @todo: add support diacritic insensitivity
+        // if (diacriticInsensitive) {
+        //   escapedWord = escapedWord.replace(/\S/g, accent_replacer);
+        // }
+        escapedPatterns.push(escapedWord);
+      }
+      const regexStr = wordsOnly ? '\\b(' + escapedPatterns.join('|') + ')\\b' : '(' + escapedPatterns.join('|') + ')';
+      return new RegExp(regexStr, 'i');
+    };
+
+    const hightlightTextNode = function (textNode: Text) {
+      const match = regex.exec(textNode.data);
+
+      const wrapperNode = doc.createElement('span');
+      wrapperNode.className = 'tt-highlight';
+
+      if (match) {
+        const patternNode = textNode.splitText(match.index);
+        patternNode.splitText(match[0].length);
+        wrapperNode.appendChild(patternNode.cloneNode(true));
+
+        textNode && textNode.parentNode && textNode.parentNode.replaceChild(wrapperNode, patternNode);
+      }
+
+      return !!match;
+    };
+
+    const traverse = function (el: HTMLElement | ChildNode, hightlightTextNode: (textNode: Text) => boolean) {
+      const TEXT_NODE_TYPE = 3;
+      let childNode;
+
+      for (let i = 0; i < el.childNodes.length; i++) {
+        childNode = el.childNodes[i];
+
+        if (childNode.nodeType === TEXT_NODE_TYPE) {
+          i += hightlightTextNode(childNode as Text) ? 1 : 0;
+        } else {
+          traverse(childNode, hightlightTextNode);
+        }
+      }
+    };
+
+    const regex = getRegex(pattern, false);
+    traverse(Elm, hightlightTextNode);
   }
 
   function blurEventHandler(): void {

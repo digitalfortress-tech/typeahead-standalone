@@ -124,6 +124,7 @@ You can pass the following config options to `typeahead-standalone`:
 |`onSelect`|This method will be called when the user chooses an item from the suggestions. The selected item will be passed as first parameter.|Sets labels text as input's value|
 |`minLength`|Specify the minimum length, when suggestions should appear on the screen.|`1`|
 |`limit`|Specify the maximum number of suggestions that should be displayed.|`5`|
+|`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is also added to facilitate styling|`undefined`|
 |`emptyMsg`|The message that will be showed when there are no suggestions that match the entered value.|`undefined`|
 |`render`|This method allows you to override the rendering function. It will be called for each suggestion and the suggestion object will be passed as first parameter. The current input field value will be passed as second parameter. This function must return a DIV element or `undefined` to skip rendering.|`undefined`|
 |`renderGroup`|The same as `render`, but will be called for each group. The first parameter of the function will be the group name. The current input field value will be passed as second parameter. This function must return a `DIV` element or `undefined` to skip rendering.|`undefined`|

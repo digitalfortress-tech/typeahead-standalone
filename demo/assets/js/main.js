@@ -47,6 +47,7 @@ var colors = [
   { label: 'Red', value: 'RD' },
   { label: 'Blue', value: 'BL', group: 'Shades of Blue' },
   { label: 'Blue Dark', value: 'DBL', group: 'Shades of Blue' },
+  { label: 'Blue Darker', value: 'DBL', group: 'Shades of Blue' },
   { label: 'Blue Light', value: 'LBL', group: 'Shades of Blue' },
   { label: 'Blue Extra Light', value: 'XLBL', group: 'Shades of Blue' },
   { label: 'Yellow', value: 'YW' },
@@ -72,5 +73,6 @@ typeahead({
     // you can also use AJAX requests instead of preloaded data
     var suggestions = colors.filter((n) => n.label.toLowerCase().startsWith(text));
     update(suggestions);
-  }
+  },
+  highlight: true,
 });

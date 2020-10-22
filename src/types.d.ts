@@ -12,6 +12,7 @@ export interface typeaheadConfig<T extends typeaheadItem> {
   className?: string;
   minLength?: number;
   limit?: number;
+  highlight?: boolean;
   emptyMsg?: string;
   onSelect?: (item: T, input: HTMLInputElement) => void;
   /**
