@@ -101,7 +101,7 @@ typeahead({
 
 Some basic styling is added to typeahead by default. However the UI is completely upto you and is customizable to the very pixel. You can override styling using the following classes.
 
-- The container has a `typeahead-standalone`. A custom class may be used as well. (See config option `className`)
+- The container has a class `typeahead-standalone`. A custom class may be used as well. (See config option `className`)
 - Each suggestion has a `tt-suggestion` class
 - Each selected suggestion has a `tt-selected` class
 - Each group has a `tt-group` class
