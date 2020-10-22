@@ -205,9 +205,11 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
           div.classList.add('tt-selected');
         }
         fragment.appendChild(div);
-        config.highlight && hightlight(div, [inputValue]);
       }
     }
+
+    // highlight matched text
+    config.highlight && hightlight(container, [inputValue]);
 
     container.appendChild(fragment);
     if (items.length < 1) {
