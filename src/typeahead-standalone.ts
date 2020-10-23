@@ -207,7 +207,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         fragment.appendChild(div);
 
         // highlight matched text
-        config.highlight && hightlight(div, [inputValue]);
+        config.highlight && hightlight(div, inputValue.split(' '));
       }
     }
 
@@ -405,7 +405,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
             function (elements: T[] | false): void {
               if (keypressCounter === savedKeypressCounter && elements) {
                 items = elements;
-                inputValue = val;
+                inputValue = val.replace(/\s{2,}/g, ' ').trim();
                 selected = items.length > 0 ? items[0] : undefined;
                 update();
               }
