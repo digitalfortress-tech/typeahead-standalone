@@ -1,7 +1,7 @@
 import type { EventTrigger } from './constants';
 
 export interface typeaheadItem {
-  label?: string;
+  label: string;
   group?: string;
 }
 
@@ -12,6 +12,7 @@ export interface typeaheadConfig<T extends typeaheadItem> {
   className?: string;
   minLength?: number;
   limit?: number;
+  hint?: boolean;
   highlight?: boolean;
   emptyMsg?: string;
   onSelect?: (item: T, input: HTMLInputElement) => void;

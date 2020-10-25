@@ -24,3 +24,21 @@
         background: #eee;
     }
 }
+
+.typeahead-standalone-input {
+    position: relative;
+    .tt-input {
+        z-index: 1;
+        background: transparent;
+        position: relative;
+    }
+    .tt-hint {
+        position: absolute;
+        left: 0;
+        cursor: default;
+        user-select: none;
+        background: #fff;
+        color: silver;
+        z-index: 0;
+    }
+}

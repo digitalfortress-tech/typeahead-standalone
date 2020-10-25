@@ -92,16 +92,17 @@ typeahead({
         var suggestions = colors.filter(n => n.label.toLowerCase().startsWith(text))
         update(suggestions);
     },
-    onSelect: function(item) {
-        input.value = item.label;
-    }
+    // onSelect: function(item) {
+    //     input.value = item.label;
+    // }
 });
 ```
 #### Styling (css)
 
 Some basic styling is added to typeahead by default. However the UI is completely upto you and is customizable to the very pixel. You can override styling using the following classes.
 
-- The container has a class `typeahead-standalone`. A custom class may be used as well. (See config option `className`)
+- The input is wrapped in a container with a class `typeahead-standalone-input`. It contains the original input element that gets an additional class `tt-input`)
+- The container of the list of suggestions has a class `typeahead-standalone`. A custom class may be used in addition. (See config option `className`)
 - Each suggestion has a `tt-suggestion` class
 - Each selected suggestion has a `tt-selected` class
 - Each group has a `tt-group` class
@@ -124,7 +125,8 @@ You can pass the following config options to `typeahead-standalone`:
 |`onSelect`|This method will be called when the user chooses an item from the suggestions. The selected item will be passed as first parameter.|Sets labels text as input's value|
 |`minLength`|Specify the minimum length, when suggestions should appear on the screen.|`1`|
 |`limit`|Specify the maximum number of suggestions that should be displayed.|`5`|
-|`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is also added to facilitate styling|`undefined`|
+|`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is added to facilitate styling|`undefined`|
+|`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
 |`emptyMsg`|The message that will be showed when there are no suggestions that match the entered value.|`undefined`|
 |`render`|This method allows you to override the rendering function. It will be called for each suggestion and the suggestion object will be passed as first parameter. The current input field value will be passed as second parameter. This function must return a DIV element or `undefined` to skip rendering.|`undefined`|
 |`renderGroup`|The same as `render`, but will be called for each group. The first parameter of the function will be the group name. The current input field value will be passed as second parameter. This function must return a `DIV` element or `undefined` to skip rendering.|`undefined`|

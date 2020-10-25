@@ -20,6 +20,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const preventSubmit = config.preventSubmit || false;
   const minLen = config.minLength || 1;
   const limitSuggestions = config.limit || 5;
+  const hint = config.hint === false ? false : true;
 
   // 'keyup' event will not be fired on Mobile Firefox, so we have to use 'input' event instead
   const keyUpEventName = mobileFirefox ? 'input' : 'keyup';
@@ -36,7 +37,23 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     throw new Error('input undefined');
   }
 
-  const input: HTMLInputElement = config.input;
+  let input: HTMLInputElement = config.input;
+
+  // wrap input in a div
+  const inputWrapper: HTMLSpanElement = doc.createElement('span');
+  inputWrapper.classList.add('typeahead-standalone-input');
+
+  const inputClone: HTMLElement = input.cloneNode(true) as HTMLElement;
+  inputClone.classList.add('tt-input');
+
+  inputWrapper.appendChild(inputClone);
+
+  input.replaceWith(inputWrapper);
+  input = inputWrapper.firstChild as HTMLInputElement;
+
+  // generate markup for hints
+  const inputHint: HTMLInputElement = input.cloneNode() as HTMLInputElement;
+  injectHintEl(inputHint);
 
   container.className = 'typeahead-standalone ' + (config.className || '');
 
@@ -87,6 +104,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
     items = [];
     inputValue = '';
+    inputHint.value = '';
     selected = undefined;
     detach();
   }
@@ -203,6 +221,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         });
         if (item === selected) {
           div.classList.add('tt-selected');
+          hint && updateHint(item);
         }
         fragment.appendChild(div);
 
@@ -395,7 +414,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     // saved and checked before redraw our typeahead box.
     const savedKeypressCounter = ++keypressCounter;
 
-    const val = input.value;
+    const val = input.value.replace(/\s{2,}/g, ' ').trim();
     if (val.length >= minLen || trigger === EventTrigger.Focus) {
       clearDebounceTimer();
       debounceTimer = window.setTimeout(
@@ -405,7 +424,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
             function (elements: T[] | false): void {
               if (keypressCounter === savedKeypressCounter && elements) {
                 items = elements;
-                inputValue = val.replace(/\s{2,}/g, ' ').trim();
+                inputValue = val;
                 selected = items.length > 0 ? items[0] : undefined;
                 update();
               }
@@ -475,6 +494,36 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
     const regex = getRegex(pattern, false);
     traverse(Elm, hightlightTextNode);
+  }
+
+  /**
+   * injects Hint input element into the DOM
+   * @param inputHint the input hint element
+   */
+  function injectHintEl(inputHint: HTMLInputElement) {
+    inputHint.removeAttribute('id');
+    inputHint.removeAttribute('placeholder');
+    inputHint.setAttribute('readonly', 'true');
+    inputHint.tabIndex = -1;
+    inputHint.classList.add('tt-hint');
+    inputHint.classList.remove('tt-input');
+
+    input.after(inputHint);
+  }
+
+  /**
+   * Updates the value of hint
+   * @param selectedItem The selected item
+   */
+  function updateHint(selectedItem: T) {
+    const rawInput = input.value;
+
+    // if last char is a space, hide the hint
+    if (' ' === rawInput.split('').pop()) {
+      inputHint.value = '';
+    } else {
+      inputHint.value = (rawInput + selectedItem.label.replace(new RegExp(inputValue, 'i'), '')) as string;
+    }
   }
 
   function blurEventHandler(): void {
