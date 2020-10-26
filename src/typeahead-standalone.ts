@@ -365,15 +365,23 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       return;
     }
 
-    if (keyCode === Keys.Enter) {
+    const useSelectedValue = function () {
       if (selected) {
         onSelect(selected, input);
         clear();
       }
+    };
 
-      if (preventSubmit) {
-        ev.preventDefault();
-      }
+    if (keyCode === Keys.Enter) {
+      useSelectedValue();
+      preventSubmit && ev.preventDefault();
+
+      return;
+    }
+
+    if (keyCode === Keys.Tab && containerDisplayed()) {
+      ev.preventDefault();
+      useSelectedValue();
     }
   }
 
