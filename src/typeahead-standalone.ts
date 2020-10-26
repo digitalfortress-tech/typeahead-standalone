@@ -39,23 +39,23 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   let input: HTMLInputElement = config.input;
 
-  // wrap input in a div
-  const inputWrapper: HTMLSpanElement = doc.createElement('span');
-  inputWrapper.classList.add('typeahead-standalone-input');
+  // create a wrapping div
+  const wrapper: HTMLSpanElement = doc.createElement('span');
+  wrapper.classList.add('typeahead-standalone');
 
   const inputClone: HTMLElement = input.cloneNode(true) as HTMLElement;
   inputClone.classList.add('tt-input');
 
-  inputWrapper.appendChild(inputClone);
+  wrapper.appendChild(inputClone);
 
-  input.replaceWith(inputWrapper);
-  input = inputWrapper.firstChild as HTMLInputElement;
+  input.replaceWith(wrapper);
+  input = wrapper.firstChild as HTMLInputElement;
 
   // generate markup for hints
   const inputHint: HTMLInputElement = input.cloneNode() as HTMLInputElement;
   injectHintEl(inputHint);
 
-  container.className = 'typeahead-standalone-list ' + (config.className || '');
+  container.className = 'tt-list ' + (config.className || '');
 
   // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
   containerStyle.position = 'absolute';
@@ -84,7 +84,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
    */
   function attach(): void {
     if (!container.parentNode) {
-      doc.body.appendChild(container);
+      wrapper.appendChild(container);
     }
   }
 
@@ -117,45 +117,14 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       return;
     }
 
-    containerStyle.height = 'auto';
-    containerStyle.width = input.offsetWidth + 'px';
+    containerStyle.width = `${input.offsetWidth}px`;
+    containerStyle.top = `${input.clientHeight}px`;
+    containerStyle.left = '0';
 
-    let maxHeight = 0;
-    let inputRect: ClientRect | DOMRect | undefined;
-
-    function calc() {
-      const docEl = doc.documentElement as HTMLElement;
-      const clientTop = docEl.clientTop || doc.body.clientTop || 0;
-      const clientLeft = docEl.clientLeft || doc.body.clientLeft || 0;
-      const scrollTop = window.pageYOffset || docEl.scrollTop;
-      const scrollLeft = window.pageXOffset || docEl.scrollLeft;
-
-      inputRect = input.getBoundingClientRect();
-
-      const top = inputRect.top + input.offsetHeight + scrollTop - clientTop;
-      const left = inputRect.left + scrollLeft - clientLeft;
-
-      containerStyle.top = top + 'px';
-      containerStyle.left = left + 'px';
-
-      maxHeight = window.innerHeight - (inputRect.top + input.offsetHeight);
-
-      if (maxHeight < 0) {
-        maxHeight = 0;
-      }
-
-      containerStyle.top = top + 'px';
-      containerStyle.bottom = '';
-      containerStyle.left = left + 'px';
-      containerStyle.maxHeight = maxHeight + 'px';
-    }
-
-    // the calc method must be called twice, otherwise the calculation may be wrong on resize event (chrome browser)
-    calc();
-    calc();
-
-    if (config.customize && inputRect) {
-      config.customize(input, inputRect, container, maxHeight);
+    if (config.customize) {
+      const inputRect: ClientRect | DOMRect | undefined = input.getBoundingClientRect();
+      const maxHeight = window.innerHeight - (inputRect.top + input.offsetHeight);
+      config.customize(input, inputRect, container, maxHeight < 0 ? 0 : maxHeight);
     }
   }
 
@@ -165,7 +134,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   function update(): void {
     // delete all children from typeahead DOM container
     while (container.firstChild) {
-      container.removeChild(container.firstChild);
+      container.firstChild.remove();
     }
 
     // function for rendering typeahead suggestions

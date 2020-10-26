@@ -1,32 +1,8 @@
-.typeahead-standalone-list {
-    background: #fff;
-    z-index: 1000;
-    box-sizing: border-box;
-    overflow: auto;
-    border: 1px solid rgba(50, 50, 50, 0.6);
-
-    .tt-suggestion, .tt-group {
-        padding: 0 4px;
-    }
-
-    .tt-suggestion {
-        &:hover:not(.group),
-        &.tt-selected {
-            background: #55acee;
-            cursor: pointer;
-        }
-        .tt-highlight {
-            font-weight: 900;
-        }
-    }
-
-    .tt-group {
-        background: #eee;
-    }
-}
-
-.typeahead-standalone-input {
+.typeahead-standalone {
     position: relative;
+    text-align: left;
+    color: #000;
+
     .tt-input {
         z-index: 1;
         background: transparent;
@@ -40,5 +16,31 @@
         background: #fff;
         color: silver;
         z-index: 0;
+    }
+    .tt-list {
+        background: #fff;
+        z-index: 1000;
+        box-sizing: border-box;
+        overflow: auto;
+        border: 1px solid rgba(50, 50, 50, 0.6);
+
+        .tt-suggestion, .tt-group {
+            padding: 0 4px;
+        }
+
+        .tt-suggestion {
+            &:hover:not(.group),
+            &.tt-selected {
+                background: #55acee;
+                cursor: pointer;
+            }
+            .tt-highlight {
+                font-weight: 900;
+            }
+        }
+
+        .tt-group {
+            background: #eee;
+        }
     }
 }
