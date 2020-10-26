@@ -227,11 +227,18 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     updateIfDisplayed();
   }
 
+  let ticking = false; // to improve scroll perf
   function scrollEventHandler(e: Event): void {
-    if (e.target !== container) {
-      updateIfDisplayed();
-    } else {
-      e.preventDefault();
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (e.target !== container) {
+          updateIfDisplayed();
+        } else {
+          e.preventDefault();
+        }
+        ticking = false;
+      });
+      ticking = true;
     }
   }
 
