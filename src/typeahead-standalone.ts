@@ -342,6 +342,12 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   function keydownEventHandler(ev: KeyboardEvent): void {
+    // if raw input is empty, clear out everything
+    if (!input.value.length) {
+      clear();
+      return;
+    }
+
     const keyCode = ev.which || ev.keyCode || 0;
 
     if (keyCode === Keys.Up || keyCode === Keys.Down || keyCode === Keys.Esc) {
