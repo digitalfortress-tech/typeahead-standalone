@@ -55,7 +55,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const inputHint: HTMLInputElement = input.cloneNode() as HTMLInputElement;
   injectHintEl(inputHint);
 
-  container.className = 'typeahead-standalone ' + (config.className || '');
+  container.className = 'typeahead-standalone-list ' + (config.className || '');
 
   // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
   containerStyle.position = 'absolute';
