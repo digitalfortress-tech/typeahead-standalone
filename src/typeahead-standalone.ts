@@ -120,12 +120,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     containerStyle.width = `${input.offsetWidth}px`;
     containerStyle.top = `${input.clientHeight}px`;
     containerStyle.left = '0';
-
-    if (config.customize) {
-      const inputRect: ClientRect | DOMRect | undefined = input.getBoundingClientRect();
-      const maxHeight = window.innerHeight - (inputRect.top + input.offsetHeight);
-      config.customize(input, inputRect, container, maxHeight < 0 ? 0 : maxHeight);
-    }
   }
 
   /**

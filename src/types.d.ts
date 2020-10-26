@@ -23,19 +23,6 @@ export interface typeaheadConfig<T extends typeaheadItem> {
   fetch: (text: string, update: (items: T[] | false) => void, trigger: EventTrigger) => void;
   debounceWaitMs?: number;
   /**
-   * Callback for additional typeahead customization
-   * @param {HTMLInputElement} input - input box associated with typeahead
-   * @param {ClientRect | DOMRect} inputRect - size of the input box and its position relative to the viewport
-   * @param {HTMLDivElement} container - container with suggestions
-   * @param {number} maxHeight - max height that can be used by typeahead
-   */
-  customize?: (
-    input: HTMLInputElement,
-    inputRect: ClientRect | DOMRect,
-    container: HTMLDivElement,
-    maxHeight: number
-  ) => void;
-  /**
    * Prevents automatic form submit when ENTER is pressed
    */
   preventSubmit?: boolean;

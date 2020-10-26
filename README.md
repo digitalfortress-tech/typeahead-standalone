@@ -133,7 +133,6 @@ You can pass the following config options to `typeahead-standalone`:
 |`renderGroup`|The same as `render`, but will be called for each group. The first parameter of the function will be the group name. The current input field value will be passed as second parameter. This function must return a `DIV` element or `undefined` to skip rendering.|`undefined`|
 |`className`|The typeahead-standalone container will have this class name if specified.|`undefined`|
 |`debounceWaitMs`|Enforces that the `fetch` function will only be called once within the specified time frame (in milliseconds) and delays execution. This prevents flooding your server with AJAX requests.|`0`|
-|`customize`|Callback for additional customization after rendering is finished. Use this function if you want to change the default position of the list of suggestions.|`undefined`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
 |`showOnFocus`|Displays suggestions on focus of the input element. Note that if `true`, the minLength property will be ignored and it will always call `fetch`.|`false`|
 
