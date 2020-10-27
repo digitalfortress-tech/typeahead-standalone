@@ -211,16 +211,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     updateScroll();
   }
 
-  function updateIfDisplayed(): void {
-    if (containerDisplayed()) {
-      update();
-    }
-  }
-
-  function resizeEventHandler(): void {
-    updateIfDisplayed();
-  }
-
   function keyupEventHandler(ev: KeyboardEvent): void {
     const keyCode = ev.which || ev.keyCode || 0;
 
@@ -526,7 +516,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     input.removeEventListener('keydown', keydownEventHandler);
     input.removeEventListener(keyUpEventName, keyupEventHandler as EventListenerOrEventListenerObject);
     input.removeEventListener('blur', blurEventHandler);
-    window.removeEventListener('resize', resizeEventHandler);
     clearDebounceTimer();
     clear();
   }
@@ -536,7 +525,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   input.addEventListener(keyUpEventName, keyupEventHandler as EventListenerOrEventListenerObject);
   input.addEventListener('blur', blurEventHandler);
   input.addEventListener('focus', focusEventHandler);
-  window.addEventListener('resize', resizeEventHandler);
 
   return {
     destroy,
