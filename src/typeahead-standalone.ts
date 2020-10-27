@@ -221,21 +221,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     updateIfDisplayed();
   }
 
-  let ticking = false; // to improve scroll perf
-  function scrollEventHandler(e: Event): void {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        if (e.target !== container) {
-          updateIfDisplayed();
-        } else {
-          e.preventDefault();
-        }
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }
-
   function keyupEventHandler(ev: KeyboardEvent): void {
     const keyCode = ev.which || ev.keyCode || 0;
 
@@ -542,7 +527,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     input.removeEventListener(keyUpEventName, keyupEventHandler as EventListenerOrEventListenerObject);
     input.removeEventListener('blur', blurEventHandler);
     window.removeEventListener('resize', resizeEventHandler);
-    doc.removeEventListener('scroll', scrollEventHandler, true);
     clearDebounceTimer();
     clear();
   }
@@ -553,7 +537,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   input.addEventListener('blur', blurEventHandler);
   input.addEventListener('focus', focusEventHandler);
   window.addEventListener('resize', resizeEventHandler);
-  doc.addEventListener('scroll', scrollEventHandler, true);
 
   return {
     destroy,
