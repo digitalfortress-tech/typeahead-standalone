@@ -361,7 +361,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   function focusEventHandler(): void {
-    if (showOnFocus) {
+    if (showOnFocus && input.value.trim().length) {
       startFetch(EventTrigger.Focus);
     }
   }
