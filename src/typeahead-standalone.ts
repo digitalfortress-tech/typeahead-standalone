@@ -27,7 +27,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   let items: T[] = [];
   let inputValue = '';
-  const showOnFocus = config.showOnFocus;
   let selected: T | undefined;
   let keypressCounter = 0;
   let debounceTimer: number | undefined;
@@ -118,7 +117,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     }
 
     containerStyle.width = `${input.offsetWidth}px`;
-    containerStyle.top = `${input.clientHeight}px`;
+    containerStyle.top = `${input.clientHeight}px`; // or top: '100%'
     containerStyle.left = '0';
   }
 
@@ -361,9 +360,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   function focusEventHandler(): void {
-    if (showOnFocus && input.value.trim().length) {
-      startFetch(EventTrigger.Focus);
-    }
+    startFetch(EventTrigger.Focus);
   }
 
   function startFetch(trigger: EventTrigger) {
@@ -374,7 +371,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     const savedKeypressCounter = ++keypressCounter;
 
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
-    if (val.length >= minLen || trigger === EventTrigger.Focus) {
+    if (val.length >= minLen) {
       clearDebounceTimer();
       debounceTimer = window.setTimeout(
         function (): void {
@@ -491,7 +488,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       if (doc.activeElement !== input) {
         clear();
       }
-    }, 200);
+    }, 50);
   }
 
   /**

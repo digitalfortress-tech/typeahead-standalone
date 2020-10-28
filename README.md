@@ -134,7 +134,8 @@ You can pass the following config options to `typeahead-standalone`:
 |`className`|The typeahead-standalone container will have this class name if specified.|`undefined`|
 |`debounceWaitMs`|Enforces that the `fetch` function will only be called once within the specified time frame (in milliseconds) and delays execution. This prevents flooding your server with AJAX requests.|`0`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
-|`showOnFocus`|Displays suggestions on focus of the input element. Note that if `true`, the minLength property will be ignored and it will always call `fetch`.|`false`|
+
+---
 
 ### API
 
