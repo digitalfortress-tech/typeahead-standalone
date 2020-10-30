@@ -132,7 +132,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     }
 
     // function for rendering typeahead suggestions
-    let render = function (item: T, currentValue: string): HTMLDivElement | undefined {
+    const render = function (item: T): HTMLDivElement | undefined {
       const itemElement = doc.createElement('div');
       itemElement.classList.add('tt-suggestion');
       if (templates?.suggestion && typeof templates?.suggestion === 'function') {
@@ -142,9 +142,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       }
       return itemElement;
     };
-    if (config.render) {
-      render = config.render;
-    }
 
     // function to render typeahead groups
     let renderGroup = function (groupName: string, currentValue: string): HTMLDivElement | undefined {
@@ -178,7 +175,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
           fragment.appendChild(groupDiv);
         }
       }
-      const div = render(item, inputValue);
+      const div = render(item);
       if (div) {
         div.addEventListener('click', function (ev: MouseEvent): void {
           onSelect(item, input);

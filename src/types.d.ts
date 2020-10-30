@@ -15,7 +15,6 @@ export interface typeaheadHtmlTemplates<T extends typeaheadItem> {
 
 export interface typeaheadConfig<T extends typeaheadItem> {
   input: HTMLInputElement;
-  render?: (item: T, currentValue: string) => HTMLDivElement | undefined;
   renderGroup?: (name: string, currentValue: string) => HTMLDivElement | undefined;
   className?: string;
   minLength?: number;

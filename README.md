@@ -130,8 +130,7 @@ You can pass the following config options to `typeahead-standalone`:
 |`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is added to facilitate styling|`undefined`|
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
 |`emptyMsg`|The message that will be showed when there are no suggestions that match the entered value.|`undefined`|
-|`render`|This method allows you to override the rendering function. It will be called for each suggestion and the suggestion object will be passed as first parameter. The current input field value will be passed as second parameter. This function must return a DIV element or `undefined` to skip rendering.|`undefined`|
-|`renderGroup`|The same as `render`, but will be called for each group. The first parameter of the function will be the group name. The current input field value will be passed as second parameter. This function must return a `DIV` element or `undefined` to skip rendering.|`undefined`|
+|`renderGroup`|This method allows you to override the rendering function for each group. The first parameter of the function will be the group name. The current input field value will be passed as second parameter. This function must return a `DIV` element or `undefined` to skip rendering.|`undefined`|
 |`className`|The typeahead-standalone container will have this class name if specified.|`undefined`|
 |`debounceWaitMs`|Enforces that the `fetch` function will only be called once within the specified time frame (in milliseconds) and delays execution. This prevents flooding your server with AJAX requests.|`0`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
