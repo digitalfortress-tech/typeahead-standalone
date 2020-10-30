@@ -8,7 +8,7 @@ export interface typeaheadItem {
 export interface typeaheadHtmlTemplates<T extends typeaheadItem> {
   header?: string;
   footer?: string;
-  suggestion?: (item?: T) => string;
+  suggestion: (item?: T) => string;
   notFound?: string;
   pending?: string;
 }

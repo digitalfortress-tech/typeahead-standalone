@@ -79,5 +79,7 @@ typeahead({
     suggestion: (item) => {
       return '<div class="custom-class"><div class="logo"></div><div class="text">' + item.label + '</div></div>';
     },
+    header: '<span>Available Colors</span>',
+    footer: '<a href="#">See more</a>',
   },
 });

@@ -166,6 +166,11 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
     const iterable = Array.from(new Set(items)); // remove duplicates
 
+    // Add header template
+    if (iterable.length && templates?.header?.trim().length) {
+      templatify(fragment, templates.header);
+    }
+
     for (const [index, item] of iterable.entries()) {
       if (index === limitSuggestions) break;
       if (item.group && item.group !== prevGroup) {
@@ -194,8 +199,13 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       }
     }
 
+    // Add footer template
+    if (iterable.length && templates?.footer?.trim().length) {
+      templatify(fragment, templates.footer);
+    }
+
     container.appendChild(fragment);
-    if (items.length < 1) {
+    if (iterable.length < 1) {
       if (config.emptyMsg) {
         const empty = doc.createElement('div');
         empty.classList.add('tt-empty');
@@ -489,7 +499,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
    * @param El The html element that the template should attach to
    * @param data The raw string representation of the html template
    */
-  function templatify(El: HTMLElement, data: string) {
+  function templatify(El: HTMLElement | DocumentFragment, data: string) {
     const template = doc.createElement('template');
     template.innerHTML = data;
     El.appendChild(template.content);
