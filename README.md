@@ -16,6 +16,7 @@ A fast fully-featured standalone autocomplete library
 - is a vastly performant blazing fast autocomplete library in pure javascript
 - has **NO DEPENDENCIES** :D  and is a light-weight library [![](http://img.badgesize.io/https://cdn.jsdelivr.net/npm/typeahead-standalone?compression=gzip)](https://cdn.jsdelivr.net/npm/typeahead-standalone)
 - it is a highly customizable library
+- supports all major browsers (sorry IE, no support for you)
 - is completely free and open source
 ---
 
@@ -134,8 +135,24 @@ You can pass the following config options to `typeahead-standalone`:
 |`className`|The typeahead-standalone container will have this class name if specified.|`undefined`|
 |`debounceWaitMs`|Enforces that the `fetch` function will only be called once within the specified time frame (in milliseconds) and delays execution. This prevents flooding your server with AJAX requests.|`0`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
+|`templates`|An object containing templates for header, footer, suggestion, notFound and pending state. See example below |`undefined`|
 
 ---
+### Templates
+
+Templates can be used to customize the rendering of the List. Their usage is completely optional.
+
+```javascript
+templates: { 
+  header: '<h1>List of Countries</h1>', /* Rendered at the top of the dataset */
+  footer: '<div>See more</div>', /* Rendered at the bottom of the dataset */
+  suggestion: function(item) { /* Used to render a single suggestion */
+    return '<div class="custom-class">' + item.label + '</div>'; 
+  },
+  notFound: '<div>Nothing Found</div>', /* Rendered if 0 suggestions are available */
+  pending: 'Loading...', /* Rendered if 0 synchronous suggestions available but asynchronous suggestions are expected */
+}
+```
 
 ### API
 

@@ -5,6 +5,14 @@ export interface typeaheadItem {
   group?: string;
 }
 
+export interface typeaheadHtmlTemplates<T extends typeaheadItem> {
+  header?: string;
+  footer?: string;
+  suggestion?: (item?: T) => string;
+  notFound?: string;
+  pending?: string;
+}
+
 export interface typeaheadConfig<T extends typeaheadItem> {
   input: HTMLInputElement;
   render?: (item: T, currentValue: string) => HTMLDivElement | undefined;
@@ -22,6 +30,7 @@ export interface typeaheadConfig<T extends typeaheadItem> {
    * Prevents automatic form submit when ENTER is pressed
    */
   preventSubmit?: boolean;
+  templates?: typeaheadHtmlTemplates<T>;
 }
 
 export interface typeaheadResult {

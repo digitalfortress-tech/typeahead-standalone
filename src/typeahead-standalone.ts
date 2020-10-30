@@ -4,7 +4,7 @@
  * MIT License
  */
 
-import type { typeaheadItem, typeaheadResult, typeaheadConfig } from './types';
+import type { typeaheadItem, typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates } from './types';
 import { EventTrigger, Keys } from './constants';
 import { NOOP, escapeRegExp } from './helpers';
 import './style.less';
@@ -21,6 +21,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const minLen = config.minLength || 1;
   const limitSuggestions = config.limit || 5;
   const hint = config.hint === false ? false : true;
+  const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
 
   // 'keyup' event will not be fired on Mobile Firefox, so we have to use 'input' event instead
   const keyUpEventName = mobileFirefox ? 'input' : 'keyup';
@@ -134,7 +135,11 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     let render = function (item: T, currentValue: string): HTMLDivElement | undefined {
       const itemElement = doc.createElement('div');
       itemElement.classList.add('tt-suggestion');
-      itemElement.textContent = item.label || '';
+      if (templates?.suggestion && typeof templates?.suggestion === 'function') {
+        templatify(itemElement, templates?.suggestion(item));
+      } else {
+        itemElement.textContent = item.label || '';
+      }
       return itemElement;
     };
     if (config.render) {
@@ -480,6 +485,17 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     } else {
       inputHint.value = (rawInput + selectedItem.label.replace(new RegExp(inputValue, 'i'), '')) as string;
     }
+  }
+
+  /**
+   * Creates and appends a template to an HTMLElement
+   * @param El The html element that the template should attach to
+   * @param data The raw string representation of the html template
+   */
+  function templatify(El: HTMLElement, data: string) {
+    const template = doc.createElement('template');
+    template.innerHTML = data;
+    El.appendChild(template.content);
   }
 
   function blurEventHandler(): void {
