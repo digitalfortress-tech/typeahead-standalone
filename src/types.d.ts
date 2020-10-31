@@ -10,7 +10,7 @@ export interface typeaheadHtmlTemplates<T extends typeaheadItem> {
   footer?: string;
   suggestion: (item?: T) => string;
   notFound?: string;
-  pending?: string;
+  // pending?: string;
 }
 
 export interface typeaheadConfig<T extends typeaheadItem> {
@@ -21,7 +21,6 @@ export interface typeaheadConfig<T extends typeaheadItem> {
   limit?: number;
   hint?: boolean;
   highlight?: boolean;
-  emptyMsg?: string;
   onSelect?: (item: T, input: HTMLInputElement) => void;
   fetch: (text: string, update: (items: T[] | false) => void, trigger: EventTrigger) => void;
   debounceWaitMs?: number;

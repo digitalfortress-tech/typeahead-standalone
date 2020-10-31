@@ -168,7 +168,10 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
     // Add header template
     if (iterable.length && templates?.header?.trim().length) {
-      templatify(fragment, templates.header);
+      const headerDiv = doc.createElement('div');
+      headerDiv.classList.add('tt-header');
+      templatify(headerDiv, templates.header);
+      fragment.appendChild(headerDiv);
     }
 
     for (const [index, item] of iterable.entries()) {
@@ -201,15 +204,21 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
     // Add footer template
     if (iterable.length && templates?.footer?.trim().length) {
-      templatify(fragment, templates.footer);
+      const footerDiv = doc.createElement('div');
+      footerDiv.classList.add('tt-footer');
+      templatify(footerDiv, templates.footer);
+      fragment.appendChild(footerDiv);
     }
 
     container.appendChild(fragment);
-    if (iterable.length < 1) {
-      if (config.emptyMsg) {
+
+    // No Matches
+    if (!iterable.length) {
+      if (templates?.notFound?.trim().length) {
+        inputHint.value = '';
         const empty = doc.createElement('div');
-        empty.classList.add('tt-empty');
-        empty.textContent = config.emptyMsg;
+        empty.classList.add('tt-notFound');
+        templatify(empty, templates.notFound);
         container.appendChild(empty);
       } else {
         clear();
