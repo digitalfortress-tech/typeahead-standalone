@@ -24,12 +24,13 @@
         overflow: auto;
         border: 1px solid rgba(50, 50, 50, 0.6);
 
-        .tt-suggestion, .tt-group {
+        // targets all templates
+        div[class^="tt-"] {
             padding: 0 4px;
         }
 
         .tt-suggestion {
-            &:hover:not(.group),
+            &:hover,
             &.tt-selected {
                 background: #55acee;
                 cursor: pointer;

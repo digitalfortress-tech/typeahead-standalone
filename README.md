@@ -105,9 +105,7 @@ Some basic styling is added to typeahead by default. However the UI is completel
 - The entire html is wrapped in a container with a class `typeahead-standalone`.
 - The original input element gets an additional class `tt-input`
 - The list of suggestions is wrapped in a container with a class `tt-list`. A custom class may be used in addition. (See config option `className`)
-- Each suggestion has a `tt-suggestion` class
-- Each selected suggestion has a `tt-selected` class
-- Each group has a `tt-group` class
+- Each suggestion has a `tt-suggestion` class and if the suggestion is selected, then it has a `tt-selected` class in addition to it
 
 ```css
 /* override background on hover */
@@ -115,6 +113,7 @@ Some basic styling is added to typeahead by default. However the UI is completel
   background: red;
 }
 ```
+If you're using the [templates](#templates) config option, each template gets wrapped in its corresponding class.
 
 ## Configuration
 
@@ -129,7 +128,6 @@ You can pass the following config options to `typeahead-standalone`:
 |`limit`|Specify the maximum number of suggestions that should be displayed.|`5`|
 |`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is added to facilitate styling|`undefined`|
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
-|`renderGroup`|This method allows you to override the rendering function for each group. The first parameter of the function will be the group name. The current input field value will be passed as second parameter. This function must return a `DIV` element or `undefined` to skip rendering.|`undefined`|
 |`className`|The typeahead-standalone container will have this class name if specified.|`undefined`|
 |`debounceWaitMs`|Enforces that the `fetch` function will only be called once within the specified time frame (in milliseconds) and delays execution. This prevents flooding your server with AJAX requests.|`0`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
@@ -145,7 +143,10 @@ templates: {
   header: '<h1>List of Countries</h1>', /* Rendered at the top of the dataset */
   footer: '<div>See more</div>', /* Rendered at the bottom of the dataset */
   suggestion: function(item) { /* Used to render a single suggestion */
-    return '<div class="custom-class">' + item.label + '</div>'; 
+    return '<div class="custom-suggestion">' + item.label + '</div>'; 
+  },
+  group: function(groupName) { /* Used to render a group */
+    return '<div class="custom-group">' + groupName + '</div>'; 
   },
   notFound: '<div>Nothing Found</div>', /* Rendered if 0 suggestions are available */
 }
@@ -155,6 +156,7 @@ Each template gets wrapped in a `div` with its corresponding class. i.e.
 `header` => class `tt-header`
 `footer` => class `tt-footer`
 `suggestion` => class `tt-suggestion`
+`group` => class `tt-group`
 `notFound` => class `tt-notFound`
 
 ### API

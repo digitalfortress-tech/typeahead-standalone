@@ -135,7 +135,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     const render = function (item: T): HTMLDivElement | undefined {
       const itemElement = doc.createElement('div');
       itemElement.classList.add('tt-suggestion');
-      if (templates?.suggestion && typeof templates?.suggestion === 'function') {
+      if (templates?.suggestion && typeof templates.suggestion === 'function') {
         templatify(itemElement, templates?.suggestion(item));
       } else {
         itemElement.textContent = item.label || '';
@@ -144,15 +144,16 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     };
 
     // function to render typeahead groups
-    let renderGroup = function (groupName: string, currentValue: string): HTMLDivElement | undefined {
+    const renderGroup = function (groupName: string): HTMLDivElement | undefined {
       const groupDiv = doc.createElement('div');
       groupDiv.classList.add('tt-group');
-      groupDiv.textContent = groupName;
+      if (templates?.group && typeof templates.group === 'function') {
+        templatify(groupDiv, templates?.group(groupName));
+      } else {
+        groupDiv.textContent = groupName || '';
+      }
       return groupDiv;
     };
-    if (config.renderGroup) {
-      renderGroup = config.renderGroup;
-    }
 
     onSelect = function (item: T, input: HTMLInputElement) {
       input.value = item.label || '';
@@ -174,11 +175,12 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       fragment.appendChild(headerDiv);
     }
 
+    // loop over suggestions
     for (const [index, item] of iterable.entries()) {
       if (index === limitSuggestions) break;
       if (item.group && item.group !== prevGroup) {
         prevGroup = item.group;
-        const groupDiv = renderGroup(item.group, inputValue);
+        const groupDiv = renderGroup(item.group);
         if (groupDiv) {
           fragment.appendChild(groupDiv);
         }

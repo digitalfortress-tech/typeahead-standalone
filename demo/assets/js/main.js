@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             : i > this.previousTop &&
               (o('#mainNav').removeClass('is-visible'),
               s < i && !o('#mainNav').hasClass('is-fixed') && o('#mainNav').addClass('is-fixed')),
-          (this.previousTop = i);
+            (this.previousTop = i);
         }
       );
     }
@@ -78,6 +78,9 @@ typeahead({
   templates: {
     suggestion: (item) => {
       return '<div class="custom-class"><div class="logo"></div><div class="text">' + item.label + '</div></div>';
+    },
+    group: (name) => {
+      return '<div class="custom-group">' + name + '</div>';
     },
     header: '<span>Available Colors</span>',
     footer: '<a href="#">See more</a>',
