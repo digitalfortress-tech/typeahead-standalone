@@ -300,10 +300,11 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     if (items.length < 1) {
       selected = undefined;
     } else {
+      const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
       if (selected === items[0]) {
-        selected = items[items.length - 1];
+        selected = items[maxLength - 1];
       } else {
-        for (let i = items.length - 1; i > 0; i--) {
+        for (let i = maxLength - 1; i > 0; i--) {
           if (selected === items[i] || i === 1) {
             selected = items[i - 1];
             break;
@@ -320,11 +321,12 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     if (items.length < 1) {
       selected = undefined;
     }
-    if (!selected || selected === items[items.length - 1]) {
+    const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
+    if (!selected || selected === items[maxLength - 1]) {
       selected = items[0];
       return;
     }
-    for (let i = 0; i < items.length - 1; i++) {
+    for (let i = 0; i < maxLength - 1; i++) {
       if (selected === items[i]) {
         selected = items[i + 1];
         break;
