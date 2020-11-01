@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Typeahead-standalone Demo</title>
-  <meta name="description" content="Rotate ads using native javascript with Typeahead-standalone." />
+  <meta name="description" content="Typeahead-standalone - A fast fully featured standalone autocomplete library" />
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-63687183-8"></script>
   <script>
@@ -30,6 +30,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.2/build/styles/default.min.css">
   <link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/app.klipse.tech/css/codemirror.css" />
   <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+    const dev = typeof mode === "string" && mode.toLowerCase() === 'dev' ? true : false;
+
     window.klipse_settings = {
       selector_eval_js: ".eval-js",
     };
@@ -69,9 +73,7 @@
 
   <!-- Page Header -->
 
-  <header class="masthead" style="
-        background-image: url('https://image.freepik.com/free-vector/abstract-realistic-technology-particle-background_23-2148433468.jpg');
-      ">
+  <header class="masthead" style="background-image: url('./assets/img/background-typeahead.jpg');">
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
@@ -79,12 +81,13 @@
           <div class="page-heading">
             <h1>Typeahead-standalone Demo</h1>
             <span class="subheading">A fast fully-featured standalone autocomplete library</span>
-            <p class="main-info">
-              Which colour would look great on you ?
-            </p>
-            <div class="live-examples-wrapper">
-              <input type="text" id="searchInput" autocomplete="off" placeholder="Search...">
-            </div>
+            <script>
+              if (dev) {
+                document.write('<p class="main-info">Which colour would look great on you ?</p><div class="live-examples-wrapper"><input type="text" id="searchInput" autocomplete="off" placeholder="Search..."></div>');
+              } else {
+                // @todo: print alternate content
+              }
+            </script>
           </div>
         </div>
       </div>
@@ -262,9 +265,7 @@
   <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.2/build/highlight.min.js"></script>
   <script src="https://storage.googleapis.com/app.klipse.tech/plugin_prod/js/klipse_plugin.min.js"></script>
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode');
-    if (typeof mode === "string" && mode.toLowerCase() === 'dev') {
+    if (dev) {
       document.write('<script src="./../dist/typeahead-standalone.js"><\/script>');
     } else {
       document.write('<script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"><\/script>');
