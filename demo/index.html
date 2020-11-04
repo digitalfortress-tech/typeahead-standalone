@@ -29,13 +29,25 @@
   <link rel="stylesheet" href="./assets/css/main.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.2/build/styles/default.min.css">
   <link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/app.klipse.tech/css/codemirror.css" />
+  <link rel="stylesheet" type="text/css" href="https://codemirror.net/theme/solarized.css" />
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
     const dev = typeof mode === "string" && mode.toLowerCase() === 'dev' ? true : false;
 
-    window.klipse_settings = {
+        window.klipse_settings = {  // input
       selector_eval_js: ".eval-js",
+        codemirror_options_in: {
+          indentUnit: 2,
+          // lineWrapping: true,
+          lineNumbers: true,
+          matchBrackets: true,
+          theme: 'solarized dark',
+        },
+        codemirror_options_out: {   // output
+          // lineNumbers: true,
+          theme: 'solarized dark',
+        }
     };
   </script>
   <link rel="canonical" href="https://typeahead-standalone.niketpathak.com" />
@@ -103,11 +115,12 @@
           <h2>Live Examples</h2>
           <hr />
           <br />
-          <div>
-            <input type="text" id="liveSearch" autocomplete="off" placeholder="Search...">
+          <h4>1. Autocomplete with Local Data</h4>
+          <div class="search-container">
+            <input type="text" id="liveSearch1" autocomplete="off" placeholder="Search Colors...">
           </div>
           <br />
-          The code below can be edited and its changes reflected immediately.
+          The following code can be edited in place and its changes reflected in the input element above (which has an <code>id="liveSearch1"</code>).
           <div class="eval-js">
             var colours = [
             { label: 'Red', value: 'RD' },
@@ -119,21 +132,49 @@
             ];
         
             typeahead({
-              input: document.getElementById('liveSearch'),
+              input: document.getElementById('liveSearch1'),
+              highlight: true,
               fetch: function (text, update) {
                 text = text.toLowerCase();
-                // you can also use AJAX requests instead of preloaded data
                 var suggestions = colours.filter((n) => n.label.toLowerCase().startsWith(text));
                 update(suggestions);
               },
-              highlight: true,
             });
           </div>
         </section>
 
+        <hr>
+
         <section class="js-fiddle">
-          <h2>Demo with Remote Data (retrieved via AJAX)</h2>
-          <script async src="https://jsfiddle.net/niketpathak/0L2b75zy/embed/js,html,result/dark/"></script>
+          <h4>2. Autocomplete with Remote Data (retrieved via AJAX)</h4>
+          <div class="search-container">
+            <input type="text" id="liveSearch2" autocomplete="off" placeholder="Search Countries...">
+          </div>
+          <br />
+          Feel free to test/edit the following code...
+          <div class="eval-js">
+            typeahead({
+            input: document.getElementById("liveSearch2"),
+            highlight: true,
+            fetch: function(text, update) {
+            text = text.toLowerCase();
+            var suggestions;
+            fetch('https://raw.githubusercontent.com/twitter/typeahead.js/gh-pages/data/countries.json')
+            .then(response => response.json())
+            .then(data => {
+            var normalizedData = data.reduce(function(acc, currentItem) {
+            acc.push({ label: currentItem});
+            return acc;
+            }, []);
+          
+            suggestions = normalizedData.filter(n => n.label.toLowerCase().startsWith(text));
+            update(suggestions);
+            });
+            },
+            });
+          </div>
+          
+          <!-- <script async src="https://jsfiddle.net/niketpathak/0L2b75zy/embed/js,html,result/dark/"></script> -->
         </section>
 
         <hr />
