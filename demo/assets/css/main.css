@@ -522,3 +522,51 @@ adapted from a snippet
 .search-container {
   padding: 20px 0;
 }
+/* override typeahead */
+.typeahead-standalone.typeahead-example .tt-list {
+  background: #292727;
+  color: #fff;
+  border: 1px solid #6d6b6b;
+  border-radius: 4px;
+  -webkit-box-shadow: -1px 10px 22px 2px rgba(0,0,0,0.36);
+  -moz-box-shadow: -1px 10px 22px 2px rgba(0,0,0,0.36);
+  box-shadow: -1px 10px 22px 2px rgba(0,0,0,0.36);
+}
+.typeahead-standalone.typeahead-example .tt-list div[class^="tt-"] {
+  padding: 5px;
+}
+.typeahead-standalone.typeahead-example .tt-list .tt-suggestion {
+  border-bottom: 1px solid #3c3838;
+}
+.typeahead-standalone.typeahead-example .tt-list .tt-suggestion:hover, .typeahead-standalone.typeahead-example .tt-list .tt-suggestion.tt-selected {
+  color: #fff;
+  background-color: #000;
+}
+.typeahead-standalone.typeahead-example .tt-list .tt-group {
+  background: #403636;
+  font-style: italic;
+}
+.typeahead-standalone .tt-list .tt-suggestion .tt-highlight {
+  color: orangered;
+}
+.typeahead-standalone.typeahead-example .preview {
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  right: 10px;
+  margin-top: 7px;
+  border: 1px solid #313131;
+}
+.typeahead-standalone .tt-header, .typeahead-standalone .tt-footer, .typeahead-standalone .tt-notFound {
+  text-align: center;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.typeahead-standalone .tt-footer, .typeahead-standalone .tt-footer a {
+  color: #fff;
+  text-align: right;
+}
+.typeahead-standalone .tt-footer a:hover {
+  text-decoration: none;
+  opacity: 0.7;
+}

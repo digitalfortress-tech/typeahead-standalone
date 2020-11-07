@@ -44,23 +44,24 @@ document.addEventListener('DOMContentLoaded', function () {
 /*****************************************************************************************/
 
 var colors = [
-  { label: 'Red', value: 'RD' },
-  { label: 'Blue', value: 'BL', group: 'Shades of Blue' },
-  { label: 'Blue Dark', value: 'DBL', group: 'Shades of Blue' },
-  { label: 'Blue Darker', value: 'DBL', group: 'Shades of Blue' },
-  { label: 'Blue Light', value: 'LBL', group: 'Shades of Blue' },
-  { label: 'Blue Extra Light', value: 'XLBL', group: 'Shades of Blue' },
-  { label: 'Yellow', value: 'YW' },
-  { label: 'Gold', value: 'GD' },
-  { label: 'Silver', value: 'SV' },
-  { label: 'Orange', value: 'OR' },
-  { label: 'Green', value: 'GR' },
-  { label: 'White', value: 'WH' },
-  { label: 'Pink', value: 'PI' },
-  { label: 'Grey', value: 'GR' },
-  { label: 'Brown', value: 'BR' },
-  { label: 'Black', value: 'BK', group: 'Shades of Black' },
-  { label: 'Black Xtra', value: 'XBK', group: 'Shades of Black' },
+  { label: 'Red', value: 'RD', hash: 'red' },
+  { label: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
+  { label: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
+  { label: 'Blue Darker', value: 'DBL', hash: 'midnightblue', group: 'Shades of Blue' },
+  { label: 'Blue Light', value: 'LBL', hash: 'cadetblue', group: 'Shades of Blue' },
+  { label: 'Blue Extra Light', value: 'XLBL', hash: 'aliceblue', group: 'Shades of Blue' },
+  { label: 'Yellow', value: 'YW', hash: 'yellow' },
+  { label: 'Gold', value: 'GD', hash: 'gold' },
+  { label: 'Silver', value: 'SV', hash: 'silver' },
+  { label: 'Orange', value: 'OR', hash: 'orange' },
+  { label: 'Green', value: 'GR', hash: 'green' },
+  { label: 'White', value: 'WH', hash: 'white' },
+  { label: 'Pink', value: 'PI', hash: 'pink' },
+  { label: 'Purple', value: 'PR', hash: 'purple' },
+  { label: 'Grey', value: 'GR', hash: 'grey' },
+  { label: 'Brown', value: 'BR', hash: 'brown' },
+  { label: 'Black', value: 'BK', hash: 'black', group: 'Shades of Black' },
+  { label: 'Black Light', value: 'LBK', hash: '#352e2e', group: 'Shades of Black' },
 ];
 
 var input = document.getElementById('searchInput');
@@ -75,15 +76,22 @@ typeahead({
     update(suggestions);
   },
   highlight: true,
+  className: 'typeahead-example',
   templates: {
     suggestion: (item) => {
-      return '<div class="custom-class"><div class="logo"></div><div class="text">' + item.label + '</div></div>';
+      return (
+        '<span class="preview" style="background-color:' +
+        item.hash +
+        '"></span><div class="text">' +
+        item.label +
+        '</div>'
+      );
     },
     group: (name) => {
       return '<div class="custom-group">' + name + '</div>';
     },
-    header: '<span>Available Colors</span>',
-    footer: '<a href="#">See more</a>',
-    notFound: 'Nothing Found!',
+    header: 'Colors Found',
+    footer: '<a href="#">See more...</a>',
+    notFound: 'Oops...Nothing Found 😪 <br>Try another color...',
   },
 });
