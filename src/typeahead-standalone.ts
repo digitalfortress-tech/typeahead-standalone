@@ -41,7 +41,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   // create a wrapping div
   const wrapper: HTMLSpanElement = doc.createElement('span');
-  wrapper.classList.add('typeahead-standalone');
+  wrapper.className = 'typeahead-standalone' + (config.className ? ` ${config.className}` : '');
 
   const inputClone: HTMLElement = input.cloneNode(true) as HTMLElement;
   inputClone.classList.add('tt-input');
@@ -55,7 +55,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const inputHint: HTMLInputElement = input.cloneNode() as HTMLInputElement;
   injectHintEl(inputHint);
 
-  container.className = 'tt-list ' + (config.className || '');
+  container.classList.add('tt-list');
 
   // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
   containerStyle.position = 'absolute';
