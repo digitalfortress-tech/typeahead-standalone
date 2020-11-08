@@ -12,8 +12,8 @@ import './style.less';
 export default function typeahead<T extends typeaheadItem>(config: typeaheadConfig<T>): typeaheadResult {
   const doc = document;
 
-  const container: HTMLDivElement = doc.createElement('div');
-  const containerStyle = container.style;
+  const listContainer: HTMLDivElement = doc.createElement('div');
+  const listContainerStyle = listContainer.style;
   const userAgent = navigator.userAgent;
   const mobileFirefox = userAgent.indexOf('Firefox') !== -1 && userAgent.indexOf('Mobile') !== -1;
   const debounceWaitMs = config.debounceWaitMs || 0;
@@ -39,7 +39,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   let input: HTMLInputElement = config.input;
 
-  // create a wrapping div
+  // main wrapper
   const wrapper: HTMLSpanElement = doc.createElement('span');
   wrapper.className = 'typeahead-standalone' + (config.className ? ` ${config.className}` : '');
 
@@ -55,18 +55,18 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const inputHint: HTMLInputElement = input.cloneNode() as HTMLInputElement;
   injectHintEl(inputHint);
 
-  container.classList.add('tt-list');
+  listContainer.classList.add('tt-list');
 
   // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
-  containerStyle.position = 'absolute';
+  listContainerStyle.position = 'absolute';
 
   /**
-   * Detach the container from DOM
+   * Detach the listContainer from DOM
    */
   function detach(): void {
-    const parent = container.parentNode;
+    const parent = listContainer.parentNode;
     if (parent) {
-      parent.removeChild(container);
+      parent.removeChild(listContainer);
     }
   }
 
@@ -80,23 +80,23 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   /**
-   * Attach the container to DOM
+   * Attach the listContainer to DOM
    */
   function attach(): void {
-    if (!container.parentNode) {
-      wrapper.appendChild(container);
+    if (!listContainer.parentNode) {
+      wrapper.appendChild(listContainer);
     }
   }
 
   /**
-   * Check if container for typeahead is displayed
+   * Check if listContainer for typeahead is displayed
    */
   function containerDisplayed(): boolean {
-    return !!container.parentNode;
+    return !!listContainer.parentNode;
   }
 
   /**
-   * Clear typeahead state and hide container
+   * Clear typeahead state and hide listContainer
    */
   function clear(): void {
     // prevent the update call if there are pending AJAX requests
@@ -117,18 +117,18 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       return;
     }
 
-    containerStyle.width = `${input.offsetWidth}px`;
-    containerStyle.top = `${input.clientHeight}px`; // or top: '100%'
-    containerStyle.left = '0';
+    listContainerStyle.width = `${input.offsetWidth}px`;
+    listContainerStyle.top = `${input.clientHeight}px`; // or top: '100%'
+    listContainerStyle.left = '0';
   }
 
   /**
    * Redraw the typeahead div element with suggestions
    */
   function update(): void {
-    // delete all children from typeahead DOM container
-    while (container.firstChild) {
-      container.firstChild.remove();
+    // delete all children from typeahead DOM listContainer
+    while (listContainer.firstChild) {
+      listContainer.firstChild.remove();
     }
 
     // function for rendering typeahead suggestions
@@ -212,7 +212,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       fragment.appendChild(footerDiv);
     }
 
-    container.appendChild(fragment);
+    listContainer.appendChild(fragment);
 
     // No Matches
     if (!iterable.length) {
@@ -221,7 +221,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         const empty = doc.createElement('div');
         empty.classList.add('tt-notFound');
         templatify(empty, templates.notFound);
-        container.appendChild(empty);
+        listContainer.appendChild(empty);
       } else {
         clear();
         return;
@@ -271,7 +271,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
    * Automatically move scroll bar if selected item is not visible
    */
   function updateScroll(): void {
-    const elements = container.getElementsByClassName('tt-selected');
+    const elements = listContainer.getElementsByClassName('tt-selected');
     if (elements.length > 0) {
       let element = elements[0] as HTMLDivElement;
 
@@ -281,13 +281,13 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         element = previous;
       }
 
-      if (element.offsetTop < container.scrollTop) {
-        container.scrollTop = element.offsetTop;
+      if (element.offsetTop < listContainer.scrollTop) {
+        listContainer.scrollTop = element.offsetTop;
       } else {
         const selectBottom = element.offsetTop + element.offsetHeight;
-        const containerBottom = container.scrollTop + container.offsetHeight;
+        const containerBottom = listContainer.scrollTop + listContainer.offsetHeight;
         if (selectBottom > containerBottom) {
-          container.scrollTop += selectBottom - containerBottom;
+          listContainer.scrollTop += selectBottom - containerBottom;
         }
       }
     }
@@ -422,7 +422,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   /**
    * Highlights a given text by its pattern
-   * @param Elm The container element
+   * @param Elm The listContainer element
    * @param pattern the string to highlight
    */
   function hightlight(Elm: HTMLElement, pattern: string[]) {
@@ -530,7 +530,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   /**
    * Fixes #26: on long clicks focus will be lost and onSelect method will not be called
    */
-  container.addEventListener('mousedown', function (evt: Event) {
+  listContainer.addEventListener('mousedown', function (evt: Event) {
     evt.stopPropagation();
     evt.preventDefault();
   });
@@ -539,7 +539,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
    * Fixes #30: typeahead closes when scrollbar is clicked in IE
    * See: https://stackoverflow.com/a/9210267/13172349
    */
-  container.addEventListener('focus', () => input.focus());
+  listContainer.addEventListener('focus', () => input.focus());
 
   /**
    * This function will remove DOM elements and clear event handlers
