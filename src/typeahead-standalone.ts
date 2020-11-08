@@ -14,17 +14,12 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   const listContainer: HTMLDivElement = doc.createElement('div');
   const listContainerStyle = listContainer.style;
-  const userAgent = navigator.userAgent;
-  const mobileFirefox = userAgent.indexOf('Firefox') !== -1 && userAgent.indexOf('Mobile') !== -1;
   const debounceWaitMs = config.debounceWaitMs || 0;
   const preventSubmit = config.preventSubmit || false;
   const minLen = config.minLength || 1;
   const limitSuggestions = config.limit || 5;
   const hint = config.hint === false ? false : true;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
-
-  // 'keyup' event will not be fired on Mobile Firefox, so we have to use 'input' event instead
-  const keyUpEventName = mobileFirefox ? 'input' : 'keyup';
 
   let items: T[] = [];
   let inputValue = '';
@@ -233,33 +228,9 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     updateScroll();
   }
 
-  function keyupEventHandler(ev: KeyboardEvent): void {
+  function inputEventHandler(ev: KeyboardEvent): void {
     const keyCode = ev.which || ev.keyCode || 0;
 
-    const ignore = [
-      Keys.Up,
-      Keys.Enter,
-      Keys.Esc,
-      Keys.Right,
-      Keys.Left,
-      Keys.Shift,
-      Keys.Ctrl,
-      Keys.Alt,
-      Keys.CapsLock,
-      Keys.WindowsKey,
-      Keys.Tab,
-    ];
-    for (const key of ignore) {
-      if (keyCode === key) {
-        return;
-      }
-    }
-
-    if (keyCode >= Keys.F1 && keyCode <= Keys.F12) {
-      return;
-    }
-
-    // the down key is used to open typeahead
     if (keyCode === Keys.Down && containerDisplayed()) {
       return;
     }
@@ -547,7 +518,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   function destroy(): void {
     input.removeEventListener('focus', focusEventHandler);
     input.removeEventListener('keydown', keydownEventHandler);
-    input.removeEventListener(keyUpEventName, keyupEventHandler as EventListenerOrEventListenerObject);
+    input.removeEventListener('input', inputEventHandler as EventListenerOrEventListenerObject);
     input.removeEventListener('blur', blurEventHandler);
     clearDebounceTimer();
     clear();
@@ -555,7 +526,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   // setup event handlers
   input.addEventListener('keydown', keydownEventHandler);
-  input.addEventListener(keyUpEventName, keyupEventHandler as EventListenerOrEventListenerObject);
+  input.addEventListener('input', inputEventHandler as EventListenerOrEventListenerObject);
   input.addEventListener('blur', blurEventHandler);
   input.addEventListener('focus', focusEventHandler);
 
