@@ -100,20 +100,30 @@ typeahead({
 ```
 #### Styling (css)
 
-Some basic styling is added to typeahead by default. However the UI is completely upto you and is customizable to the very pixel. You can override styling using the following classes.
+Some basic styling is added to typeahead by default. However the UI is completely upto you and is customizable to the very pixel. You can use the following classes to add/override styles. 
 
 - The entire html is wrapped in a container with a class `typeahead-standalone`.
-- The original input element gets an additional class `tt-input`
-- The list of suggestions is wrapped in a container with a class `tt-list`. A custom class may be used in addition. (See config option `className`)
-- Each suggestion has a `tt-suggestion` class and if the suggestion is selected, then it has a `tt-selected` class in addition to it
+- The input element gets an additional class `tt-input`.
+- The list of suggestions is wrapped in a container with a class `tt-list`.
+- Each suggestion has a `tt-suggestion` class and if the suggestion is selected, then it has a `tt-selected` class additionally.
 
 ```css
-/* override background on hover */
-.typeahead-standalone .tt-list .tt-suggestion:hover {
-  background: red;
+/* set background color for each suggestion */
+.typeahead-standalone .tt-list .tt-suggestion {
+  background-color: green;
 }
 ```
-If you're using the [templates](#templates) config option, each template gets wrapped in its corresponding class.
+
+<strong>Note</strong>: To override default styling, set the config option `className` and use it as a selector. Lets say you set `className: "typeahead-example"`, then to override style on hovering/selecting a suggestion, you could use: 
+ ```css
+/* override styles */
+.typeahead-standalone.typeahead-example .tt-list .tt-suggestion:hover, 
+.typeahead-standalone.typeahead-example .tt-list .tt-suggestion.tt-selected {
+  color: black;
+  background-color: white;
+}
+```
+Refer the [templates](#templates) config option for further customization.
 
 ## Configuration
 
@@ -128,7 +138,7 @@ You can pass the following config options to `typeahead-standalone`:
 |`limit`|Specify the maximum number of suggestions that should be displayed.|`5`|
 |`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is added to facilitate styling|`undefined`|
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
-|`className`|The typeahead-standalone container will have this class name if specified.|`undefined`|
+|`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`)|`undefined`|
 |`debounceWaitMs`|Enforces that the `fetch` function will only be called once within the specified time frame (in milliseconds) and delays execution. This prevents flooding your server with AJAX requests.|`0`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
 |`templates`|An object containing templates for header, footer, suggestion, notFound and pending state. See example below |`undefined`|
@@ -153,11 +163,12 @@ templates: {
 ```
 
 Each template gets wrapped in a `div` with its corresponding class. i.e.
-`header` => class `tt-header`
-`footer` => class `tt-footer`
-`suggestion` => class `tt-suggestion`
-`group` => class `tt-group`
-`notFound` => class `tt-notFound`
+- `header` => class `tt-header`
+- `footer` => class `tt-footer`
+- `suggestion` => class `tt-suggestion`
+- `group` => class `tt-group`
+- `notFound` => class `tt-notFound`
+---
 
 ### API
 
