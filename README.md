@@ -69,7 +69,7 @@ Here is a basic example
 <script src="..." async></script>
 
 <!-- Html markup -->
-<input type="text" id="searchInput" autocomplete="off" placeholder="Search...">
+<input type="search" id="searchInput" autocomplete="off" placeholder="Search...">
 ```
 #### Javascript
 

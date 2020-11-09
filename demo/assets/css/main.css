@@ -522,6 +522,10 @@ adapted from a snippet
 .search-container {
   padding: 20px 0;
 }
+
+[type=search] {
+  outline-offset: 0px;
+}
 /* override typeahead */
 /* override style for list of suggestions */
 .typeahead-standalone.typeahead-example .tt-list {
