@@ -5,6 +5,12 @@ export interface typeaheadItem {
   group?: string;
 }
 
+export interface typeaheadDataSource {
+  local?: Record<string, unknown>[];
+  prefetch?: string;
+  remote?: string;
+}
+
 export interface typeaheadHtmlTemplates<T extends typeaheadItem> {
   header?: string;
   footer?: string;
@@ -25,10 +31,8 @@ export interface typeaheadConfig<T extends typeaheadItem> {
   onSelect?: (item: T, input: HTMLInputElement) => void;
   fetch: (text: string, update: (items: T[] | false) => void, trigger: EventTrigger) => void;
   debounceWaitMs?: number;
-  /**
-   * Prevents automatic form submit when ENTER is pressed
-   */
-  preventSubmit?: boolean;
+  preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
+  source?: typeaheadDataSource;
   templates?: typeaheadHtmlTemplates<T>;
 }
 
