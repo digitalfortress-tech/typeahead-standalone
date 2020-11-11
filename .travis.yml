@@ -5,8 +5,8 @@ node_js:
 script:
   - rm -rf node_modules
   - npm install
-  - npm run prod
   - npm run test
+  - npm run prod
 
 # block for now
 #deploy:

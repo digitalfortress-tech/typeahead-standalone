@@ -2,8 +2,8 @@ import type { TrieType } from './types';
 
 // Trie algorithm (inspired by https://github.com/Yomguithereal/mnemonist/blob/master/trie.js)
 export const trieCore = function (): TrieType {
-  let root: Record<string, unknown> = {};
-  let size = 0;
+  let root: Record<string, unknown>, size: number;
+  clear();
 
   // constant to mark the end of a string
   const SENTINEL = String.fromCharCode(0);
