@@ -10,9 +10,13 @@ watch:	## Build for Dev environment and Watch files
 lint:		## Lint all files
 	@npm run lint
 
+test:		## Run unit tests (JEST)
+	@npm run test
+
 prod:		## Build for Production environment
 	@npm run prod
 
 publish:	## Publish to NPM
+	@make test
 	@make prod
 	@npm publish
