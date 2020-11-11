@@ -33,6 +33,7 @@ export interface typeaheadConfig<T extends typeaheadItem> {
   debounceWaitMs?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
   source?: typeaheadDataSource;
+  normalizer?: (listItems: string[], label?: string) => string[] | void;
   templates?: typeaheadHtmlTemplates<T>;
 }
 

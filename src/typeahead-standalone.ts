@@ -27,6 +27,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   let keypressCounter = 0;
   let debounceTimer: number | undefined;
   let onSelect: (item: T, input: HTMLInputElement) => void = NOOP;
+  let normalizer: (listItems: string[], label?: string) => string[] | void = NOOP;
 
   if (!config.input) {
     throw new Error('input undefined');
@@ -262,6 +263,13 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         }
       }
     }
+  }
+
+  normalizer = function (listItems = [], label = 'label') {
+    // @todo: fix
+  };
+  if (config.normalizer) {
+    normalizer = config.normalizer;
   }
 
   /**
