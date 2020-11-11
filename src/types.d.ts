@@ -9,6 +9,7 @@ export interface typeaheadDataSource {
   local?: Record<string, unknown>[];
   prefetch?: string;
   remote?: string;
+  identifier?: string;
 }
 
 export interface typeaheadHtmlTemplates<T extends typeaheadItem> {
@@ -33,7 +34,7 @@ export interface typeaheadConfig<T extends typeaheadItem> {
   debounceWaitMs?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
   source?: typeaheadDataSource;
-  normalizer?: (listItems: string[], label?: string) => string[] | void;
+  normalizer?: (listItems: string[] | Record<string, unknown>[], label?: string) => string[];
   templates?: typeaheadHtmlTemplates<T>;
 }
 

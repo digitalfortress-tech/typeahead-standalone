@@ -6,7 +6,7 @@
 
 import type { typeaheadItem, typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates } from './types';
 import { EventTrigger, Keys } from './constants';
-import { NOOP, escapeRegExp } from './helpers';
+import { NOOP, escapeRegExp, normalizer } from './helpers';
 import './style.less';
 
 export default function typeahead<T extends typeaheadItem>(config: typeaheadConfig<T>): typeaheadResult {
@@ -22,15 +22,24 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
 
   let items: T[] = [];
+  // let listSuggestions: T[] = [];
   let inputValue = '';
   let selected: T | undefined;
   let keypressCounter = 0;
   let debounceTimer: number | undefined;
   let onSelect: (item: T, input: HTMLInputElement) => void = NOOP;
-  let normalizer: (listItems: string[], label?: string) => string[] | void = NOOP;
+  const normalize = config.normalizer || normalizer;
 
   if (!config.input) {
     throw new Error('input undefined');
+  }
+
+  if (!config.source?.local && !config.source?.remote && !config.fetch) {
+    throw new Error('data source undefined');
+  }
+
+  if (config.source?.local) {
+    items = normalize(config.source?.local, config.source?.identifier) as T[];
   }
 
   let input: HTMLInputElement = config.input;
@@ -263,13 +272,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         }
       }
     }
-  }
-
-  normalizer = function (listItems = [], label = 'label') {
-    // @todo: fix
-  };
-  if (config.normalizer) {
-    normalizer = config.normalizer;
   }
 
   /**
