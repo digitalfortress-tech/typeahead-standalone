@@ -30,7 +30,7 @@ export const normalizer = <T extends typeaheadItem>(
     acc.push(
       isObject && identifier
         ? { label: currentItem[identifier], ...(currentItem as Record<string, unknown>) }
-        : { label: currentItem }
+        : { label: currentItem && typeof currentItem === 'string' ? currentItem : JSON.stringify(currentItem) }
     );
     return acc;
   }, []);
