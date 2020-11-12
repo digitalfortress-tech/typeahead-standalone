@@ -64,17 +64,45 @@ var colors = [
   { label: 'Black Light', value: 'LBK', hash: '#352e2e', group: 'Shades of Black' },
 ];
 
+var colors1 = [
+  { id: 'Red', value: 'RD', hash: 'red' },
+  { id: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
+  { id: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
+  { id: 'Blue Darker', value: 'DBL', hash: 'midnightblue', group: 'Shades of Blue' },
+  { id: 'Blue Light', value: 'LBL', hash: 'cadetblue', group: 'Shades of Blue' },
+  { id: 'Blue Extra Light', value: 'XLBL', hash: 'aliceblue', group: 'Shades of Blue' },
+  { id: 'Yellow', value: 'YW', hash: 'yellow' },
+  { id: 'Gold', value: 'GD', hash: 'gold' },
+  { id: 'Silver', value: 'SV', hash: 'silver' },
+  { id: 'Orange', value: 'OR', hash: 'orange' },
+  { id: 'Green', value: 'GR', hash: 'green' },
+  { id: 'White', value: 'WH', hash: 'white' },
+  { id: 'Pink', value: 'PI', hash: 'pink' },
+  { id: 'Purple', value: 'PR', hash: 'purple' },
+  { id: 'Grey', value: 'GR', hash: 'grey' },
+  { id: 'Brown', value: 'BR', hash: 'brown' },
+  { id: 'Black', value: 'BK', hash: 'black', group: 'Shades of Black' },
+  { id: 'Black Light', value: 'LBK', hash: '#352e2e', group: 'Shades of Black' },
+];
+
 var input = document.getElementById('searchInput');
 
 // eslint-disable-next-line no-undef
 typeahead({
   input: input,
+  // fetch: function () {
+  //   console.log(' here :>> ');
+  // },
   fetch: function (text, update) {
     text = text.toLowerCase();
     // you can also use AJAX requests instead of preloaded data
     var suggestions = colors.filter((n) => n.label.toLowerCase().startsWith(text));
     update(suggestions);
   },
+  // source: {
+  //   local: colors1,
+  //   identifier: 'id',
+  // },
   highlight: true,
   className: 'typeahead-example',
   templates: {

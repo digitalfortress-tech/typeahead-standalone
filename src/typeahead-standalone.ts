@@ -6,7 +6,7 @@
 
 import type { typeaheadItem, typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates } from './types';
 import { EventTrigger, Keys } from './constants';
-import { NOOP, escapeRegExp, normalizer } from './helpers';
+import { escapeRegExp, normalizer, onSelectCb } from './helpers';
 import './style.less';
 
 export default function typeahead<T extends typeaheadItem>(config: typeaheadConfig<T>): typeaheadResult {
@@ -27,7 +27,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   let selected: T | undefined;
   let keypressCounter = 0;
   let debounceTimer: number | undefined;
-  let onSelect: (item: T, input: HTMLInputElement) => void = NOOP;
+  const onSelect: (item: T, input: HTMLInputElement) => void = config.onSelect || onSelectCb;
   const normalize = config.normalizer || normalizer;
 
   if (!config.input) {
@@ -159,13 +159,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       }
       return groupDiv;
     };
-
-    onSelect = function (item: T, input: HTMLInputElement) {
-      input.value = item.label || '';
-    };
-    if (config.onSelect) {
-      onSelect = config.onSelect;
-    }
 
     const fragment = doc.createDocumentFragment();
     let prevGroup = '#9?$';

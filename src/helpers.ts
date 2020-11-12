@@ -6,6 +6,10 @@ export const escapeRegExp = (text: string): string => text.replace(/[-[\]{}()*+?
 
 /****** helpers specific to typeahead  *****/
 
+export const onSelectCb = <T extends typeaheadItem>(item: T, input: HTMLInputElement): void => {
+  input.value = item.label || '';
+};
+
 export const normalizer = <T extends typeaheadItem>(
   listItems: string[] | Record<string, unknown>[] | T[],
   identifier = ''
