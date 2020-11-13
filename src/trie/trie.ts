@@ -1,7 +1,7 @@
 import type { TrieType } from './types';
 
-// Trie algorithm (inspired by https://github.com/Yomguithereal/mnemonist/blob/master/trie.js)
-export const trieCore = function (): TrieType {
+// Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
+export const Trie = function (): TrieType {
   let root: Record<string, unknown>, size: number;
   clear();
 
@@ -66,6 +66,17 @@ export const trieCore = function (): TrieType {
     return matches;
   }
 
+  function addAll(iterable: string[]): TrieType {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const trie = this as TrieType;
+    iterable.forEach((value: string) => {
+      trie.add(value);
+    });
+
+    return trie;
+  }
+
   function clear() {
     root = {};
     size = 0;
@@ -73,23 +84,20 @@ export const trieCore = function (): TrieType {
 
   return {
     add,
+    addAll,
     find,
     clear,
   };
 };
 
-export function Trie(iterable: unknown[]): TrieType {
-  const trie = new (trieCore as any)();
-
-  iterable.forEach((value: unknown) => {
-    trie.add(value);
-  });
-
-  return trie;
-}
-
-// test
-// const words = ['roman', 'romanesque', 'romanesco', 'cat', 'category', 'romanei', 'dd romaneidfs'];
-// const trie = Trie(words);
-// const res = trie.find('romane');
-// console.log('ressss :>> ', res);
+/**
+ * Create a new trie from items
+ * @deprecated 13 Nov 2020
+ * */
+// export function TrieInit(iterable: unknown[]): TrieType {
+//   const tr = new (Trie as any)();
+//   iterable.forEach((value: unknown) => {
+//     tr.add(value);
+//   });
+//   return tr;
+// }
