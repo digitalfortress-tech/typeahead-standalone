@@ -22,7 +22,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
 
   let items: T[] = [];
-  // let listSuggestions: T[] = [];
   let inputValue = '';
   let selected: T | undefined;
   let keypressCounter = 0;
