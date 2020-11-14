@@ -7,8 +7,12 @@ export interface typeaheadItem {
 
 export interface typeaheadDataSource {
   local?: Record<string, unknown>[];
-  prefetch?: string;
-  remote?: string;
+  // prefetch?: string;
+  remote?: {
+    url: string;
+    wildcard: string;
+    method?: string;
+  };
   identifier?: string;
 }
 

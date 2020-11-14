@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             : i > this.previousTop &&
               (o('#mainNav').removeClass('is-visible'),
               s < i && !o('#mainNav').hasClass('is-fixed') && o('#mainNav').addClass('is-fixed')),
-            (this.previousTop = i);
+          (this.previousTop = i);
         }
       );
     }
@@ -102,6 +102,9 @@ typeahead({
   // source: {
   //   local: colors1,
   //   identifier: 'id',
+  //   remote: {
+  //     url: 'https://raw.githubusercontent.com/twitter/typeahead.js/gh-pages/data/countries.json',
+  //   },
   // },
   highlight: true,
   className: 'typeahead-example',

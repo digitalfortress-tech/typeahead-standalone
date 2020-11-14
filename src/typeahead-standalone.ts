@@ -7,6 +7,7 @@
 import type { typeaheadItem, typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates } from './types';
 import { EventTrigger, Keys } from './constants';
 import { escapeRegExp, normalizer, onSelectCb } from './helpers';
+import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import './style.less';
 
 export default function typeahead<T extends typeaheadItem>(config: typeaheadConfig<T>): typeaheadResult {
@@ -38,7 +39,13 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   if (config.source?.local) {
-    items = normalize(config.source?.local, config.source?.identifier) as T[];
+    items = normalize(config.source.local, config.source?.identifier) as T[];
+  }
+
+  if (config.source?.remote && config.source.remote.url && config.source.remote.wildcard) {
+    fetchWrapper.get(config.source.remote.url).then((data) => {
+      console.debug('data received :>> ', data);
+    });
   }
 
   let input: HTMLInputElement = config.input;
