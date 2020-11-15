@@ -10,10 +10,12 @@ export const Trie = function (): TrieType {
 
   /**
    * Method used to add the given prefix to the trie.
+   * You can optionally provide data, which will be stored in the tree as well
    */
-  function add(prefix: string | string[]) {
+  function add(prefix: string, data?: Record<string, unknown>) {
     let node = root;
     let token;
+    prefix = prefix.toLowerCase(); // to make the search case insensitive
 
     for (let i = 0, l = prefix.length; i < l; i++) {
       token = prefix[i];
@@ -23,24 +25,22 @@ export const Trie = function (): TrieType {
     // Do we need to increase size?
     if (!(SENTINEL in node)) size++;
 
-    node[SENTINEL] = true;
+    node[SENTINEL] = data || true;
   }
 
   /**
-   * Method used to retrieve every item in the trie with the given prefix.
+   * Method used to retrieve every item in the trie beginning with the given prefix.
    */
-  function find(prefix: string | string[]): string[] {
-    const isString = typeof prefix === 'string';
-
+  function find(prefix: string): string[] | Record<string, unknown>[] {
     let node = root;
-    const matches: string[] = [];
+    const matches: string[] | Record<string, unknown>[] = [];
     let token, i, l;
 
     for (i = 0, l = prefix.length; i < l; i++) {
       token = prefix[i];
       node = node[token] as Record<string, unknown>;
 
-      if (typeof node === 'undefined') return matches;
+      if (typeof node === 'undefined') return matches as string[];
     }
 
     // Performing DFS (Depth-First Search) from prefix to traverse the tree
@@ -54,24 +54,31 @@ export const Trie = function (): TrieType {
 
       for (k in node) {
         if (k === SENTINEL) {
-          matches.push(prefix);
+          node[SENTINEL] === true ? matches.push(prefix as any) : matches.push(node[SENTINEL] as any);
           continue;
         }
 
         nodeStack.push(node[k] as Record<string, unknown>);
-        prefixStack.push(isString ? prefix + k : prefix.concat(k));
+        prefixStack.push(prefix + k);
       }
     }
 
     return matches;
   }
 
-  function addAll(iterable: string[]): TrieType {
+  /**
+   * Adds the given array of strings/objects to the trie
+   */
+  function addAll(iterable: string[] | Record<string, unknown>[]): TrieType {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const trie = this as TrieType;
-    iterable.forEach((value: string) => {
-      trie.add(value);
+    iterable.forEach((value: string | Record<string, unknown>) => {
+      if (typeof value === 'string') {
+        trie.add(value);
+      } else {
+        trie.add(value.label as string, value);
+      }
     });
 
     return trie;

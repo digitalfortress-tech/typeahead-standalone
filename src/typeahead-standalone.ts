@@ -8,6 +8,7 @@ import type { typeaheadItem, typeaheadResult, typeaheadConfig, typeaheadHtmlTemp
 import { EventTrigger, Keys } from './constants';
 import { escapeRegExp, normalizer, onSelectCb } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
+import { Trie } from './trie/trie';
 import './style.less';
 
 export default function typeahead<T extends typeaheadItem>(config: typeaheadConfig<T>): typeaheadResult {
@@ -21,8 +22,10 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const limitSuggestions = config.limit || 5;
   const hint = config.hint === false ? false : true;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
+  const trie = new (Trie as any)();
 
-  let items: T[] = [];
+  let items: T[] = []; // suggestions
+  let dataSource: T[] = [];
   let inputValue = '';
   let selected: T | undefined;
   let keypressCounter = 0;
@@ -34,12 +37,13 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     throw new Error('input undefined');
   }
 
-  if (!config.source?.local && !config.source?.remote && !config.fetch) {
+  if (!config.source?.local && !config.source?.remote) {
     throw new Error('data source undefined');
   }
 
   if (config.source?.local) {
-    items = normalize(config.source.local, config.source?.identifier) as T[];
+    dataSource = normalize(config.source.local, config.source?.identifier) as T[];
+    trie.addAll(dataSource);
   }
 
   if (config.source?.remote && config.source.remote.url && config.source.remote.wildcard) {
@@ -372,7 +376,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     // if multiple keys were pressed, before we get update from server,
     // this may cause redrawing our typeahead multiple times after the last key press.
     // to avoid this, the number of times keyboard was pressed will be
-    // saved and checked before redraw our typeahead box.
+    // saved and checked before redrawing the typeahead box.
     const savedKeypressCounter = ++keypressCounter;
 
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
@@ -380,18 +384,14 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       clearDebounceTimer();
       debounceTimer = window.setTimeout(
         function (): void {
-          config.fetch(
-            val,
-            function (elements: T[] | false): void {
-              if (keypressCounter === savedKeypressCounter && elements) {
-                items = elements;
-                inputValue = val;
-                selected = items.length > 0 ? items[0] : undefined;
-                update();
-              }
-            },
-            EventTrigger.Keyboard
-          );
+          if (keypressCounter === savedKeypressCounter) {
+            items = trie.find(val.toLowerCase());
+            inputValue = val;
+            if (items.length) {
+              selected = items[0];
+            }
+            update();
+          }
         },
         trigger === EventTrigger.Keyboard ? debounceWaitMs : 0
       );

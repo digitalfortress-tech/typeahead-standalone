@@ -132,7 +132,6 @@ You can pass the following config options to `typeahead-standalone`:
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
 |`input`|DOM input element must be passed with this parameter and typeahead will attach itself to this field. |`-`|
-|`fetch`|This method will be called to prepare suggestions and then pass them to typeahead. The first parameter is the text in the input field. The second parameter is a callback function that must be called after suggestions are prepared with an array as parameter. If you pass `false` to the callback function, previous suggestions would be shown.|`-`|
 |`onSelect`|This method will be called when the user chooses an item from the suggestions. The selected item will be passed as first parameter.|Sets labels text as input's value|
 |`minLength`|Specify the minimum length, when suggestions should appear on the screen.|`1`|
 |`limit`|Specify the maximum number of suggestions that should be displayed.|`5`|
