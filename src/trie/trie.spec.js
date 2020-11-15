@@ -72,4 +72,11 @@ describe('Trie algorithm', () => {
     const suggestions = trie.find('romane');
     expect(suggestions).toStrictEqual(['romanei', 'romanesco', 'romanesque']);
   });
+
+  it('Trie limit found suggestions to 2', () => {
+    const words = ['romAn', 'romAneSquE', 'ROmanesCo', 'romanex', 'romaney', 'romanez', 'romanei', 'romanif'];
+    const trie = new Trie().addAll(words);
+    const suggestions = trie.find('romane', 2);
+    expect(suggestions).toStrictEqual(['romanei', 'romanez']);
+  });
 });

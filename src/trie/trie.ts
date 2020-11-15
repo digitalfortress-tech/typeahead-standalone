@@ -31,7 +31,7 @@ export const Trie = function (): TrieType {
   /**
    * Method used to retrieve every item in the trie beginning with the given prefix.
    */
-  function find(prefix: string): string[] | Record<string, unknown>[] {
+  function find(prefix: string, limit?: number): string[] | Record<string, unknown>[] {
     let node = root;
     const matches: string[] | Record<string, unknown>[] = [];
     let token, i, l;
@@ -53,6 +53,9 @@ export const Trie = function (): TrieType {
       node = nodeStack.pop() as Record<string, unknown>;
 
       for (k in node) {
+        // limit found matches
+        if (limit && matches.length >= limit) break;
+
         if (k === SENTINEL) {
           node[SENTINEL] === true ? matches.push(prefix as any) : matches.push(node[SENTINEL] as any);
           continue;
