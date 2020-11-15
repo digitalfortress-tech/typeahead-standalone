@@ -91,27 +91,29 @@ var input = document.getElementById('searchInput');
 typeahead({
   input: input,
   source: {
-    local: colors1,
-    identifier: 'id',
-    // remote: {
-    //   url: 'https://raw.githubusercontent.com/twitter/typeahead.js/gh-pages/data/countries.json',
-    // },
+    // local: colors1,
+    // identifier: 'id',
+    remote: {
+      url: 'https://restcountries.eu/rest/v2/name/%QUERY',
+      wildcard: '%QUERY',
+    },
+    identifier: 'name',
   },
   highlight: true,
   className: 'typeahead-example',
   templates: {
-    suggestion: (item) => {
-      return (
-        '<span class="preview" style="background-color:' +
-        item.hash +
-        '"></span><div class="text">' +
-        item.label +
-        '</div>'
-      );
-    },
-    group: (name) => {
-      return '<div class="custom-group">' + name + '</div>';
-    },
+    // suggestion: (item) => {
+    //   return (
+    //     '<span class="preview" style="background-color:' +
+    //     item.hash +
+    //     '"></span><div class="text">' +
+    //     item.label +
+    //     '</div>'
+    //   );
+    // },
+    // group: (name) => {
+    //   return '<div class="custom-group">' + name + '</div>';
+    // },
     header: 'Colors Found',
     footer: '<a href="#">See more...</a>',
     notFound: 'Oops...Nothing Found 😪 <br>Try another color...',

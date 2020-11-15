@@ -16,22 +16,23 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   const listContainer: HTMLDivElement = doc.createElement('div');
   const listContainerStyle = listContainer.style;
-  const debounceWaitMs = config.debounceWaitMs || 0;
+  const debounceWaitMs = config.debounceWaitMs || 10;
   const preventSubmit = config.preventSubmit || false;
   const minLen = config.minLength || 1;
   const limitSuggestions = config.limit || 5;
   const hint = config.hint === false ? false : true;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
   const trie = new (Trie as any)();
-
-  let items: T[] = []; // suggestions
-  let dataSource: T[] = [];
-  let inputValue = '';
-  let selected: T | undefined;
-  let keypressCounter = 0;
-  let debounceTimer: number | undefined;
   const onSelect: (item: T, input: HTMLInputElement) => void = config.onSelect || onSelectCb;
   const normalize = config.normalizer || normalizer;
+  const remoteXhrCache: Record<string, unknown> = {};
+
+  let items: T[] = []; // suggestions
+  let dataStore: T[] = [];
+  let inputValue = '';
+  let selected: T | undefined;
+  let debounceTimer: number | undefined;
+  let fetchInProgress = false;
 
   if (!config.input) {
     throw new Error('input undefined');
@@ -42,14 +43,8 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   if (config.source?.local) {
-    dataSource = normalize(config.source.local, config.source?.identifier) as T[];
-    trie.addAll(dataSource);
-  }
-
-  if (config.source?.remote && config.source.remote.url && config.source.remote.wildcard) {
-    fetchWrapper.get(config.source.remote.url).then((data) => {
-      console.debug('data received :>> ', data);
-    });
+    dataStore = normalize(config.source.local, config.source?.identifier) as T[];
+    trie.addAll(dataStore);
   }
 
   let input: HTMLInputElement = config.input;
@@ -114,11 +109,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
    * Clear typeahead state and hide listContainer
    */
   function clear(): void {
-    // prevent the update call if there are pending AJAX requests
-    keypressCounter++;
-
     items = [];
-    inputValue = '';
     inputHint.value = '';
     selected = undefined;
     detach();
@@ -173,10 +164,8 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     const fragment = doc.createDocumentFragment();
     let prevGroup = '#9?$';
 
-    const iterable = Array.from(new Set(items)); // remove duplicates
-
     // Add header template
-    if (iterable.length && templates?.header?.trim().length) {
+    if (items.length && templates?.header?.trim().length) {
       const headerDiv = doc.createElement('div');
       headerDiv.classList.add('tt-header');
       templatify(headerDiv, templates.header);
@@ -184,7 +173,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     }
 
     // loop over suggestions
-    for (const [index, item] of iterable.entries()) {
+    for (const [index, item] of items.entries()) {
       if (index === limitSuggestions) break;
       if (item.group && item.group !== prevGroup) {
         prevGroup = item.group;
@@ -213,7 +202,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     }
 
     // Add footer template
-    if (iterable.length && templates?.footer?.trim().length) {
+    if (items.length && templates?.footer?.trim().length) {
       const footerDiv = doc.createElement('div');
       footerDiv.classList.add('tt-footer');
       templatify(footerDiv, templates.footer);
@@ -223,7 +212,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     listContainer.appendChild(fragment);
 
     // No Matches
-    if (!iterable.length) {
+    if (!items.length) {
       if (templates?.notFound?.trim().length) {
         inputHint.value = '';
         const empty = doc.createElement('div');
@@ -373,31 +362,84 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   function startFetch(trigger: EventTrigger) {
-    // if multiple keys were pressed, before we get update from server,
-    // this may cause redrawing our typeahead multiple times after the last key press.
-    // to avoid this, the number of times keyboard was pressed will be
-    // saved and checked before redrawing the typeahead box.
-    const savedKeypressCounter = ++keypressCounter;
-
+    clearDebounceTimer();
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
     if (val.length >= minLen) {
-      clearDebounceTimer();
       debounceTimer = window.setTimeout(
         function (): void {
-          if (keypressCounter === savedKeypressCounter) {
-            items = trie.find(val.toLowerCase());
-            inputValue = val;
-            if (items.length) {
-              selected = items[0];
-            }
-            update();
+          inputValue = val;
+          calcSuggestions();
+          update();
+          if (items.length < limitSuggestions && !fetchInProgress) {
+            fetchDataFromRemote();
           }
         },
-        trigger === EventTrigger.Keyboard ? debounceWaitMs : 0
+        trigger === EventTrigger.Keyboard ? debounceWaitMs : 10
       );
     } else {
+      inputValue = '';
       clear();
     }
+  }
+
+  function calcSuggestions() {
+    const suggestions: T[] = trie.find(inputValue.toLowerCase(), limitSuggestions);
+    // remove duplicates from suggestions to allow back-filling
+    items = [...new Map(suggestions.map((item) => [item['label'], item])).values()];
+    // set selected item
+    if (items.length) {
+      selected = items[0];
+    }
+  }
+
+  function fetchDataFromRemote() {
+    if (config.source && config.source.remote && config.source.remote.url && config.source.remote.wildcard) {
+      fetchInProgress = true;
+      const frozenInput = inputValue;
+      const url = config.source.remote.url.replace(config.source.remote.wildcard, frozenInput);
+      const urlThumbprint = JSON.stringify(url);
+      // cache XHR requests so that same calls aren't made multiple times
+      if (remoteXhrCache[urlThumbprint]) {
+        fetchInProgress = false;
+        return;
+      }
+
+      let transformed: T[] = [];
+
+      fetchWrapper
+        .get(url)
+        .then(
+          (data) => {
+            if (config.source?.remote?.transform) {
+              transformed = config.source.remote.transform(data) as T[];
+            }
+            transformed = normalize(data, config.source?.identifier) as T[];
+            trie.addAll(transformed);
+          },
+          (reject) => {
+            console.error('Request failed - ', reject);
+          }
+        )
+        .finally(() => {
+          remoteXhrCache[urlThumbprint] = true; // add to cache
+          if (transformed.length && inputValue.length) {
+            calcSuggestions();
+            update();
+            updateDataStore(transformed);
+          }
+          fetchInProgress = false;
+
+          // make another request if inputVal exists but is different than the last remote request
+          if (inputValue.length && frozenInput !== inputValue) {
+            fetchDataFromRemote();
+          }
+        });
+    }
+  }
+
+  function updateDataStore(iterable: T[]) {
+    dataStore = [...dataStore, ...iterable];
+    dataStore = [...new Map(dataStore.map((item) => [item['label'], item])).values()]; // remove duplicates
   }
 
   /**
