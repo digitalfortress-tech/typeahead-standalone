@@ -72,18 +72,24 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
   listContainerStyle.position = 'absolute';
 
+  attachListContainer();
+
   /**
-   * Detach the listContainer from DOM
+   * Display/show the listContainer
    */
-  function detach(): void {
-    const parent = listContainer.parentNode;
-    if (parent) {
-      parent.removeChild(listContainer);
-    }
+  function show(): void {
+    listContainerStyle.display = 'block';
   }
 
   /**
-   * Clear debouncing timer if assigned
+   * Hides the listContainer from DOM
+   */
+  function hide(): void {
+    listContainerStyle.display = 'none';
+  }
+
+  /**
+   * Clear debounce timer if assigned
    */
   function clearDebounceTimer(): void {
     if (debounceTimer) {
@@ -92,7 +98,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   /**
-   * Clear remote debouncing timer if assigned
+   * Clear remote debounce timer if assigned
    */
   function clearRemoteDebounceTimer(): void {
     if (remoteDebounceTimer) {
@@ -101,19 +107,10 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   /**
-   * Attach the listContainer to DOM
-   */
-  function attach(): void {
-    if (!listContainer.parentNode) {
-      wrapper.appendChild(listContainer);
-    }
-  }
-
-  /**
    * Check if listContainer for typeahead is displayed
    */
   function containerDisplayed(): boolean {
-    return !!listContainer.parentNode;
+    return listContainer.style.display !== 'none';
   }
 
   /**
@@ -123,18 +120,18 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     items = [];
     inputHint.value = '';
     selected = undefined;
-    detach();
+    hide();
   }
 
   /**
-   * Update typeahead position
+   * Attaches list container to the DOM and styles it
    */
-  function updatePosition(): void {
-    if (!containerDisplayed()) {
-      return;
-    }
+  function attachListContainer(): void {
+    wrapper.appendChild(listContainer);
 
-    listContainerStyle.width = `${input.offsetWidth}px`;
+    // fix position of listContainer
+    listContainerStyle.display = 'none';
+    listContainerStyle.width = '100%';
     listContainerStyle.top = `${input.clientHeight}px`; // or top: '100%'
     listContainerStyle.left = '0';
   }
@@ -236,8 +233,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       }
     }
 
-    attach();
-    updatePosition();
+    show();
     updateScroll();
   }
 
