@@ -234,7 +234,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     }
 
     show();
-    updateScroll();
   }
 
   function inputEventHandler(ev: KeyboardEvent): void {
@@ -245,32 +244,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     }
 
     startFetch(EventTrigger.Keyboard);
-  }
-
-  /**
-   * Automatically move scroll bar if selected item is not visible
-   */
-  function updateScroll(): void {
-    const elements = listContainer.getElementsByClassName('tt-selected');
-    if (elements.length > 0) {
-      let element = elements[0] as HTMLDivElement;
-
-      // make group visible
-      const previous = element.previousElementSibling as HTMLDivElement;
-      if (previous && previous.className.indexOf('tt-group') !== -1 && !previous.previousElementSibling) {
-        element = previous;
-      }
-
-      if (element.offsetTop < listContainer.scrollTop) {
-        listContainer.scrollTop = element.offsetTop;
-      } else {
-        const selectBottom = element.offsetTop + element.offsetHeight;
-        const containerBottom = listContainer.scrollTop + listContainer.offsetHeight;
-        if (selectBottom > containerBottom) {
-          listContainer.scrollTop += selectBottom - containerBottom;
-        }
-      }
-    }
   }
 
   /**
