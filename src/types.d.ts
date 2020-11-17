@@ -35,6 +35,7 @@ export interface typeaheadConfig<T extends typeaheadItem> {
   highlight?: boolean;
   onSelect?: (item: T, input: HTMLInputElement) => void;
   debounceWaitMs?: number;
+  debounceRemote?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
   source?: typeaheadDataSource;
   normalizer?: (listItems: string[] | Record<string, unknown>[], label?: string) => string[];

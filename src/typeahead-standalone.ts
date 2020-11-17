@@ -17,6 +17,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const listContainer: HTMLDivElement = doc.createElement('div');
   const listContainerStyle = listContainer.style;
   const debounceWaitMs = config.debounceWaitMs || 10;
+  const debounceXHR = config.debounceRemote || 100;
   const preventSubmit = config.preventSubmit || false;
   const minLen = config.minLength || 1;
   const limitSuggestions = config.limit || 5;
@@ -32,6 +33,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   let inputValue = '';
   let selected: T | undefined;
   let debounceTimer: number | undefined;
+  let remoteDebounceTimer: number | undefined;
   let fetchInProgress = false;
 
   if (!config.input) {
@@ -86,6 +88,15 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   function clearDebounceTimer(): void {
     if (debounceTimer) {
       window.clearTimeout(debounceTimer);
+    }
+  }
+
+  /**
+   * Clear remote debouncing timer if assigned
+   */
+  function clearRemoteDebounceTimer(): void {
+    if (remoteDebounceTimer) {
+      window.clearTimeout(remoteDebounceTimer);
     }
   }
 
@@ -363,6 +374,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   function startFetch(trigger: EventTrigger) {
     clearDebounceTimer();
+    clearRemoteDebounceTimer();
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
     if (val.length >= minLen) {
       debounceTimer = window.setTimeout(
@@ -370,9 +382,11 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
           inputValue = val;
           calcSuggestions();
           update();
-          if (items.length < limitSuggestions && !fetchInProgress) {
-            fetchDataFromRemote();
-          }
+          remoteDebounceTimer = window.setTimeout(function (): void {
+            if (items.length < limitSuggestions && !fetchInProgress) {
+              fetchDataFromRemote();
+            }
+          }, debounceXHR);
         },
         trigger === EventTrigger.Keyboard ? debounceWaitMs : 10
       );
@@ -398,8 +412,9 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       const frozenInput = inputValue;
       const url = config.source.remote.url.replace(config.source.remote.wildcard, frozenInput);
       const urlThumbprint = JSON.stringify(url);
-      // cache XHR requests so that same calls aren't made multiple times
-      if (remoteXhrCache[urlThumbprint]) {
+
+      // check cache, verify input length
+      if (remoteXhrCache[urlThumbprint] || !frozenInput.length) {
         fetchInProgress = false;
         return;
       }
@@ -421,7 +436,8 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
           }
         )
         .finally(() => {
-          remoteXhrCache[urlThumbprint] = true; // add to cache
+          // cache XHR requests so that same calls aren't made multiple times
+          remoteXhrCache[urlThumbprint] = true;
           if (transformed.length && inputValue.length) {
             calcSuggestions();
             update();
@@ -572,6 +588,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     input.removeEventListener('input', inputEventHandler as EventListenerOrEventListenerObject);
     input.removeEventListener('blur', blurEventHandler);
     clearDebounceTimer();
+    clearRemoteDebounceTimer();
     clear();
   }
 
