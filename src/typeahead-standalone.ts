@@ -149,7 +149,11 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     listContainerStyle.left = '0';
   }
 
-  function noResultsHandler(forceRender = false) {
+  /**
+   * Displays the NotFound template if it exists, otherwise, does nothing (i.e. return true)
+   * @param asyncRender set to true for asyncRenders
+   */
+  function noResultsHandler(asyncRender = false) {
     if (!items.length) {
       clear(); // clear the list
       if (!templates?.notFound) {
@@ -164,7 +168,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
       if (!remote) {
         renderNotFoundTemplate();
-      } else if (forceRender && !fetchInProgress) {
+      } else if (asyncRender && !fetchInProgress) {
         // wait for remote results before rendering notFoundTemplate;
         clearListDOM();
         renderNotFoundTemplate();
@@ -412,11 +416,10 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
     fetchInProgress = true;
     const frozenInput = inputValue;
-    const url = remote.url.replace(remote.wildcard, frozenInput);
-    const urlThumbprint = JSON.stringify(url);
+    const thumbprint = JSON.stringify(frozenInput);
 
     // check cache, verify input length
-    if (remoteXhrCache[urlThumbprint] || !inputValue.length) {
+    if (remoteXhrCache[thumbprint] || !inputValue.length) {
       fetchInProgress = false;
       noResultsHandler(true);
       return;
@@ -425,7 +428,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     let transformed: T[] = [];
 
     fetchWrapper
-      .get(url)
+      .get(remote.url.replace(remote.wildcard, frozenInput))
       .then(
         (data) => {
           if (remote.transform) {
@@ -440,7 +443,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       )
       .finally(() => {
         // cache XHR requests so that same calls aren't made multiple times
-        remoteXhrCache[urlThumbprint] = true;
+        remoteXhrCache[thumbprint] = true;
         if (transformed.length && inputValue.length) {
           calcSuggestions();
           update();
