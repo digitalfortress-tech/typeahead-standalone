@@ -149,19 +149,36 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     listContainerStyle.left = '0';
   }
 
-  function noResultsHandler() {
+  function noResultsHandler(forceRender = false) {
     if (!items.length) {
       clear(); // clear the list
-
       if (!templates?.notFound) {
         return true;
       }
+      const renderNotFoundTemplate = () => {
+        const empty = doc.createElement('div');
+        empty.classList.add('tt-notFound');
+        templatify(empty, templates.notFound || '');
+        listContainer.appendChild(empty);
+      };
 
-      // render notFound template
-      const empty = doc.createElement('div');
-      empty.classList.add('tt-notFound');
-      templatify(empty, templates.notFound);
-      listContainer.appendChild(empty);
+      if (!remote) {
+        renderNotFoundTemplate();
+      } else if (forceRender && !fetchInProgress) {
+        // wait for remote results before rendering notFoundTemplate;
+        clearListDOM();
+        renderNotFoundTemplate();
+        show();
+      }
+    }
+  }
+
+  /**
+   * Delete all children from typeahead DOM listContainer
+   */
+  function clearListDOM() {
+    while (listContainer.firstChild) {
+      listContainer.firstChild.remove();
     }
   }
 
@@ -169,10 +186,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
    * Redraw the typeahead div element with suggestions
    */
   function update(): void {
-    // delete all children from typeahead DOM listContainer
-    while (listContainer.firstChild) {
-      listContainer.firstChild.remove();
-    }
+    clearListDOM();
 
     // function for rendering typeahead suggestions
     const render = function (item: T): HTMLDivElement | undefined {
@@ -404,6 +418,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     // check cache, verify input length
     if (remoteXhrCache[urlThumbprint] || !inputValue.length) {
       fetchInProgress = false;
+      noResultsHandler(true);
       return;
     }
 
@@ -437,6 +452,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         if (inputValue.length && frozenInput !== inputValue) {
           fetchDataFromRemote();
         }
+        noResultsHandler(true);
       });
   }
 
