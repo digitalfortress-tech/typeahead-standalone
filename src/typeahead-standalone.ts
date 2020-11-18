@@ -25,8 +25,13 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
   const trie = new (Trie as any)();
   const onSelect: (item: T, input: HTMLInputElement) => void = config.onSelect || onSelectCb;
+  const identifier = config.source?.identifier || '';
   const normalize = config.normalizer || normalizer;
   const remoteXhrCache: Record<string, unknown> = {};
+  const remote =
+    config.source && config.source.remote && config.source.remote.url && config.source.remote.wildcard
+      ? config.source.remote
+      : null;
 
   let items: T[] = []; // suggestions
   let dataStore: T[] = [];
@@ -45,7 +50,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   if (config.source?.local) {
-    dataStore = normalize(config.source.local, config.source?.identifier) as T[];
+    dataStore = normalize(config.source.local, identifier) as T[];
     trie.addAll(dataStore);
   }
 
@@ -376,50 +381,50 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   function fetchDataFromRemote() {
-    if (config.source && config.source.remote && config.source.remote.url && config.source.remote.wildcard) {
-      fetchInProgress = true;
-      const frozenInput = inputValue;
-      const url = config.source.remote.url.replace(config.source.remote.wildcard, frozenInput);
-      const urlThumbprint = JSON.stringify(url);
+    if (!remote) return;
 
-      // check cache, verify input length
-      if (remoteXhrCache[urlThumbprint] || !frozenInput.length) {
-        fetchInProgress = false;
-        return;
-      }
+    fetchInProgress = true;
+    const frozenInput = inputValue;
+    const url = remote.url.replace(remote.wildcard, frozenInput);
+    const urlThumbprint = JSON.stringify(url);
 
-      let transformed: T[] = [];
-
-      fetchWrapper
-        .get(url)
-        .then(
-          (data) => {
-            if (config.source?.remote?.transform) {
-              transformed = config.source.remote.transform(data) as T[];
-            }
-            transformed = normalize(data, config.source?.identifier) as T[];
-            trie.addAll(transformed);
-          },
-          (reject) => {
-            console.error('Request failed - ', reject);
-          }
-        )
-        .finally(() => {
-          // cache XHR requests so that same calls aren't made multiple times
-          remoteXhrCache[urlThumbprint] = true;
-          if (transformed.length && inputValue.length) {
-            calcSuggestions();
-            update();
-            updateDataStore(transformed);
-          }
-          fetchInProgress = false;
-
-          // make another request if inputVal exists but is different than the last remote request
-          if (inputValue.length && frozenInput !== inputValue) {
-            fetchDataFromRemote();
-          }
-        });
+    // check cache, verify input length
+    if (remoteXhrCache[urlThumbprint] || !inputValue.length) {
+      fetchInProgress = false;
+      return;
     }
+
+    let transformed: T[] = [];
+
+    fetchWrapper
+      .get(url)
+      .then(
+        (data) => {
+          if (remote.transform) {
+            transformed = remote.transform(data) as T[];
+          }
+          transformed = normalize(data, identifier) as T[];
+          trie.addAll(transformed);
+        },
+        (reject) => {
+          console.error('Request failed - ', reject);
+        }
+      )
+      .finally(() => {
+        // cache XHR requests so that same calls aren't made multiple times
+        remoteXhrCache[urlThumbprint] = true;
+        if (transformed.length && inputValue.length) {
+          calcSuggestions();
+          update();
+          updateDataStore(transformed);
+        }
+        fetchInProgress = false;
+
+        // make another request if inputVal exists but is different than the last remote request
+        if (inputValue.length && frozenInput !== inputValue) {
+          fetchDataFromRemote();
+        }
+      });
   }
 
   function updateDataStore(iterable: T[]) {
