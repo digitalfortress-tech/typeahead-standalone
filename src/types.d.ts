@@ -21,7 +21,7 @@ export interface typeaheadHtmlTemplates<T extends typeaheadItem> {
   header?: string;
   footer?: string;
   suggestion: (item?: T) => string;
-  group: (groupName?: string) => string;
+  group?: (groupName?: string) => string;
   notFound?: string;
   // pending?: string;
 }

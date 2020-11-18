@@ -41,6 +41,14 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   let remoteDebounceTimer: number | undefined;
   let fetchInProgress = false;
 
+  // init templates if they exist
+  if (templates) {
+    templates.header = templates.header?.trim();
+    templates.footer = templates.footer?.trim();
+    templates.notFound = templates.notFound?.trim();
+    templates.group = templates.group && typeof templates.group === 'function' ? templates.group : undefined;
+  }
+
   if (!config.input) {
     throw new Error('input undefined');
   }
@@ -141,6 +149,22 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     listContainerStyle.left = '0';
   }
 
+  function noResultsHandler() {
+    if (!items.length) {
+      clear(); // clear the list
+
+      if (!templates?.notFound) {
+        return true;
+      }
+
+      // render notFound template
+      const empty = doc.createElement('div');
+      empty.classList.add('tt-notFound');
+      templatify(empty, templates.notFound);
+      listContainer.appendChild(empty);
+    }
+  }
+
   /**
    * Redraw the typeahead div element with suggestions
    */
@@ -166,8 +190,8 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     const renderGroup = function (groupName: string): HTMLDivElement | undefined {
       const groupDiv = doc.createElement('div');
       groupDiv.classList.add('tt-group');
-      if (templates?.group && typeof templates.group === 'function') {
-        templatify(groupDiv, templates?.group(groupName));
+      if (templates?.group) {
+        templatify(groupDiv, templates.group(groupName));
       } else {
         groupDiv.textContent = groupName || '';
       }
@@ -178,7 +202,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     let prevGroup = '#9?$';
 
     // Add header template
-    if (items.length && templates?.header?.trim().length) {
+    if (items.length && templates?.header) {
       const headerDiv = doc.createElement('div');
       headerDiv.classList.add('tt-header');
       templatify(headerDiv, templates.header);
@@ -215,7 +239,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     }
 
     // Add footer template
-    if (items.length && templates?.footer?.trim().length) {
+    if (items.length && templates?.footer) {
       const footerDiv = doc.createElement('div');
       footerDiv.classList.add('tt-footer');
       templatify(footerDiv, templates.footer);
@@ -225,18 +249,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     listContainer.appendChild(fragment);
 
     // No Matches
-    if (!items.length) {
-      if (templates?.notFound?.trim().length) {
-        inputHint.value = '';
-        const empty = doc.createElement('div');
-        empty.classList.add('tt-notFound');
-        templatify(empty, templates.notFound);
-        listContainer.appendChild(empty);
-      } else {
-        clear();
-        return;
-      }
-    }
+    if (noResultsHandler()) return;
 
     show();
   }
