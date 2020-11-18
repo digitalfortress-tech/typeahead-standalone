@@ -150,10 +150,11 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   /**
-   * Displays the NotFound template if it exists, otherwise, does nothing (i.e. return true)
+   * Displays the NotFound template if it exists, otherwise, does nothing (i.e. returns true)
    * @param asyncRender set to true for asyncRenders
+   * @returns true if no suggestions are found, else returns undefined
    */
-  function noResultsHandler(asyncRender = false) {
+  function noSuggestionsHandler(asyncRender = false) {
     if (!items.length) {
       clear(); // clear the list
       if (!templates?.notFound) {
@@ -168,12 +169,14 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
       if (!remote) {
         renderNotFoundTemplate();
-      } else if (asyncRender && !fetchInProgress) {
+      } else if (asyncRender && inputValue && !fetchInProgress) {
         // wait for remote results before rendering notFoundTemplate;
         clearListDOM();
         renderNotFoundTemplate();
-        show();
       }
+
+      show();
+      return true;
     }
   }
 
@@ -190,6 +193,9 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
    * Redraw the typeahead div element with suggestions
    */
   function update(): void {
+    // No Matches
+    if (noSuggestionsHandler()) return;
+
     clearListDOM();
 
     // function for rendering typeahead suggestions
@@ -220,7 +226,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     let prevGroup = '#9?$';
 
     // Add header template
-    if (items.length && templates?.header) {
+    if (templates?.header) {
       const headerDiv = doc.createElement('div');
       headerDiv.classList.add('tt-header');
       templatify(headerDiv, templates.header);
@@ -257,7 +263,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     }
 
     // Add footer template
-    if (items.length && templates?.footer) {
+    if (templates?.footer) {
       const footerDiv = doc.createElement('div');
       footerDiv.classList.add('tt-footer');
       templatify(footerDiv, templates.footer);
@@ -265,9 +271,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     }
 
     listContainer.appendChild(fragment);
-
-    // No Matches
-    if (noResultsHandler()) return;
 
     show();
   }
@@ -421,7 +424,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     // check cache, verify input length
     if (remoteXhrCache[thumbprint] || !inputValue.length) {
       fetchInProgress = false;
-      noResultsHandler(true);
+      noSuggestionsHandler(true);
       return;
     }
 
@@ -455,7 +458,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         if (inputValue.length && frozenInput !== inputValue) {
           fetchDataFromRemote();
         }
-        noResultsHandler(true);
+        noSuggestionsHandler(true);
       });
   }
 
