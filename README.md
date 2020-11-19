@@ -60,7 +60,7 @@ The library will be available as a global object at `window.typeahead`
 
 Typeahead requires an `input` Element to attach itself to and a `Data source` (local, remote) to display suggestions. 
 
-Here is a basic example
+Here is a very basic example (See [demo](#demo) for advanced examples)
 
 #### Html
 
@@ -75,27 +75,17 @@ Here is a basic example
 
 ```javascript
 // local Data
-var colors = [
-  { label: 'Grey', value: 'GR' },
-  { label: 'Brown', value: 'BR' },
-  { label: 'Black', value: 'BK', group: 'Shades of Black' },
-  { label: 'Black Xtra', value: 'XBK', group: 'Shades of Black' },
-];
+var colors = ['Grey', 'Brown', 'Black', 'Blue']
 
 // input element to attach to
-var input = document.getElementById("searchInput");
+var inputElement = document.getElementById("searchInput");
 
 typeahead({
-    input: input,
-    fetch: function(text, update) {
-        text = text.toLowerCase();
-        // you can also make AJAX requests instead of using local data
-        var suggestions = colors.filter(n => n.label.toLowerCase().startsWith(text))
-        update(suggestions);
-    },
-    // onSelect: function(item) {
-    //     input.value = item.label;
-    // }
+    input: inputElement,
+    source: {
+      local: colors,
+      // remote: {...}
+    }
 });
 ```
 #### Styling (css)
@@ -131,18 +121,62 @@ You can pass the following config options to `typeahead-standalone`:
 
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
-|`input`|DOM input element must be passed with this parameter and typeahead will attach itself to this field. |`-`|
+|`input`|DOM input element must be passed with this parameter and typeahead will attach itself to this field. |`-` (Required)|
+|`source`|This is the source of Data from which suggestions will be provided. The source can be local or retrieved from a remote endpoint. [Details](#source) |`-` (Required)|
+|`normalizer`| Normalizer is a function that gets executed for any type of source provided. By default, it tries to convert the source data into the expected format. viz **array of objects with a label property**. For example, `['hello world']` is converted to `[{ label: 'hello world'}]`. Works in conjuction with the **identifier** property to add a `label` property on the fly |Conversion to expected Source Format|
 |`onSelect`|This method will be called when the user chooses an item from the suggestions. The selected item will be passed as first parameter.|Sets labels text as input's value|
 |`minLength`|Specify the minimum length, when suggestions should appear on the screen.|`1`|
 |`limit`|Specify the maximum number of suggestions that should be displayed.|`5`|
 |`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is added to facilitate styling|`undefined`|
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
 |`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`)|`undefined`|
-|`debounceWaitMs`|Enforces that the `fetch` function will only be called once within the specified time frame (in milliseconds) and delays execution. This prevents flooding your server with AJAX requests.|`0`|
+|`debounceWaitMs`|Delays execution of retrieving suggestions (in milliseconds) |`10`|
+|`debounceRemote`|Delays execution of executing Ajax requests (in milliseconds) |`100`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
-|`templates`|An object containing templates for header, footer, suggestion, notFound and pending state. See example below |`undefined`|
+|`templates`|An object containing templates for header, footer, suggestion, notFound and pending state. See [detailed explanation](#templates) below |`undefined`|
 
 ---
+### Source
+
+This is the source of data from which suggestions will be provided. This is the expected format of the source object.
+```
+source: {
+  local: [];
+  remote: {
+    url: 'https://remoteapi/%QUERY';
+    wildcard: '%QUERY';
+    transform: function (data) {
+      // modify remote data if needed
+      return data;
+    };
+  };
+  identifier: '';
+}
+```
+- The `local` data source is used when you want to provide suggestions from a local preloaded data source.
+- The `remote` data source is used when you want to interrogate a remote endpoint for data
+- While using the `remote` data source, you must set the `url` and the `wildcard` options. `wildcard` will be replaced with the search string while executing the request.
+- **Transform**: You can provide a custom `transform` function which is called immediately after the remote endpoint returns a response. You can modify the remote response before it gets processed by typeahead. The transformed data is sent to the `normalizer` function to ensure the integrity of the format of the data.
+- **Identifier**: An `identifier` is used to identify which property of the object must be used as the label. For example, assuming for data source returns the following data
+```javascript
+/* Data source returns */
+[
+  { id: 1, color: "Yellow" }, 
+  { id: 2, color: "Green" },
+  ...
+]
+ ```
+ Then the **identifier** must be set to **color**. (i.e. `identifier: "color"`)
+```javascript
+/* When the identifier is set, the default normalizer will produce the following expected data format */
+[
+  { id: 1, color: "Yellow", label: "Yellow" }, 
+  { id: 2, color: "Green", label: "Green" },
+  ...
+]
+```
+The identifier is optional and must be used only if the data needs to be normalized.
+
 ### Templates
 
 Templates can be used to customize the rendering of the List. Their usage is completely optional.

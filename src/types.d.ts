@@ -11,7 +11,6 @@ export interface typeaheadDataSource {
   remote?: {
     url: string;
     wildcard: string;
-    method?: string;
     transform?: (data: string[] | Record<string, unknown>[]) => string[] | Record<string, unknown>[];
   };
   identifier?: string;
