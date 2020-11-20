@@ -561,7 +561,7 @@ adapted from a snippet
 }
 
 /* style highlight */
-.typeahead-standalone .tt-list .tt-suggestion .tt-highlight {
+.typeahead-standalone.typeahead-example .tt-list .tt-suggestion .tt-highlight {
   color: orangered;
 }
 

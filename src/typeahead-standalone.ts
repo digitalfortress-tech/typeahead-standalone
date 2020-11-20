@@ -606,16 +606,9 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
    * This function will remove DOM elements and clear event handlers
    */
   function destroy(): void {
-    input.removeEventListener('focus', focusEventHandler);
-    input.removeEventListener('keydown', keydownEventHandler);
-    input.removeEventListener('input', inputEventHandler as EventListenerOrEventListenerObject);
-    input.removeEventListener('blur', blurEventHandler);
     clearDebounceTimer();
     clearRemoteDebounceTimer();
-    clear();
-    // @todo: test if this works
-    // cleanup DOM and remove all events Listeners on input
-    // wrapper.replaceWith(input.cloneNode(true));
+    wrapper.replaceWith(input.cloneNode());
   }
 
   // setup event handlers
