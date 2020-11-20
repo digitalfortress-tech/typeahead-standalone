@@ -156,10 +156,14 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
    */
   function noSuggestionsHandler(asyncRender = false) {
     if (!items.length) {
-      clear(); // clear the list
+      // clear the list and the DOM
+      clear();
+      clearListDOM();
+
       if (!templates?.notFound) {
         return true;
       }
+
       const renderNotFoundTemplate = () => {
         const empty = doc.createElement('div');
         empty.classList.add('tt-notFound');
@@ -168,11 +172,9 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       };
 
       if (!remote) {
-        clearListDOM();
         renderNotFoundTemplate();
       } else if (asyncRender && inputValue && !fetchInProgress) {
         // wait for remote results before rendering notFoundTemplate
-        clearListDOM();
         renderNotFoundTemplate();
       }
 
@@ -405,10 +407,21 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     }
   }
 
-  function calcSuggestions() {
-    const suggestions: T[] = trie.find(inputValue.toLowerCase(), limitSuggestions);
+  function calcSuggestions(fromRemoteCb = false) {
+    let suggestions: T[] = [];
+
+    // if searching within remote or (local + remote), merge the suggestions
+    if (fromRemoteCb) {
+      suggestions = trie.find(inputValue.toLowerCase(), limitSuggestions - items.length);
+      suggestions = [...items, ...suggestions];
+    } else {
+      // if searching only within local
+      suggestions = trie.find(inputValue.toLowerCase(), limitSuggestions);
+    }
+
     // remove duplicates from suggestions to allow back-filling
     items = [...new Map(suggestions.map((item) => [item['label'], item])).values()];
+
     // set selected item
     if (items.length) {
       selected = items[0];
@@ -449,7 +462,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         // cache XHR requests so that same calls aren't made multiple times
         remoteXhrCache[thumbprint] = true;
         if (transformed.length && inputValue.length) {
-          calcSuggestions();
+          calcSuggestions(true);
           update();
           updateDataStore(transformed);
         }

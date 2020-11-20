@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             : i > this.previousTop &&
               (o('#mainNav').removeClass('is-visible'),
               s < i && !o('#mainNav').hasClass('is-fixed') && o('#mainNav').addClass('is-fixed')),
-            (this.previousTop = i);
+          (this.previousTop = i);
         }
       );
     }
@@ -65,24 +65,24 @@ var colors = [
 ];
 
 var colors1 = [
-  { id: 'Red', value: 'RD', hash: 'red' },
-  { id: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
-  { id: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
-  { id: 'Blue Darker', value: 'DBL', hash: 'midnightblue', group: 'Shades of Blue' },
-  { id: 'Blue Light', value: 'LBL', hash: 'cadetblue', group: 'Shades of Blue' },
-  { id: 'Blue Extra Light', value: 'XLBL', hash: 'aliceblue', group: 'Shades of Blue' },
-  { id: 'Yellow', value: 'YW', hash: 'yellow' },
-  { id: 'Gold', value: 'GD', hash: 'gold' },
-  { id: 'Silver', value: 'SV', hash: 'silver' },
-  { id: 'Orange', value: 'OR', hash: 'orange' },
-  { id: 'Green', value: 'GR', hash: 'green' },
-  { id: 'White', value: 'WH', hash: 'white' },
-  { id: 'Pink', value: 'PI', hash: 'pink' },
-  { id: 'Purple', value: 'PR', hash: 'purple' },
-  { id: 'Grey', value: 'GR', hash: 'grey' },
-  { id: 'Brown', value: 'BR', hash: 'brown' },
-  { id: 'Black', value: 'BK', hash: 'black', group: 'Shades of Black' },
-  { id: 'Black Light', value: 'LBK', hash: '#352e2e', group: 'Shades of Black' },
+  { name: 'Red', value: 'RD', hash: 'red' },
+  { name: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
+  { name: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
+  { name: 'Blue Darker', value: 'DBL', hash: 'mnamenightblue', group: 'Shades of Blue' },
+  { name: 'Blue Light', value: 'LBL', hash: 'cadetblue', group: 'Shades of Blue' },
+  { name: 'Blue Extra Light', value: 'XLBL', hash: 'aliceblue', group: 'Shades of Blue' },
+  { name: 'Yellow', value: 'YW', hash: 'yellow' },
+  { name: 'Gold', value: 'GD', hash: 'gold' },
+  { name: 'Silver', value: 'SV', hash: 'silver' },
+  { name: 'Orange', value: 'OR', hash: 'orange' },
+  { name: 'Green', value: 'GR', hash: 'green' },
+  { name: 'White', value: 'WH', hash: 'white' },
+  { name: 'Pink', value: 'PI', hash: 'pink' },
+  { name: 'Purple', value: 'PR', hash: 'purple' },
+  { name: 'Grey', value: 'GR', hash: 'grey' },
+  { name: 'Brown', value: 'BR', hash: 'brown' },
+  { name: 'Black', value: 'BK', hash: 'black', group: 'Shades of Black' },
+  { name: 'Black Light', value: 'LBK', hash: '#352e2e', group: 'Shades of Black' },
 ];
 
 var input = document.getElementById('searchInput');
@@ -92,12 +92,11 @@ typeahead({
   input: input,
   source: {
     // local: colors1,
-    // identifier: 'id',
+    identifier: 'name',
     remote: {
       url: 'https://restcountries.eu/rest/v2/name/%QUERY',
       wildcard: '%QUERY',
     },
-    identifier: 'name',
   },
   highlight: true,
   className: 'typeahead-example',
