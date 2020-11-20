@@ -122,23 +122,23 @@
           <br />
           The following code can be edited in place and its changes reflected in the input element above (which has an <code>id="liveSearch1"</code>).
           <div class="eval-js">
-            var colours = [
-            { label: 'Red', value: 'RD' },
-            { label: 'Blue', value: 'BL', group: 'Shades of Blue' },
-            { label: 'Blue Dark', value: 'DBL', group: 'Shades of Blue' },
-            { label: 'Blue Light', value: 'LBL', group: 'Shades of Blue' },
-            { label: 'Black', value: 'BK', group: 'Shades of Black' },
-            { label: 'Black Xtra', value: 'XBK', group: 'Shades of Black' },
+            var colors1 = ['Green', 'Grey', 'Gold', 'Pink', 'Purple']
+            
+            // You can use *group* to group colors too
+            var colors2 = [
+            { label: 'Red Deep', group: 'Shades of Red' },
+            { label: 'Blue Dark', group: 'Shades of Blue' },
+            { label: 'Blue Light', group: 'Shades of Blue' },
+            { label: 'Black', group: 'Shades of Black' },
+            { label: 'Black Xtra', group: 'Shades of Black' },
             ];
-        
+            
             typeahead({
               input: document.getElementById('liveSearch1'),
               highlight: true,
-              fetch: function (text, update) {
-                text = text.toLowerCase();
-                var suggestions = colours.filter((n) => n.label.toLowerCase().startsWith(text));
-                update(suggestions);
-              },
+              source: {
+              local: colors1 // try using "colors2" for groups
+              }
             });
           </div>
         </section>
@@ -156,20 +156,12 @@
             typeahead({
             input: document.getElementById("liveSearch2"),
             highlight: true,
-            fetch: function(text, update) {
-            text = text.toLowerCase();
-            var suggestions;
-            fetch('https://raw.githubusercontent.com/twitter/typeahead.js/gh-pages/data/countries.json')
-            .then(response => response.json())
-            .then(data => {
-            var normalizedData = data.reduce(function(acc, currentItem) {
-            acc.push({ label: currentItem});
-            return acc;
-            }, []);
-          
-            suggestions = normalizedData.filter(n => n.label.toLowerCase().startsWith(text));
-            update(suggestions);
-            });
+            source: {
+            remote: {
+            url: 'https://restcountries.eu/rest/v2/name/%QUERY',
+            wildcard: '%QUERY',
+            },
+            identifier: 'name',
             },
             });
           </div>
