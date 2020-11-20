@@ -168,9 +168,10 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       };
 
       if (!remote) {
+        clearListDOM();
         renderNotFoundTemplate();
       } else if (asyncRender && inputValue && !fetchInProgress) {
-        // wait for remote results before rendering notFoundTemplate;
+        // wait for remote results before rendering notFoundTemplate
         clearListDOM();
         renderNotFoundTemplate();
       }
@@ -599,6 +600,9 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     clearDebounceTimer();
     clearRemoteDebounceTimer();
     clear();
+    // @todo: test if this works
+    // cleanup DOM and remove all events Listeners on input
+    // wrapper.replaceWith(input.cloneNode(true));
   }
 
   // setup event handlers
