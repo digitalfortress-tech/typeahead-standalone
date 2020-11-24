@@ -175,8 +175,11 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
       if (!remote) {
         renderNotFoundTemplate();
-      } else if (asyncRender && inputValue && !fetchInProgress) {
-        // wait for remote results before rendering notFoundTemplate
+      } else if (
+        (inputValue && asyncRender && !fetchInProgress) ||
+        (inputValue && remoteXhrCache[JSON.stringify(inputValue)])
+      ) {
+        // wait for remote results before rendering notFoundTemplate / render immediately if request was cached
         renderNotFoundTemplate();
       }
 
