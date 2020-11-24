@@ -13,11 +13,12 @@ A fast fully-featured standalone autocomplete library
 
 **Typeahead-standalone.js**
 
-- is a vastly performant blazing fast autocomplete library in pure javascript
-- has **NO DEPENDENCIES** :D  and is a light-weight library [![](http://img.badgesize.io/https://cdn.jsdelivr.net/npm/typeahead-standalone?compression=gzip)](https://cdn.jsdelivr.net/npm/typeahead-standalone)
-- it is a highly customizable library
+- is a blazing fast autocomplete library in pure javascript with **ZERO DEPENDENCIES**!
+- is a highly customizable light-weight library [![](http://img.badgesize.io/https://cdn.jsdelivr.net/npm/typeahead-standalone?compression=gzip)](https://cdn.jsdelivr.net/npm/typeahead-standalone)
+- inbuilt support for multiple data sources - Local, remote
+- suggestions calculated via a very efficient trie algorithm
+- remote requests are rate-limited by default
 - supports all major browsers (sorry IE, no support for you)
-- is completely free and open source
 ---
 
 ### Demo
@@ -41,7 +42,7 @@ Then include the library in your App/Page.
 import { typeahead } from 'typeahead-standalone';
 
 // using CommonJS modules
-var typeahead = require("typeahead-standalone");
+var typeahead = require('typeahead-standalone');
 ```
 
 **In the browser context,**
@@ -52,13 +53,13 @@ var typeahead = require("typeahead-standalone");
 <!-- Alternatively, you can use a CDN with jsdelivr -->
 <script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"></script>
 <!-- or with unpkg.com -->
-<script src="https://unpkg.com/typeahead-standalone@1.2.0/dist/typeahead-standalone.js"></script>
+<script src="https://unpkg.com/typeahead-standalone@2.2.0/dist/typeahead-standalone.js"></script>
 ```
 The library will be available as a global object at `window.typeahead`
 
 ## Usage
 
-Typeahead requires an `input` Element to attach itself to and a `Data source` (local, remote) to display suggestions. 
+Typeahead requires an `input` Element to attach itself to and a `Data source` (local/remote) to display suggestions. 
 
 Here is a very basic example (See [demo](#demo) for advanced examples)
 
@@ -75,10 +76,10 @@ Here is a very basic example (See [demo](#demo) for advanced examples)
 
 ```javascript
 // local Data
-var colors = ['Grey', 'Brown', 'Black', 'Blue']
+const colors = ['Grey', 'Brown', 'Black', 'Blue']
 
 // input element to attach to
-var inputElement = document.getElementById("searchInput");
+const inputElement = document.getElementById("searchInput");
 
 typeahead({
     input: inputElement,
@@ -93,9 +94,9 @@ typeahead({
 Some basic styling is added to typeahead by default. However the UI is completely upto you and is customizable to the very pixel. You can use the following classes to add/override styles. 
 
 - The entire html is wrapped in a container with a class `typeahead-standalone`.
-- The input element gets an additional class `tt-input`.
-- The list of suggestions is wrapped in a container with a class `tt-list`.
-- Each suggestion has a `tt-suggestion` class and if the suggestion is selected, then it has a `tt-selected` class additionally.
+- The input element gets an additional `tt-input` class.
+- The list of suggestions is wrapped in a container with a `tt-list` class. (A class `tt-hide` is added when no suggestions are available)
+- Each suggestion has a class `tt-suggestion` and if the suggestion is selected, then it has a `tt-selected` class additionally.
 
 ```css
 /* set background color for each suggestion */
@@ -104,16 +105,16 @@ Some basic styling is added to typeahead by default. However the UI is completel
 }
 ```
 
-<strong>Note</strong>: To override default styling, set the config option `className` and use it as a selector. Lets say you set `className: "typeahead-example"`, then to override style on hovering/selecting a suggestion, you could use: 
+<strong>Note</strong>: To override default styling, set the config option `className` and use it as a selector. Lets say you set `className: "my-typeahead"`, then to override style on hovering/selecting a suggestion, you could use: 
  ```css
 /* override styles */
-.typeahead-standalone.typeahead-example .tt-list .tt-suggestion:hover, 
-.typeahead-standalone.typeahead-example .tt-list .tt-suggestion.tt-selected {
+.typeahead-standalone.my-typeahead .tt-list .tt-suggestion:hover, 
+.typeahead-standalone.my-typeahead .tt-list .tt-suggestion.tt-selected {
   color: black;
   background-color: white;
 }
 ```
-Refer the [templates](#templates) config option for further customization.
+You can also use templates to add a header, footer and further style each suggestion. Refer the [templates](#templates) config option for directions on usage.
 
 ## Configuration
 
@@ -122,8 +123,8 @@ You can pass the following config options to `typeahead-standalone`:
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
 |`input`|DOM input element must be passed with this parameter and typeahead will attach itself to this field. |`-` (Required)|
-|`source`|This is the source of Data from which suggestions will be provided. The source can be local or retrieved from a remote endpoint. [Details](#source) |`-` (Required)|
-|`normalizer`| Normalizer is a function that gets executed for any type of source provided. By default, it tries to convert the source data into the expected format. viz **array of objects with a label property**. For example, `['hello world']` is converted to `[{ label: 'hello world'}]`. Works in conjuction with the **identifier** property to add a `label` property on the fly |Conversion to expected Source Format|
+|`source`|This is the source of Data from which suggestions will be calculated. The source can be local or retrieved from a remote endpoint. [Details](#source) |`-` (Required)|
+|`normalizer`| Normalizer is a function that is executed before fetching suggestions. It tries to convert/normalize the source data into the expected format. viz **array of objects with a label property**. For example, `['hello world']` is converted to `[{ label: 'hello world'}]`. Works in conjuction with the **identifier** property of the source |Normlizes source data|
 |`onSelect`|This method will be called when the user chooses an item from the suggestions. The selected item will be passed as first parameter.|Sets labels text as input's value|
 |`minLength`|Specify the minimum length, when suggestions should appear on the screen.|`1`|
 |`limit`|Specify the maximum number of suggestions that should be displayed.|`5`|
@@ -131,9 +132,9 @@ You can pass the following config options to `typeahead-standalone`:
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
 |`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`)|`undefined`|
 |`debounceWaitMs`|Delays execution of retrieving suggestions (in milliseconds) |`10`|
-|`debounceRemote`|Delays execution of executing Ajax requests (in milliseconds) |`100`|
+|`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
-|`templates`|An object containing templates for header, footer, suggestion, notFound and pending state. See [detailed explanation](#templates) below |`undefined`|
+|`templates`|An object containing templates for header, footer, suggestion, ground and notFound state. See [templates section](#templates) for clarification |`undefined`|
 
 ---
 ### Source
@@ -143,7 +144,7 @@ This is the source of data from which suggestions will be provided. This is the 
 source: {
   local: [];
   remote: {
-    url: 'https://remoteapi/%QUERY';
+    url: 'https://remoteapi.com/%QUERY';
     wildcard: '%QUERY';
     transform: function (data) {
       // modify remote data if needed
@@ -153,11 +154,11 @@ source: {
   identifier: '';
 }
 ```
-- The `local` data source is used when you want to provide suggestions from a local preloaded data source.
-- The `remote` data source is used when you want to interrogate a remote endpoint for data
-- While using the `remote` data source, you must set the `url` and the `wildcard` options. `wildcard` will be replaced with the search string while executing the request.
+- **Local**: The `local` data source is used when you want to provide suggestions from a local variable.
+- **Remote**: The `remote` data source is used when you want to interrogate a remote endpoint for data
+- **Wildcard**: While using the `remote` data source, you must set the `url` and the `wildcard` options. `wildcard` will be replaced with the search string while executing the request.
 - **Transform**: You can provide a custom `transform` function which is called immediately after the remote endpoint returns a response. You can modify the remote response before it gets processed by typeahead. The transformed data is sent to the `normalizer` function to ensure the integrity of the format of the data.
-- **Identifier**: An `identifier` is used to identify which property of the object must be used as the label. For example, assuming for data source returns the following data
+- **Identifier**: An `identifier` is used to identify which property of the object should be used as the label. For example, assuming the data source returns the following:
 ```javascript
 /* Data source returns */
 [
@@ -166,7 +167,7 @@ source: {
   ...
 ]
  ```
- Then the **identifier** must be set to **color**. (i.e. `identifier: "color"`)
+ Now if we wish to use the `label`(suggestions) as the text defined in the `color` property , then the **identifier** must be set to **color**. (i.e. `identifier: "color"`)
 ```javascript
 /* When the identifier is set, the default normalizer will produce the following expected data format */
 [
