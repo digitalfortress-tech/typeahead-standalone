@@ -91,14 +91,14 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
    * Display/show the listContainer
    */
   function show(): void {
-    listContainerStyle.display = 'block';
+    listContainer.classList.remove('tt-hide');
   }
 
   /**
    * Hides the listContainer from DOM
    */
   function hide(): void {
-    listContainerStyle.display = 'none';
+    listContainer.classList.add('tt-hide');
   }
 
   /**
@@ -142,8 +142,10 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   function attachListContainer(): void {
     wrapper.appendChild(listContainer);
 
+    // hide search results initially
+    listContainer.classList.add('tt-hide');
+
     // fix position of listContainer
-    listContainerStyle.display = 'none';
     listContainerStyle.width = '100%';
     listContainerStyle.top = `${input.clientHeight}px`; // or top: '100%'
     listContainerStyle.left = '0';
