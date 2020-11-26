@@ -89,32 +89,6 @@ typeahead({
     }
 });
 ```
-#### Styling (css)
-
-Some basic styling is added to typeahead by default. However the UI is completely upto you and is customizable to the very pixel. You can use the following classes to add/override styles. 
-
-- The entire html is wrapped in a container with a class `typeahead-standalone`.
-- The input element gets an additional `tt-input` class.
-- The list of suggestions is wrapped in a container with a `tt-list` class. (A class `tt-hide` is added when no suggestions are available)
-- Each suggestion has a class `tt-suggestion` and if the suggestion is selected, then it has a `tt-selected` class additionally.
-
-```css
-/* set background color for each suggestion */
-.typeahead-standalone .tt-list .tt-suggestion {
-  background-color: green;
-}
-```
-
-<strong>Note</strong>: To override default styling, set the config option `className` and use it as a selector. Lets say you set `className: "my-typeahead"`, then to override style on hovering/selecting a suggestion, you could use: 
- ```css
-/* override styles */
-.typeahead-standalone.my-typeahead .tt-list .tt-suggestion:hover, 
-.typeahead-standalone.my-typeahead .tt-list .tt-suggestion.tt-selected {
-  color: black;
-  background-color: white;
-}
-```
-You can also use templates to add a header, footer and further style each suggestion. Refer the [templates](#templates) config option for directions on usage.
 
 ## Configuration
 
@@ -124,18 +98,19 @@ You can pass the following config options to `typeahead-standalone`:
 | --------- | ----------- | ------- |
 |`input`|DOM input element must be passed with this parameter and typeahead will attach itself to this field. |`-` (Required)|
 |`source`|This is the source of Data from which suggestions will be calculated. The source can be local or retrieved from a remote endpoint. [Details](#source) |`-` (Required)|
-|`normalizer`| Normalizer is a function that is executed before fetching suggestions. It tries to convert/normalize the source data into the expected format. viz **array of objects with a label property**. For example, `['hello world']` is converted to `[{ label: 'hello world'}]`. Works in conjuction with the **identifier** property of the source |Normlizes source data|
-|`onSelect`|This method will be called when the user chooses an item from the suggestions. The selected item will be passed as first parameter.|Sets labels text as input's value|
 |`minLength`|Specify the minimum length, when suggestions should appear on the screen.|`1`|
 |`limit`|Specify the maximum number of suggestions that should be displayed.|`5`|
 |`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is added to facilitate styling|`undefined`|
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
 |`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`)|`undefined`|
+|`templates`|An object containing templates for header, footer, suggestion, ground and notFound state. See [templates section](#templates) for clarification |`undefined`|
 |`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
-|`templates`|An object containing templates for header, footer, suggestion, ground and notFound state. See [templates section](#templates) for clarification |`undefined`|
+|`onSelect`|This method will be called when the user chooses an item from the suggestions. The selected item will be passed as first parameter.|Sets labels text as input's value|
+|`normalizer`| The Normalizer function tries to convert/normalize the source data into the expected format => **array of objects with a label property**. For example, `['hello world']` is converted to `[{ label: 'hello world'}]`. Receives the list of suggestions `listItems: []` and the `identifier: string` as its arguments.|Normlizes source data|
 
 ---
+
 ### Source
 
 This is the source of data from which suggestions will be provided. This is the expected format of the source object.
@@ -175,7 +150,34 @@ source: {
   ...
 ]
 ```
-The identifier is optional and must be used only if the data needs to be normalized.
+The identifier is optional and must be used **only if the data needs to be normalized**.
+
+## Styling (css)
+
+Some basic styling is added to typeahead by default. However the UI is completely upto you and is customizable to the very pixel. You can use the following classes to add/override styles. 
+
+- The entire html is wrapped in a container with a class `typeahead-standalone`.
+- The input element gets an additional `tt-input` class.
+- The list of suggestions is wrapped in a container with a `tt-list` class. (A class `tt-hide` is added when no suggestions are available)
+- Each suggestion has a class `tt-suggestion` and if the suggestion is selected, then it has a `tt-selected` class additionally.
+
+```css
+/* set background color for each suggestion */
+.typeahead-standalone .tt-list .tt-suggestion {
+  background-color: green;
+}
+```
+
+<strong>Note</strong>: To override default styling, set the config option `className` and use it as a selector. Lets say you set `className: "my-typeahead"`, then to override style on hovering/selecting a suggestion, you could use: 
+ ```css
+/* override styles */
+.typeahead-standalone.my-typeahead .tt-list .tt-suggestion:hover, 
+.typeahead-standalone.my-typeahead .tt-list .tt-suggestion.tt-selected {
+  color: black;
+  background-color: white;
+}
+```
+You can also use templates to add a header, footer and further style each suggestion.
 
 ### Templates
 
