@@ -131,7 +131,6 @@ You can pass the following config options to `typeahead-standalone`:
 |`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is added to facilitate styling|`undefined`|
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
 |`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`)|`undefined`|
-|`debounceWaitMs`|Delays execution of retrieving suggestions (in milliseconds) |`10`|
 |`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
 |`templates`|An object containing templates for header, footer, suggestion, ground and notFound state. See [templates section](#templates) for clarification |`undefined`|
@@ -155,9 +154,9 @@ source: {
 }
 ```
 - **Local**: The `local` data source is used when you want to provide suggestions from a local variable.
-- **Remote**: The `remote` data source is used when you want to interrogate a remote endpoint for data
+- **Remote**: The `remote` data source is used when you want to interrogate a remote endpoint to fetch data.
 - **Wildcard**: While using the `remote` data source, you must set the `url` and the `wildcard` options. `wildcard` will be replaced with the search string while executing the request.
-- **Transform**: You can provide a custom `transform` function which is called immediately after the remote endpoint returns a response. You can modify the remote response before it gets processed by typeahead. The transformed data is sent to the `normalizer` function to ensure the integrity of the format of the data.
+- **Transform**: You can provide a custom `transform` function which is called immediately after the remote endpoint returns a response. You can modify the remote response before it gets processed by typeahead. The transformed data is passed to the `normalizer` to ensure that the data is normalized.
 - **Identifier**: An `identifier` is used to identify which property of the object should be used as the label. For example, assuming the data source returns the following:
 ```javascript
 /* Data source returns */

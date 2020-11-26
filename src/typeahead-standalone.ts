@@ -5,7 +5,7 @@
  */
 
 import type { typeaheadItem, typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates } from './types';
-import { EventTrigger, Keys } from './constants';
+import { Keys } from './constants';
 import { escapeRegExp, normalizer, onSelectCb } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
@@ -16,7 +16,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   const listContainer: HTMLDivElement = doc.createElement('div');
   const listContainerStyle = listContainer.style;
-  const debounceWaitMs = config.debounceWaitMs || 10;
+  const debounceGlobal = 10;
   const debounceXHR = config.debounceRemote || 100;
   const preventSubmit = config.preventSubmit || false;
   const minLen = config.minLength || 1;
@@ -290,7 +290,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       return;
     }
 
-    startFetch(EventTrigger.Keyboard);
+    startFetch();
   }
 
   /**
@@ -385,27 +385,24 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   function focusEventHandler(): void {
-    startFetch(EventTrigger.Focus);
+    startFetch();
   }
 
-  function startFetch(trigger: EventTrigger) {
+  function startFetch() {
     clearDebounceTimer();
     clearRemoteDebounceTimer();
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
     if (val.length >= minLen) {
-      debounceTimer = window.setTimeout(
-        function (): void {
-          inputValue = val;
-          calcSuggestions();
-          update();
-          remoteDebounceTimer = window.setTimeout(function (): void {
-            if (items.length < limitSuggestions && !fetchInProgress) {
-              fetchDataFromRemote();
-            }
-          }, debounceXHR);
-        },
-        trigger === EventTrigger.Keyboard ? debounceWaitMs : 10
-      );
+      debounceTimer = window.setTimeout(function (): void {
+        inputValue = val;
+        calcSuggestions();
+        update();
+        remoteDebounceTimer = window.setTimeout(function (): void {
+          if (items.length < limitSuggestions && !fetchInProgress) {
+            fetchDataFromRemote();
+          }
+        }, debounceXHR);
+      }, debounceGlobal);
     } else {
       inputValue = '';
       clear();

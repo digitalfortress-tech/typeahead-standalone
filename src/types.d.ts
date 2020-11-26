@@ -1,5 +1,3 @@
-import type { EventTrigger } from './constants';
-
 export interface typeaheadItem {
   label: string;
   group?: string;
@@ -33,7 +31,6 @@ export interface typeaheadConfig<T extends typeaheadItem> {
   hint?: boolean;
   highlight?: boolean;
   onSelect?: (item: T, input: HTMLInputElement) => void;
-  debounceWaitMs?: number;
   debounceRemote?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
   source?: typeaheadDataSource;
