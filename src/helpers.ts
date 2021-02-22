@@ -4,6 +4,19 @@ export const NOOP = (...args: unknown[]): void => undefined;
 
 export const escapeRegExp = (text: string): string => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 
+const supportsLS = () => {
+  // some browsers will throw an error if you try to access local storage (e.g. brave browser)
+  // hence check is inside a try/catch
+  try {
+    if (!localStorage) {
+      return false;
+    }
+  } catch (ex) {
+    return false;
+  }
+  return true;
+}
+
 /****** helpers specific to typeahead  *****/
 
 export const onSelectCb = <T extends typeaheadItem>(item: T, input: HTMLInputElement): void => {
