@@ -9,8 +9,14 @@ export interface typeaheadDataSource {
   remote?: {
     url: string;
     wildcard: string;
-    transform?: (data: string[] | Record<string, unknown>[]) => string[] | Record<string, unknown>[];
   };
+  prefetch?: {
+    url: string;
+    startEvent?: 'onInit' | 'onFocus';
+    done: Boolean;
+  };
+  cache?: Boolean;
+  transform?: (data: string[] | Record<string, unknown>[]) => string[] | Record<string, unknown>[];
   identifier?: string;
 }
 

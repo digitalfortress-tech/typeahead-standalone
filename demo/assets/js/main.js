@@ -101,6 +101,10 @@ if (dev) {
         url: 'https://restcountries.eu/rest/v2/name/%QUERY',
         wildcard: '%QUERY',
       },
+      prefetch: {
+        url: 'https://restcountries.eu/rest/v2/name/an',
+        startEvent: 'onFocus'
+      }
     },
     highlight: true,
     className: 'typeahead-example',

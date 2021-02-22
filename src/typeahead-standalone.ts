@@ -28,10 +28,13 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const identifier = config.source?.identifier || '';
   const normalize = config.normalizer || normalizer;
   const remoteXhrCache: Record<string, unknown> = {};
+  const transform = config.source?.transform || null;
   const remote =
     config.source && config.source.remote && config.source.remote.url && config.source.remote.wildcard
       ? config.source.remote
       : null;
+  const prefetch = config.source?.prefetch && config.source.prefetch.url ? { ...{ startEvent: 'onInit', done: false }, ...config.source.prefetch } : null;
+  const cache = config.source?.cache;
 
   let items: T[] = []; // suggestions
   let dataStore: T[] = [];
@@ -86,6 +89,37 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   listContainerStyle.position = 'absolute';
 
   attachListContainer();
+
+  if (prefetch && prefetch.startEvent === 'onInit') {
+    prefetchData();
+  }
+
+  function prefetchData() {
+    // check if data was already prefetched
+    if (!prefetch || prefetch.done) return;
+
+    let transformed: T[] = [];
+
+    fetchWrapper
+      .get(prefetch.url)
+      .then(
+        (data) => {
+          if (transform) {
+            transformed = transform(data) as T[];
+          }
+          transformed = normalize(data, identifier) as T[];
+          trie.addAll(transformed);
+        },
+        (reject) => {
+          console.error('Prefetch failed - ', reject);
+        }
+      )
+      .finally(() => {
+        updateDataStore(transformed);
+      });
+
+    prefetch.done = true;
+  }
 
   /**
    * Display/show the listContainer
@@ -385,6 +419,9 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   function focusEventHandler(): void {
+    if (prefetch && prefetch.startEvent === 'onFocus') {
+      prefetchData();
+    }
     startFetch();
   }
 
@@ -450,8 +487,8 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       .get(remote.url.replace(remote.wildcard, frozenInput))
       .then(
         (data) => {
-          if (remote.transform) {
-            transformed = remote.transform(data) as T[];
+          if (transform) {
+            transformed = transform(data) as T[];
           }
           transformed = normalize(data, identifier) as T[];
           trie.addAll(transformed);
@@ -481,6 +518,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   function updateDataStore(iterable: T[]) {
     dataStore = [...dataStore, ...iterable];
     dataStore = [...new Map(dataStore.map((item) => [item['label'], item])).values()]; // remove duplicates
+    // @todo: use datastore for cache
   }
 
   /**

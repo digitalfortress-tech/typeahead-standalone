@@ -15,7 +15,7 @@ A fast fully-featured standalone autocomplete library
 
 - is a blazing fast autocomplete library in pure javascript with **ZERO DEPENDENCIES**!
 - is a highly customizable light-weight library [![](http://img.badgesize.io/https://cdn.jsdelivr.net/npm/typeahead-standalone?compression=gzip)](https://cdn.jsdelivr.net/npm/typeahead-standalone)
-- inbuilt support for multiple data sources - Local, remote
+- inbuilt support for multiple data sources - Local, Prefetch and Remote
 - suggestions calculated via a very efficient trie algorithm
 - remote requests are rate-limited by default
 - supports all major browsers (sorry IE, no support for you)
@@ -97,7 +97,7 @@ You can pass the following config options to `typeahead-standalone`:
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
 |`input`|DOM input element must be passed with this parameter and typeahead will attach itself to this field. |`-` (Required)|
-|`source`|This is the source of Data from which suggestions will be calculated. The source can be local or retrieved from a remote endpoint. [Details](#source) |`-` (Required)|
+|`source`|This is the source of Data from which suggestions will be calculated. The source can be local, prefetched or retrieved from a remote endpoint. [Details](#source) |`-` (Required)|
 |`minLength`|Specify the minimum length, when suggestions should appear on the screen.|`1`|
 |`limit`|Specify the maximum number of suggestions that should be displayed.|`5`|
 |`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is added to facilitate styling|`undefined`|
@@ -120,18 +120,23 @@ source: {
   remote: {
     url: 'https://remoteapi.com/%QUERY';
     wildcard: '%QUERY';
-    transform: function (data) {
-      // modify remote data if needed
-      return data;
-    };
+  };
+  prefetch: {
+    url: 'https://remoteapi.com/%QUERY';
+    startEvent: ''; // defaults to 'onInit' 
   };
   identifier: '';
+  transform: function (data) {
+    // modify remote data if needed
+    return data;
+  };
 }
 ```
 - **Local**: The `local` data source is used when you want to provide suggestions from a local variable.
+- **Prefetch**: The `prefetch` data source is used when you want to preload suggestions from a remote endpoint in advance. You can also provide an optional `startEvent` parameter. Its value defaults to `onInit` meaning that suggestions will be loaded as soon as typeahead gets initialized. You can set it to `onFocus` which will cause suggestions to be preloaded as soon as the user focuses the search input box.
 - **Remote**: The `remote` data source is used when you want to interrogate a remote endpoint to fetch data.
 - **Wildcard**: While using the `remote` data source, you must set the `url` and the `wildcard` options. `wildcard` will be replaced with the search string while executing the request.
-- **Transform**: You can provide a custom `transform` function which is called immediately after the remote endpoint returns a response. You can modify the remote response before it gets processed by typeahead. The transformed data is passed to the `normalizer` to ensure that the data is normalized.
+- **Transform**: You can provide an optional `transform` function which gets called immediately after the remote endpoint returns a response. You can modify the remote response before it gets processed by typeahead. The transformed data is passed to the `normalizer` to ensure that the data is normalized.
 - **Identifier**: An `identifier` is used to identify which property of the object should be used as the label. For example, assuming the data source returns the following:
 ```javascript
 /* Data source returns */
