@@ -85,6 +85,7 @@ typeahead({
     input: inputElement,
     source: {
       local: colors,
+      // prefetch: {...}
       // remote: {...}
     }
 });
@@ -116,20 +117,20 @@ You can pass the following config options to `typeahead-standalone`:
 This is the source of data from which suggestions will be provided. This is the expected format of the source object.
 ```
 source: {
-  local: [];
+  local: [],
   remote: {
-    url: 'https://remoteapi.com/%QUERY';
-    wildcard: '%QUERY';
-  };
+    url: 'https://remoteapi.com/%QUERY',
+    wildcard: '%QUERY'
+  },
   prefetch: {
-    url: 'https://remoteapi.com/%QUERY';
-    startEvent: ''; // defaults to 'onInit' 
-  };
-  identifier: '';
+    url: 'https://remoteapi.com/getdata',
+    startEvent: '' // optional, defaults to 'onInit' 
+  },
+  identifier: '',
   transform: function (data) {
     // modify remote data if needed
     return data;
-  };
+  }
 }
 ```
 - **Local**: The `local` data source is used when you want to provide suggestions from a local variable.
