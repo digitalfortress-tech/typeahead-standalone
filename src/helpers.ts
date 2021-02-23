@@ -4,18 +4,9 @@ export const NOOP = (...args: unknown[]): void => undefined;
 
 export const escapeRegExp = (text: string): string => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 
-const supportsLS = () => {
-  // some browsers will throw an error if you try to access local storage (e.g. brave browser)
-  // hence check is inside a try/catch
-  try {
-    if (!localStorage) {
-      return false;
-    }
-  } catch (ex) {
-    return false;
-  }
-  return true;
-}
+export const isObject = (item: any): boolean => {
+  return item !== null && item.constructor.name === 'Object';
+};
 
 /****** helpers specific to typeahead  *****/
 
