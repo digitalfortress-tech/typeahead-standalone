@@ -172,7 +172,36 @@
         <hr />
 
         <section class="js-fiddle">
-          <h4>3. Typeahead-standalone with Templates</h4>
+          <h4>3. Autocomplete with Prefetched Data (retrieved via AJAX)</h4>
+          <div class="search-container">
+            <input type="search" id="liveSearch3" autocomplete="off" placeholder="Search Countries...">
+          </div>
+          <br />
+          <p>To understand the working of this example, be sure to keep the network tab of your developer tools open.
+          As soon as you focus on the search box above, an ajax request will the made to prefetch data.</p>
+          <p>Now try typing "a"... you will see suggestions pop up immediately without any request made since the data has already
+          been fetched.
+          Prefetch can be used in conjunction with remote to fetch more precise results.</p>
+          
+          <div class="eval-js">
+            typeahead({
+            input: document.getElementById("liveSearch3"),
+            highlight: true,
+            source: {
+            prefetch: {
+            url: 'https://restcountries.eu/rest/v2/name/an',
+            startEvent: 'onFocus', // default is `onInit`
+            },
+            identifier: 'name',
+            },
+            });
+          </div>
+          </section>
+          
+          <hr />
+          
+          <section class="js-fiddle">
+            <h4>4. Typeahead-standalone with Templates</h4>
           The following JS fiddle demonstrates how you could style every aspect of your typeahead instance by using the config
           option - <code>templates</code>.
         

@@ -56,7 +56,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     throw new Error('input undefined');
   }
 
-  if (!config.source?.local && !config.source?.remote) {
+  if (!config.source?.local && !config.source?.prefetch && !config.source?.remote) {
     throw new Error('data source undefined');
   }
 
@@ -420,6 +420,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   function focusEventHandler(): void {
     if (prefetch && prefetch.startEvent === 'onFocus') {
+      console.log('prefetch :>> ', prefetch);
       prefetchData();
     }
     startFetch();
