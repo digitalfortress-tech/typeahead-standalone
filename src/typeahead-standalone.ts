@@ -9,6 +9,7 @@ import { Keys } from './constants';
 import { escapeRegExp, normalizer, onSelectCb } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
+import { ls } from './ls/ls';
 import './style.less';
 
 export default function typeahead<T extends typeaheadItem>(config: typeaheadConfig<T>): typeaheadResult {
@@ -33,8 +34,11 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     config.source && config.source.remote && config.source.remote.url && config.source.remote.wildcard
       ? config.source.remote
       : null;
-  const prefetch = config.source?.prefetch && config.source.prefetch.url ? { ...{ startEvent: 'onInit', done: false }, ...config.source.prefetch } : null;
-  const cache = config.source?.cache;
+  const prefetch =
+    config.source?.prefetch && config.source.prefetch.url
+      ? { ...{ startEvent: 'onInit', done: false }, ...config.source.prefetch }
+      : null;
+  const cache = config.source?.cache?.enable ? { ttl: 864e5, ...config.source.cache } : { enable: false, ttl: 864e5 };
 
   let items: T[] = []; // suggestions
   let dataStore: T[] = [];
@@ -43,6 +47,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   let debounceTimer: number | undefined;
   let remoteDebounceTimer: number | undefined;
   let fetchInProgress = false;
+  let prefetchCached: T[] | undefined;
 
   // init templates if they exist
   if (templates) {
@@ -60,10 +65,18 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     throw new Error('data source undefined');
   }
 
-  if (config.source?.local) {
-    dataStore = normalize(config.source.local, identifier) as T[];
-    trie.addAll(dataStore);
+  if (cache.enable) {
+    ls.flush();
+    prefetchCached = ls.get('typeahead_prefetch') as T[];
+    dataStore = prefetchCached ? (prefetchCached as T[]) : [];
   }
+
+  if (config.source?.local) {
+    updateDataStore(normalize(config.source.local, identifier) as T[]);
+  }
+
+  // update Trie
+  trie.addAll(dataStore);
 
   let input: HTMLInputElement = config.input;
 
@@ -95,8 +108,8 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   function prefetchData() {
-    // check if data was already prefetched
-    if (!prefetch || prefetch.done) return;
+    // check if data was already prefetched for current session or if prefetch response was cached in LS
+    if (!prefetch || prefetch.done || prefetchCached) return;
 
     let transformed: T[] = [];
 
@@ -115,7 +128,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         }
       )
       .finally(() => {
-        updateDataStore(transformed);
+        updateDataStore(transformed, 'prefetch');
       });
 
     prefetch.done = true;
@@ -420,7 +433,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   function focusEventHandler(): void {
     if (prefetch && prefetch.startEvent === 'onFocus') {
-      console.log('prefetch :>> ', prefetch);
       prefetchData();
     }
     startFetch();
@@ -504,7 +516,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         if (transformed.length && inputValue.length) {
           calcSuggestions(true);
           update();
-          updateDataStore(transformed);
+          updateDataStore(transformed, 'remote');
         }
         fetchInProgress = false;
 
@@ -516,10 +528,18 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       });
   }
 
-  function updateDataStore(iterable: T[]) {
+  function updateDataStore(iterable: T[], source = 'local') {
     dataStore = [...dataStore, ...iterable];
     dataStore = [...new Map(dataStore.map((item) => [item['label'], item])).values()]; // remove duplicates
-    // @todo: use datastore for cache
+
+    // Add to cache
+    if (cache.enable) {
+      if (source === 'prefetch') {
+        ls.set('typeahead_prefetch', dataStore, cache.ttl);
+      } else if (source === 'remote') {
+        // @todo: handle remote cache
+      }
+    }
   }
 
   /**

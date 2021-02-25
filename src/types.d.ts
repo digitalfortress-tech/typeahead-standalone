@@ -5,7 +5,6 @@ export interface typeaheadItem {
 
 export interface typeaheadDataSource {
   local?: Record<string, unknown>[];
-  // prefetch?: string;
   remote?: {
     url: string;
     wildcard: string;
@@ -13,9 +12,12 @@ export interface typeaheadDataSource {
   prefetch?: {
     url: string;
     startEvent?: 'onInit' | 'onFocus';
-    done: Boolean;
+    done: boolean;
   };
-  cache?: Boolean;
+  cache?: {
+    enable: boolean;
+    ttl?: number;
+  };
   transform?: (data: string[] | Record<string, unknown>[]) => string[] | Record<string, unknown>[];
   identifier?: string;
 }
