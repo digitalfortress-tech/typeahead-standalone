@@ -16,7 +16,7 @@ const set = (key: string, value: unknown, ttl?: number): void | boolean => {
   if (!supportsLS) return false;
 
   try {
-    const val = ttl ? JSON.stringify({ value, ttl: Date.now() + ttl }) : JSON.stringify(value);
+    const val = ttl ? JSON.stringify({ value, ttl: Date.now() + +ttl }) : JSON.stringify(value);
     localStorage.setItem(key, val);
   } catch (e) {
     // Sometimes stringify fails due to circular refs
