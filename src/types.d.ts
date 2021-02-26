@@ -14,10 +14,6 @@ export interface typeaheadDataSource {
     startEvent?: 'onInit' | 'onFocus';
     done: boolean;
   };
-  cache?: {
-    enable: boolean;
-    ttl?: number;
-  };
   transform?: (data: string[] | Record<string, unknown>[]) => string[] | Record<string, unknown>[];
   identifier?: string;
 }

@@ -9,7 +9,6 @@ import { Keys } from './constants';
 import { escapeRegExp, normalizer, onSelectCb } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
-import { ls } from './ls/ls';
 import './style.less';
 
 export default function typeahead<T extends typeaheadItem>(config: typeaheadConfig<T>): typeaheadResult {
@@ -38,7 +37,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     config.source?.prefetch && config.source.prefetch.url
       ? { ...{ startEvent: 'onInit', done: false }, ...config.source.prefetch }
       : null;
-  const cache = config.source?.cache?.enable ? { ttl: 864e5, ...config.source.cache } : { enable: false, ttl: 864e5 };
 
   let items: T[] = []; // suggestions
   let dataStore: T[] = [];
@@ -63,12 +61,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   if (!config.source?.local && !config.source?.prefetch && !config.source?.remote) {
     throw new Error('data source undefined');
-  }
-
-  if (cache.enable) {
-    ls.flush();
-    prefetchCached = ls.get('typeahead_prefetch') as T[];
-    dataStore = prefetchCached ? (prefetchCached as T[]) : [];
   }
 
   if (config.source?.local) {
@@ -531,15 +523,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   function updateDataStore(iterable: T[], source = 'local') {
     dataStore = [...dataStore, ...iterable];
     dataStore = [...new Map(dataStore.map((item) => [item['label'], item])).values()]; // remove duplicates
-
-    // Add to cache
-    if (cache.enable) {
-      if (source === 'prefetch') {
-        ls.set('typeahead_prefetch', dataStore, cache.ttl);
-      } else if (source === 'remote') {
-        // @todo: handle remote cache
-      }
-    }
   }
 
   /**
