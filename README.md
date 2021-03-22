@@ -91,7 +91,8 @@ typeahead({
 });
 ```
 
-## Configuration
+## <a id="configoptions">Configuration</a>
+
 
 You can pass the following config options to `typeahead-standalone`:
 
