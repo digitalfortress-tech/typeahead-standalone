@@ -45,7 +45,6 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   let debounceTimer: number | undefined;
   let remoteDebounceTimer: number | undefined;
   let fetchInProgress = false;
-  let prefetchCached: T[] | undefined;
 
   // init templates if they exist
   if (templates) {
@@ -101,7 +100,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   function prefetchData() {
     // check if data was already prefetched for current session or if prefetch response was cached in LS
-    if (!prefetch || prefetch.done || prefetchCached) return;
+    if (!prefetch || prefetch.done) return;
 
     let transformed: T[] = [];
 
@@ -120,7 +119,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         }
       )
       .finally(() => {
-        updateDataStore(transformed, 'prefetch');
+        updateDataStore(transformed);
       });
 
     prefetch.done = true;
@@ -508,7 +507,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
         if (transformed.length && inputValue.length) {
           calcSuggestions(true);
           update();
-          updateDataStore(transformed, 'remote');
+          updateDataStore(transformed);
         }
         fetchInProgress = false;
 
@@ -520,7 +519,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       });
   }
 
-  function updateDataStore(iterable: T[], source = 'local') {
+  function updateDataStore(iterable: T[]) {
     dataStore = [...dataStore, ...iterable];
     dataStore = [...new Map(dataStore.map((item) => [item['label'], item])).values()]; // remove duplicates
   }
