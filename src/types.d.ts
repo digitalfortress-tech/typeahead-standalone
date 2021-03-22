@@ -11,7 +11,7 @@ export interface typeaheadDataSource {
   };
   prefetch?: {
     url: string;
-    startEvent?: 'onInit' | 'onFocus';
+    when?: 'onInit' | 'onFocus';
     done: boolean;
   };
   transform?: (data: string[] | Record<string, unknown>[]) => string[] | Record<string, unknown>[];

@@ -123,8 +123,8 @@ source: {
     wildcard: '%QUERY'
   },
   prefetch: {
-    url: 'https://remoteapi.com/getdata',
-    startEvent: '' // optional, defaults to 'onInit' 
+    url: 'https://remoteapi.com/load-suggestions',
+    when: '' // optional, defaults to 'onInit' 
   },
   identifier: '',
   transform: function (data) {
@@ -134,7 +134,7 @@ source: {
 }
 ```
 - **Local**: The `local` data source is used when you want to provide suggestions from a local variable.
-- **Prefetch**: The `prefetch` data source is used when you want to preload suggestions from a remote endpoint in advance. You can also provide an optional `startEvent` parameter. Its value defaults to `onInit` meaning that suggestions will be loaded as soon as typeahead gets initialized. You can set it to `onFocus` which will cause suggestions to be preloaded as soon as the user focuses the search input box.
+- **Prefetch**: The `prefetch` data source is used when you want to preload suggestions from a remote endpoint in advance. You can also provide an optional `when` parameter. It defines when should the prefetch occur. It defaults to `onInit` meaning that suggestions will be preloaded as soon as typeahead gets initialized. You can set it to `onFocus` which will cause suggestions to be preloaded as soon as the user focuses the search input box.
 - **Remote**: The `remote` data source is used when you want to interrogate a remote endpoint to fetch data.
 - **Wildcard**: While using the `remote` data source, you must set the `url` and the `wildcard` options. `wildcard` will be replaced with the search string while executing the request.
 - **Transform**: You can provide an optional `transform` function which gets called immediately after the remote endpoint returns a response. You can modify the remote response before it gets processed by typeahead. The transformed data is passed to the `normalizer` to ensure that the data is normalized.

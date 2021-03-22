@@ -35,7 +35,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       : null;
   const prefetch =
     config.source?.prefetch && config.source.prefetch.url
-      ? { ...{ startEvent: 'onInit', done: false }, ...config.source.prefetch }
+      ? { ...{ when: 'onInit', done: false }, ...config.source.prefetch }
       : null;
 
   let items: T[] = []; // suggestions
@@ -94,7 +94,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   attachListContainer();
 
-  if (prefetch && prefetch.startEvent === 'onInit') {
+  if (prefetch && prefetch.when === 'onInit') {
     prefetchData();
   }
 
@@ -423,7 +423,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   function focusEventHandler(): void {
-    if (prefetch && prefetch.startEvent === 'onFocus') {
+    if (prefetch && prefetch.when === 'onFocus') {
       prefetchData();
     }
     startFetch();
