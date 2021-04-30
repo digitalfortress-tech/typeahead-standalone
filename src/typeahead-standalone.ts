@@ -67,7 +67,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   }
 
   // update Trie
-  trie.addAll(dataStore);
+  trie.addAll(dataStore, identifier);
 
   let input: HTMLInputElement = config.input;
 
@@ -112,7 +112,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
             transformed = transform(data) as T[];
           }
           transformed = normalize(data, identifier) as T[];
-          trie.addAll(transformed);
+          trie.addAll(transformed, identifier);
         },
         (reject) => {
           console.error('Prefetch failed - ', reject);
@@ -495,7 +495,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
             transformed = transform(data) as T[];
           }
           transformed = normalize(data, identifier) as T[];
-          trie.addAll(transformed);
+          trie.addAll(transformed, identifier);
         },
         (reject) => {
           console.error('Request failed - ', reject);

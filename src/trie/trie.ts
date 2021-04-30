@@ -72,7 +72,7 @@ export const Trie = function (): TrieType {
   /**
    * Adds the given array of strings/objects to the trie
    */
-  function addAll(iterable: string[] | Record<string, unknown>[]): TrieType {
+  function addAll(iterable: string[] | Record<string, unknown>[], identifier = 'label'): TrieType {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const trie = this as TrieType;
@@ -80,7 +80,7 @@ export const Trie = function (): TrieType {
       if (typeof value === 'string') {
         trie.add(value);
       } else {
-        trie.add(value.label as string, value);
+        trie.add(value[identifier] as string, value);
       }
     });
 
