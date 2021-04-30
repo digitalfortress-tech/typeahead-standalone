@@ -44,27 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
 /*****************************************************************************************/
 
 var colors = [
-  { label: 'Red', value: 'RD', hash: 'red' },
-  { label: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
-  { label: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
-  { label: 'Blue Darker', value: 'DBL', hash: 'midnightblue', group: 'Shades of Blue' },
-  { label: 'Blue Light', value: 'LBL', hash: 'cadetblue', group: 'Shades of Blue' },
-  { label: 'Blue Extra Light', value: 'XLBL', hash: 'aliceblue', group: 'Shades of Blue' },
-  { label: 'Yellow', value: 'YW', hash: 'yellow' },
-  { label: 'Gold', value: 'GD', hash: 'gold' },
-  { label: 'Silver', value: 'SV', hash: 'silver' },
-  { label: 'Orange', value: 'OR', hash: 'orange' },
-  { label: 'Green', value: 'GR', hash: 'green' },
-  { label: 'White', value: 'WH', hash: 'white' },
-  { label: 'Pink', value: 'PI', hash: 'pink' },
-  { label: 'Purple', value: 'PR', hash: 'purple' },
-  { label: 'Grey', value: 'GR', hash: 'grey' },
-  { label: 'Brown', value: 'BR', hash: 'brown' },
-  { label: 'Black', value: 'BK', hash: 'black', group: 'Shades of Black' },
-  { label: 'Black Light', value: 'LBK', hash: '#352e2e', group: 'Shades of Black' },
-];
-
-var colors1 = [
   { name: 'Red', value: 'RD', hash: 'red' },
   { name: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
   { name: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
@@ -95,8 +74,9 @@ if (dev) {
   instance = typeahead({
     input: input,
     source: {
-      local: colors1,
+      local: colors,
       identifier: 'name',
+      groupIdentifier: 'group',
       remote: {
         url: 'https://restcountries.eu/rest/v2/name/%QUERY',
         wildcard: '%QUERY',
@@ -104,9 +84,6 @@ if (dev) {
       prefetch: {
         url: 'https://restcountries.eu/rest/v2/name/an',
         when: 'onFocus',
-      },
-      cache: {
-        enable: true,
       },
     },
     highlight: true,
@@ -117,7 +94,7 @@ if (dev) {
       //     '<span class="preview" style="background-color:' +
       //     item.hash +
       //     '"></span><div class="text">' +
-      //     item.label +
+      //     item.name +
       //     '</div>'
       //   );
       // },

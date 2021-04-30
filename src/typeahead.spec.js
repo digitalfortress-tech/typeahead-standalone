@@ -1,66 +1,48 @@
 // import { typeahead } from './typeahead-standalone';
-import { NOOP, normalizer } from './helpers';
+import { normalizer } from './helpers';
+
+const colorsObj = [
+  { id: 'Red', value: 'RD', hash: 'red' },
+  { id: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
+  { id: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
+  { id: 'Blue Darker', value: 'DBL', hash: 'midnightblue', group: 'Shades of Blue' },
+];
+const colorsStr = ['Red', 'Blue', 'Blue Dark', 'Blue Darker'];
 
 describe('Typeahead Standalone', () => {
   describe('Normalizer', () => {
-    it('Input as empty array', () => {
-      const colors = [];
-      const result = normalizer(colors);
-      expect(result).toEqual(colors);
+    test('Input as empty array', () => {
+      const result = normalizer([]);
+      expect(result).toEqual([]);
     });
 
-    it('Input as string array', () => {
-      const colors = ['Red', 'Blue', 'Blue Dark', 'Blue Darker'];
-      const result = normalizer(colors);
+    test('Input as string array with no identifier', () => {
+      const result = normalizer(colorsStr);
+      // keys are undefined because identifier is missing
+      expect(result).toEqual([
+        { undefined: 'Red' },
+        { undefined: 'Blue' },
+        { undefined: 'Blue Dark' },
+        { undefined: 'Blue Darker' },
+      ]);
+    });
+
+    test('Input as string array with identifier', () => {
+      const result = normalizer(colorsStr, 'label');
       expect(result).toEqual([{ label: 'Red' }, { label: 'Blue' }, { label: 'Blue Dark' }, { label: 'Blue Darker' }]);
     });
 
-    it('Input as object array, missing identifier + label', () => {
-      var colors = [
-        { id: 'Red', value: 'RD', hash: 'red' },
-        { id: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
-        { id: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
-        { id: 'Blue Darker', value: 'DBL', hash: 'midnightblue', group: 'Shades of Blue' },
-      ];
-
-      const result = normalizer(colors);
-
-      expect(result).toEqual([
-        { label: '{"id":"Red","value":"RD","hash":"red"}' },
-        { label: '{"id":"Blue","value":"BL","hash":"blue","group":"Shades of Blue"}' },
-        { label: '{"id":"Blue Dark","value":"DBL","hash":"darkblue","group":"Shades of Blue"}' },
-        { label: '{"id":"Blue Darker","value":"DBL","hash":"midnightblue","group":"Shades of Blue"}' },
-      ]);
+    test('Input as object array with identifier', () => {
+      const result = normalizer(colorsObj, 'id');
+      expect(result).toEqual(colorsObj);
     });
 
-    it('Input as object array with identifier', () => {
-      var colors = [
-        { id: 'Red', value: 'RD', hash: 'red' },
-        { id: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
-        { id: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
-        { id: 'Blue Darker', value: 'DBL', hash: 'midnightblue', group: 'Shades of Blue' },
-      ];
-
-      const result = normalizer(colors, 'id');
-
-      expect(result).toEqual([
-        { label: 'Red', id: 'Red', value: 'RD', hash: 'red' },
-        { label: 'Blue', id: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
-        { label: 'Blue Dark', id: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
-        { label: 'Blue Darker', id: 'Blue Darker', value: 'DBL', hash: 'midnightblue', group: 'Shades of Blue' },
-      ]);
+    test('Input as object array with missing/non-existent identifier should throw', () => {
+      expect(() => normalizer(colorsObj, 'cle')).toThrow();
     });
 
-    it('Input as normalized object array', () => {
-      var colors = [
-        { label: 'Red', value: 'RD', hash: 'red' },
-        { label: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
-        { label: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
-        { label: 'Blue Darker', value: 'DBL', hash: 'midnightblue', group: 'Shades of Blue' },
-      ];
-
-      const result = normalizer(colors);
-      expect(result).toEqual(colors);
+    it('should throw when input is an array of objects + no identifier is given', () => {
+      expect(() => normalizer(colorsObj)).toThrow();
     });
   });
 });

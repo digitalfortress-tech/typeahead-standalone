@@ -1,10 +1,7 @@
-export interface typeaheadItem {
-  label: string;
-  group?: string;
-}
+export type Dictionary<T = unknown> = Record<string, T>;
 
 export interface typeaheadDataSource {
-  local?: Record<string, unknown>[];
+  local?: Dictionary[];
   remote?: {
     url: string;
     wildcard: string;
@@ -14,11 +11,12 @@ export interface typeaheadDataSource {
     when?: 'onInit' | 'onFocus';
     done: boolean;
   };
-  transform?: (data: string[] | Record<string, unknown>[]) => string[] | Record<string, unknown>[];
-  identifier?: string;
+  transform?: (data: string[] | Dictionary[]) => string[] | Dictionary[];
+  identifier?: 'label' | string;
+  groupIdentifier?: string;
 }
 
-export interface typeaheadHtmlTemplates<T extends typeaheadItem> {
+export interface typeaheadHtmlTemplates<T extends Dictionary> {
   header?: string;
   footer?: string;
   suggestion: (item?: T) => string;
@@ -27,18 +25,18 @@ export interface typeaheadHtmlTemplates<T extends typeaheadItem> {
   // pending?: string;
 }
 
-export interface typeaheadConfig<T extends typeaheadItem> {
+export interface typeaheadConfig<T extends Dictionary> {
   input: HTMLInputElement;
   className?: string;
   minLength?: number;
   limit?: number;
   hint?: boolean;
   highlight?: boolean;
-  onSelect?: (item: T, input: HTMLInputElement) => void;
+  onSelect?: (item: T, identifier: string, input: HTMLInputElement) => void;
   debounceRemote?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
   source?: typeaheadDataSource;
-  normalizer?: (listItems: string[] | Record<string, unknown>[], label?: string) => string[];
+  normalizer?: (listItems: string[] | Dictionary[] | T[], identifier: string) => string[];
   templates?: typeaheadHtmlTemplates<T>;
 }
 

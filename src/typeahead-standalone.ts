@@ -4,14 +4,14 @@
  * MIT License
  */
 
-import type { typeaheadItem, typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates } from './types';
+import type { typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates, Dictionary } from './types';
 import { Keys } from './constants';
 import { escapeRegExp, normalizer, onSelectCb } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
 import './style.less';
 
-export default function typeahead<T extends typeaheadItem>(config: typeaheadConfig<T>): typeaheadResult {
+export default function typeahead<T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult {
   const doc = document;
 
   const listContainer: HTMLDivElement = doc.createElement('div');
@@ -24,10 +24,11 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
   const hint = config.hint === false ? false : true;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
   const trie = new (Trie as any)();
-  const onSelect: (item: T, input: HTMLInputElement) => void = config.onSelect || onSelectCb;
-  const identifier = config.source?.identifier || '';
+  const onSelect: (item: T, identifier: string, input: HTMLInputElement) => void = config.onSelect || onSelectCb;
+  const identifier = config.source?.identifier || 'label'; // label is the default identifier
+  const groupIdentifier = config.source?.groupIdentifier || '';
   const normalize = config.normalizer || normalizer;
-  const remoteXhrCache: Record<string, unknown> = {};
+  const remoteXhrCache: Dictionary = {};
   const transform = config.source?.transform || null;
   const remote =
     config.source && config.source.remote && config.source.remote.url && config.source.remote.wildcard
@@ -251,7 +252,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       if (templates?.suggestion && typeof templates.suggestion === 'function') {
         templatify(itemElement, templates?.suggestion(item));
       } else {
-        itemElement.textContent = item.label || '';
+        itemElement.textContent = (item[identifier] as string) || '';
       }
       return itemElement;
     };
@@ -282,9 +283,9 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     // loop over suggestions
     for (const [index, item] of items.entries()) {
       if (index === limitSuggestions) break;
-      if (item.group && item.group !== prevGroup) {
-        prevGroup = item.group;
-        const groupDiv = renderGroup(item.group);
+      if (item[groupIdentifier] && item[groupIdentifier] !== prevGroup) {
+        prevGroup = item[groupIdentifier] as string;
+        const groupDiv = renderGroup(item[groupIdentifier] as string);
         if (groupDiv) {
           fragment.appendChild(groupDiv);
         }
@@ -292,7 +293,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
       const div = render(item);
       if (div) {
         div.addEventListener('click', function (ev: MouseEvent): void {
-          onSelect(item, input);
+          onSelect(item, identifier, input);
           clear();
           ev.preventDefault();
           ev.stopPropagation();
@@ -404,7 +405,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
     const useSelectedValue = function () {
       if (selected) {
-        onSelect(selected, input);
+        onSelect(selected, identifier, input);
         clear();
       }
     };
@@ -463,7 +464,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     }
 
     // remove duplicates from suggestions to allow back-filling
-    items = [...new Map(suggestions.map((item) => [item['label'], item])).values()];
+    items = [...new Map(suggestions.map((item) => [item[identifier], item])).values()];
 
     // set selected item
     if (items.length) {
@@ -521,7 +522,7 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
 
   function updateDataStore(iterable: T[]) {
     dataStore = [...dataStore, ...iterable];
-    dataStore = [...new Map(dataStore.map((item) => [item['label'], item])).values()]; // remove duplicates
+    dataStore = [...new Map(dataStore.map((item) => [item[identifier], item])).values()]; // remove duplicates
   }
 
   /**
@@ -607,7 +608,8 @@ export default function typeahead<T extends typeaheadItem>(config: typeaheadConf
     if (' ' === rawInput.split('').pop()) {
       inputHint.value = '';
     } else {
-      inputHint.value = (rawInput + selectedItem.label.replace(new RegExp(inputValue, 'i'), '')) as string;
+      inputHint.value = (rawInput +
+        (selectedItem[identifier] as string).replace(new RegExp(inputValue, 'i'), '')) as string;
     }
   }
 

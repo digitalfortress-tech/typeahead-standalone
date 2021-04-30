@@ -1,4 +1,4 @@
-import type { typeaheadItem } from './types';
+import type { Dictionary } from './types';
 
 export const NOOP = (...args: unknown[]): void => undefined;
 
@@ -10,36 +10,29 @@ export const isObject = (item: any): boolean => {
 
 /****** helpers specific to typeahead  *****/
 
-export const onSelectCb = <T extends typeaheadItem>(item: T, input: HTMLInputElement): void => {
-  input.value = item.label || '';
+export const onSelectCb = <T extends Dictionary>(item: T, identifier: string, input: HTMLInputElement): void => {
+  input.value = (item[identifier] as string) || '';
 };
 
-export const normalizer = <T extends typeaheadItem>(
-  listItems: string[] | Record<string, unknown>[] | T[],
-  identifier = ''
-): T[] => {
+export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionary[] | T[], identifier: string): T[] => {
   if (!listItems.length) return [];
-  const testItem = listItems[0] as typeaheadItem;
 
-  // check array items
-  const isString = testItem && typeof testItem === 'string' ? true : false;
-  const isObj = isObject(testItem);
+  const testItem = listItems[0] as Dictionary;
 
-  if (!isString && !isObj) {
-    throw new Error('Items provided must be a string array or an array of objects');
+  if (isObject(testItem)) {
+    // return if identifier exists (i.e. normalized already)
+    if (identifier in testItem) {
+      return listItems as T[];
+    } else {
+      throw new Error('Missing identifier');
+    }
   }
 
-  // check if already normalized
-  if (isObj && testItem.label) {
-    return listItems as T[];
-  }
-
+  // The default identifier (label) is used for string arrays
   const normalizedData = (listItems as []).reduce(function (acc: Record<string, unknown>[], currentItem) {
-    acc.push(
-      isObj && identifier
-        ? { label: currentItem[identifier], ...(currentItem as Record<string, unknown>) }
-        : { label: currentItem && typeof currentItem === 'string' ? currentItem : JSON.stringify(currentItem) }
-    );
+    acc.push({
+      [identifier]: currentItem && typeof currentItem === 'string' ? currentItem : JSON.stringify(currentItem),
+    });
     return acc;
   }, []);
 
