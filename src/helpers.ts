@@ -23,20 +23,20 @@ export const normalizer = <T extends typeaheadItem>(
 
   // check array items
   const isString = testItem && typeof testItem === 'string' ? true : false;
-  const isObject = testItem && testItem.constructor.name === 'Object' ? true : false;
+  const isObj = isObject(testItem);
 
-  if (!isString && !isObject) {
+  if (!isString && !isObj) {
     throw new Error('Items provided must be a string array or an array of objects');
   }
 
   // check if already normalized
-  if (isObject && testItem.label) {
+  if (isObj && testItem.label) {
     return listItems as T[];
   }
 
   const normalizedData = (listItems as []).reduce(function (acc: Record<string, unknown>[], currentItem) {
     acc.push(
-      isObject && identifier
+      isObj && identifier
         ? { label: currentItem[identifier], ...(currentItem as Record<string, unknown>) }
         : { label: currentItem && typeof currentItem === 'string' ? currentItem : JSON.stringify(currentItem) }
     );
