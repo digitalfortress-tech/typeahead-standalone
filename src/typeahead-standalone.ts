@@ -6,7 +6,7 @@
 
 import type { typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates, Dictionary } from './types';
 import { Keys } from './constants';
-import { escapeRegExp, normalizer, onSelectCb } from './helpers';
+import { escapeRegExp, normalizer } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
 import './style.less';
@@ -24,11 +24,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const hint = config.hint === false ? false : true;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
   const trie = new (Trie as any)();
-  const onSelect: (item: T, identifier: string, input: HTMLInputElement) => void = config.onSelect || onSelectCb;
   const identifier = config.source?.identifier || 'label'; // label is the default identifier
   const groupIdentifier = config.source?.groupIdentifier || '';
   const remoteXhrCache: Dictionary = {};
-  const transform = config.source?.transform || null;
+  const transform = typeof config.source?.transform === 'function' ? config.source.transform : undefined;
   const remote =
     config.source && config.source.remote && config.source.remote.url && config.source.remote.wildcard
       ? config.source.remote
@@ -100,7 +99,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   }
 
   function prefetchData() {
-    // check if data was already prefetched for current session or if prefetch response was cached in LS
+    // check if data was already prefetched for current session
     if (!prefetch || prefetch.done) return;
 
     let transformed: T[] = [];
@@ -293,7 +292,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       const div = render(item);
       if (div) {
         div.addEventListener('click', function (ev: MouseEvent): void {
-          onSelect(item, identifier, input);
+          onSelect(item);
           clear();
           ev.preventDefault();
           ev.stopPropagation();
@@ -331,6 +330,13 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     startFetch();
   }
+
+  /**
+   * Sets the input value when a suggestion is selected
+   */
+  const onSelect = <T extends Dictionary>(item: T): void => {
+    input.value = (item[identifier] as string) || '';
+  };
 
   /**
    * Select the previous item in suggestions
@@ -405,7 +411,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     const useSelectedValue = function () {
       if (selected) {
-        onSelect(selected, identifier, input);
+        onSelect(selected);
         clear();
       }
     };

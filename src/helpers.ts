@@ -10,10 +10,6 @@ export const isObject = (item: any): boolean => {
 
 /****** helpers specific to typeahead  *****/
 
-export const onSelectCb = <T extends Dictionary>(item: T, identifier: string, input: HTMLInputElement): void => {
-  input.value = (item[identifier] as string) || '';
-};
-
 export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionary[] | T[], identifier: string): T[] => {
   const length = listItems.length;
   if (!length) return [];
