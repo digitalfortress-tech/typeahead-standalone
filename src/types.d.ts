@@ -13,6 +13,7 @@ export interface typeaheadDataSource {
   };
   transform?: (data: string[] | Dictionary[]) => string[] | Dictionary[];
   identifier?: 'label' | string;
+  dataTokens?: string[];
   groupIdentifier?: string;
 }
 

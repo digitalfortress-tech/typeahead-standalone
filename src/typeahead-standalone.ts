@@ -25,6 +25,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
   const trie = new (Trie as any)();
   const identifier = config.source?.identifier || 'label'; // label is the default identifier
+  const dataTokens =
+    config.source?.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
   const groupIdentifier = config.source?.groupIdentifier || '';
   const remoteXhrCache: Dictionary = {};
   const transform = typeof config.source?.transform === 'function' ? config.source.transform : undefined;
@@ -66,8 +68,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     updateDataStore(normalizer(config.source.local, identifier) as T[]);
   }
 
-  // update Trie
-  trie.addAll(dataStore, identifier);
+  // update search Index
+  updateSearchIndex(dataStore);
 
   let input: HTMLInputElement = config.input;
 
@@ -112,7 +114,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
             transformed = transform(data) as T[];
           }
           transformed = normalizer(data, identifier) as T[];
-          trie.addAll(transformed, identifier);
+          updateSearchIndex(transformed);
         },
         (reject) => {
           console.error('Prefetch failed - ', reject);
@@ -502,7 +504,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
             transformed = transform(data) as T[];
           }
           transformed = normalizer(data, identifier) as T[];
-          trie.addAll(transformed, identifier);
+          updateSearchIndex(transformed);
         },
         (reject) => {
           console.error('Request failed - ', reject);
@@ -526,9 +528,31 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       });
   }
 
+  /**
+   * Updates the dataStore with new items. The dataStore maintains a list of the totality of the suggestions
+   */
   function updateDataStore(iterable: T[]) {
+    if (!iterable.length) return;
+
     dataStore = [...dataStore, ...iterable];
     dataStore = [...new Map(dataStore.map((item) => [item[identifier], item])).values()]; // remove duplicates
+  }
+
+  /**
+   * Update the search Index with the identifier + dataTokens
+   */
+  function updateSearchIndex(iterable: T[]) {
+    if (!iterable.length) return;
+
+    // @todo: add only unique items to the index
+
+    // add new items to the search index
+    trie.addAll(iterable, identifier);
+    if (dataTokens) {
+      dataTokens.forEach((token) => {
+        trie.addAll(iterable, token);
+      });
+    }
   }
 
   /**
