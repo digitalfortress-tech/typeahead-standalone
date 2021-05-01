@@ -19,7 +19,7 @@ export interface typeaheadDataSource {
 export interface typeaheadHtmlTemplates<T extends Dictionary> {
   header?: string;
   footer?: string;
-  suggestion: (item?: T) => string;
+  suggestion?: (item?: T) => string;
   group?: (groupName?: string) => string;
   notFound?: string;
   // pending?: string;

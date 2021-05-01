@@ -51,7 +51,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     templates.header = templates.header?.trim();
     templates.footer = templates.footer?.trim();
     templates.notFound = templates.notFound?.trim();
-    templates.group = templates.group && typeof templates.group === 'function' ? templates.group : undefined;
+    templates.group = typeof templates.group === 'function' ? templates.group : undefined;
+    templates.suggestion = typeof templates.suggestion === 'function' ? templates.suggestion : undefined;
   }
 
   if (!config.input) {
@@ -248,7 +249,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     const render = function (item: T): HTMLDivElement | undefined {
       const itemElement = doc.createElement('div');
       itemElement.classList.add('tt-suggestion');
-      if (templates?.suggestion && typeof templates.suggestion === 'function') {
+      if (templates?.suggestion) {
         templatify(itemElement, templates?.suggestion(item));
       } else {
         itemElement.textContent = (item[identifier] as string) || '';
