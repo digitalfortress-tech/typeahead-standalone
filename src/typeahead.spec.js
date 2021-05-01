@@ -41,6 +41,17 @@ describe('Typeahead Standalone', () => {
       expect(() => normalizer(colorsObj, 'cle')).toThrow();
     });
 
+    test('Input as object array with only a few items missing an identifier should throw', () => {
+      const colors = [
+        ...colorsObj,
+        ...[
+          { name: 'orange', value: 'OR' },
+          { name: 'yellow', value: 'TW' },
+        ],
+      ];
+      expect(() => normalizer(colors, 'id')).toThrow();
+    });
+
     it('should throw when input is an array of objects + no identifier is given', () => {
       expect(() => normalizer(colorsObj)).toThrow();
     });

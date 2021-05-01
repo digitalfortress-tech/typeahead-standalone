@@ -36,7 +36,6 @@ export interface typeaheadConfig<T extends Dictionary> {
   debounceRemote?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
   source?: typeaheadDataSource;
-  normalizer?: (listItems: string[] | Dictionary[] | T[], identifier: string) => string[];
   templates?: typeaheadHtmlTemplates<T>;
 }
 

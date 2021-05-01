@@ -15,17 +15,17 @@ export const onSelectCb = <T extends Dictionary>(item: T, identifier: string, in
 };
 
 export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionary[] | T[], identifier: string): T[] => {
-  if (!listItems.length) return [];
+  const length = listItems.length;
+  if (!length) return [];
 
-  const testItem = listItems[0] as Dictionary;
-
-  if (isObject(testItem)) {
-    // return if identifier exists (i.e. normalized already)
-    if (identifier in testItem) {
-      return listItems as T[];
-    } else {
-      throw new Error('Missing identifier');
+  if (isObject(listItems[0] as Dictionary)) {
+    // verify if identifier exists (i.e. normalized already)
+    for (let x = 0; x < length; x++) {
+      if (!(identifier in (listItems[x] as Dictionary))) {
+        throw new Error('Missing identifier');
+      }
     }
+    return listItems as T[];
   }
 
   // The default identifier (label) is used for string arrays

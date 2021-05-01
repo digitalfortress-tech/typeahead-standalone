@@ -27,7 +27,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const onSelect: (item: T, identifier: string, input: HTMLInputElement) => void = config.onSelect || onSelectCb;
   const identifier = config.source?.identifier || 'label'; // label is the default identifier
   const groupIdentifier = config.source?.groupIdentifier || '';
-  const normalize = config.normalizer || normalizer;
   const remoteXhrCache: Dictionary = {};
   const transform = config.source?.transform || null;
   const remote =
@@ -64,7 +63,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   }
 
   if (config.source?.local) {
-    updateDataStore(normalize(config.source.local, identifier) as T[]);
+    updateDataStore(normalizer(config.source.local, identifier) as T[]);
   }
 
   // update Trie
@@ -112,7 +111,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
           if (transform) {
             transformed = transform(data) as T[];
           }
-          transformed = normalize(data, identifier) as T[];
+          transformed = normalizer(data, identifier) as T[];
           trie.addAll(transformed, identifier);
         },
         (reject) => {
@@ -495,7 +494,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
           if (transform) {
             transformed = transform(data) as T[];
           }
-          transformed = normalize(data, identifier) as T[];
+          transformed = normalizer(data, identifier) as T[];
           trie.addAll(transformed, identifier);
         },
         (reject) => {
