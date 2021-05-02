@@ -251,7 +251,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       const itemElement = doc.createElement('div');
       itemElement.classList.add('tt-suggestion');
       if (templates?.suggestion) {
-        templatify(itemElement, templates?.suggestion(item));
+        templatify(itemElement, templates.suggestion(item));
       } else {
         itemElement.textContent = (item[identifier] as string) || '';
       }
@@ -271,7 +271,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     };
 
     const fragment = doc.createDocumentFragment();
-    let prevGroup = '#9?$';
+    const prevGroups: string[] = [];
 
     // Add header template
     if (templates?.header) {
@@ -284,8 +284,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     // loop over suggestions
     for (const [index, item] of items.entries()) {
       if (index === limitSuggestions) break;
-      if (item[groupIdentifier] && item[groupIdentifier] !== prevGroup) {
-        prevGroup = item[groupIdentifier] as string;
+      if (item[groupIdentifier] && !prevGroups.includes(item[groupIdentifier] as string)) {
+        prevGroups.push(item[groupIdentifier] as string);
         const groupDiv = renderGroup(item[groupIdentifier] as string);
         if (groupDiv) {
           fragment.appendChild(groupDiv);
@@ -548,11 +548,11 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // add new items to the search index
     trie.addAll(iterable, identifier);
-    if (dataTokens) {
-      dataTokens.forEach((token) => {
-        trie.addAll(iterable, token);
-      });
-    }
+    // if (dataTokens) {
+    //   dataTokens.forEach((token) => {
+    //     trie.addAll(iterable, token);
+    //   });
+    // }
   }
 
   /**
