@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             : i > this.previousTop &&
               (o('#mainNav').removeClass('is-visible'),
               s < i && !o('#mainNav').hasClass('is-fixed') && o('#mainNav').addClass('is-fixed')),
-            (this.previousTop = i);
+          (this.previousTop = i);
         }
       );
     }
@@ -77,6 +77,7 @@ if (dev) {
       local: colors,
       identifier: 'name',
       groupIdentifier: 'group',
+      dataTokens: ['value'],
       // remote: {
       //   url: 'https://restcountries.eu/rest/v2/name/%QUERY',
       //   wildcard: '%QUERY',
