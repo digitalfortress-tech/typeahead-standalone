@@ -53,6 +53,7 @@ var colors = [
   { name: 'Yellow', value: 'YW', hash: 'yellow' },
   { name: 'Gold', value: 'GD', hash: 'gold' },
   { name: 'Silver', value: 'SV', hash: 'silver' },
+  { name: 'Baige', value: 'BG', hash: '#352e2e' },
   { name: 'Orange', value: 'OR', hash: 'orange' },
   { name: 'Green', value: 'GR', hash: 'green' },
   { name: 'White', value: 'WH', hash: 'white' },

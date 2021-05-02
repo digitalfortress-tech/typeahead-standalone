@@ -464,15 +464,20 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // if searching within remote or (local + remote), merge the suggestions
     if (fromRemoteCb) {
-      suggestions = trie.find(inputValue.toLowerCase(), limitSuggestions - items.length);
+      suggestions = trie.find(inputValue.toLowerCase(), limitSuggestions - items.length, identifier);
       suggestions = [...items, ...suggestions];
     } else {
       // if searching only within local
-      suggestions = trie.find(inputValue.toLowerCase(), limitSuggestions);
+      suggestions = trie.find(inputValue.toLowerCase(), limitSuggestions, identifier);
     }
 
     // remove duplicates from suggestions to allow back-filling
     items = [...new Map(suggestions.map((item) => [item[identifier], item])).values()];
+
+    // if suggestions need to be grouped, sort them first
+    if (groupIdentifier) {
+      sortByGroup();
+    }
 
     // set selected item
     if (items.length) {
@@ -548,11 +553,26 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // add new items to the search index
     trie.addAll(iterable, identifier);
-    // if (dataTokens) {
-    //   dataTokens.forEach((token) => {
-    //     trie.addAll(iterable, token);
-    //   });
-    // }
+    if (dataTokens) {
+      dataTokens.forEach((token) => {
+        trie.addAll(iterable, token);
+      });
+    }
+  }
+
+  /**
+   * Sorts(in-place) "items" array by group
+   */
+  function sortByGroup() {
+    items.sort((a: Dictionary, b: Dictionary) => {
+      if (!a[groupIdentifier] || (a[groupIdentifier] as string) < (b[groupIdentifier] as string)) {
+        return -1;
+      }
+      if ((a[groupIdentifier] as string) > (b[groupIdentifier] as string)) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   /**

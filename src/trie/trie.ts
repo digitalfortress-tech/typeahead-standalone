@@ -1,3 +1,4 @@
+import { Dictionary } from '../types';
 import type { TrieType } from './types';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
@@ -31,9 +32,9 @@ export const Trie = function (): TrieType {
   /**
    * Method used to retrieve every item in the trie beginning with the given prefix.
    */
-  function find(prefix: string, limit?: number): string[] | Record<string, unknown>[] {
+  function find(prefix: string, limit?: number, identifier?: string): string[] | Dictionary[] {
     let node = root;
-    const matches: string[] | Record<string, unknown>[] = [];
+    let matches: string[] | Dictionary[] = [];
     let token, i, l;
 
     for (i = 0, l = prefix.length; i < l; i++) {
@@ -58,6 +59,11 @@ export const Trie = function (): TrieType {
 
         if (k === SENTINEL) {
           node[SENTINEL] === true ? matches.push(prefix as any) : matches.push(node[SENTINEL] as any);
+          // specific to typeahead
+          if (identifier) {
+            // deduplicate matches
+            matches = [...new Map((matches as Dictionary[]).map((item) => [item[identifier], item])).values()];
+          }
           continue;
         }
 
@@ -72,11 +78,11 @@ export const Trie = function (): TrieType {
   /**
    * Adds the given array of strings/objects to the trie
    */
-  function addAll(iterable: string[] | Record<string, unknown>[], identifier = 'label'): TrieType {
+  function addAll(iterable: string[] | Dictionary[], identifier = 'label'): TrieType {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const trie = this as TrieType;
-    iterable.forEach((value: string | Record<string, unknown>) => {
+    iterable.forEach((value: string | Dictionary) => {
       if (typeof value === 'string') {
         trie.add(value);
       } else {
