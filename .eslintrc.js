@@ -4,6 +4,7 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier',
+    'plugin:cypress/recommended',
   ],
   env: {
     browser: true,

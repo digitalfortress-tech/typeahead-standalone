@@ -10,13 +10,23 @@ watch:	## Build for Dev environment and Watch files
 lint:		## Lint all files
 	@npm run lint
 
-test:		## Run unit tests (JEST)
+tests:		## Run all tests (unit + e2e)
+	@make test-unit
+	@make test-e2e
+
+test-unit:		## Run unit tests (JEST)
 	@npm run test
+
+test-e2e:		## Run e2e tests (Cypress CLI)
+	@npm run test-e2e
+
+test-e2e-gui:		## Run e2e tests (Cypress GUI)
+	@npm run test-e2e-gui
 
 prod:		## Build for Production environment
 	@npm run prod
 
 publish:	## Publish to NPM
 	@make prod
-	@make test
+	@make tests
 	@npm publish

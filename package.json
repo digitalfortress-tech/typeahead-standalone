@@ -12,6 +12,10 @@
     "server": "webpack",
     "tag": "npm version minor --no-git-tag-version && npm run prod && PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git commit -am \"$PACKAGE_VERSION release\" && git tag v$PACKAGE_VERSION",
     "test": "jest --verbose",
+    "test-e2e-gui": "npm run cy:open",
+    "test-e2e": "npm run cy:run",
+    "cy:run": "npx cypress run --headless --browser chrome",
+    "cy:open": "npx cypress open --browser chrome",
     "lint": "eslint ./src --ext .ts --fix"
   },
   "jest": {
@@ -61,9 +65,11 @@
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.1.0",
     "css-loader": "^5.0.0",
+    "cypress": "^7.2.0",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.13.0",
     "eslint-loader": "^4.0.2",
+    "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-jest": "^24.1.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.6.3",

@@ -1,0 +1,28 @@
+body {
+  background: #000f;
+  color: #ccc;
+}
+
+label {
+  padding-right: 10px;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  text-align: center;
+}
+
+.subtitle {
+  color: #c7c740;
+}
+
+.section-one {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
