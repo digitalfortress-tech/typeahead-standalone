@@ -12,12 +12,84 @@
 <body>
   <main class="container">
     <h2 class="title">Typeahead End To End Tests</h2>
-    <section class="section-one">
+    <section class="section-one top-section">
       <form method="GET">
-        <h3 class="subtitle">1. Default Config, Source: Local</h3>
+        <h3 class="subtitle">1. Default Config, Source: Local, String Arr</h3>
         <div>
           <label for="input-one">My Fav Color</label>
           <input id="input-one" name="color-test-1" type="search" autocomplete="off" placeholder="Search...">
+          <button type="submit">OK</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="section-two top-section">
+      <form method="GET">
+        <h3 class="subtitle">2. Custom Config, Source: Local, Object Arr</h3>
+        <p class="details">minLength: 2; highlight: true; identifier: 'name';</p>
+        <div>
+          <label for="input-two">My Fav Color</label>
+          <input id="input-two" name="color-test-2" type="search" autocomplete="off" placeholder="Search...">
+          <button type="submit">OK</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="section-three top-section">
+      <form method="GET">
+        <h3 class="subtitle">3. Grouped Results, Source: Local, Object Arr</h3>
+        <p class="details">groupIdentifier: 'group'</p>
+        <div>
+          <label for="input-three">My Fav Color</label>
+          <input id="input-three" name="color-test-3" type="search" autocomplete="off" placeholder="Search...">
+          <button type="submit">OK</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="section-four top-section">
+      <form method="GET">
+        <h3 class="subtitle">4. Templates, Source: Local, Object Arr</h3>
+        <p class="details">Used Templates: header; footer; suggestion; group; notFound</p>
+        <div>
+          <label for="input-four">My Fav Color</label>
+          <input id="input-four" name="color-test-4" type="search" autocomplete="off" placeholder="Search...">
+          <button type="submit">OK</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="section-five top-section">
+      <form method="GET">
+        <h3 class="subtitle">5. DataTokens, Source: Local, Object Arr</h3>
+        <p class="details">dataTokens: ['value']</p>
+        <div>
+          <label for="input-five">My Fav Color</label>
+          <input id="input-five" name="color-test-5" type="search" autocomplete="off" placeholder="Search...">
+          <button type="submit">OK</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="section-six top-section">
+      <form method="GET">
+        <h3 class="subtitle">6. Source: Remote, Object Arr</h3>
+        <p class="details">wildcard: '%QUERY'; identifier: 'name', dataTokens: ['capital']</p>
+        <div>
+          <label for="input-six">Countries</label>
+          <input id="input-six" name="color-test-6" type="search" autocomplete="off" placeholder="Search...">
+          <button type="submit">OK</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="section-seven top-section">
+      <form method="GET">
+        <h3 class="subtitle">7. Source: Prefetch, Object Arr</h3>
+        <p class="details">when: 'onFocus'; identifier: 'name', dataTokens: ['capital']</p>
+        <div>
+          <label for="input-seven">Countries</label>
+          <input id="input-seven" name="color-test-7" type="search" autocomplete="off" placeholder="Search...">
           <button type="submit">OK</button>
         </div>
       </form>

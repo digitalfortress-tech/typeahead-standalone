@@ -21,8 +21,85 @@ label {
   color: #c7c740;
 }
 
-.section-one {
+.top-section {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #464646;
+  text-align: center;
+}
+
+.details {
+  font-size: 14px;
+  color: #6d6d6d;
+}
+
+
+/* Styling typeahead templates */
+/* override style for list of suggestions */
+.typeahead-standalone.typeahead-test-four .tt-list {
+  background: #292727;
+  color: #fff;
+  border: 1px solid #6d6b6b;
+  border-radius: 4px;
+  -webkit-box-shadow: -1px 10px 22px 2px rgba(0,0,0,0.36);
+  -moz-box-shadow: -1px 10px 22px 2px rgba(0,0,0,0.36);
+  box-shadow: -1px 10px 22px 2px rgba(0,0,0,0.36);
+}
+
+/* override style for all templates */
+.typeahead-standalone.typeahead-test-four .tt-list div[class^="tt-"] {
+  padding: 5px;
+}
+
+/* single suggestion */
+.typeahead-standalone.typeahead-test-four .tt-list .tt-suggestion {
+  border-bottom: 1px solid #3c3838;
+}
+
+/* single selected suggestion and single suggestion on hover */
+.typeahead-standalone.typeahead-test-four .tt-list .tt-suggestion:hover, .typeahead-standalone.typeahead-test-four .tt-list .tt-suggestion.tt-selected {
+  color: #fff;
+  background-color: #000;
+}
+
+/* single group */
+.typeahead-standalone.typeahead-test-four .tt-list .tt-group {
+  background: #403636;
+  font-style: italic;
+}
+
+/* style highlight */
+.typeahead-standalone.typeahead-test-four .tt-list .tt-suggestion .tt-highlight {
+  color: orangered;
+}
+
+/* style suggestion template */
+.typeahead-standalone.typeahead-test-four .preview {
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  right: 10px;
+  margin-top: 7px;
+  border: 1px solid #313131;
+}
+
+/* style header template, footer template and not found template */
+.typeahead-standalone .tt-header, .typeahead-standalone .tt-footer, .typeahead-standalone .tt-notFound {
+  text-align: center;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+/* style footer link */
+.typeahead-standalone .tt-footer, .typeahead-standalone .tt-footer a {
+  color: #fff;
+  text-align: right;
+}
+
+/* style footer link on hover */
+.typeahead-standalone .tt-footer a:hover {
+  text-decoration: none;
+  opacity: 0.7;
 }

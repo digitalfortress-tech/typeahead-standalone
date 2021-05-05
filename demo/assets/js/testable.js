@@ -24,8 +24,113 @@ const colors = [
 const test1 = typeahead({
   input: document.getElementById('input-one'),
   source: {
+    local: ['Gold', 'Green', 'Grey'],
+  },
+  className: 'typeahead-test-one',
+});
+
+// eslint-disable-next-line no-undef
+const test2 = typeahead({
+  input: document.getElementById('input-two'),
+  source: {
     local: colors,
     identifier: 'name',
   },
-  className: 'typeahead-test-one',
+  className: 'typeahead-test-two',
+  minLength: 2,
+  highlight: true,
+});
+
+// eslint-disable-next-line no-undef
+const test3 = typeahead({
+  input: document.getElementById('input-three'),
+  source: {
+    local: colors,
+    identifier: 'name',
+    groupIdentifier: 'group',
+  },
+  className: 'typeahead-test-three',
+  highlight: true,
+});
+
+// eslint-disable-next-line no-undef
+const test4 = typeahead({
+  input: document.getElementById('input-four'),
+  source: {
+    local: colors,
+    identifier: 'name',
+    groupIdentifier: 'group',
+  },
+  className: 'typeahead-test-four',
+  highlight: true,
+  templates: {
+    suggestion: (item) => {
+      return (
+        '<span class="preview" style="background-color:' +
+        item.hash +
+        '"></span><div class="text">' +
+        item.name +
+        '</div>'
+      );
+    },
+    group: (name) => {
+      return '<div class="custom-group">' + name + '</div>';
+    },
+    header: 'Colors Found',
+    footer: '<a href="#">See more...</a>',
+    notFound: 'Oops...Nothing Found 😪 <br>Try another color...',
+  },
+});
+
+// eslint-disable-next-line no-undef
+const test5 = typeahead({
+  input: document.getElementById('input-five'),
+  source: {
+    local: colors,
+    identifier: 'name',
+    groupIdentifier: 'group',
+    dataTokens: ['value'],
+  },
+  className: 'typeahead-test-five',
+  highlight: true,
+});
+
+// eslint-disable-next-line no-undef
+const test6 = typeahead({
+  input: document.getElementById('input-six'),
+  source: {
+    remote: {
+      url: 'https://restcountries.eu/rest/v2/name/%QUERY',
+      wildcard: '%QUERY',
+    },
+    identifier: 'name',
+    dataTokens: ['capital'],
+  },
+  className: 'typeahead-test-six',
+  highlight: true,
+  templates: {
+    suggestion: (item) => {
+      return item.name + ', ' + item.capital;
+    },
+  },
+});
+
+// eslint-disable-next-line no-undef
+const test7 = typeahead({
+  input: document.getElementById('input-seven'),
+  source: {
+    prefetch: {
+      url: 'https://restcountries.eu/rest/v2/name/p',
+      when: 'onFocus',
+    },
+    identifier: 'name',
+    dataTokens: ['capital'],
+  },
+  className: 'typeahead-test-seven',
+  highlight: true,
+  templates: {
+    suggestion: (item) => {
+      return item.name + ', ' + item.capital;
+    },
+  },
 });
