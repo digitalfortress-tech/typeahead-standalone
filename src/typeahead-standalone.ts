@@ -6,7 +6,7 @@
 
 import type { typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates, Dictionary } from './types';
 import { Keys } from './constants';
-import { escapeRegExp, normalizer } from './helpers';
+import { escapeRegExp, normalizer, spaceTokenizer } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
 import './style.less';
@@ -461,14 +461,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   function calcSuggestions(fromRemoteCb = false) {
     let suggestions: T[] = [];
-
+    const method = spaceTokenizer(inputValue).length > 1 ? 'search' : 'find';
     // if searching within remote or (local + remote), merge the suggestions
     if (fromRemoteCb) {
-      suggestions = trie.find(inputValue.toLowerCase(), limitSuggestions - items.length, identifier);
+      suggestions = trie[method](inputValue.toLowerCase(), identifier, limitSuggestions - items.length);
       suggestions = [...items, ...suggestions];
     } else {
       // if searching only within local
-      suggestions = trie.find(inputValue.toLowerCase(), limitSuggestions, identifier);
+      suggestions = trie[method](inputValue.toLowerCase(), identifier, limitSuggestions);
     }
 
     // remove duplicates from suggestions to allow back-filling
@@ -722,6 +722,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   return {
     destroy,
-    // trie: Trie, // we expose tree only for tests
+    trie: Trie, // we expose trie only for tests
   };
 }

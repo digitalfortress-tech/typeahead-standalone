@@ -103,3 +103,23 @@ label {
   text-decoration: none;
   opacity: 0.7;
 }
+
+/* Styling for Track */
+.track {
+  padding: 5px 0;
+}
+.track-title {
+  font-size: 17px;
+}
+.track-details .track-artist {
+  color: #631717;
+  font-size: 16px;
+}
+.track-details .track-album {
+  color: #828080;
+  font-size: 14px;
+}
+.typeahead-standalone.typeahead-test-eight .tt-list .tt-suggestion:hover, .typeahead-standalone.typeahead-test-eight .tt-list .tt-suggestion.tt-selected {
+  color: #fff;
+  background-color: #000;
+}

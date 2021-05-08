@@ -1,6 +1,7 @@
 export interface TrieType {
-  add(prefix: string, data?: Record<string, unknown>): void;
-  addAll(iterable: string[]): TrieType;
-  find(prefix: string, limit?: number): string[] | Record<string, unknown>[];
+  add(prefix: string, data?: unknown): void;
+  addAll(iterable: string[]): void;
+  find(prefix: string, identifier?: string, limit?: number): string[] | Record<string, unknown>[];
+  search(prefix: string, identifier?: string, limit?: number): string[] | Record<string, unknown>[];
   clear(): void;
 }

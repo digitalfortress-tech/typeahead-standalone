@@ -1,10 +1,10 @@
 import { Dictionary } from '../types';
 import type { TrieType } from './types';
+import { spaceTokenizer } from '../helpers';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
 export const Trie = function (): TrieType {
-  let root: Record<string, unknown>;
-  clear();
+  let root: Record<string, unknown> = {};
 
   // constant to mark the end of a string
   const SENTINEL = String.fromCharCode(0);
@@ -13,28 +13,25 @@ export const Trie = function (): TrieType {
    * Method used to add the given prefix to the trie.
    * You can optionally provide data, which will be stored in the tree as well
    */
-  function add(prefix: string, data?: Record<string, unknown>) {
+  function add(prefix: string, data?: unknown) {
     let node = root;
     let token;
-    prefix = prefix.toLowerCase(); // to make the search case insensitive
+    data = data ? data : prefix;
+    prefix = prefix.toLocaleLowerCase(); // to make the search case insensitive
 
     for (let i = 0, l = prefix.length; i < l; i++) {
       token = prefix[i];
       node = (node[token] || (node[token] = {})) as Record<string, unknown>;
     }
 
-    // when data is to be stored, we store it within an array to handle collisions
-    if (node[SENTINEL] && node[SENTINEL] !== true) {
-      node[SENTINEL] = [...(node[SENTINEL] as Dictionary[]), data];
-    } else {
-      node[SENTINEL] = data ? [data] : true;
-    }
+    // we store data within an array to avoid collisions
+    node[SENTINEL] = node[SENTINEL] ? [...(node[SENTINEL] as Dictionary[]), data] : [data];
   }
 
   /**
    * Method used to retrieve every item in the trie beginning with the given prefix.
    */
-  function find(prefix: string, limit?: number, identifier?: string): string[] | Dictionary[] {
+  function find(prefix: string, identifier?: string, limit?: number): string[] | Dictionary[] {
     let node = root;
     let matches: string[] | Dictionary[] = [];
     let token;
@@ -60,9 +57,8 @@ export const Trie = function (): TrieType {
         if (limit && matches.length >= limit) break;
 
         if (k === SENTINEL) {
-          node[SENTINEL] === true
-            ? matches.push(prefix as any)
-            : (matches = (matches as Dictionary[]).concat(node[SENTINEL] as Dictionary[]));
+          matches = (matches as Dictionary[]).concat(node[SENTINEL] as Dictionary[]);
+
           // specific to typeahead
           if (identifier) {
             // deduplicate matches
@@ -76,25 +72,52 @@ export const Trie = function (): TrieType {
       }
     }
 
+    // if concatenation of matches leads to addition of extra items, truncate the matches[] array
+    if (limit && matches.length > limit) {
+      matches.length = 5;
+    }
+
     return matches;
   }
 
   /**
    * Adds the given array of strings/objects to the trie
    */
-  function addAll(iterable: string[] | Dictionary[], identifier = 'label'): TrieType {
+  function addAll(iterable: string[] | Dictionary[], identifier = 'label') {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const trie = this as TrieType;
     iterable.forEach((value: string | Dictionary) => {
-      if (typeof value === 'string') {
-        trie.add(value);
-      } else {
-        trie.add(value[identifier] as string, value);
-      }
+      const dataTokens =
+        typeof value === 'string' ? spaceTokenizer(value) : spaceTokenizer(value[identifier] as string);
+      dataTokens.forEach((token) => trie.add(token, value));
+    });
+  }
+
+  function search(query: string, identifier?: string, limit?: number) {
+    const searchTokens = spaceTokenizer(query);
+    const objArrs: Dictionary[][] = [];
+    let suggestions: string[] | Dictionary[] = [];
+    searchTokens.forEach((token) => {
+      // note that limit is not passed to "find()"
+      objArrs.push(find(token, identifier) as Dictionary[]);
     });
 
-    return trie;
+    // get intersection of found suggestions
+    suggestions = objArrs.reduce((acc: Dictionary[], currentArr: Dictionary[]) => {
+      return acc.filter((accItem: Dictionary) => {
+        return currentArr.some((currentArrItem: Dictionary) => {
+          return accItem[identifier as string] === currentArrItem[identifier as string];
+        });
+      });
+    });
+
+    // truncate suggestions to limit
+    if (limit && suggestions.length > limit) {
+      suggestions.length = 5;
+    }
+
+    return suggestions;
   }
 
   function clear() {
@@ -106,17 +129,6 @@ export const Trie = function (): TrieType {
     addAll,
     find,
     clear,
+    search,
   };
 };
-
-/**
- * Create a new trie from items
- * @deprecated 13 Nov 2020
- * */
-// export function TrieInit(iterable: unknown[]): TrieType {
-//   const tr = new (Trie as any)();
-//   iterable.forEach((value: unknown) => {
-//     tr.add(value);
-//   });
-//   return tr;
-// }

@@ -34,3 +34,5 @@ export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionar
 
   return normalizedData as T[];
 };
+
+export const spaceTokenizer = (tokenString: string): string[] => tokenString.trim().split(/\s+/);

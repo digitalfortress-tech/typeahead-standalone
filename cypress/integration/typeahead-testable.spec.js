@@ -34,13 +34,13 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue');
 
     cy.get('@input2').type('{downarrow}{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue Light');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue Darker');
 
     cy.get('@input2').type('{downarrow}');
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Black');
 
     cy.get('@input2').type('{uparrow}{uparrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue Extra Light');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue Dark');
   });
 
   it('Displays grouped results', () => {
@@ -114,6 +114,19 @@ context('Typeahead', () => {
     cy.get('@input7').type('pa', { delay: 100 });
     cy.get('.typeahead-test-seven .tt-list').as('list').children().should('have.length', 5);
     cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'France, Paris');
+  });
+
+  it('displays suggestions for multiple space-separated queries', () => {
+    cy.get('#input-eight').as('input8').type('or', { delay: 100 });
+    cy.get('.typeahead-test-eight .tt-list').as('list').children().should('have.length', 3);
+    cy.get('@list').children('.tt-selected').find('.track-artist').should('have.text', 'Fernando Ortega');
+    cy.get('.typeahead-test-eight .tt-hint').as('hint').should('have.value', '');
+
+    cy.get('@input8').type('{backspace}{backspace}sh', { delay: 100 });
+    cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 5);
+    cy.get('@suggestions').first().find('.track-title').should('have.text', 'Shalom Jerusalem');
+    cy.get('@suggestions').eq(1).find('.track-album').should('have.text', 'Shalom Jerusalem');
+    cy.get('@hint').should('have.value', 'shalom Jerusalem');
   });
 
   // https://on.cypress.io/interacting-with-elements
