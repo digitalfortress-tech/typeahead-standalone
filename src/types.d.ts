@@ -41,4 +41,5 @@ export interface typeaheadConfig<T extends Dictionary> {
 
 export interface typeaheadResult {
   destroy: () => void;
+  trie?: unknown;
 }

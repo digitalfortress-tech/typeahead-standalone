@@ -722,5 +722,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   return {
     destroy,
+    // trie: Trie, // we expose tree only for tests
   };
 }

@@ -3,7 +3,7 @@ import type { TrieType } from './types';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
 export const Trie = function (): TrieType {
-  let root: Record<string, unknown>, size: number;
+  let root: Record<string, unknown>;
   clear();
 
   // constant to mark the end of a string
@@ -23,10 +23,12 @@ export const Trie = function (): TrieType {
       node = (node[token] || (node[token] = {})) as Record<string, unknown>;
     }
 
-    // Do we need to increase size?
-    if (!(SENTINEL in node)) size++;
-
-    node[SENTINEL] = data || true;
+    // when data is to be stored, we store it within an array to handle collisions
+    if (node[SENTINEL] && node[SENTINEL] !== true) {
+      node[SENTINEL] = [...(node[SENTINEL] as Dictionary[]), data];
+    } else {
+      node[SENTINEL] = data ? [data] : true;
+    }
   }
 
   /**
@@ -35,12 +37,12 @@ export const Trie = function (): TrieType {
   function find(prefix: string, limit?: number, identifier?: string): string[] | Dictionary[] {
     let node = root;
     let matches: string[] | Dictionary[] = [];
-    let token, i, l;
+    let token;
 
-    for (i = 0, l = prefix.length; i < l; i++) {
-      token = prefix[i];
+    // traverse the root until you reach the end of prefix
+    for (let i = 0, l = prefix.length; i < l; i++) {
+      token = prefix[i]; // each letter of search string
       node = node[token] as Record<string, unknown>;
-
       if (typeof node === 'undefined') return matches as string[];
     }
 
@@ -58,7 +60,9 @@ export const Trie = function (): TrieType {
         if (limit && matches.length >= limit) break;
 
         if (k === SENTINEL) {
-          node[SENTINEL] === true ? matches.push(prefix as any) : matches.push(node[SENTINEL] as any);
+          node[SENTINEL] === true
+            ? matches.push(prefix as any)
+            : (matches = (matches as Dictionary[]).concat(node[SENTINEL] as Dictionary[]));
           // specific to typeahead
           if (identifier) {
             // deduplicate matches
@@ -95,7 +99,6 @@ export const Trie = function (): TrieType {
 
   function clear() {
     root = {};
-    size = 0;
   }
 
   return {
