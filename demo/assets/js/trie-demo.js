@@ -35,6 +35,17 @@ const colors = [
   { name: 'Plum', value: 'PN', hash: 'plum' },
 ];
 
+const colorsCollision = [
+  { name: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
+  { name: 'Blue Darker', value: 'DBL', hash: 'mnamenightblue', group: 'Shades of Blue' },
+  { name: 'Blue Darkest', value: 'DBL', hash: 'cadetblue', group: 'Shades of Blue' },
+  { name: 'Blue Black', value: 'DBL', hash: 'aliceblue', group: 'Shades of Blue' },
+  { name: 'Black Blue', value: 'DBL', hash: 'black', group: 'Shades of Black' },
+  { name: 'Black Dark', value: 'DBL', hash: '#352e2e', group: 'Shades of Black' },
+  { name: 'Black Darker', value: 'DBL', hash: '#352e2e', group: 'Shades of Black' },
+  { name: 'Black Sheeep', hash: '#352e2e', group: 'Shades of Black' },
+];
+
 const words = ['romAn', 'romAneSquE', 'ROmanesCo', 'cat', 'category', 'romanei', 'another romaneid'];
 
 const songs = [
@@ -297,18 +308,24 @@ const songs = [
 
 /********************************* TEST ON STRINGS ***************************************/
 
-// trie.addAll(words);
-// console.log('trie1 :>> ', trie.find('romane'));
+// trie.add(words);
+// console.log('trie1 :>> ', trie.search('romane'));
 
 /********************************* TEST ON COLORS ***************************************/
 
-// trie.addAll(colors, 'name');
-// trie.addAll(colors, 'value');
-// console.log('trie2 :>> Find: "b" => ', trie.find('b', 5, 'name'));
+// trie.add(colors, 'name');
+// trie.add(colors, 'value');
+// console.log('trie2 :>> Search: "b" => ', trie.search('b', 'name', 5));
+
+/* Colors Collision Test */
+
+trie.add(colorsCollision, 'name');
+trie.add(colorsCollision, 'value');
+console.log('trie2 : Collision >> Search: "b" => ', trie.search('dbl', 'name', 5));
 
 /********************************* TEST ON SONGS ***************************************/
 
-trie.addAll(songs, 'title');
-trie.addAll(songs, 'artist');
-trie.addAll(songs, 'album');
-console.log('trie3 :>> Search: "god is good" =>', trie.search('god is good', 'title', 5));
+// trie.add(songs, 'title');
+// trie.add(songs, 'artist');
+// trie.add(songs, 'album');
+// console.log('trie3 :>> Search: "god is good" =>', trie.search('god is good', 'title', 5));

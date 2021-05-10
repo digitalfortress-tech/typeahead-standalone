@@ -10,26 +10,39 @@ export const Trie = function (): TrieType {
   const SENTINEL = String.fromCharCode(0);
 
   /**
-   * Method used to add the given prefix to the trie.
-   * You can optionally provide data, which will be stored in the tree as well
+   * Method used to add the given data to the trie.
+   * Identifier is optional when data is a string|string[], but mandatory for Dictionary[]
    */
-  function add(prefix: string, data?: unknown) {
+  function add(data: string | string[] | Dictionary[], identifier = '') {
+    if (!data) return;
+
     let node = root;
     let token;
-    data = data ? data : prefix;
-    prefix = prefix.toLocaleLowerCase(); // to make the search case insensitive
+    data = (data.constructor === Array ? data : [data]) as [];
 
-    for (let i = 0, l = prefix.length; i < l; i++) {
-      token = prefix[i];
-      node = (node[token] || (node[token] = {})) as Record<string, unknown>;
-    }
+    data.forEach((value: string | Dictionary) => {
+      // we tokenize the incoming data to make search possible by fragments
+      const dataTokens =
+        typeof value === 'string' ? spaceTokenizer(value) : spaceTokenizer((value[identifier] as string) || '');
+      dataTokens
+        .filter((item) => item) // filter out falsy values
+        .forEach((prefix) => {
+          node = root;
+          prefix = prefix.toLocaleLowerCase(); // make search case insensitive
 
-    // we store data within an array to avoid collisions
-    node[SENTINEL] = node[SENTINEL] ? [...(node[SENTINEL] as Dictionary[]), data] : [data];
+          for (let i = 0, l = prefix.length; i < l; i++) {
+            token = prefix[i];
+            node = (node[token] || (node[token] = {})) as Record<string, unknown>;
+          }
+
+          // we store data within an array to avoid collisions
+          node[SENTINEL] = node[SENTINEL] ? [...(node[SENTINEL] as Dictionary[]), value] : [value];
+        });
+    });
   }
 
   /**
-   * Method used to retrieve every item in the trie beginning with the given prefix.
+   * Internal Method used to retrieve items in the trie beginning with the given prefix.
    */
   function find(prefix: string, identifier?: string, limit?: number): string[] | Dictionary[] {
     let node = root;
@@ -53,17 +66,19 @@ export const Trie = function (): TrieType {
       node = nodeStack.pop() as Record<string, unknown>;
 
       for (k in node) {
-        // limit found matches
-        if (limit && matches.length >= limit) break;
-
         if (k === SENTINEL) {
           matches = (matches as Dictionary[]).concat(node[SENTINEL] as Dictionary[]);
 
-          // specific to typeahead
+          // deduplicate matches, specific to typeahead
           if (identifier) {
-            // deduplicate matches
             matches = [...new Map((matches as Dictionary[]).map((item) => [item[identifier], item])).values()];
           }
+          // limit found matches / truncate array
+          if (limit && matches.length >= limit) {
+            matches.length = limit;
+            break;
+          }
+
           continue;
         }
 
@@ -72,30 +87,21 @@ export const Trie = function (): TrieType {
       }
     }
 
-    // if concatenation of matches leads to addition of extra items, truncate the matches[] array
-    if (limit && matches.length > limit) {
-      matches.length = 5;
-    }
-
     return matches;
   }
 
   /**
-   * Adds the given array of strings/objects to the trie
+   * Search for query strings within the trie
    */
-  function addAll(iterable: string[] | Dictionary[], identifier = 'label') {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const trie = this as TrieType;
-    iterable.forEach((value: string | Dictionary) => {
-      const dataTokens =
-        typeof value === 'string' ? spaceTokenizer(value) : spaceTokenizer(value[identifier] as string);
-      dataTokens.forEach((token) => trie.add(token, value));
-    });
-  }
-
   function search(query: string, identifier?: string, limit?: number) {
     const searchTokens = spaceTokenizer(query);
+
+    // search for single token/query
+    if (searchTokens.length === 1) {
+      return find(searchTokens[0], identifier, limit);
+    }
+
+    // Search for multiple tokens/queries
     const objArrs: Dictionary[][] = [];
     let suggestions: string[] | Dictionary[] = [];
     searchTokens.forEach((token) => {
@@ -126,8 +132,6 @@ export const Trie = function (): TrieType {
 
   return {
     add,
-    addAll,
-    find,
     clear,
     search,
   };

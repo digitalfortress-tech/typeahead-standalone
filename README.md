@@ -1,10 +1,10 @@
-# Typeahead-standalone.js 
+# Typeahead-standalone.js
 
 [![npm version](https://img.shields.io/npm/v/typeahead-standalone.svg)](https://www.npmjs.com/package/typeahead-standalone)
-[![Build Status](https://travis-ci.org/niketpathak/typeahead-standalone.svg?branch=master)](https://travis-ci.org/niketpathak/typeahead-standalone) 
+[![Build Status](https://travis-ci.org/niketpathak/typeahead-standalone.svg?branch=master)](https://travis-ci.org/niketpathak/typeahead-standalone)
 [![code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-![Downloads](https://img.shields.io/npm/dt/typeahead-standalone) 
-![maintained](https://img.shields.io/badge/maintained-yes-blueviolet) 
+![Downloads](https://img.shields.io/npm/dt/typeahead-standalone)
+![maintained](https://img.shields.io/badge/maintained-yes-blueviolet)
 [![License](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![speed blazing](https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-9cf.svg)](https://twitter.com/acdlite/status/974390255393505280)
 
@@ -36,10 +36,10 @@ $ yarn add typeahead-standalone
 ```
 Then include the library in your App/Page.
 
-**As a module,** 
+**As a module,**
 ```javascript
 // using ES6 modules
-import { typeahead } from 'typeahead-standalone';
+import typeahead from 'typeahead-standalone';
 
 // using CommonJS modules
 var typeahead = require('typeahead-standalone');
@@ -59,7 +59,7 @@ The library will be available as a global object at `window.typeahead`
 
 ## Usage
 
-Typeahead requires an `input` Element to attach itself to and a `Data source` (local/remote) to display suggestions. 
+Typeahead requires an `input` Element to attach itself to and a `Data source` (local/remote) to display suggestions.
 
 Here is a very basic example (See [demo](#demo) for advanced examples)
 
@@ -125,7 +125,7 @@ source: {
   },
   prefetch: {
     url: 'https://remoteapi.com/load-suggestions',
-    when: '' // optional, defaults to 'onInit' 
+    when: '' // optional, defaults to 'onInit'
   },
   identifier: '',
   transform: function (data) {
@@ -143,7 +143,7 @@ source: {
 ```javascript
 /* Data source returns */
 [
-  { id: 1, color: "Yellow" }, 
+  { id: 1, color: "Yellow" },
   { id: 2, color: "Green" },
   ...
 ]
@@ -152,7 +152,7 @@ source: {
 ```javascript
 /* When the identifier is set, the default normalizer will produce the following expected data format */
 [
-  { id: 1, color: "Yellow", label: "Yellow" }, 
+  { id: 1, color: "Yellow", label: "Yellow" },
   { id: 2, color: "Green", label: "Green" },
   ...
 ]
@@ -161,7 +161,7 @@ The identifier is optional and must be used **only if the data needs to be norma
 
 ## Styling (css)
 
-Some basic styling is added to typeahead by default. However the UI is completely upto you and is customizable to the very pixel. You can use the following classes to add/override styles. 
+Some basic styling is added to typeahead by default. However the UI is completely upto you and is customizable to the very pixel. You can use the following classes to add/override styles.
 
 - The entire html is wrapped in a container with a class `typeahead-standalone`.
 - The input element gets an additional `tt-input` class.
@@ -175,10 +175,10 @@ Some basic styling is added to typeahead by default. However the UI is completel
 }
 ```
 
-<strong>Note</strong>: To override default styling, set the config option `className` and use it as a selector. Lets say you set `className: "my-typeahead"`, then to override style on hovering/selecting a suggestion, you could use: 
+<strong>Note</strong>: To override default styling, set the config option `className` and use it as a selector. Lets say you set `className: "my-typeahead"`, then to override style on hovering/selecting a suggestion, you could use:
  ```css
 /* override styles */
-.typeahead-standalone.my-typeahead .tt-list .tt-suggestion:hover, 
+.typeahead-standalone.my-typeahead .tt-list .tt-suggestion:hover,
 .typeahead-standalone.my-typeahead .tt-list .tt-suggestion.tt-selected {
   color: black;
   background-color: white;
@@ -191,14 +191,14 @@ You can also use templates to add a header, footer and further style each sugges
 Templates can be used to customize the rendering of the List. Their usage is completely optional.
 
 ```javascript
-templates: { 
+templates: {
   header: '<h1>List of Countries</h1>', /* Rendered at the top of the dataset */
   footer: '<div>See more</div>', /* Rendered at the bottom of the dataset */
   suggestion: function(item) { /* Used to render a single suggestion */
-    return '<div class="custom-suggestion">' + item.label + '</div>'; 
+    return '<div class="custom-suggestion">' + item.label + '</div>';
   },
   group: function(groupName) { /* Used to render a group */
-    return '<div class="custom-group">' + groupName + '</div>'; 
+    return '<div class="custom-group">' + groupName + '</div>';
   },
   notFound: '<div>Nothing Found</div>', /* Rendered if 0 suggestions are available */
 }

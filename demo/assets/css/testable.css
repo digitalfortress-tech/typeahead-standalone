@@ -50,7 +50,7 @@ label {
 
 /* override style for all templates */
 .typeahead-standalone.typeahead-test-four .tt-list div[class^="tt-"] {
-  padding: 5px;
+  padding: 10px 5px;
 }
 
 /* single suggestion */
@@ -81,7 +81,6 @@ label {
   width: 15px;
   position: absolute;
   right: 10px;
-  margin-top: 7px;
   border: 1px solid #313131;
 }
 

@@ -6,7 +6,7 @@
 
 import type { typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates, Dictionary } from './types';
 import { Keys } from './constants';
-import { escapeRegExp, normalizer, spaceTokenizer } from './helpers';
+import { escapeRegExp, normalizer } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
 import './style.less';
@@ -25,9 +25,13 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
   const trie = new (Trie as any)();
   const identifier = config.source?.identifier || 'label'; // label is the default identifier
+  const groupIdentifier = config.source?.groupIdentifier || '';
+  const onSelectCb = <T extends Dictionary>(item: T, input: HTMLInputElement): void => {
+    input.value = item[identifier] as string;
+  };
+  const onSelect: (item: T, input: HTMLInputElement) => void = config.onSelect || onSelectCb;
   const dataTokens =
     config.source?.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
-  const groupIdentifier = config.source?.groupIdentifier || '';
   const remoteXhrCache: Dictionary = {};
   const transform = typeof config.source?.transform === 'function' ? config.source.transform : undefined;
   const remote =
@@ -294,7 +298,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       const div = render(item);
       if (div) {
         div.addEventListener('click', function (ev: MouseEvent): void {
-          onSelect(item);
+          onSelect(item, input);
           clear();
           ev.preventDefault();
           ev.stopPropagation();
@@ -332,13 +336,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     startFetch();
   }
-
-  /**
-   * Sets the input value when a suggestion is selected
-   */
-  const onSelect = <T extends Dictionary>(item: T): void => {
-    input.value = (item[identifier] as string) || '';
-  };
 
   /**
    * Select the previous item in suggestions
@@ -413,7 +410,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     const useSelectedValue = function () {
       if (selected) {
-        onSelect(selected);
+        onSelect(selected, input);
         clear();
       }
     };
@@ -461,14 +458,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   function calcSuggestions(fromRemoteCb = false) {
     let suggestions: T[] = [];
-    const method = spaceTokenizer(inputValue).length > 1 ? 'search' : 'find';
+
     // if searching within remote or (local + remote), merge the suggestions
     if (fromRemoteCb) {
-      suggestions = trie[method](inputValue.toLowerCase(), identifier, limitSuggestions - items.length);
+      suggestions = trie.search(inputValue.toLowerCase(), identifier, limitSuggestions - items.length);
       suggestions = [...items, ...suggestions];
     } else {
       // if searching only within local
-      suggestions = trie[method](inputValue.toLowerCase(), identifier, limitSuggestions);
+      suggestions = trie.search(inputValue.toLowerCase(), identifier, limitSuggestions);
     }
 
     // remove duplicates from suggestions to allow back-filling
@@ -552,10 +549,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     // @todo: add only unique items to the index
 
     // add new items to the search index
-    trie.addAll(iterable, identifier);
+    trie.add(iterable, identifier);
     if (dataTokens) {
       dataTokens.forEach((token) => {
-        trie.addAll(iterable, token);
+        trie.add(iterable, token);
       });
     }
   }

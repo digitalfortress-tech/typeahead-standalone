@@ -1,7 +1,7 @@
+import { Dictionary } from '../types';
+
 export interface TrieType {
-  add(prefix: string, data?: unknown): void;
-  addAll(iterable: string[]): void;
-  find(prefix: string, identifier?: string, limit?: number): string[] | Record<string, unknown>[];
-  search(prefix: string, identifier?: string, limit?: number): string[] | Record<string, unknown>[];
+  add(data: string | string[] | Dictionary[], identifier?: string): void;
+  search(prefix: string, identifier?: string, limit?: number): string[] | Dictionary[];
   clear(): void;
 }

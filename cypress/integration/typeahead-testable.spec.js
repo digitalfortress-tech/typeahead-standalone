@@ -43,6 +43,16 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue Dark');
   });
 
+  it('Uses custom onSelect config option', () => {
+    cy.get('#input-two').type('ye', { delay: 100 });
+    cy.get('.typeahead-test-two .tt-list').as('list').children().first().should('have.length', 1);
+    cy.get('.typeahead-test-two .tt-hint').should('have.value', 'yellow');
+    cy.get('@list').children().first().click();
+    cy.get('#input-two').should('have.value', 'Yellow - YW');
+
+    // @todo: test onSelect by keyboard as well
+  });
+
   it('Displays grouped results', () => {
     cy.get('#input-three').as('input3').type('b', { delay: 100 });
     cy.get('.typeahead-test-three .tt-list').as('list').children().should('have.length', 7);
@@ -127,6 +137,20 @@ context('Typeahead', () => {
     cy.get('@suggestions').first().find('.track-title').should('have.text', 'Shalom Jerusalem');
     cy.get('@suggestions').eq(1).find('.track-album').should('have.text', 'Shalom Jerusalem');
     cy.get('@hint').should('have.value', 'shalom Jerusalem');
+  });
+
+  it('displays suggestions for data-collisions', () => {
+    cy.get('#input-nine').as('input9').type('sh', { delay: 100 });
+    cy.get('.typeahead-test-nine .tt-list')
+      .as('list')
+      .children('.tt-suggestion')
+      .should('contain.text', 'Black Sheeep');
+
+    cy.get('@input9').type('{backspace}{backspace}dbl', { delay: 100 });
+    cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 6);
+    cy.get('@suggestions').each(($item) => {
+      cy.wrap($item).should('not.contain.text', 'Sheeep');
+    });
   });
 
   // https://on.cypress.io/interacting-with-elements

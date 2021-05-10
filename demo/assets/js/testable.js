@@ -20,6 +20,16 @@ const colors = [
   { name: 'Black Light', value: 'LBK', hash: '#352e2e', group: 'Shades of Black' },
 ];
 
+const colorsCollision = [
+  { name: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
+  { name: 'Blue Darker', value: 'DBL', hash: 'mnamenightblue', group: 'Shades of Blue' },
+  { name: 'Blue Darkest', value: 'DBL', hash: 'cadetblue', group: 'Shades of Blue' },
+  { name: 'Blue Black', value: 'DBL', hash: 'aliceblue', group: 'Shades of Blue' },
+  { name: 'Black Blue', value: 'DBL', hash: 'black', group: 'Shades of Black' },
+  { name: 'Black Dark', value: 'DBL', hash: '#352e2e', group: 'Shades of Black' },
+  { name: 'Black Sheeep', hash: '#352e2e', group: 'Shades of Black' },
+];
+
 const songs = [
   {
     title: 'Sing For Joy In The Lord',
@@ -297,6 +307,9 @@ const test2 = typeahead({
   className: 'typeahead-test-two',
   minLength: 2,
   highlight: true,
+  onSelect: function (selectedItem, inputEl) {
+    inputEl.value = selectedItem.name + ' - ' + selectedItem.value;
+  },
 });
 
 // eslint-disable-next-line no-undef
@@ -416,4 +429,18 @@ const test8 = typeahead({
       );
     },
   },
+});
+
+// eslint-disable-next-line no-undef
+const test9 = typeahead({
+  input: document.getElementById('input-nine'),
+  source: {
+    local: colorsCollision,
+    identifier: 'name',
+    groupIdentifier: 'group',
+    dataTokens: ['value'],
+  },
+  className: 'typeahead-test-nine',
+  highlight: true,
+  limit: 10,
 });
