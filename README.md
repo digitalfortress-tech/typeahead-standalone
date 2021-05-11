@@ -59,7 +59,7 @@ The library will be available as a global object at `window.typeahead`
 
 ## Usage
 
-Typeahead requires an `input` Element to attach itself to and a `Data source` (local/remote) to display suggestions.
+Typeahead requires an `input` Element to attach itself to, and a `Data source` (local/remote) to display suggestions.
 
 Here is a very basic example (See [demo](#demo) for advanced examples)
 
@@ -108,8 +108,7 @@ You can pass the following config options to `typeahead-standalone`:
 |`templates`|An object containing templates for header, footer, suggestion, ground and notFound state. See [templates section](#templates) for clarification |`undefined`|
 |`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|
 |`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
-|`onSelect`|This method will be called when the user chooses an item from the suggestions. The selected item will be passed as first parameter.|Sets labels text as input's value|
-|`normalizer`| The Normalizer function tries to convert/normalize the source data into the expected format => **array of objects with a label property**. For example, `['hello world']` is converted to `[{ label: 'hello world'}]`. Receives the list of suggestions `listItems: []` and the `identifier: string` as its arguments.|Normlizes source data|
+|`onSelect(selectedItem, input)`|This hook gets called when the user selects an item from the suggestions. You could custom value for the input with this hook |Sets the selected item as the input's text|
 
 ---
 
@@ -125,9 +124,11 @@ source: {
   },
   prefetch: {
     url: 'https://remoteapi.com/load-suggestions',
-    when: '' // optional, defaults to 'onInit'
+    when: 'onInit'        // optional, default => 'onInit'
   },
-  identifier: '',
+  identifier: '...',      // optional (required when source => Object[])
+  dataTokens: ['...'],    // optional
+  groupIdentifier: '...', // optional, default => undefined
   transform: function (data) {
     // modify remote data if needed
     return data;
@@ -138,26 +139,22 @@ source: {
 - **Prefetch**: The `prefetch` data source is used when you want to preload suggestions from a remote endpoint in advance. You can also provide an optional `when` parameter. It defines when should the prefetch occur. It defaults to `onInit` meaning that suggestions will be preloaded as soon as typeahead gets initialized. You can set it to `onFocus` which will cause suggestions to be preloaded as soon as the user focuses the search input box.
 - **Remote**: The `remote` data source is used when you want to interrogate a remote endpoint to fetch data.
 - **Wildcard**: While using the `remote` data source, you must set the `url` and the `wildcard` options. `wildcard` will be replaced with the search string while executing the request.
-- **Transform**: You can provide an optional `transform` function which gets called immediately after the remote endpoint returns a response. You can modify the remote response before it gets processed by typeahead. The transformed data is passed to the `normalizer` to ensure that the data is normalized.
-- **Identifier**: An `identifier` is used to identify which property of the object should be used as the label. For example, assuming the data source returns the following:
+- **Transform**: You can provide an optional `transform` function which gets called immediately after the remote endpoint returns a response. You can modify the remote response before it gets processed by typeahead.
+- **Identifier**: An `identifier` is required when the data source is an array of objects. An `identifier` is used to identify which property of the object should be used as the text for displaying the suggestions. For example, lets say the data source is something like this:
 ```javascript
-/* Data source returns */
+/* Example Data source */
 [
-  { id: 1, color: "Yellow" },
-  { id: 2, color: "Green" },
+  { id: 1, color: "Yellow", colorCode: "YW" },
+  { id: 2, color: "Green", colorCode: "GN", shade: "Greenish" },
+  { id: 3, color: "Olive", colorCode: "OV", shade: "Greenish" },
   ...
 ]
  ```
- Now if we wish to use the `label`(suggestions) as the text defined in the `color` property , then the **identifier** must be set to **color**. (i.e. `identifier: "color"`)
-```javascript
-/* When the identifier is set, the default normalizer will produce the following expected data format */
-[
-  { id: 1, color: "Yellow", label: "Yellow" },
-  { id: 2, color: "Green", label: "Green" },
-  ...
-]
-```
-The identifier is optional and must be used **only if the data needs to be normalized**.
+ Now if we wish to use the the text defined in the `color` property to appear as the suggestions, then the **identifier** must be set to **color**. (i.e. `identifier: "color"`)
+- **dataTokens**: `dataTokens: string[]` is an _optional_ property. It accepts an array of strings which represent the properties of the source object that should be added to the search index. This can be best understood with an example. Lets take the same example data source as shown above. Now, if you set `dataTokens: ["colorCode"]`, when you search for "**YW**", the suggestion "Yellow" will pop up.
+- **groupIdentifier**: If you wish to group your suggestions, set the groupIdentifier property. This is an optional property. Again, going with the same example data source as above, when you set `groupIdentifier: "shade"`, suggestions will be grouped by the property "**shade**". In this example, the colors _Green_ and _Olive_ will appear under the group "**Greenish**" (`shade`) whereas the color _Yellow_ will have no group.
+
+Checkout the **[Live Examples](https://typeahead.niketpathak.com/)** for further clarification.
 
 ## Styling (css)
 
