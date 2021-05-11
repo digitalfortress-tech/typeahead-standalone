@@ -519,12 +519,17 @@ adapted from a snippet
 /************************************** CUSTOM *******************************************/
 /*****************************************************************************************/
 
+.underline {
+  text-decoration: underline;
+}
+
 .search-container {
   padding: 20px 0;
 }
 
 [type=search] {
   outline-offset: 0px;
+  padding-left: 5px;
 }
 /* override typeahead */
 /* override style for list of suggestions */

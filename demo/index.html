@@ -39,6 +39,7 @@
       selector_eval_js: ".eval-js",
         codemirror_options_in: {
           indentUnit: 2,
+          tabSize: 2,
           // lineWrapping: true,
           lineNumbers: true,
           matchBrackets: true,
@@ -47,6 +48,7 @@
         codemirror_options_out: {   // output
           // lineNumbers: true,
           theme: 'solarized dark',
+          tabSize: 2,
         }
     };
   </script>
@@ -115,32 +117,62 @@
           <h2>Live Examples</h2>
           <hr />
           <br />
-          <h4>1. Autocomplete with Local Data</h4>
+          <h4>1. Autocomplete with Local Data (Identifier + Groups)</h4>
           <div class="search-container">
             <input type="search" id="liveSearch1" autocomplete="off" placeholder="Search Colors...">
           </div>
           <br />
-          The following code can be edited in place and its changes reflected in the input element above (which has an <code>id="liveSearch1"</code>).
+          The code block shown below can be edited in place and its changes reflected in the input element above (which has an
+          <code>id="liveSearch1"</code>).
+          <hr>
+          <ul>
+            <li>If you try typing the letter "<b>G</b>" or "<b>P</b>", you should see some suggestions pop up instantly</li>
+            <li>
+              <b class="underline">USING IDENTIFIER</b>:
+              Lets use another data source => <code>source: colors2</code>. As soon as you update the source,
+              you will see an error - <i>Missing Identifier</i>. This is because <code>colors2</code> is an array of objects.
+              For an array of objects, the <b>Identifier</b> property is mandatory as it represents the text that should be
+              displayed as the suggestions. Therefore, lets set the identifier to <code>identifier: 'name'</code>. When you try
+              searching for <b>"B"</b>, you should see some suggestions pop up immediately.
+            </li>
+            <li>
+              <b class="underline">USING GROUPS</b>:
+              Lets say you wish to group colors by their shade. We will use the source as <code>source: colors2</code>. Since
+              <code>colors2</code> is an array of objects, we will set the <code>identifier: 'name'</code> as explained above. Now
+              to group colors by their shade, we need to set the <b>groupIdentifier</b> property which represents the name of the
+              group to be used. So, we set <code>groupIdentifier: 'shade'</code>. Once again, when you try searching for
+              <b>"B"</b>, you should see some colors grouped by their shade. Also, if you notice, the color "<i>Brown</i>" has no
+              group since it has no "<i>shade</i>" property.
+            </li>
+          </ul>
           <div class="eval-js">
             var colors1 = ['Green', 'Grey', 'Gold', 'Pink', 'Purple']
-            
+
             // You can use *group* to group colors too
             var colors2 = [
-            { label: 'Red Deep', group: 'Shades of Red' },
-            { label: 'Blue Dark', group: 'Shades of Blue' },
-            { label: 'Blue Light', group: 'Shades of Blue' },
-            { label: 'Black', group: 'Shades of Black' },
-            { label: 'Black Xtra', group: 'Shades of Black' },
+            { name: 'Red Deep', shade: 'Shades of Red' },
+            { name: 'Blue Dark', shade: 'Shades of Blue' },
+            { name: 'Blue Light', shade: 'Shades of Blue' },
+            { name: 'Brown' },
+            { name: 'Black', shade: 'Shades of Black' },
+            { name: 'Black Light', shade: 'Shades of Black' },
             ];
-            
+
             typeahead({
               input: document.getElementById('liveSearch1'),
               highlight: true,
               source: {
-              local: colors1 // try using "colors2" for groups
+              local: colors1, // try using "colors2"
+              // identifier: 'name',
+              // groupIdentifier: 'shade',
               }
             });
           </div>
+          <p>
+            <b class="underline">Note:</b> With typeahead, when you search for multiple words, the order of the words does not
+            matter. To explain this easily with an example, use <code>colors2</code> as the source, and then try searching for
+            "<b>light</b>" or "<b>light blue</b>".
+          </p>
         </section>
 
         <hr />
@@ -151,7 +183,27 @@
             <input type="search" id="liveSearch2" autocomplete="off" placeholder="Search Countries...">
           </div>
           <br />
-          Feel free to test/edit the following code...
+          <ul>
+            <li>
+              Try searching for "<b>Fr</b>" and you should see some search results loaded from the remote endpoint. If you had
+              kept the network tab of your developer tools open, you would have seen the necessary requests made.
+            </li>
+            <li>
+              <b class="underline">Network Requests Cached</b>:
+              Now, if you clear the input and type "<b>Fr</b>" again, you will see the search results again but this time no
+              requests are made. This is because, in typeahead, the results of every XHR request are cached to avoid
+              loading the same data again.
+            </li>
+            <li>
+              <b class="underline">Network Requests on demand</b>:
+              In the previous step, when you searched for "<b>Fr</b>", 2 requests were made and their results were added to the
+              search index. If you now type "<b>Ma</b>", you will see countries beginning with the letters "Ma" without any
+              network requests being made. A network request will be made on demand only when the number of available suggestions
+              is lesser than the maximum <code>limit</code> of suggestions which by default is <b><code>5</code></b>. Try
+              typing "<b>Mal</b>" and you should see a new network request made since the search index returned less than 5 matches.
+            </li>
+          </ul>
+
           <div class="eval-js">
             typeahead({
             input: document.getElementById("liveSearch2"),
@@ -165,7 +217,7 @@
             },
             });
           </div>
-          
+
           <!-- <script async src="https://jsfiddle.net/niketpathak/0L2b75zy/embed/js,html,result/dark/"></script> -->
         </section>
 
@@ -177,12 +229,23 @@
             <input type="search" id="liveSearch3" autocomplete="off" placeholder="Search Countries...">
           </div>
           <br />
-          <p>To understand the working of this example, be sure to keep the network tab of your developer tools open.
-          As soon as you focus on the search box above, an ajax request will the made to prefetch data.</p>
-          <p>Now try typing "a"... you will see suggestions pop up immediately without any request made since the data has already
-          been fetched.
-          Prefetch can be used in conjunction with remote to fetch more precise results.</p>
-          
+          <ul>
+            <li>
+              To understand the working of this example, be sure to keep the network tab of your developer tools open.
+              As soon as you focus on the search box above, a network request will the made to prefetch data. This happens because
+              we set <code>startEvent: 'onFocus'</code> which causes data to be prefetched on focussing the search input element.
+              By default, its value is <code>startEvent: 'onInit'</code> meaning that data is prefetched / loaded as soon as
+              typeahead gets initialized.
+            </li>
+            <li>
+              Now try typing "<b>A</b>"... you will see suggestions pop up instantaneously without making any request since the
+              data was already fetched & added to the search index.
+            </li>
+            <li>
+              Prefetch can be used in conjunction with remote to fetch more precise results.
+            </li>
+          </ul>
+
           <div class="eval-js">
             typeahead({
             input: document.getElementById("liveSearch3"),
@@ -197,17 +260,128 @@
             });
           </div>
           </section>
-          
+
           <hr />
-          
+
           <section class="js-fiddle">
             <h4>4. Typeahead-standalone with Templates</h4>
           The following JS fiddle demonstrates how you could style every aspect of your typeahead instance by using the config
           option - <code>templates</code>.
-        
+            <ul>
+              <li>
+                Using templates is completely optional. There are 5 types of templates and you can use a few of them or all of them
+                according to your needs. All the templates can optionally contain HTML too which is parsed and rendered as expected.
+              </li>
+              <li>
+                <b class="underline">Header, Footer</b>:
+                The <code>header</code> and <code>footer</code> template is a string that accepts any text/html and renders them in
+                the list. In the result tab below, when you search for "Red", you should see the header ("<b>Colors Found</b>") at
+                the top of the list and the footer ("<b>See more</b>") at the bottom of the list respectively.
+              </li>
+              <li>
+                <b class="underline">Suggestion</b>:
+                If you searched for "Red", you would see the <code>suggestion</code> template. The suggestion template is a function
+                that receives the current suggestion/item as a parameter. This paramater can be used to display not only the
+                suggestion's text, but also additional data like colors as seen in the example. You can add any valid HTML which
+                will be rendered within the suggestion allowing you to fine tune your styling.
+              </li>
+              <li>
+                <b class="underline">Group</b>:
+                The <code>group</code> template is a function that receives the name of the group as a parameter. In the
+                result tab below, when you start typing "<b>Bl</b>", you should see several suggestions which are arranged by their
+                group (<code>groupIdentifier</code>). This template allows you to modify the styling of the group's element.
+              </li>
+              <li>
+                <b class="underline">Not Found</b>:
+                The <code>notFound</code> template is string/HTML that is rendered when no suggestions are available. In the
+                example, if you search for a non-existent color like "xyz", you should see the <b>notFound</b> template in action.
+              </li>
+            </ul>
+            <hr>
           <br />
           <script async src="https://jsfiddle.net/niketpathak/2bfnq7k5/embed/js,html,css,result/dark/"></script>
           <br />
+        </section>
+
+        <section class="js-fiddle">
+          <h4>5. Autocomplete with Data Tokens and custom onSelect</h4>
+          <div class="search-container">
+            <input type="search" id="liveSearch5" autocomplete="off" placeholder="Search Songs...">
+          </div>
+          <br />
+          <ul>
+            <li>
+              <b class="underline">DATATOKENS</b>:
+              Datatokens are used to add additional data to the search index. To understand this easily, in the example below, see the
+              <code>songs</code> data source. We are using <code>identifier: 'title'</code> which means songs will be searchable by
+              their <b>title</b>. But what if we wanted to also search by <b>artist</b> and by <b>album</b> ? This is where dataTokens
+              comes in. We simply set <code>dataTokens: ['artist', 'album']</code> which causes these properties to be added to the
+              search index.
+            </li>
+            <li>
+              Try to search by artist/album, (for example, try "<b>Christmas</b>" or "<b>Paul</b>") and you should have the expected
+              suggestions displayed. If you search for "<b>good</b>", notice how the position of the word "<i>good</i>"" in the title
+              does not matter while being searched.
+              </li>
+              <li>
+                <b class="underline">CUSTOM "onSelect"</b>:
+                If you try searching for "<b>it</b>", you should see a single suggestion pop up. Try to select it (either by clicking
+                on the suggestion or by pressing the "<i>Tab</i>" key). You will see that by default the title of the track (i.e. the
+                <code>identifier</code>) gets displayed as the value of the search box. What if you wanted to include the artist name
+                as well ? To do so, uncomment the <code>onSelect</code> function below and retry. The onSelect callback receives the
+                <i>selected item</i> as the first parameter and the <i>input element</i> as the second. You can use these parameters to
+                customize the input value or for any other use-case too.
+            </li>
+          </ul>
+
+          <div class="eval-js">
+            var songs = [
+            {
+            title: 'Emmanuel',
+            artist: 'Blackmores Night',
+            album: 'Christmas Songs',
+            },
+            {
+            title: 'Henei Ma Tov (Behold how good)',
+            artist: 'Paul Wilbur',
+            album: 'Shalom Jerusalem',
+            },
+            {
+            title: 'Angels We Have Heard On High',
+            artist: 'Fernando Ortega',
+            album: 'Christmas Songs',
+            },
+            {
+            title: 'It is good',
+            artist: 'Paul Wilbur',
+            album: 'Jerusalem Arise',
+            },
+            {
+            title: 'The Shout Of El Shaddai',
+            artist: 'Paul Wilbur',
+            // album: 'Jerusalem Arise',
+            }
+            ];
+
+            typeahead({
+            input: document.getElementById("liveSearch5"),
+            highlight: true,
+            source: {
+            local: songs,
+            identifier: 'title',
+            dataTokens: ['artist', 'album'],
+            },
+            // onSelect: function (selectedItem, inputEl) {
+            // inputEl.value = selectedItem.title + ' - ' + selectedItem.artist;
+            // },
+            templates: {
+            suggestion: (item) => {
+            return item.title + ' - ' + item.artist;
+            // return item.title + ' (' + item.album + ')';
+            },
+            },
+            });
+          </div>
         </section>
 
       </div>
@@ -240,7 +414,7 @@
           </div>
         </div>
         <div class="divider-1 clearfix"></div>
-        
+
         <div class="pubb">
           <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
           <!-- gospelmusic_sidebar_bottom -->
