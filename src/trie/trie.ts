@@ -1,6 +1,6 @@
 import { Dictionary } from '../types';
 import type { TrieType } from './types';
-import { spaceTokenizer } from '../helpers';
+import { deduplicateArr, spaceTokenizer } from '../helpers';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
 export const Trie = function (): TrieType {
@@ -71,7 +71,7 @@ export const Trie = function (): TrieType {
 
           // deduplicate matches, specific to typeahead
           if (identifier) {
-            matches = [...new Map((matches as Dictionary[]).map((item) => [item[identifier], item])).values()];
+            matches = deduplicateArr(matches, identifier);
           }
           // limit found matches / truncate array
           if (limit && matches.length >= limit) {

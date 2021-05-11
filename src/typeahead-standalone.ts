@@ -6,7 +6,7 @@
 
 import type { typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates, Dictionary } from './types';
 import { Keys } from './constants';
-import { escapeRegExp, normalizer } from './helpers';
+import { deduplicateArr, escapeRegExp, normalizer } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
 import './style.less';
@@ -469,7 +469,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     // remove duplicates from suggestions to allow back-filling
-    items = [...new Map(suggestions.map((item) => [item[identifier], item])).values()];
+    items = deduplicateArr(suggestions, identifier) as T[];
 
     // if suggestions need to be grouped, sort them first
     if (groupIdentifier) {
@@ -537,7 +537,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (!iterable.length) return;
 
     dataStore = [...dataStore, ...iterable];
-    dataStore = [...new Map(dataStore.map((item) => [item[identifier], item])).values()]; // remove duplicates
+    dataStore = deduplicateArr(dataStore, identifier) as T[];
   }
 
   /**
@@ -545,8 +545,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    */
   function updateSearchIndex(iterable: T[]) {
     if (!iterable.length) return;
-
-    // @todo: add only unique items to the index
 
     // add new items to the search index
     trie.add(iterable, identifier);

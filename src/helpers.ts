@@ -8,6 +8,12 @@ export const isObject = (item: any): boolean => {
   return item !== null && item.constructor.name === 'Object';
 };
 
+export const deduplicateArr = (iterable: Dictionary[], prop: string): Dictionary[] => [
+  ...new Map(iterable.map((item) => [item[prop], item])).values(),
+];
+
+export const spaceTokenizer = (tokenString: string): string[] => tokenString.trim().split(/\s+/);
+
 /****** helpers specific to typeahead  *****/
 
 export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionary[] | T[], identifier: string): T[] => {
@@ -34,5 +40,3 @@ export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionar
 
   return normalizedData as T[];
 };
-
-export const spaceTokenizer = (tokenString: string): string[] => tokenString.trim().split(/\s+/);
