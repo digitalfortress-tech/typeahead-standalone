@@ -634,8 +634,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * @param inputHint the input hint element
    */
   function injectHintEl(inputHint: HTMLInputElement) {
-    inputHint.removeAttribute('id');
-    inputHint.removeAttribute('placeholder');
+    ['id', 'name', 'placeholder'].forEach((attr) => inputHint.removeAttribute(attr));
     inputHint.setAttribute('readonly', 'true');
     inputHint.tabIndex = -1;
     inputHint.classList.add('tt-hint');
@@ -719,6 +718,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   return {
     destroy,
-    trie: Trie, // we expose trie only for tests
+    // trie: Trie, // we expose trie only for local tests
   };
 }

@@ -310,6 +310,7 @@ const test2 = typeahead({
   onSelect: function (selectedItem, inputEl) {
     inputEl.value = selectedItem.name + ' - ' + selectedItem.value;
   },
+  preventSubmit: true,
 });
 
 // eslint-disable-next-line no-undef

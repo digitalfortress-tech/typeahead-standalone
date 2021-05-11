@@ -50,7 +50,21 @@ context('Typeahead', () => {
     cy.get('@list').children().first().click();
     cy.get('#input-two').should('have.value', 'Yellow - YW');
 
-    // @todo: test onSelect by keyboard as well
+    // typing {tab} key is not supported yet
+    cy.get('#input-two').clear().type('ye{downarrow}{enter}');
+    cy.get('#input-two').should('have.value', 'Yellow - YW');
+  });
+
+  it('Submits correct data', () => {
+    cy.get('#input-two').type('li', { delay: 100 });
+    cy.get('.typeahead-test-two .tt-list').as('list').children().eq(1).should('have.text', 'Blue Extra Light');
+
+    // typing {tab} key is not supported yet
+    cy.get('#input-two').type('{downarrow}{enter}');
+    cy.get('#input-two').should('have.value', 'Blue Extra Light - LBLX');
+
+    cy.get('.section-two button').click();
+    cy.url().should('include', 'color-test-2=Blue+Extra+Light+-+LBLX');
   });
 
   it('Displays grouped results', () => {
