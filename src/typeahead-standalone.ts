@@ -456,17 +456,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
   }
 
-  function calcSuggestions(fromRemoteCb = false) {
-    let suggestions: T[] = [];
-
-    // if searching within remote or (local + remote), merge the suggestions
-    if (fromRemoteCb) {
-      suggestions = trie.search(inputValue.toLowerCase(), identifier, limitSuggestions - items.length);
-      suggestions = [...items, ...suggestions];
-    } else {
-      // if searching only within local
-      suggestions = trie.search(inputValue.toLowerCase(), identifier, limitSuggestions);
-    }
+  function calcSuggestions() {
+    // get suggestions
+    const suggestions: T[] = trie.search(inputValue.toLowerCase(), identifier, limitSuggestions);
 
     // remove duplicates from suggestions to allow back-filling
     items = deduplicateArr(suggestions, identifier) as T[];
@@ -516,7 +508,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         // cache XHR requests so that same calls aren't made multiple times
         remoteXhrCache[thumbprint] = true;
         if (transformed.length && inputValue.length) {
-          calcSuggestions(true);
+          calcSuggestions();
           update();
           updateDataStore(transformed);
         }
