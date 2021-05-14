@@ -191,8 +191,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // fix position of listContainer
     listContainerStyle.width = '100%';
-    listContainerStyle.top = `${input.clientHeight}px`; // or top: '100%'
     listContainerStyle.left = '0';
+    // listContainerStyle.top = `${input.clientHeight}px`; // or top: '100%' // not required apparently
   }
 
   /**
