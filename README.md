@@ -23,7 +23,7 @@ A fast fully-featured standalone autocomplete library
 
 ### Demo
 
-Here is a **[Live Demo](https://typeahead.niketpathak.com/)** of **typeahead-standalone.js** in action.
+Here is a **[Live Demo](https://typeahead.digitalfortress.tech/)** of **typeahead-standalone.js** in action.
 
 ## Install
 
@@ -154,7 +154,7 @@ source: {
 - **dataTokens**: `dataTokens: string[]` is an _optional_ property. It accepts an array of strings which represent the properties of the source object that should be added to the search index. This can be best understood with an example. Lets take the same example data source as shown above. What if you wanted to search colors by another property(_colorCode_) and not just by its identifier(_color_) ? That's exactly where **dataTokens** comes in. Set `dataTokens: ["colorCode"]`. If you now search for "**YW**", the suggestion "Yellow" pops up as expected.
 - **groupIdentifier**: If you wish to group your suggestions, set the groupIdentifier property. This is an optional property. Again, going with the same example data source as above, when you set `groupIdentifier: "shade"`, suggestions will be grouped by the property "**shade**". In this example, the colors _Green_ and _Olive_ will appear under the group "**Greenish**" (`shade`) whereas the color _Yellow_ will have no group.
 
-Checkout the **[Live Examples](https://typeahead.niketpathak.com/)** for further clarification.
+Checkout the **[Live Examples](https://typeahead.digitalfortress.tech/)** for further clarification.
 
 ## Styling (css)
 
