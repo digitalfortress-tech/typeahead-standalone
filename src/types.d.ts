@@ -1,7 +1,7 @@
 export type Dictionary<T = unknown> = Record<string, T>;
 
 export interface typeaheadDataSource {
-  local?: Dictionary[];
+  local?: string[] | Dictionary[];
   remote?: {
     url: string;
     wildcard: string;
