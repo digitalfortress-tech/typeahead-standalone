@@ -31,6 +31,7 @@
   },
   "browser": "dist/typeahead-standalone.min.js",
   "main": "dist/typeahead-standalone.js",
+  "types": "dist/src/typeahead-standalone.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/niketpathak/typeahead-standalone.git"
