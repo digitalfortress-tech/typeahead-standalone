@@ -2,7 +2,7 @@
   "name": "typeahead-standalone",
   "title": "typeahead-standalone",
   "description": "A fast fully-featured standalone autocomplete library",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "homepage": "https://github.com/digitalfortress-tech/typeahead-standalone",
   "license": "MIT",
   "scripts": {
@@ -32,7 +32,7 @@
   },
   "browser": "dist/typeahead-standalone.min.js",
   "main": "dist/typeahead-standalone.js",
-  "types": "dist/src/typeahead-standalone.d.ts",
+  "types": "dist/typeahead-standalone.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/niketpathak/typeahead-standalone.git"
