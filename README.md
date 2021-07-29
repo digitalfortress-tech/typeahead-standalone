@@ -76,7 +76,7 @@ Here is a very basic example (See [demo](#demo) for advanced examples)
 
 ```javascript
 // local Data
-const colors = ['Grey', 'Brown', 'Black', 'Blue']
+const colors = ['Grey', 'Brown', 'Black', 'Blue'];
 
 // input element to attach to
 const inputElement = document.getElementById("searchInput");
@@ -221,6 +221,8 @@ Destroys the typeahead instance, removes all event handlers and cleans up the DO
 var typeaheadInstance = typeahead({ /* options */ });
 typeaheadInstance.destroy();
 ```
+
+---
 
 ### Contribute
 
