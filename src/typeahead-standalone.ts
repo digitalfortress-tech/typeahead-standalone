@@ -346,18 +346,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * Select the previous item in suggestions
    */
   function selectPrev(): void {
-    if (items.length < 1) {
-      selected = undefined;
+    const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
+    if (selected === items[0]) {
+      selected = items[maxLength - 1];
     } else {
-      const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
-      if (selected === items[0]) {
-        selected = items[maxLength - 1];
-      } else {
-        for (let i = maxLength - 1; i > 0; i--) {
-          if (selected === items[i] || i === 1) {
-            selected = items[i - 1];
-            break;
-          }
+      for (let i = maxLength - 1; i > 0; i--) {
+        if (selected === items[i] || i === 1) {
+          selected = items[i - 1];
+          break;
         }
       }
     }
@@ -367,9 +363,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * Select the next item in suggestions
    */
   function selectNext(): void {
-    if (items.length < 1) {
-      selected = undefined;
-    }
     const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
     if (!selected || selected === items[maxLength - 1]) {
       selected = items[0];
