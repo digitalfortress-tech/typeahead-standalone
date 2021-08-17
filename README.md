@@ -224,6 +224,18 @@ typeaheadInstance.destroy();
 
 ---
 
+### Error Codes
+
+Here is a small glossary of the possible errors codes that one may come across
+
+| Code | Description |
+| --------- | ----------- |
+| e01 | Missing input DOM element |
+| e02 | Missing source of suggestions. You need to atleast one of the 3 possible sources - local, prefetch or remote  |
+| e03 | Prefetch request failed |
+| e04 | Remote request failed |
+
+---
 ### Contribute
 
 Interested in contributing features and fixes?
@@ -232,8 +244,8 @@ Interested in contributing features and fixes?
 
 ### Changelog
 
-See the [Changelog](https://github.com/niketpathak/typeahead-standalone/wiki/Changelog)
+See the [Changelog](https://github.com/digitalfortress-tech/typeahead-standalone/wiki/Changelog)
 
 ### License
 
-[MIT](LICENSE) © [Niket Pathak](https://niketpathak.com)
+[MIT](LICENSE) © [DigitalFortress](https://digitalfortress.tech)

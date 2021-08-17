@@ -1,5 +1,5 @@
 /*
- * https://github.com/niketpathak/typeahead-standalone
+ * https://github.com/digitalfortress-tech/typeahead-standalone
  * Copyright (c) 2020 Niket Pathak
  * MIT License
  */
@@ -61,11 +61,11 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   }
 
   if (!config.input) {
-    throw new Error('input undefined');
+    throw new Error('e01');
   }
 
   if (!config.source?.local && !config.source?.prefetch && !config.source?.remote) {
-    throw new Error('data source undefined');
+    throw new Error('e02');
   }
 
   if (config.source?.local) {
@@ -121,7 +121,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
           updateSearchIndex(transformed);
         },
         (reject) => {
-          console.error('Prefetch failed - ', reject);
+          console.error('e03', reject);
         }
       )
       .finally(() => {
@@ -501,7 +501,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
           updateSearchIndex(transformed);
         },
         (reject) => {
-          console.error('Request failed - ', reject);
+          console.error('e04', reject);
         }
       )
       .finally(() => {
