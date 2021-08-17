@@ -305,7 +305,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         });
         if (item === selected) {
           div.classList.add('tt-selected');
-          hint && updateHint(item);
         }
         fragment.appendChild(div);
 
@@ -323,6 +322,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     listContainer.appendChild(fragment);
+
+    if (hint) {
+      // update hint if its enabled
+      if (selected) updateHint(selected);
+      else updateHint(items[0]);
+    }
 
     show();
   }
@@ -408,7 +413,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       return;
     }
 
-    const useSelectedValue = function () {
+    const useSelectedValue = function (fallback = false) {
+      if (!selected && fallback && items.length) {
+        selected = items[0];
+      }
       if (selected) {
         onSelect(selected, input);
         clear();
@@ -424,7 +432,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     if (keyCode === Keys.Tab && containerDisplayed()) {
       ev.preventDefault();
-      useSelectedValue();
+      useSelectedValue(true);
     }
   }
 
@@ -466,11 +474,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     // if suggestions need to be grouped, sort them first
     if (groupIdentifier) {
       sortByGroup();
-    }
-
-    // set selected item
-    if (items.length) {
-      selected = items[0];
     }
   }
 
