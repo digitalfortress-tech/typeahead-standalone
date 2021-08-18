@@ -252,7 +252,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     clearListDOM();
 
     // function for rendering typeahead suggestions
-    const render = function (item: T): HTMLDivElement | undefined {
+    const render = (item: T): HTMLDivElement | undefined => {
       const itemElement = doc.createElement('div');
       itemElement.classList.add('tt-suggestion');
       if (templates?.suggestion) {
@@ -264,7 +264,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     };
 
     // function to render typeahead groups
-    const renderGroup = function (groupName: string): HTMLDivElement | undefined {
+    const renderGroup = (groupName: string): HTMLDivElement | undefined => {
       const groupDiv = doc.createElement('div');
       groupDiv.classList.add('tt-group');
       if (templates?.group) {
