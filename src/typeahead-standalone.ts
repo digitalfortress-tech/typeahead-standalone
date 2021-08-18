@@ -22,6 +22,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const minLen = config.minLength || 1;
   const limitSuggestions = config.limit || 5;
   const hint = config.hint === false ? false : true;
+  const autoSelect = config.autoSelect || false;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
   const trie = new (Trie as any)();
   const identifier = config.source?.identifier || 'label'; // label is the default identifier
@@ -467,6 +468,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     // if suggestions need to be grouped, sort them first
     if (groupIdentifier) {
       sortByGroup();
+    }
+
+    if (autoSelect && items.length) {
+      selected = items[0];
     }
   }
 

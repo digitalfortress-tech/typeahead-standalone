@@ -32,6 +32,7 @@ export interface typeaheadConfig<T extends Dictionary> {
   minLength?: number;
   limit?: number;
   hint?: boolean;
+  autoSelect?: boolean;
   highlight?: boolean;
   onSelect?: (item: T, input: HTMLInputElement) => void;
   debounceRemote?: number;
