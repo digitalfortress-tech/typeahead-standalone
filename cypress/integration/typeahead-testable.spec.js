@@ -8,9 +8,8 @@ context('Typeahead', () => {
   it('Shows suggestions on keypress', () => {
     cy.get('#input-one').type('g', { delay: 100 });
     cy.get('.typeahead-test-one .tt-list').as('list').should('exist');
-    cy.get('@list').children().should('have.length', 3);
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.length', 1);
-    cy.get('@selectedSuggestion').should('have.text', 'Grey');
+    cy.get('@list').children().should('have.length', 4);
+    cy.get('@list').children('.tt-selected').should('have.length', 0);
   });
 
   it('Shows hint', () => {
@@ -26,9 +25,31 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-two .tt-list .tt-highlight').first().should('have.text', 'Gr');
   });
 
-  it('Navigates between suggestions via Keyboard', () => {
+  it('Navigates between suggestions via Keyboard with autoSelect disabled (default behaviour)', () => {
+    cy.get('#input-one').as('input1').type('g', { delay: 100 });
+    cy.get('.typeahead-test-one .tt-list').as('list').children().should('have.length', 4);
+    cy.get('@list').children('.tt-selected').should('have.length', 0);
+
+    cy.get('@input1').type('{uparrow}');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Golden Brown');
+
+    cy.get('@input1').type('{downarrow}{downarrow}');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Green');
+
+    cy.get('@input1').type('{downarrow}{downarrow}');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Golden Brown');
+
+    cy.get('@input1').type('{downarrow}');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Grey');
+
+    cy.get('@input1').type('{uparrow}{uparrow}');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Gold');
+  });
+
+  it('Navigates between suggestions via Keyboard with autoSelect enabled', () => {
     cy.get('#input-two').as('input2').type('bl', { delay: 100 });
     cy.get('.typeahead-test-two .tt-list').as('list').children().should('have.length', 5);
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Black'); // auto selects first suggestion
 
     cy.get('@input2').type('{downarrow}{downarrow}');
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue');
@@ -90,6 +111,8 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-footer').should('have.length', 1);
     cy.get('.typeahead-test-four .tt-footer a').should('contain.text', 'See more');
     cy.get('@list').children('.tt-suggestion').should('have.length', 2);
+    cy.get('@list').children('.tt-selected').should('have.length', 0);
+    cy.get('@input4').type('{downarrow}{downarrow}');
     cy.get('.typeahead-test-four .tt-selected .preview').should('exist');
     cy.get('.typeahead-test-four .tt-selected .text').should('exist');
 
@@ -143,6 +166,8 @@ context('Typeahead', () => {
   it('displays suggestions for multiple space-separated queries', () => {
     cy.get('#input-eight').as('input8').type('or', { delay: 100 });
     cy.get('.typeahead-test-eight .tt-list').as('list').children().should('have.length', 3);
+    cy.get('@list').children('.tt-selected').should('have.length', 0);
+    cy.get('@input8').type('{downarrow}');
     cy.get('@list').children('.tt-selected').find('.track-artist').should('have.text', 'Fernando Ortega');
     cy.get('.typeahead-test-eight .tt-hint').as('hint').should('have.value', '');
 

@@ -292,7 +292,7 @@ const songs = [
 const test1 = typeahead({
   input: document.getElementById('input-one'),
   source: {
-    local: ['Gold', 'Green', 'Grey'],
+    local: ['Gold', 'Green', 'Grey', 'Golden Brown'],
   },
   className: 'typeahead-test-one',
 });
@@ -311,6 +311,7 @@ const test2 = typeahead({
     inputEl.value = selectedItem.name + ' - ' + selectedItem.value;
   },
   preventSubmit: true,
+  autoSelect: true,
 });
 
 // eslint-disable-next-line no-undef
