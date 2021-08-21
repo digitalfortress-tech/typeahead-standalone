@@ -24,7 +24,7 @@ export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionar
     // verify if identifier exists (i.e. normalized already)
     for (let x = 0; x < length; x++) {
       if (!(identifier in (listItems[x] as Dictionary))) {
-        throw new Error('Missing identifier');
+        throw new Error('e03');
       }
     }
     return listItems as T[];

@@ -35,6 +35,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     config.source?.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
   const remoteXhrCache: Dictionary = {};
   const transform = typeof config.source?.transform === 'function' ? config.source.transform : undefined;
+  const local = config.source?.local || null;
   const remote =
     config.source && config.source.remote && config.source.remote.url && config.source.remote.wildcard
       ? config.source.remote
@@ -65,16 +66,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     throw new Error('e01');
   }
 
-  if (!config.source?.local && !config.source?.prefetch && !config.source?.remote) {
+  if (!local && !prefetch && !remote) {
     throw new Error('e02');
   }
 
-  if (config.source?.local) {
-    updateDataStore(normalizer(config.source.local, identifier) as T[]);
+  if (local) {
+    updateDataStore(normalizer(local, identifier) as T[]);
+    updateSearchIndex(dataStore);
   }
-
-  // update search Index
-  updateSearchIndex(dataStore);
 
   let input: HTMLInputElement = config.input;
 
@@ -122,7 +121,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
           updateSearchIndex(transformed);
         },
         (reject) => {
-          console.error('e03', reject);
+          console.error('e04', reject);
         }
       )
       .finally(() => {
@@ -348,7 +347,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    */
   function selectPrev(): void {
     const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
-    if (selected === items[0]) {
+    if (!selected || selected === items[0]) {
       selected = items[maxLength - 1];
     } else {
       for (let i = maxLength - 1; i > 0; i--) {
@@ -502,7 +501,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
           updateSearchIndex(transformed);
         },
         (reject) => {
-          console.error('e04', reject);
+          console.error('e05', reject);
         }
       )
       .finally(() => {
@@ -681,9 +680,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   /**
    * Fixes #26: on long clicks focus will be lost and onSelect method will not be called
    */
-  listContainer.addEventListener('mousedown', function (evt: Event) {
-    evt.stopPropagation();
-    evt.preventDefault();
+  listContainer.addEventListener('mousedown', function (e: Event) {
+    e.stopPropagation();
+    e.preventDefault();
   });
 
   /**
