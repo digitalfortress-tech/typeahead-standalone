@@ -53,7 +53,7 @@ var typeahead = require('typeahead-standalone');
 <!-- Alternatively, you can use a CDN with jsdelivr -->
 <script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"></script>
 <!-- or with unpkg.com -->
-<script src="https://unpkg.com/typeahead-standalone@3.0.5/dist/typeahead-standalone.js"></script>
+<script src="https://unpkg.com/typeahead-standalone@3.1.0/dist/typeahead-standalone.js"></script>
 ```
 The library will be available as a global object at `window.typeahead`
 
