@@ -30,7 +30,7 @@
     "email": "contact@niketpathak.com",
     "url": "https://niketpathak.com"
   },
-  "browser": "dist/typeahead-standalone.min.js",
+  "browser": "dist/typeahead-standalone.js",
   "main": "dist/typeahead-standalone.js",
   "types": "dist/typeahead-standalone.d.ts",
   "repository": {
@@ -76,7 +76,7 @@
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.1.0",
     "copyfiles": "^2.4.1",
-    "css-loader": "^5.0.0",
+    "css-loader": "^5.1.3",
     "cypress": "^7.2.0",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.13.0",
