@@ -233,8 +233,8 @@
             <li>
               To understand the working of this example, be sure to keep the network tab of your developer tools open.
               As soon as you focus on the search box above, a network request will the made to prefetch data. This happens because
-              we set <code>startEvent: 'onFocus'</code> which causes data to be prefetched on focussing the search input element.
-              By default, its value is <code>startEvent: 'onInit'</code> meaning that data is prefetched / loaded as soon as
+              we set <code>when: 'onFocus'</code> which causes data to be prefetched on focussing the search input element.
+              By default, its value is <code>when: 'onInit'</code> meaning that data is prefetched / loaded as soon as
               typeahead gets initialized.
             </li>
             <li>
@@ -252,8 +252,9 @@
             highlight: true,
             source: {
             prefetch: {
-            url: 'https://restcountries.eu/rest/v2/name/an',
-            startEvent: 'onFocus', // default is `onInit`
+            url:
+            'https://raw.githubusercontent.com/digitalfortress-tech/typeahead-standalone/master/demo/assets/json/countries.json',
+            when: 'onFocus', // default is `onInit`
             },
             identifier: 'name',
             },
