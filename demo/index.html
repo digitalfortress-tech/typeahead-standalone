@@ -119,14 +119,14 @@
           <br />
           <h4>1. Autocomplete with Local Data (Identifier + Groups)</h4>
           <div class="search-container">
-            <input type="search" id="liveSearch1" autocomplete="off" placeholder="Search Colors...">
+            <div class="padding-v15">Try typing the letter "<b>G</b>" or "<b>P</b>"...</div>
+            <input type="search" id="liveSearch1" autocomplete="off" placeholder="Search Color...">
           </div>
           <br />
-          The code block shown below can be edited in place and its changes reflected in the input element above (which has an
-          <code>id="liveSearch1"</code>).
+          The code shown below can be edited in place and its changes reflected back in the input box above).
           <hr>
           <ul>
-            <li>If you try typing the letter "<b>G</b>" or "<b>P</b>", you should see some suggestions pop up instantly</li>
+            <li>If you tried typing the letter "<b>G</b>" or "<b>P</b>", you should have seen some suggestions pop up instantly</li>
             <li>
               <b class="underline">USING IDENTIFIER</b>:
               Lets use another data source => <code>source: colors2</code>. As soon as you update the source,
@@ -210,7 +210,7 @@
             highlight: true,
             source: {
             remote: {
-            url: 'https://restcountries.eu/rest/v2/name/%QUERY',
+            url: 'https://restcountries.com/v2/name/%QUERY',
             wildcard: '%QUERY',
             },
             identifier: 'name',
