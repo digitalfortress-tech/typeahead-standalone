@@ -641,8 +641,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     const rawInput = input.value;
 
     // if raw string is not part of suggestion, hide the hint
-    // @todo: add test to check hint with "it   is   g"
-    // @todo: add test to check hint with "it   is   g "
     if (
       (selectedItem[identifier] as string).toLocaleLowerCase().indexOf(
         rawInput

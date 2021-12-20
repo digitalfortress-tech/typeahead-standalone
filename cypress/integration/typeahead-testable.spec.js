@@ -16,7 +16,7 @@ context('Typeahead', () => {
     cy.get('#input-two').as('input2').type('gr', { delay: 100 });
     cy.get('.typeahead-test-two .tt-hint').as('hint2').should('have.value', 'grey');
 
-    cy.get('@input2').type('{backspace}{backspace}black l', { delay: 100 });
+    cy.get('@input2').clear().type('black l', { delay: 100 });
     cy.get('@hint2').should('have.value', 'black light');
   });
 
@@ -122,7 +122,7 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-four .tt-notFound').should('contain.text', 'Nothing Found');
 
     // group template
-    cy.get('@input4').type('{backspace}{backspace}bla', { delay: 100 });
+    cy.get('@input4').clear().type('bla', { delay: 100 });
     cy.get('@list').children('.tt-group').as('group').should('have.length', 1);
     cy.get('@group').children('.custom-group').should('have.length', 1);
     cy.get('@group').children('.custom-group').should('have.text', 'Shades of Black');
@@ -135,7 +135,7 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-five .tt-hint').as('hint').should('have.value', '');
     cy.get('.typeahead-test-five .tt-highlight').as('highlight').should('not.exist');
 
-    cy.get('@input5').type('{backspace}{backspace}lbl', { delay: 100 });
+    cy.get('@input5').clear().type('lbl', { delay: 100 });
     cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 2);
     cy.get('@list').children('.tt-group').as('groups').should('have.length', 1);
     cy.get('@suggestions').first().should('have.text', 'Blue Light');
@@ -171,7 +171,7 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').find('.track-artist').should('have.text', 'Fernando Ortega');
     cy.get('.typeahead-test-eight .tt-hint').as('hint').should('have.value', '');
 
-    cy.get('@input8').type('{backspace}{backspace}sh', { delay: 100 });
+    cy.get('@input8').clear().type('sh', { delay: 100 });
     cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 5);
     cy.get('@suggestions').first().find('.track-title').should('have.text', 'Shalom Jerusalem');
     cy.get('@suggestions').eq(1).find('.track-album').should('have.text', 'Shalom Jerusalem');
@@ -199,7 +199,7 @@ context('Typeahead', () => {
       .children('.tt-suggestion')
       .should('contain.text', 'Black Sheeep');
 
-    cy.get('@input9').type('{backspace}{backspace}dbl', { delay: 100 });
+    cy.get('@input9').clear().type('dbl', { delay: 100 });
     cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 6);
     cy.get('@suggestions').each(($item) => {
       cy.wrap($item).should('not.contain.text', 'Sheeep');
