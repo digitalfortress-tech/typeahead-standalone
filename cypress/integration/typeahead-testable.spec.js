@@ -178,6 +178,20 @@ context('Typeahead', () => {
     cy.get('@hint').should('have.value', 'shalom Jerusalem');
   });
 
+  it('displays correct hint for multiple space-separated queries', () => {
+    cy.get('#input-eight').as('input8').type('    it', { delay: 100 });
+    cy.get('.typeahead-test-eight .tt-hint').as('hint').should('have.value', '    it is good');
+
+    cy.get('@input8').clear().type('   it   i', { delay: 100 });
+    cy.get('@hint').should('have.value', '   it   is good');
+
+    cy.get('@input8').clear().type('it    ', { delay: 100 });
+    cy.get('@hint').should('have.value', 'it    is good');
+
+    cy.get('@input8').clear().type('   it   i s', { delay: 100 });
+    cy.get('@hint').should('have.value', '');
+  });
+
   it('displays suggestions for data-collisions', () => {
     cy.get('#input-nine').as('input9').type('sh', { delay: 100 });
     cy.get('.typeahead-test-nine .tt-list')
