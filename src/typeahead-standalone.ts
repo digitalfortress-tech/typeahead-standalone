@@ -640,19 +640,20 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   function updateHint(selectedItem: T) {
     const rawInput = input.value;
 
-    // if last char is a space, or if raw string is not part of suggestion, hide the hint
+    // if raw string is not part of suggestion, hide the hint
+    // @todo: add test to check hint with "it   is   g"
+    // @todo: add test to check hint with "it   is   g "
     if (
-      ' ' === rawInput.split('').pop() ||
       (selectedItem[identifier] as string).toLocaleLowerCase().indexOf(
         rawInput
           .replace(/\s{2,}/g, ' ')
-          .trim()
+          .trimStart()
           .toLocaleLowerCase()
       ) !== 0
     ) {
       inputHint.value = '';
     } else {
-      inputHint.value = (rawInput +
+      inputHint.value = (rawInput.replace(/\s?$/, '') +
         (selectedItem[identifier] as string).replace(new RegExp(inputValue, 'i'), '')) as string;
     }
   }
