@@ -163,7 +163,7 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'France, Paris');
   });
 
-  it('displays suggestions for multiple space-separated queries', () => {
+  it('displays suggestions for multiple space-separated queries having correct/reverse order', () => {
     cy.get('#input-eight').as('input8').type('or', { delay: 100 });
     cy.get('.typeahead-test-eight .tt-list').as('list').children().should('have.length', 3);
     cy.get('@list').children('.tt-selected').should('have.length', 0);

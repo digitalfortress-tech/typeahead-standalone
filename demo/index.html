@@ -52,7 +52,7 @@
         }
     };
   </script>
-  <link rel="canonical" href="https://typeahead-standalone.niketpathak.com" />
+  <link rel="canonical" href="https://typeahead.digitalfortress.tech/" />
 </head>
 
 <body>
@@ -69,16 +69,18 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">Home</a>
+            <a class="nav-link" href="./">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="npmjs.com/package/typeahead-standalone" target="_blank" rel="noopener">Docs</a>
+            <a class="nav-link" href="https://github.com/digitalfortress-tech/typeahead-standalone#readme" target="_blank"
+              rel="noopener">Docs</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#tutorial">Tutorial</a>
+            <a class="nav-link"
+              href="https://digitalfortress.tech/tutorial/all-in-one-smart-search-with-typeahead-standalone/">Tutorial</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#contact">Contact</a>
+            <a class="nav-link" href="https://www.npmjs.com/package/typeahead-standalone">Download</a>
           </li>
         </ul>
       </div>
@@ -302,6 +304,8 @@
           <br />
           <script async src="https://jsfiddle.net/niketpathak/2bfnq7k5/embed/js,html,css,result/dark/"></script>
           <br />
+          <br />
+          <hr>
         </section>
 
         <section class="js-fiddle">
@@ -383,6 +387,53 @@
             },
             });
           </div>
+          <br>
+          <hr>
+          </section>
+          
+          <section class="typeaheadComparison">
+            <h3>Typeahead-standalone Comparison</h3>
+            <p>This library is inspired by the original <a href="https://twitter.github.io/typeahead.js/">Twitter-typeahead
+                library</a> with a few performance improvements and a few additional features.
+              <br>
+              Let's see the differences between typeahead-standalone and other popular libraries...
+            </p>
+            <h4>1. <a href="https://github.com/twitter/typeahead.js/" class="underline">Twitter-typeahead</a></h4>
+            <ul>
+              <li>Depends on <a href="https://jquery.com/"><i>jQuery</i></a></li>
+              <li>Does not support grouped suggestions</li>
+              <li>Supports fewer templates than typeahead-standalone</li>
+              <li>Larger in terms of size (<a class="underline" href="https://bundlephobia.com/package/typeahead.js@0.11.1">~40kb
+                  minzipped</a> vs <a href="https://bundlephobia.com/package/typeahead-standalone@3.2.0" class="underline">~6kb
+                  minzipped</a> for
+                typeahead-standalone)</li>
+              <li>As of 2022, not maintained since 8 years</li>
+            </ul>
+            <h4>2. <a href="https://github.com/kraaden/autocomplete" class="underline">Autocomplete</a></h4>
+            <ul>
+              <li>Does not have a true suggestion engine</li>
+              <li>Does not support hints</li>
+              <li>Does not support identifiers/tokenizers (search based on multiple tokens)</li>
+              <li>Does not support prefetching of remote data</li>
+              <li>Does not support templating</li>
+              <li>Unsupported data transformation for remote endpoint</li>
+              </ul>
+              <h4>3. <a href="https://www.npmjs.com/package/suggestions" class="underline">Suggestions</a></h4>
+              <ul>
+                <li>has a dependency on <a href="https://github.com/mattyork/fuzzy"><i>Fuzzy</i></a> and <a
+                    href="https://www.npmjs.com/package/xtend"><i>xtend</i></a></li>
+                <li>Does not support fetching remote data out of the box</li>
+                <li>Does not have a true suggestion engine i.e. Fuzzy matching takes place</li>
+                <li>Does not support hints</li>
+                <li>Does not support style templates</li>
+                <li>has very few customization options</li>
+            </ul>
+            <hr>
+            <p>
+              To report any bugs or problems while using typeahead-standalone, kindly open an issue on the <a
+                href="https://github.com/digitalfortress-tech/typeahead-standalone/issues">issue-tracker</a>.
+            </p>
+            <hr>
         </section>
 
       </div>
@@ -483,7 +534,7 @@
             </li>
 
             <li class="list-inline-item">
-              <a href="npmjs.com/package/typeahead-standalone">
+              <a href="https://www.npmjs.com/package/typeahead-standalone">
                 <span class="fa-stack fa-lg">
                   <i class="fas fa-circle fa-stack-2x"></i>
                   <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
@@ -492,7 +543,7 @@
             </li>
 
             <li class="list-inline-item">
-              <a href="https://github.com/niketpathak/typeahead-standalone">
+              <a href="https://github.com/digitalfortress-tech/typeahead-standalone">
                 <span class="fa-stack fa-lg">
                   <i class="fas fa-circle fa-stack-2x"></i>
                   <i class="fab fa-github fa-stack-1x fa-inverse"></i>
