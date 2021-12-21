@@ -171,6 +171,12 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').find('.track-artist').should('have.text', 'Fernando Ortega');
     cy.get('.typeahead-test-eight .tt-hint').as('hint').should('have.value', '');
 
+    cy.get('@input8').clear().type('ortega fernando', { delay: 100 });
+    cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 3);
+    cy.get('@input8').type('{downarrow}');
+    cy.get('@list').children('.tt-selected').find('.track-artist').should('have.text', 'Fernando Ortega');
+    cy.get('.typeahead-test-eight .tt-hint').as('hint').should('have.value', '');
+
     cy.get('@input8').clear().type('sh', { delay: 100 });
     cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 5);
     cy.get('@suggestions').first().find('.track-title').should('have.text', 'Shalom Jerusalem');
