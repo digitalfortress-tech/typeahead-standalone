@@ -25,6 +25,10 @@ A fast fully-featured standalone autocomplete library
 
 Here is a **[Live Demo](https://typeahead.digitalfortress.tech/)** of **typeahead-standalone.js** in action.
 
+A preview of the basic example taken from the Live Demo:
+
+![Basic example](./demo/basic-ex.gif)
+
 ## Install
 
 ```shell script
