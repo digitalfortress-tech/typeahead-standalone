@@ -602,3 +602,18 @@ adapted from a snippet
   text-decoration: none;
   opacity: 0.7;
 }
+
+/* style sidebar gadverts */
+.gAdvert_sidebar {
+  width: 100%;
+  overflow: hidden;
+  max-height: 600px;
+  margin-bottom: 20px;
+  padding: 0 30px;
+}
+
+/* add transition to sticky element */
+.stickyElx {
+  transition: all 0.5s;
+  z-index: 1;
+}

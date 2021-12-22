@@ -43,6 +43,62 @@ document.addEventListener('DOMContentLoaded', function () {
 /************************************** CUSTOM *******************************************/
 /*****************************************************************************************/
 
+// handle sticky elements
+const stickyEl = (El, stickyConf) => {
+  if (!El || !(El instanceof HTMLElement) || !stickyConf || stickyConf.constructor !== Object) return null;
+
+  const { beforeEl, afterEl, offsetTop, offsetBottom } = stickyConf;
+  let startPos = 0,
+    endPos = 0,
+    scrollPos = 0;
+  let ticking = false;
+  if (beforeEl && beforeEl instanceof HTMLElement) {
+    const props = beforeEl.getBoundingClientRect();
+    startPos = window.pageYOffset + props.top + props.height;
+  }
+  if (afterEl && afterEl instanceof HTMLElement) {
+    endPos = window.pageYOffset + afterEl.getBoundingClientRect().top;
+  }
+
+  const eventHandler = () => {
+    if (!ticking) {
+      scrollPos = window.scrollY;
+      window.requestAnimationFrame(() => {
+        if (
+          scrollPos > startPos &&
+          !(endPos && scrollPos > endPos - El.clientHeight - (parseInt(offsetBottom, 10) || 0))
+        ) {
+          El.classList.add('stickyElx');
+          El.style.position = 'fixed';
+          El.style.top = (parseInt(offsetTop, 10) || 0) + 'px';
+        } else {
+          El.style.top = '0';
+          El.style.position = 'relative';
+          El.classList.remove('stickyElx');
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  };
+
+  window.addEventListener('scroll', eventHandler);
+  return eventHandler;
+};
+
+const makeSticky = () => {
+  const stickyGAdv = document.querySelector('.gAdvert_sidebar_sticky');
+  if (!stickyGAdv || !stickyGAdv.clientHeight) return;
+  stickyEl(stickyGAdv, {
+    beforeEl: document.querySelector('.beforePubbCard'),
+    afterEl: document.querySelector('.subscribe-area'),
+    offsetTop: 120,
+  });
+};
+
+// Make Pub sticky after a small delay
+setTimeout(makeSticky, 3e3);
+
 var colors = [
   { name: 'Red', value: 'RD', hash: 'red' },
   { name: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
