@@ -88,11 +88,12 @@ const stickyEl = (El, stickyConf) => {
 
 const makeSticky = () => {
   const stickyGAdv = document.querySelector('.gAdvert_sidebar_sticky');
-  if (!stickyGAdv || !stickyGAdv.clientHeight) return;
+  if (!stickyGAdv || !stickyGAdv.clientHeight || window.screen.availWidth <= 992) return;
   stickyEl(stickyGAdv, {
     beforeEl: document.querySelector('.beforePubbCard'),
     afterEl: document.querySelector('.subscribe-area'),
     offsetTop: 120,
+    offsetBottom: 100,
   });
 };
 
