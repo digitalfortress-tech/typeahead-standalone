@@ -627,8 +627,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     ['id', 'name', 'placeholder'].forEach((attr) => inputHint.removeAttribute(attr));
     inputHint.setAttribute('readonly', 'true');
     inputHint.tabIndex = -1;
-    inputHint.classList.add('tt-hint');
-    inputHint.classList.remove('tt-input');
+    inputHint.className = 'tt-hint';
 
     input.after(inputHint);
   }
