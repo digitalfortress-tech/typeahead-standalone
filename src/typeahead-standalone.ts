@@ -461,6 +461,25 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     // get suggestions
     const suggestions: T[] = trie.search(inputValue.toLowerCase(), identifier, limitSuggestions);
 
+    // sort by giving preference to items beginning with the provided query
+    const startingLetterPref = (a: Dictionary, b: Dictionary) => {
+      if (
+        (a[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase()) >
+        (b[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase())
+      ) {
+        return 1;
+      }
+      if (
+        (a[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase()) <
+        (b[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase())
+      ) {
+        return -1;
+      }
+      return 0;
+    };
+
+    suggestions.sort(startingLetterPref);
+
     // remove duplicates from suggestions to allow back-filling
     items = deduplicateArr(suggestions, identifier) as T[];
 
