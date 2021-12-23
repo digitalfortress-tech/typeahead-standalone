@@ -459,34 +459,21 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   function calcSuggestions() {
     // get suggestions
-    const suggestions: T[] = trie.search(inputValue.toLowerCase(), identifier, limitSuggestions);
-
-    // sort by giving preference to items beginning with the provided query
-    const startingLetterPref = (a: Dictionary, b: Dictionary) => {
-      if (
-        (a[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase()) >
-        (b[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase())
-      ) {
-        return 1;
-      }
-      if (
-        (a[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase()) <
-        (b[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase())
-      ) {
-        return -1;
-      }
-      return 0;
-    };
-
-    suggestions.sort(startingLetterPref);
+    let suggestions: T[] = trie.search(inputValue.toLowerCase(), identifier, limitSuggestions);
 
     // remove duplicates from suggestions to allow back-filling
-    items = deduplicateArr(suggestions, identifier) as T[];
+    suggestions = deduplicateArr(suggestions, identifier) as T[];
+
+    // sort by giving preference to items beginning with the starting letter of the query
+    sortByStartingLetter(suggestions);
 
     // if suggestions need to be grouped, sort them first
     if (groupIdentifier) {
-      sortByGroup();
+      sortByGroup(suggestions);
     }
+
+    // update items with available suggestions to draw the view
+    items = suggestions;
 
     if (autoSelect && items.length) {
       selected = items[0];
@@ -567,10 +554,28 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   }
 
   /**
-   * Sorts(in-place) "items" array by group
+   * Sorts array in place giving preference to the starting letter of the query
    */
-  function sortByGroup() {
-    items.sort((a: Dictionary, b: Dictionary) => {
+  function sortByStartingLetter(suggestions: T[]) {
+    suggestions.sort((a: Dictionary, b: Dictionary) => {
+      const one = (a[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase());
+      const two = (b[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase());
+
+      if (one < two) {
+        return -1;
+      }
+      if (one > two) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  /**
+   * Sorts(in-place) array by group
+   */
+  function sortByGroup(suggestions: T[]) {
+    suggestions.sort((a: Dictionary, b: Dictionary) => {
       if (!a[groupIdentifier] || (a[groupIdentifier] as string) < (b[groupIdentifier] as string)) {
         return -1;
       }
