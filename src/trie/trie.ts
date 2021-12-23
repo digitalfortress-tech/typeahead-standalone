@@ -120,7 +120,7 @@ export const Trie = function (): TrieType {
 
     // truncate suggestions to limit
     if (limit && suggestions.length > limit) {
-      suggestions.length = 5;
+      suggestions.length = limit;
     }
 
     return suggestions;
