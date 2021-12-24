@@ -558,15 +558,16 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    */
   function sortByStartingLetter(suggestions: T[]) {
     suggestions.sort((a: Dictionary, b: Dictionary) => {
-      const one = (a[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase());
-      const two = (b[identifier as string] as string).toLowerCase().indexOf(inputValue.toLowerCase());
+      const one = (a[identifier as string] as string).toLowerCase().startsWith(inputValue.toLowerCase());
+      const two = (b[identifier as string] as string).toLowerCase().startsWith(inputValue.toLowerCase());
+      // @todo: test with dark blue
+      // @todo: test with blue dark
+      if (one && !two) return -1;
 
-      if (one < two) {
+      if (one && (a[identifier as string] as string).length < (b[identifier as string] as string).length) {
         return -1;
       }
-      if (one > two) {
-        return 1;
-      }
+
       return 0;
     });
   }
