@@ -34,7 +34,7 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Golden Brown');
 
     cy.get('@input1').type('{downarrow}{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Green');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Gold');
 
     cy.get('@input1').type('{downarrow}{downarrow}');
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Golden Brown');
@@ -43,25 +43,25 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Grey');
 
     cy.get('@input1').type('{uparrow}{uparrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Gold');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Green');
   });
 
   it('Navigates between suggestions via Keyboard with autoSelect enabled', () => {
     cy.get('#input-two').as('input2').type('bl', { delay: 100 });
     cy.get('.typeahead-test-two .tt-list').as('list').children().should('have.length', 5);
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Black'); // auto selects first suggestion
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue'); // auto selects first suggestion
 
     cy.get('@input2').type('{downarrow}{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue Dark');
 
     cy.get('@input2').type('{downarrow}{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue Darker');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Dark Blue');
 
     cy.get('@input2').type('{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Black');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue');
 
     cy.get('@input2').type('{uparrow}{uparrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue Dark');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Black Light');
   });
 
   it('Uses custom onSelect config option', () => {
