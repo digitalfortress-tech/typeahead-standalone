@@ -1,6 +1,7 @@
 const colors = [
   { name: 'Red', value: 'RD', hash: 'red' },
   { name: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
+  { name: 'Dark Blue', value: 'DBLD', hash: 'darkblue', group: 'Shades of Blue' },
   { name: 'Blue Dark', value: 'DBL', hash: 'darkblue', group: 'Shades of Blue' },
   { name: 'Blue Darker', value: 'DBXL', hash: 'mnamenightblue', group: 'Shades of Blue' },
   { name: 'Blue Light', value: 'LBL', hash: 'cadetblue', group: 'Shades of Blue' },
