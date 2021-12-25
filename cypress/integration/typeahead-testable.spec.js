@@ -25,6 +25,34 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-two .tt-list .tt-highlight').first().should('have.text', 'Gr');
   });
 
+  it('Sorts suggestions by giving preference to the first letter and the length of the input query', () => {
+    cy.get('#input-two').as('input2').type('bl', { delay: 100 });
+    cy.get('.typeahead-test-two .tt-list').as('list').children().should('have.length', 5);
+    cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'Blue');
+    cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'Black');
+    cy.get('@list').children('.tt-suggestion').eq(2).should('have.text', 'Blue Dark');
+    cy.get('@list').children('.tt-suggestion').eq(3).should('have.text', 'Black Light');
+    cy.get('@list').children('.tt-suggestion').eq(4).should('have.text', 'Dark Blue');
+
+    cy.get('@input2').clear().type('blue d');
+    cy.get('@list').children().should('have.length', 3);
+    cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'Blue Dark');
+    cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'Blue Darker');
+    cy.get('@list').children('.tt-suggestion').eq(2).should('have.text', 'Dark Blue');
+
+    cy.get('@input2').clear().type('dar');
+    cy.get('@list').children().should('have.length', 3);
+    cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'Dark Blue');
+    cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'Blue Dark');
+    cy.get('@list').children('.tt-suggestion').eq(2).should('have.text', 'Blue Darker');
+
+    cy.get('@input2').clear().type('dark b');
+    cy.get('@list').children().should('have.length', 3);
+    cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'Dark Blue');
+    cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'Blue Dark');
+    cy.get('@list').children('.tt-suggestion').eq(2).should('have.text', 'Blue Darker');
+  });
+
   it('Navigates between suggestions via Keyboard with autoSelect disabled (default behaviour)', () => {
     cy.get('#input-one').as('input1').type('g', { delay: 100 });
     cy.get('.typeahead-test-one .tt-list').as('list').children().should('have.length', 4);
@@ -99,6 +127,20 @@ context('Typeahead', () => {
     cy.get('@list').children().eq(4).should('have.text', 'Black Light');
     cy.get('@list').children().eq(5).should('have.text', 'Shades of Blue');
     cy.get('@list').children().eq(6).should('have.text', 'Blue');
+
+    cy.get('@input3').clear().type('bl');
+    cy.get('@list').children().should('have.length', 7);
+    cy.get('@list').children('.tt-suggestion').should('have.length', 5);
+    cy.get('@list').children().eq(1).should('have.text', 'Black');
+    cy.get('@list').children().eq(4).should('have.text', 'Blue');
+    cy.get('@list').children().eq(5).should('have.text', 'Blue Dark');
+    cy.get('@list').children().eq(6).should('have.text', 'Dark Blue');
+
+    cy.get('@input3').clear().type('dar');
+    cy.get('@list').children().should('have.length', 4);
+    cy.get('@list').children().eq(1).should('have.text', 'Dark Blue');
+    cy.get('@list').children().eq(2).should('have.text', 'Blue Dark');
+    cy.get('@list').children().eq(3).should('have.text', 'Blue Darker');
   });
 
   it('Displays Templates', () => {
