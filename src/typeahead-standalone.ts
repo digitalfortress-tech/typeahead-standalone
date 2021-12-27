@@ -494,10 +494,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       return;
     }
 
+    const requestOptions = remote.requestOptions ? remote.requestOptions : undefined;
+
     let transformed: T[] = [];
 
     fetchWrapper
-      .get(remote.url.replace(remote.wildcard, frozenInput))
+      .get(remote.url.replace(remote.wildcard, frozenInput), requestOptions)
       .then(
         (data) => {
           if (transform) {

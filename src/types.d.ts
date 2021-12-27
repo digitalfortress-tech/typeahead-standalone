@@ -5,6 +5,7 @@ export interface typeaheadDataSource {
   remote?: {
     url: string;
     wildcard: string;
+    requestOptions?: object;
   };
   prefetch?: {
     url: string;
