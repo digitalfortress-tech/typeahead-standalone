@@ -5,11 +5,12 @@ export interface typeaheadDataSource {
   remote?: {
     url: string;
     wildcard: string;
-    requestOptions?: object;
+    requestOptions?: Dictionary;
   };
   prefetch?: {
     url: string;
     when?: 'onInit' | 'onFocus';
+    requestOptions?: Dictionary;
     done: boolean;
   };
   transform?: (data: string[] | Dictionary[]) => string[] | Dictionary[];

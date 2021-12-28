@@ -1,13 +1,15 @@
 // A custom FETCH API wrapper
 // inspired by https://jasonwatmore.com/post/2020/04/18/fetch-a-lightweight-fetch-wrapper-to-simplify-http-requests
 
-const get = async function (url: string, requestOptions?: object): Promise<any> {
-  if (!requestOptions) {
-    requestOptions = {
+import { Dictionary } from '../types';
+
+const get = async function (url: string, requestOptions?: Dictionary): Promise<any> {
+  const response = await fetch(
+    url,
+    requestOptions || {
       method: 'GET',
-    };
-  }
-  const response = await fetch(url, requestOptions);
+    }
+  );
   return handleResponse(response);
 };
 
