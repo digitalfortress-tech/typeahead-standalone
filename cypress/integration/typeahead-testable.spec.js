@@ -187,7 +187,7 @@ context('Typeahead', () => {
   });
 
   it('Displays suggestions from a Remote Source', () => {
-    cy.intercept('GET', 'https://restcountries.eu/rest/v2/name/*', { fixture: 'countries.json' }).as('getCountries');
+    cy.intercept('GET', 'https://restcountries.com/v2/name/*', { fixture: 'countries.json' }).as('getCountries');
     cy.get('#input-six').as('input6').type('pa', { delay: 100 });
     cy.wait('@getCountries');
 
@@ -196,7 +196,7 @@ context('Typeahead', () => {
   });
 
   it('Displays suggestions from Prefetch', () => {
-    cy.intercept('GET', 'https://restcountries.eu/rest/v2/name/*', { fixture: 'countries.json' }).as('getCountries');
+    cy.intercept('GET', 'https://restcountries.com/v2/name/*', { fixture: 'countries.json' }).as('getCountries');
     cy.get('#input-seven').as('input7').focus();
     cy.wait('@getCountries');
 
@@ -252,6 +252,20 @@ context('Typeahead', () => {
     cy.get('@suggestions').each(($item) => {
       cy.wrap($item).should('not.contain.text', 'Sheeep');
     });
+  });
+
+  it('displays remote suggestions with custom requestOptions (POST with payload)', () => {
+    cy.intercept('POST', 'https://restcountries.com/v2/name/*', (req) => {
+      expect(req.body).to.include({
+        hello: 'world',
+      });
+      req.reply({
+        fixture: 'countries.json',
+      });
+    }).as('getCountries');
+    cy.get('#input-ten').as('input10').type('au', { delay: 100 });
+    cy.wait('@getCountries');
+    cy.get('.typeahead-test-ten .tt-list').as('list').children('.tt-suggestion').should('contain.text', 'Australia');
   });
 
   // https://on.cypress.io/interacting-with-elements

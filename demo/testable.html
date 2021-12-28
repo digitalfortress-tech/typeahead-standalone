@@ -119,6 +119,22 @@
       </form>
     </section>
 
+    <section class="section-ten top-section">
+      <form method="GET">
+        <h3 class="subtitle">10. Remote Source test with custom Request params</h3>
+        <p class="details">requestOptions: {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ hello: 'world' }),
+          },</p>
+        <div>
+          <label for="input-ten">Countries</label>
+          <input id="input-ten" name="color-test-ten" type="search" autocomplete="off" placeholder="Search...">
+          <button type="submit">OK</button>
+        </div>
+      </form>
+    </section>
+
     <br />
   </main>
   <script src="./../dist/typeahead-standalone.js"></script>

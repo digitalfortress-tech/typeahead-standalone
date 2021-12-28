@@ -374,7 +374,7 @@ const test6 = typeahead({
   input: document.getElementById('input-six'),
   source: {
     remote: {
-      url: 'https://restcountries.eu/rest/v2/name/%QUERY',
+      url: 'https://restcountries.com/v2/name/%QUERY',
       wildcard: '%QUERY',
     },
     identifier: 'name',
@@ -394,7 +394,7 @@ const test7 = typeahead({
   input: document.getElementById('input-seven'),
   source: {
     prefetch: {
-      url: 'https://restcountries.eu/rest/v2/name/p',
+      url: 'https://restcountries.com/v2/name/p',
       when: 'onFocus',
     },
     identifier: 'name',
@@ -444,6 +444,28 @@ const test9 = typeahead({
     dataTokens: ['value'],
   },
   className: 'typeahead-test-nine',
+  highlight: true,
+  limit: 10,
+});
+
+// eslint-disable-next-line no-undef
+const test10 = typeahead({
+  input: document.getElementById('input-ten'),
+  source: {
+    identifier: 'name',
+    groupIdentifier: 'group',
+    dataTokens: ['value'],
+    remote: {
+      url: 'https://restcountries.com/v2/name/%QUERY',
+      wildcard: '%QUERY',
+      requestOptions: {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hello: 'world' }),
+      },
+    },
+  },
+  className: 'typeahead-test-ten',
   highlight: true,
   limit: 10,
 });

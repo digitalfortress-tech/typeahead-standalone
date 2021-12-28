@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             : i > this.previousTop &&
               (o('#mainNav').removeClass('is-visible'),
               s < i && !o('#mainNav').hasClass('is-fixed') && o('#mainNav').addClass('is-fixed')),
-            (this.previousTop = i);
+          (this.previousTop = i);
         }
       );
     }
@@ -138,11 +138,16 @@ if (dev) {
       groupIdentifier: 'group',
       dataTokens: ['value'],
       // remote: {
-      //   url: 'https://restcountries.eu/rest/v2/name/%QUERY',
+      //   url: 'https://restcountries.com/v2/name/%QUERY',
       //   wildcard: '%QUERY',
+      //   requestOptions: {
+      //     method: 'POST',
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify({ hello: 'world' }),
+      //   },
       // },
       // prefetch: {
-      //   url: 'https://restcountries.eu/rest/v2/name/an',
+      //   url: 'https://restcountries.com/v2/name/an',
       //   when: 'onFocus',
       // },
     },
