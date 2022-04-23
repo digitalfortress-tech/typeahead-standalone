@@ -298,8 +298,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       const div = render(item);
       if (div) {
         div.addEventListener('click', function (ev: MouseEvent): void {
-          onSelect(item, input);
           clear();
+          onSelect(item, input);
           ev.preventDefault();
           ev.stopPropagation();
         });
@@ -411,8 +411,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         selected = items[0];
       }
       if (selected) {
-        onSelect(selected, input);
+        const select = selected;
         clear();
+        onSelect(select, input);
       }
     };
 
