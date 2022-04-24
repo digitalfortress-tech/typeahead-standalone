@@ -47,7 +47,7 @@ Then include the library in your App/Page.
 import typeahead from 'typeahead-standalone';
 
 // using CommonJS modules
-var typeahead = require('typeahead-standalone');
+const typeahead = require('typeahead-standalone');
 ```
 
 **In the browser context,**
@@ -58,7 +58,7 @@ var typeahead = require('typeahead-standalone');
 <!-- Alternatively, you can use a CDN with jsdelivr -->
 <script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"></script>
 <!-- or with unpkg.com -->
-<script src="https://unpkg.com/typeahead-standalone@3.1.0/dist/typeahead-standalone.js"></script>
+<script src="https://unpkg.com/typeahead-standalone@3.6.0/dist/typeahead-standalone.js"></script>
 ```
 The library will be available as a global object at `window.typeahead`
 
@@ -132,7 +132,7 @@ source: {
   },
   prefetch: {
     url: 'https://remoteapi.com/load-suggestions',
-    when: 'onInit'        // optional, default => 'onInit'
+    when: 'onFocus'       // optional, default => 'onInit'
   },
   identifier: '...',      // optional (required when source => Object[])
   dataTokens: ['...'],    // optional
