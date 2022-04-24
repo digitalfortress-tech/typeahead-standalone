@@ -268,5 +268,12 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-ten .tt-list').as('list').children('.tt-suggestion').should('contain.text', 'Australia');
   });
 
+  it('Executes onSubmit hook', () => {
+    cy.get('#input-eleven').as('input11').type('dar', { delay: 100 });
+    cy.get('.typeahead-test-eleven .tt-list').as('list').children().should('have.length', 4);
+    cy.get('@input11').type('{downarrow}{enter}');
+    cy.get('.onsubmit_test').should('contain.text', 'Passed');
+  });
+
   // https://on.cypress.io/interacting-with-elements
 });

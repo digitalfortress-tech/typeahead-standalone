@@ -113,7 +113,8 @@ You can pass the following config options to `typeahead-standalone`:
 |`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`)|`undefined`|
 |`templates`|An object containing templates for header, footer, suggestion, ground and notFound state. See [templates section](#templates) for clarification |`undefined`|
 |`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|
-|`preventSubmit`|Prevents automatic form submit when ENTER is pressed.|`false`|
+|`preventSubmit`|If your input element is used inside a form element, this flag allows to prevent the default submit action when ENTER is pressed.|`false`|
+|`onSubmit(event)`|When you want to use typeahead outside a form element, this handler can be used to process/submit the input value. Gets triggered on hitting the ENTER key|`NOOP`|
 |`onSelect(selectedItem, input)`|This hook gets called when the user selects an item from the suggestions. You could use a custom value for the input with this hook |Sets the selected item as the input's text|
 
 ---

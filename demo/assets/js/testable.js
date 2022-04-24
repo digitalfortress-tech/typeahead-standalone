@@ -469,3 +469,18 @@ const test10 = typeahead({
   highlight: true,
   limit: 10,
 });
+
+// eslint-disable-next-line no-undef
+const test11 = typeahead({
+  input: document.getElementById('input-eleven'),
+  source: {
+    local: colors,
+    identifier: 'name',
+    groupIdentifier: 'group',
+  },
+  className: 'typeahead-test-eleven',
+  highlight: true,
+  onSubmit: () => {
+    document.querySelector('.onsubmit_test').innerHTML = 'OnSubmit Test Passed';
+  },
+});
