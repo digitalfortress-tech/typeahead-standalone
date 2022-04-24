@@ -6,7 +6,7 @@
 
 import type { typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates, Dictionary } from './types';
 import { Keys } from './constants';
-import { deduplicateArr, escapeRegExp, normalizer } from './helpers';
+import { deduplicateArr, escapeRegExp, NOOP, normalizer } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
 import './style.less';
@@ -31,6 +31,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     input.value = item[identifier] as string;
   };
   const onSelect: (item: T, input: HTMLInputElement) => void = config.onSelect || onSelectCb;
+  const onSubmit: (e: Event) => void = config.onSubmit || NOOP;
   const dataTokens =
     config.source?.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
   const remoteXhrCache: Dictionary = {};
@@ -419,6 +420,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (keyCode === Keys.Enter) {
       useSelectedValue();
       preventSubmit && ev.preventDefault();
+      onSubmit(ev);
 
       return;
     }
