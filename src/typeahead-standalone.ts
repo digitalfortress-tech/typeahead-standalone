@@ -31,7 +31,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     return `${item[identifier]}`;
   };
   const display: (item: T) => string = config.display || displayCb;
-  const onSubmit: (e: Event) => void = config.onSubmit || NOOP;
+  const onSubmit: (e: Event, item?: T) => void = config.onSubmit || NOOP;
   const dataTokens =
     config.source?.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
   const remoteXhrCache: Dictionary = {};
@@ -411,16 +411,17 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         selected = items[0];
       }
       if (selected) {
-        const select = selected;
+        const item = selected;
         clear();
-        input.value = display(select);
+        input.value = display(item);
+        return item;
       }
     };
 
     if (keyCode === Keys.Enter) {
-      useSelectedValue();
+      const selectedItem = useSelectedValue();
       preventSubmit && ev.preventDefault();
-      onSubmit(ev);
+      onSubmit(ev, selectedItem);
 
       return;
     }

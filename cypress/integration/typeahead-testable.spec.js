@@ -272,6 +272,9 @@ context('Typeahead', () => {
     cy.get('#input-eleven').as('input11').type('dar', { delay: 100 });
     cy.get('.typeahead-test-eleven .tt-list').as('list').children().should('have.length', 4);
     cy.get('@input11').type('{downarrow}{enter}');
+    cy.get('.onsubmit_test').should('contain.text', '#DBLD');
+
+    cy.get('@input11').clear().type('dar{enter}');
     cy.get('.onsubmit_test').should('contain.text', 'Passed');
   });
 

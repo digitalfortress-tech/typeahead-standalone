@@ -480,7 +480,11 @@ const test11 = typeahead({
   },
   className: 'typeahead-test-eleven',
   highlight: true,
-  onSubmit: () => {
-    document.querySelector('.onsubmit_test').innerHTML = 'OnSubmit Test Passed';
+  onSubmit: (e, item) => {
+    if (item && item.value) {
+      document.querySelector('.onsubmit_test').innerHTML = 'OnSubmit Test Passed #' + item.value;
+    } else {
+      document.querySelector('.onsubmit_test').innerHTML = 'OnSubmit Test Passed';
+    }
   },
 });
