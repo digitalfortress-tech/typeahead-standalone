@@ -309,7 +309,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         fragment.appendChild(div);
 
         // highlight matched text
-        config.highlight && hightlight(div, inputValue.split(' '));
+        config.highlight && hightlight(div, [inputValue]);
       }
     }
 
