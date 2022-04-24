@@ -27,10 +27,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const trie = new (Trie as any)();
   const identifier = config.source?.identifier || 'label'; // label is the default identifier
   const groupIdentifier = config.source?.groupIdentifier || '';
-  const onSelectCb = <T extends Dictionary>(item: T, input: HTMLInputElement): void => {
-    input.value = item[identifier] as string;
+  const displayCb = <T extends Dictionary>(item: T): string => {
+    return `${item[identifier]}`;
   };
-  const onSelect: (item: T, input: HTMLInputElement) => void = config.onSelect || onSelectCb;
+  const display: (item: T) => string = config.display || displayCb;
   const onSubmit: (e: Event) => void = config.onSubmit || NOOP;
   const dataTokens =
     config.source?.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
@@ -300,7 +300,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       if (div) {
         div.addEventListener('click', function (ev: MouseEvent): void {
           clear();
-          onSelect(item, input);
+          input.value = display(item);
           ev.preventDefault();
         });
         if (item === selected) {
@@ -413,7 +413,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       if (selected) {
         const select = selected;
         clear();
-        onSelect(select, input);
+        input.value = display(select);
       }
     };
 
@@ -678,7 +678,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       inputHint.value = '';
     } else {
       inputHint.value = (rawInput.replace(/\s?$/, '') +
-        (selectedItem[identifier] as string).replace(new RegExp(inputValue, 'i'), '')) as string;
+        display(selectedItem).replace(new RegExp(inputValue, 'i'), '')) as string;
     }
   }
 
@@ -703,7 +703,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   }
 
   /**
-   * Fixes #26: on long clicks focus will be lost and onSelect method will not be called
+   * Fixes #26: on long clicks focus will be lost and display method will not be called
    */
   listContainer.addEventListener('mousedown', function (e: Event) {
     e.stopPropagation();

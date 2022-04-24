@@ -36,7 +36,7 @@ export interface typeaheadConfig<T extends Dictionary> {
   hint?: boolean;
   autoSelect?: boolean;
   highlight?: boolean;
-  onSelect?: (item: T, input: HTMLInputElement) => void;
+  display?: (selectedItem: T) => string;
   onSubmit?: (e: Event) => void;
   debounceRemote?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed

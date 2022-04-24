@@ -308,8 +308,8 @@ const test2 = typeahead({
   className: 'typeahead-test-two',
   minLength: 2,
   highlight: true,
-  onSelect: function (selectedItem, inputEl) {
-    inputEl.value = selectedItem.name + ' - ' + selectedItem.value;
+  display: (selectedItem) => {
+    return selectedItem.name + ' - ' + selectedItem.value;
   },
   preventSubmit: true,
   autoSelect: true,

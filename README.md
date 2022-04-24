@@ -115,7 +115,7 @@ You can pass the following config options to `typeahead-standalone`:
 |`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|
 |`preventSubmit`|If your input element is used inside a form element, this flag allows to prevent the default submit action when ENTER is pressed.|`false`|
 |`onSubmit(event)`|When you want to use typeahead outside a form element, this handler can be used to process/submit the input value. Gets triggered on hitting the ENTER key|`NOOP`|
-|`onSelect(selectedItem, input)`|This hook gets called when the user selects an item from the suggestions. You could use a custom value for the input with this hook |Sets the selected item as the input's text|
+|`display(selectedItem) => string`|This callback is executed when the user selects an item from the suggestions. The current suggestion/item is passed as a parameter and it returns a string which is set as the input's value |Sets the selected item as the input's text|
 
 ---
 

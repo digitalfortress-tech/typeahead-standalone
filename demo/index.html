@@ -309,7 +309,7 @@
         </section>
 
         <section class="js-fiddle">
-          <h4>5. Autocomplete with Data Tokens and custom onSelect</h4>
+          <h4>5. Autocomplete with Data Tokens and custom display option</h4>
           <div class="search-container">
             <input type="search" id="liveSearch5" autocomplete="off" placeholder="Search Songs...">
           </div>
@@ -329,13 +329,13 @@
               does not matter while being searched.
               </li>
               <li>
-                <b class="underline">CUSTOM "onSelect"</b>:
+                <b class="underline">CUSTOM "display()"</b>:
                 If you try searching for "<b>it</b>", you should see a single suggestion pop up. Try to select it (either by clicking
                 on the suggestion or by pressing the "<i>Tab</i>" key). You will see that by default the title of the track (i.e. the
                 <code>identifier</code>) gets displayed as the value of the search box. What if you wanted to include the artist name
-                as well ? To do so, uncomment the <code>onSelect</code> function below and retry. The onSelect callback receives the
-                <i>selected item</i> as the first parameter and the <i>input element</i> as the second. You can use these parameters to
-                customize the input value or for any other use-case too.
+                as well ? To do so, uncomment the <code>display</code> function below and retry. The display callback receives the
+                <i>selected item</i> as its parameter. You can use it to generate a string and return that string which will be used.
+                as the input's value. By default, the identifier's text is used but you can customise the default behaviour in this callback
             </li>
           </ul>
 
@@ -376,8 +376,8 @@
             identifier: 'title',
             dataTokens: ['artist', 'album'],
             },
-            // onSelect: function (selectedItem, inputEl) {
-            // inputEl.value = selectedItem.title + ' - ' + selectedItem.artist;
+            // display: function (selectedItem) {
+            // return selectedItem.title + ' - ' + selectedItem.artist;
             // },
             templates: {
             suggestion: (item) => {
@@ -390,7 +390,7 @@
           <br>
           <hr>
           </section>
-          
+
           <section class="typeaheadComparison">
             <h3>Typeahead-standalone Comparison</h3>
             <p>This library is inspired by the original <a href="https://twitter.github.io/typeahead.js/">Twitter-typeahead

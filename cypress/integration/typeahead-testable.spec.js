@@ -14,10 +14,10 @@ context('Typeahead', () => {
 
   it('Shows hint', () => {
     cy.get('#input-two').as('input2').type('gr', { delay: 100 });
-    cy.get('.typeahead-test-two .tt-hint').as('hint2').should('have.value', 'grey');
+    cy.get('.typeahead-test-two .tt-hint').as('hint2').should('have.value', 'grey - GR');
 
     cy.get('@input2').clear().type('black l', { delay: 100 });
-    cy.get('@hint2').should('have.value', 'black light');
+    cy.get('@hint2').should('have.value', 'black light - LBK');
   });
 
   it('Highlights matched text', () => {
@@ -92,10 +92,10 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Black Light');
   });
 
-  it('Uses custom onSelect config option', () => {
+  it('Uses custom display config option', () => {
     cy.get('#input-two').type('ye', { delay: 100 });
     cy.get('.typeahead-test-two .tt-list').as('list').children().first().should('have.length', 1);
-    cy.get('.typeahead-test-two .tt-hint').should('have.value', 'yellow');
+    cy.get('.typeahead-test-two .tt-hint').should('have.value', 'yellow - YW');
     cy.get('@list').children().first().click();
     cy.get('#input-two').should('have.value', 'Yellow - YW');
 
