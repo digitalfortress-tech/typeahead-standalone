@@ -301,7 +301,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
           clear();
           onSelect(item, input);
           ev.preventDefault();
-          ev.stopPropagation();
         });
         if (item === selected) {
           div.classList.add('tt-selected');
