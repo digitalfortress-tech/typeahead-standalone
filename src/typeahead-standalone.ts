@@ -34,7 +34,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const onSubmit: (e: Event, item?: T) => void = config.onSubmit || NOOP;
   const dataTokens =
     config.source?.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
-  const remoteXhrCache: Dictionary = {};
+  const remoteQueryCache: Dictionary = {};
+  const remoteResponseCache: Dictionary = {};
   const transform = config.source?.transform || ((data) => data);
   const local = config.source?.local || null;
   const remote =
@@ -218,7 +219,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         renderNotFoundTemplate();
       } else if (
         (inputValue && asyncRender && !fetchInProgress) ||
-        (inputValue && remoteXhrCache[JSON.stringify(inputValue)])
+        (inputValue && remoteQueryCache[JSON.stringify(inputValue)])
       ) {
         // wait for remote results before rendering notFoundTemplate / render immediately if request was cached
         renderNotFoundTemplate();
@@ -443,7 +444,15 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       debounceTimer = window.setTimeout(function (): void {
         inputValue = val;
         calcSuggestions();
-        update();
+
+        // if remote source exists, first check remote cache before making any query
+        const thumbprint = JSON.stringify(inputValue);
+        if (remote && items.length < limitSuggestions && (remoteResponseCache[thumbprint] as [])?.length) {
+          calcSuggestions(remoteResponseCache[thumbprint] as []);
+        }
+
+        update(); // update view
+
         remoteDebounceTimer = window.setTimeout(function (): void {
           if (items.length < limitSuggestions && !fetchInProgress) {
             fetchDataFromRemote();
@@ -456,12 +465,17 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
   }
 
-  function calcSuggestions() {
+  function calcSuggestions(newItems?: T[]) {
     // get suggestions
     let suggestions: T[] = trie.search(inputValue.toLowerCase(), identifier, limitSuggestions);
 
     // remove duplicates from suggestions to allow back-filling
     suggestions = deduplicateArr(suggestions, identifier) as T[];
+
+    if (newItems?.length) {
+      suggestions = [...suggestions, ...newItems];
+      suggestions = deduplicateArr(suggestions, identifier) as T[];
+    }
 
     // sort by giving preference to items beginning with the starting letter of the query
     sortByStartingLetter(suggestions);
@@ -487,7 +501,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     const thumbprint = JSON.stringify(frozenInput);
 
     // check cache, verify input length
-    if (remoteXhrCache[thumbprint] || !inputValue.length) {
+    if (remoteQueryCache[thumbprint] || !inputValue.length) {
       fetchInProgress = false;
       noSuggestionsHandler(true);
       return;
@@ -509,9 +523,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       )
       .finally(() => {
         // cache XHR requests so that same calls aren't made multiple times
-        remoteXhrCache[thumbprint] = true;
+        remoteQueryCache[thumbprint] = true;
+        remoteResponseCache[thumbprint] = transformed || [];
         if (transformed.length && inputValue.length) {
-          calcSuggestions();
+          calcSuggestions(transformed);
           update();
         }
         fetchInProgress = false;

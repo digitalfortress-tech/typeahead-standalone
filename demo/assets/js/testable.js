@@ -456,7 +456,6 @@ const test10 = typeahead({
   input: document.getElementById('input-ten'),
   source: {
     identifier: 'name',
-    groupIdentifier: 'group',
     dataTokens: ['value'],
     remote: {
       url: 'https://restcountries.com/v2/name/%QUERY',

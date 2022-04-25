@@ -188,7 +188,7 @@ context('Typeahead', () => {
 
   it('Displays suggestions from a Remote Source', () => {
     cy.intercept('GET', 'https://restcountries.com/v2/name/*', { fixture: 'countries.json' }).as('getCountries');
-    cy.get('#input-six').as('input6').type('pa', { delay: 100 });
+    cy.get('#input-six').as('input6').type('par', { delay: 100 });
     cy.wait('@getCountries');
 
     cy.get('.typeahead-test-six .tt-list').as('list').children().should('have.length', 5);
