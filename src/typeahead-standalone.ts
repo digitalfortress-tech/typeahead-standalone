@@ -56,9 +56,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   // init templates if they exist
   if (templates) {
-    templates.header = templates.header?.trim();
-    templates.footer = templates.footer?.trim();
-    templates.notFound = templates.notFound?.trim();
+    templates.header = typeof templates.header === 'function' ? templates.header : undefined;
+    templates.footer = typeof templates.footer === 'function' ? templates.footer : undefined;
+    templates.notFound = typeof templates.notFound === 'function' ? templates.notFound : undefined;
     templates.group = typeof templates.group === 'function' ? templates.group : undefined;
     templates.suggestion = typeof templates.suggestion === 'function' ? templates.suggestion : undefined;
   }
@@ -211,7 +211,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       const renderNotFoundTemplate = () => {
         const empty = doc.createElement('div');
         empty.classList.add('tt-notFound');
-        templatify(empty, templates.notFound || '');
+        templatify(empty, templates.notFound ? templates.notFound() : '');
         listContainer.appendChild(empty);
       };
 
@@ -279,7 +279,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (templates?.header) {
       const headerDiv = doc.createElement('div');
       headerDiv.classList.add('tt-header');
-      templatify(headerDiv, templates.header);
+      templatify(headerDiv, templates.header());
       fragment.appendChild(headerDiv);
     }
 
@@ -314,7 +314,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (templates?.footer) {
       const footerDiv = doc.createElement('div');
       footerDiv.classList.add('tt-footer');
-      templatify(footerDiv, templates.footer);
+      templatify(footerDiv, templates.footer());
       fragment.appendChild(footerDiv);
     }
 

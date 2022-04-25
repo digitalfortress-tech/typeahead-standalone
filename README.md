@@ -111,7 +111,7 @@ You can pass the following config options to `typeahead-standalone`:
 |`autoSelect`| If set to true, pre-selects the first displayed suggestion |`false`|
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
 |`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`)|`undefined`|
-|`templates`|An object containing templates for header, footer, suggestion, ground and notFound state. See [templates section](#templates) for clarification |`undefined`|
+|`templates`|An object containing templates for header, footer, suggestion, group and notFound state. See [templates section](#templates) for clarification |`undefined`|
 |`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|
 |`preventSubmit`|If your input element is used inside a form element, this flag allows to prevent the default submit action when ENTER is pressed.|`false`|
 |`onSubmit(event, selectedItem?)`|When you want to use typeahead outside a form element, this handler can be used to process/submit the input value. Gets triggered on hitting the ENTER key. First parameter is the keyboard Event and the 2nd parameter is the selected item or undefined if no item was selected|`undefined`|
@@ -201,19 +201,20 @@ Templates can be used to customize the rendering of the List. Their usage is com
 
 ```javascript
 templates: {
-  header: '<h1>List of Countries</h1>', /* Rendered at the top of the dataset */
-  footer: '<div>See more</div>', /* Rendered at the bottom of the dataset */
-  suggestion: function(item) { /* Used to render a single suggestion */
-    return '<div class="custom-suggestion">' + item.label + '</div>';
+  header: () => '<h1>List of Countries</h1>', /* Rendered at the top of the dataset */
+  footer: () => '<div>See more</div>', /* Rendered at the bottom of the dataset */
+  suggestion: (item) => {   /* Used to render a single suggestion */
+    return `<div class="custom-suggestion">${item.label}</div>`;
   },
-  group: function(groupName) { /* Used to render a group */
-    return '<div class="custom-group">' + groupName + '</div>';
+  group: (groupName) => {   /* Used to render a group */
+    return `<div class="custom-group">${groupName}</div>`;
   },
-  notFound: '<div>Nothing Found</div>', /* Rendered if 0 suggestions are available */
+  notFound: () => '<span>Nothing Found</span>', /* Rendered if no suggestions are available */
 }
 ```
+As seen above, each template takes a callback that must return a `string` which is later interpreted as HTML.
 
-Each template gets wrapped in a `div` with its corresponding class. i.e.
+Each template is wrapped in a `div` element with its corresponding class. i.e.
 - `header` => class `tt-header`
 - `footer` => class `tt-footer`
 - `suggestion` => class `tt-suggestion`

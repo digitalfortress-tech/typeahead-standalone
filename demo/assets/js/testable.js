@@ -350,9 +350,9 @@ const test4 = typeahead({
     group: (name) => {
       return '<div class="custom-group">' + name + '</div>';
     },
-    header: 'Colors Found',
-    footer: '<a href="#">See more...</a>',
-    notFound: 'Oops...Nothing Found 😪 <br>Try another color...',
+    header: () => 'Colors Found',
+    footer: () => '<a href="#">See more...</a>',
+    notFound: () => 'Oops...Nothing Found 😪 <br>Try another color...',
   },
 });
 

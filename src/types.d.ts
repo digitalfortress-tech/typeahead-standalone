@@ -21,11 +21,11 @@ export interface typeaheadDataSource<T> {
 }
 
 export interface typeaheadHtmlTemplates<T extends Dictionary> {
-  header?: string;
-  footer?: string;
-  suggestion?: (item?: T) => string;
+  header?: () => string;
+  footer?: () => string;
+  suggestion?: (item: T) => string;
   group?: (groupName?: string) => string;
-  notFound?: string;
+  notFound?: () => string;
   // pending?: string;
 }
 
