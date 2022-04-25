@@ -47,7 +47,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       : null;
 
   let items: T[] = []; // suggestions
-  let dataStore: T[] = [];
   let inputValue = '';
   let selected: T | undefined;
   let debounceTimer: number | undefined;
@@ -72,8 +71,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   }
 
   if (local) {
-    updateDataStore(normalizer(local, identifier) as T[]);
-    updateSearchIndex(dataStore);
+    updateSearchIndex(deduplicateArr(normalizer(local, identifier) as T[], identifier) as T[]);
   }
 
   let input: HTMLInputElement = config.input;
@@ -124,7 +122,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         }
       )
       .finally(() => {
-        updateDataStore(transformed);
         typeof prefetch.process === 'function' && prefetch.process(transformed);
       });
 
@@ -516,7 +513,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         if (transformed.length && inputValue.length) {
           calcSuggestions();
           update();
-          updateDataStore(transformed);
         }
         fetchInProgress = false;
 
@@ -526,16 +522,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         }
         noSuggestionsHandler(true);
       });
-  }
-
-  /**
-   * Updates the dataStore with new items. The dataStore maintains a list of the totality of the suggestions
-   */
-  function updateDataStore(iterable: T[]) {
-    if (!iterable.length) return;
-
-    dataStore = [...dataStore, ...iterable];
-    dataStore = deduplicateArr(dataStore, identifier) as T[];
   }
 
   /**
