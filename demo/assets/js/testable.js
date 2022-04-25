@@ -396,6 +396,9 @@ const test7 = typeahead({
     prefetch: {
       url: 'https://restcountries.com/v2/name/p',
       when: 'onFocus',
+      process: (suggestions) => {
+        document.querySelector('.prefetch_process_cb').innerHTML = suggestions[0].alpha3Code;
+      },
     },
     identifier: 'name',
     dataTokens: ['capital'],

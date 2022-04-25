@@ -195,10 +195,13 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'France, Paris');
   });
 
-  it('Displays suggestions from Prefetch', () => {
+  it('Displays suggestions from Prefetch, executes process() hook', () => {
     cy.intercept('GET', 'https://restcountries.com/v2/name/*', { fixture: 'countries.json' }).as('getCountries');
     cy.get('#input-seven').as('input7').focus();
     cy.wait('@getCountries');
+
+    // ensure process callback was executed
+    cy.get('.prefetch_process_cb').should('contain.text', 'AFG');
 
     cy.get('@input7').type('pa', { delay: 100 });
     cy.get('.typeahead-test-seven .tt-list').as('list').children().should('have.length', 5);

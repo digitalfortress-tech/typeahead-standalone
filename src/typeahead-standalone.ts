@@ -125,6 +125,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       )
       .finally(() => {
         updateDataStore(transformed);
+        typeof prefetch.process === 'function' && prefetch.process(transformed);
       });
 
     prefetch.done = true;

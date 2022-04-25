@@ -1,7 +1,7 @@
 export type Dictionary<T = unknown> = Record<string, T>;
 
-export interface typeaheadDataSource {
-  local?: string[] | Dictionary[];
+export interface typeaheadDataSource<T> {
+  local?: string[] | T[];
   remote?: {
     url: string;
     wildcard: string;
@@ -9,9 +9,10 @@ export interface typeaheadDataSource {
   };
   prefetch?: {
     url: string;
-    when?: 'onInit' | 'onFocus';
-    requestOptions?: Dictionary;
     done: boolean;
+    when?: 'onInit' | 'onFocus';
+    process?: (items: T[]) => void;
+    requestOptions?: Dictionary;
   };
   transform?: (data: string[] | Dictionary[]) => string[] | Dictionary[];
   identifier?: 'label' | string;
@@ -40,7 +41,7 @@ export interface typeaheadConfig<T extends Dictionary> {
   onSubmit?: (e: Event, selectedItem?: T) => void;
   debounceRemote?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
-  source?: typeaheadDataSource;
+  source?: typeaheadDataSource<T>;
   templates?: typeaheadHtmlTemplates<T>;
 }
 
