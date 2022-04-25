@@ -35,7 +35,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const dataTokens =
     config.source?.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
   const remoteXhrCache: Dictionary = {};
-  const transform = typeof config.source?.transform === 'function' ? config.source.transform : undefined;
+  const transform = config.source?.transform || ((data) => data);
   const local = config.source?.local || null;
   const remote =
     config.source && config.source.remote && config.source.remote.url && config.source.remote.wildcard
@@ -115,10 +115,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       .get(prefetch.url, prefetch?.requestOptions)
       .then(
         (data) => {
-          if (transform) {
-            transformed = transform(data) as T[];
-          }
-          transformed = normalizer(data, identifier) as T[];
+          transformed = transform(data) as T[];
+          transformed = normalizer(transformed, identifier) as T[];
           updateSearchIndex(transformed);
         },
         (reject) => {
@@ -503,10 +501,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       .get(remote.url.replace(remote.wildcard, frozenInput), remote?.requestOptions)
       .then(
         (data) => {
-          if (transform) {
-            transformed = transform(data) as T[];
-          }
-          transformed = normalizer(data, identifier) as T[];
+          transformed = transform(data) as T[];
+          transformed = normalizer(transformed, identifier) as T[];
           updateSearchIndex(transformed);
         },
         (reject) => {

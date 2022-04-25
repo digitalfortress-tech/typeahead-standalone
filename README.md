@@ -114,8 +114,8 @@ You can pass the following config options to `typeahead-standalone`:
 |`templates`|An object containing templates for header, footer, suggestion, ground and notFound state. See [templates section](#templates) for clarification |`undefined`|
 |`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|
 |`preventSubmit`|If your input element is used inside a form element, this flag allows to prevent the default submit action when ENTER is pressed.|`false`|
-|`onSubmit(event, selectedItem?)`|When you want to use typeahead outside a form element, this handler can be used to process/submit the input value. Gets triggered on hitting the ENTER key. First parameter is the keyboard Event and the 2nd parameter is the selected item or undefined if no item was selected|`NOOP`|
-|`display(selectedItem) => string`|This callback is executed when the user selects an item from the suggestions. The current suggestion/item is passed as a parameter and it returns a string which is set as the input's value |Sets the selected item as the input's text|
+|`onSubmit(event, selectedItem?)`|When you want to use typeahead outside a form element, this handler can be used to process/submit the input value. Gets triggered on hitting the ENTER key. First parameter is the keyboard Event and the 2nd parameter is the selected item or undefined if no item was selected|`undefined`|
+|`display(selectedItem) => string`|This callback is executed when the user selects an item from the suggestions. The current suggestion/item is passed as a parameter and it must return a string which is set as the input's value |Returns the string representation of the selected item|
 
 ---
 
@@ -132,19 +132,21 @@ source: {
   },
   prefetch: {
     url: 'https://remoteapi.com/load-suggestions',
-    when: 'onFocus'       // optional, default => 'onInit'
+    when: 'onFocus',      // optional, default => 'onInit'
+    requestOptions: {},   // optional, default => undefined
+    done: false           // optional, default => false
   },
   identifier: '...',      // optional (required when source => Object[])
   dataTokens: ['...'],    // optional
   groupIdentifier: '...', // optional, default => undefined
   transform: function (data) {
-    // modify remote data if needed
+    // modify remote data if needed & return it
     return data;
   }
 }
 ```
 - **Local**: The `local` data source is used when you want to provide suggestions from a local variable.
-- **Prefetch**: The `prefetch` data source is used when you want to preload suggestions from a remote endpoint in advance. You can also provide an optional `when` parameter. It defines when should the prefetch occur. It defaults to `onInit` meaning that suggestions will be preloaded as soon as typeahead gets initialized. You can set it to `onFocus` which will cause suggestions to be preloaded as soon as the user focuses the search input box.
+- **Prefetch**: The `prefetch` data source is used when you want to preload suggestions from a remote endpoint in advance. You can also provide an optional `when` parameter. It defines when should the prefetch occur. It defaults to `onInit` meaning that suggestions will be preloaded as soon as typeahead gets initialized. You can set it to `onFocus` which will cause suggestions to be preloaded as soon as the user focuses the search input box. The `done` flag is a Boolean & can be used to disable prefetching. Its default value is `false`. It is set to `true` automatically when data is prefetched the first time to prevent multiple calls. An example use-case to set `done: true` can be when you are using localStorage to store suggestions & the localStorage already had stored suggestions previously.
 - **Remote**: The `remote` data source is used when you want to interrogate a remote endpoint to fetch data.
 - **Wildcard**: While using the `remote` data source, you must set the `url` and the `wildcard` options. `wildcard` will be replaced with the search string while executing the request.
 - **RequestOptions**: The [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) API is used to query remote endpoints.  You may provide an object of [requestOptions](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options) to customize that query.  By default the query type is GET.
