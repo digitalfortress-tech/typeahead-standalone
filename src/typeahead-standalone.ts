@@ -240,7 +240,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   }
 
   /**
-   * Redraw the typeahead div element with suggestions
+   * Responsible for drawing/updating the view
    */
   function update(): void {
     // No Matches
@@ -477,15 +477,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       suggestions = deduplicateArr(suggestions, identifier) as T[];
     }
 
-    // sort by giving preference to items beginning with the starting letter of the query
-    sortByStartingLetter(suggestions);
-
-    // if suggestions need to be grouped, sort them first
+    // if suggestions need to be grouped, sort them by group, else sort by starting letter of the query
     if (groupIdentifier) {
       sortByGroup(suggestions);
+    } else {
+      sortByStartingLetter(suggestions);
     }
 
-    // update items with available suggestions to draw the view
+    // update items with available suggestions
     items = suggestions;
 
     if (autoSelect && items.length) {
