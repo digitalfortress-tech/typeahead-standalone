@@ -61,14 +61,20 @@ context('Typeahead', () => {
     cy.get('@input1').type('{uparrow}');
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Golden Brown');
 
-    cy.get('@input1').type('{downarrow}{downarrow}');
+    cy.get('@input1').type('{downarrow}{downarrow}{downarrow}');
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Gold');
 
     cy.get('@input1').type('{downarrow}{downarrow}');
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Golden Brown');
 
     cy.get('@input1').type('{downarrow}');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.length', 0);
+
+    cy.get('@input1').type('{downarrow}');
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Grey');
+
+    cy.get('@input1').type('{uparrow}');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.length', 0);
 
     cy.get('@input1').type('{uparrow}{uparrow}');
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Green');
@@ -86,9 +92,9 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Dark Blue');
 
     cy.get('@input2').type('{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue');
+    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.length', 0);
 
-    cy.get('@input2').type('{uparrow}{uparrow}');
+    cy.get('@input2').type('{downarrow}{uparrow}{uparrow}{uparrow}');
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Black Light');
   });
 
@@ -100,7 +106,7 @@ context('Typeahead', () => {
     cy.get('#input-two').should('have.value', 'Yellow - YW');
 
     // typing {tab} key is not supported yet
-    cy.get('#input-two').clear().type('ye{downarrow}{enter}');
+    cy.get('#input-two').clear().type('ye{enter}');
     cy.get('#input-two').should('have.value', 'Yellow - YW');
   });
 

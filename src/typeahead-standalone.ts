@@ -500,11 +500,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       suggestions = deduplicateArr(suggestions, identifier) as T[];
     }
 
-    // if suggestions need to be grouped, sort them by group, else sort by starting letter of the query
+    // sort by starting letter of the query
+    sortByStartingLetter(suggestions);
+
+    // if suggestions need to be grouped, sort them by group
     if (groupIdentifier) {
       sortByGroup(suggestions);
-    } else {
-      sortByStartingLetter(suggestions);
     }
 
     // update items with available suggestions
@@ -689,6 +690,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // if raw string is not part of suggestion, hide the hint
     if (
+      selectedItem[identifier] === rawInput || // if input string is exactly the same as selectedItem
       (selectedItem[identifier] as string).toLocaleLowerCase().indexOf(
         rawInput
           .replace(/\s{2,}/g, ' ')
