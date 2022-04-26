@@ -133,34 +133,34 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   /**
    * Display/show the listContainer
    */
-  function show(): void {
+  const show = (): void => {
     listContainer.classList.remove('tt-hide');
-  }
+  };
 
   /**
    * Hides the listContainer from DOM
    */
-  function hide(): void {
+  const hide = (): void => {
     listContainer.classList.add('tt-hide');
-  }
+  };
 
   /**
    * Clear debounce timer if assigned
    */
-  function clearDebounceTimer(): void {
+  const clearDebounceTimer = (): void => {
     if (debounceTimer) {
       window.clearTimeout(debounceTimer);
     }
-  }
+  };
 
   /**
    * Clear remote debounce timer if assigned
    */
-  function clearRemoteDebounceTimer(): void {
+  const clearRemoteDebounceTimer = (): void => {
     if (remoteDebounceTimer) {
       window.clearTimeout(remoteDebounceTimer);
     }
-  }
+  };
 
   /**
    * Check if listContainer for typeahead is displayed
@@ -170,13 +170,13 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   /**
    * Clear typeahead state and hide listContainer
    */
-  function clear(): void {
+  const clear = (): void => {
     items = [];
     inputHint.value = '';
     selected = undefined;
     storedInput = '';
     hide();
-  }
+  };
 
   /**
    * Attaches list container to the DOM and styles it
@@ -198,7 +198,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * @param asyncRender set to true for asyncRenders
    * @returns true if no suggestions are found, else returns undefined
    */
-  function noSuggestionsHandler(asyncRender = false) {
+  const noSuggestionsHandler = (asyncRender = false) => {
     if (!items.length) {
       // clear the list and the DOM
       clear();
@@ -228,21 +228,21 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       show();
       return true;
     }
-  }
+  };
 
   /**
    * Delete all children from typeahead DOM listContainer
    */
-  function clearListDOM() {
+  const clearListDOM = () => {
     while (listContainer.firstChild) {
       listContainer.firstChild.remove();
     }
-  }
+  };
 
   /**
    * Responsible for drawing/updating the view
    */
-  function update(): void {
+  const update = (): void => {
     // No Matches
     if (noSuggestionsHandler()) return;
 
@@ -327,9 +327,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     show();
-  }
+  };
 
-  function inputEventHandler(ev: KeyboardEvent): void {
+  const inputEventHandler = (ev: KeyboardEvent): void => {
     const keyCode = ev.which || ev.keyCode || 0;
 
     if (keyCode === Keys.Down && containerDisplayed()) {
@@ -338,12 +338,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     storedInput = input.value;
     startFetch();
-  }
+  };
 
   /**
    * Select the previous item in suggestions
    */
-  function selectPrev(): void {
+  const selectPrev = (): void => {
     const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
     // if first item is selected and UP Key is pressed, focus input and restore original input
     if (selected === items[0]) {
@@ -364,12 +364,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     input.value = display(selected);
-  }
+  };
 
   /**
    * Select the next item in suggestions
    */
-  function selectNext(): void {
+  const selectNext = (): void => {
     const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
     // if nothing selected, select the first suggestion
     if (!selected) {
@@ -392,9 +392,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     input.value = display(selected);
-  }
+  };
 
-  function keydownEventHandler(ev: KeyboardEvent): void {
+  const keydownEventHandler = (ev: KeyboardEvent): void => {
     // if raw input is empty, clear out everything
     if (!input.value.length) {
       clear();
@@ -447,16 +447,16 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       ev.preventDefault();
       useSelectedValue(true);
     }
-  }
+  };
 
-  function focusEventHandler(): void {
+  const focusEventHandler = (): void => {
     if (prefetch && prefetch.when === 'onFocus') {
       prefetchData();
     }
     startFetch();
-  }
+  };
 
-  function startFetch() {
+  const startFetch = (): void => {
     clearDebounceTimer();
     clearRemoteDebounceTimer();
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
@@ -483,9 +483,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       inputValue = '';
       clear();
     }
-  }
+  };
 
-  function calcSuggestions(newItems?: T[]) {
+  const calcSuggestions = (newItems?: T[]): void => {
     // get suggestions
     let suggestions: T[] = trie.search(inputValue.toLowerCase(), identifier, limitSuggestions);
 
@@ -511,9 +511,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (autoSelect && items.length) {
       selected = items[0];
     }
-  }
+  };
 
-  function fetchDataFromRemote() {
+  const fetchDataFromRemote = () => {
     if (!remote) return;
 
     fetchInProgress = true;
@@ -557,7 +557,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         }
         noSuggestionsHandler(true);
       });
-  }
+  };
 
   /**
    * Update the search Index with the identifier + dataTokens
@@ -577,7 +577,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   /**
    * Sorts array in place giving preference to the starting letter of the query
    */
-  function sortByStartingLetter(suggestions: T[]) {
+  const sortByStartingLetter = (suggestions: T[]): void => {
     suggestions.sort((a: Dictionary, b: Dictionary) => {
       const one = (a[identifier as string] as string).toLowerCase().startsWith(inputValue.toLowerCase());
       const two = (b[identifier as string] as string).toLowerCase().startsWith(inputValue.toLowerCase());
@@ -591,12 +591,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
       return 0;
     });
-  }
+  };
 
   /**
    * Sorts(in-place) array by group
    */
-  function sortByGroup(suggestions: T[]) {
+  const sortByGroup = (suggestions: T[]) => {
     suggestions.sort((a: Dictionary, b: Dictionary) => {
       if (!a[groupIdentifier] || (a[groupIdentifier] as string) < (b[groupIdentifier] as string)) {
         return -1;
@@ -606,14 +606,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       }
       return 0;
     });
-  }
+  };
 
   /**
    * Highlights a given text by its pattern
    * @param Elm The listContainer element
    * @param pattern the string to highlight
    */
-  function hightlight(Elm: HTMLElement, pattern: string[]) {
+  const hightlight = (Elm: HTMLElement, pattern: string[]): void => {
     const getRegex = function (patterns: string[], wordsOnly: boolean) {
       const escapedPatterns = [];
 
@@ -663,7 +663,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     const regex = getRegex(pattern, false);
     traverse(Elm, hightlightTextNode);
-  }
+  };
 
   /**
    * injects Hint input element into the DOM
@@ -682,7 +682,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * Updates the value of hint
    * @param selectedItem The selected item
    */
-  function updateHint(selectedItem: T) {
+  const updateHint = (selectedItem: T) => {
     const rawInput = input.value;
 
     // if raw string is not part of suggestion, hide the hint
@@ -700,27 +700,27 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       inputHint.value = (rawInput.replace(/\s?$/, '') +
         display(selectedItem).replace(new RegExp(inputValue, 'i'), '')) as string;
     }
-  }
+  };
 
   /**
    * Creates and appends a template to an HTMLElement
    * @param El The html element that the template should attach to
    * @param data The raw string representation of the html template
    */
-  function templatify(El: HTMLElement | DocumentFragment, data: string) {
+  const templatify = (El: HTMLElement | DocumentFragment, data: string) => {
     const template = doc.createElement('template');
     template.innerHTML = data;
     El.appendChild(template.content);
-  }
+  };
 
-  function blurEventHandler(): void {
+  const blurEventHandler = (): void => {
     // we need to delay clear, because when we click on an item, blur will be called before click and remove items from DOM
     setTimeout(() => {
       if (doc.activeElement !== input) {
         clear();
       }
     }, 50);
-  }
+  };
 
   /**
    * Fixes #26: on long clicks focus will be lost and display method will not be called
@@ -739,11 +739,11 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   /**
    * This function will remove DOM elements and clear event handlers
    */
-  function destroy(): void {
+  const destroy = (): void => {
     clearDebounceTimer();
     clearRemoteDebounceTimer();
     wrapper.replaceWith(input.cloneNode());
-  }
+  };
 
   // setup event handlers
   input.addEventListener('keydown', keydownEventHandler);
