@@ -1,0 +1,150 @@
+[
+  {
+    "name": {
+      "code": "Red"
+    },
+    "value": "RD",
+    "hash": "red"
+  },
+  {
+    "name": {
+      "code": "Blue"
+    },
+    "value": "BL",
+    "hash": "blue",
+    "group": "Shades of Blue"
+  },
+  {
+    "name": {
+      "code": "Dark Blue"
+    },
+    "value": "DBLD",
+    "hash": "darkblue",
+    "group": "Shades of Blue"
+  },
+  {
+    "name": {
+      "code": "Blue Dark"
+    },
+    "value": "DBL",
+    "hash": "darkblue",
+    "group": "Shades of Blue"
+  },
+  {
+    "name": {
+      "code": "Blue Darker"
+    },
+    "value": "DBXL",
+    "hash": "mnamenightblue",
+    "group": "Shades of Blue"
+  },
+  {
+    "name": {
+      "code": "Blue Light"
+    },
+    "value": "LBL",
+    "hash": "cadetblue",
+    "group": "Shades of Blue"
+  },
+  {
+    "name": {
+      "code": "Blue Extra Light"
+    },
+    "value": "LBLX",
+    "hash": "aliceblue",
+    "group": "Shades of Blue"
+  },
+  {
+    "name": {
+      "code": "Yellow"
+    },
+    "value": "YW",
+    "hash": "yellow"
+  },
+  {
+    "name": {
+      "code": "Gold"
+    },
+    "value": "GD",
+    "hash": "gold"
+  },
+  {
+    "name": {
+      "code": "Silver"
+    },
+    "value": "SV",
+    "hash": "silver"
+  },
+  {
+    "name": {
+      "code": "Baige"
+    },
+    "value": "BG",
+    "hash": "#352e2e"
+  },
+  {
+    "name": {
+      "code": "Orange"
+    },
+    "value": "OR",
+    "hash": "orange"
+  },
+  {
+    "name": {
+      "code": "Green"
+    },
+    "value": "GR",
+    "hash": "green"
+  },
+  {
+    "name": {
+      "code": "White"
+    },
+    "value": "WH",
+    "hash": "white"
+  },
+  {
+    "name": {
+      "code": "Pink"
+    },
+    "value": "PI",
+    "hash": "pink"
+  },
+  {
+    "name": {
+      "code": "Purple"
+    },
+    "value": "PR",
+    "hash": "purple"
+  },
+  {
+    "name": {
+      "code": "Grey"
+    },
+    "value": "GR",
+    "hash": "grey"
+  },
+  {
+    "name": {
+      "code": "Brown"
+    },
+    "value": "BR",
+    "hash": "brown"
+  },
+  {
+    "name": {
+      "code": "Black"
+    },
+    "value": "BK",
+    "hash": "black",
+    "group": "Shades of Black"
+  },
+  {
+    "name": {
+      "code": "Black Light"
+    },
+    "value": "LBK",
+    "hash": "#352e2e",
+    "group": "Shades of Black"
+  }
+]

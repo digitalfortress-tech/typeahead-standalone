@@ -15,7 +15,7 @@ A fast fully-featured standalone autocomplete library
 **Typeahead-standalone.js**
 
 - is a blazing fast autocomplete library in pure javascript with **ZERO DEPENDENCIES**!
-- is a highly customizable light-weight library [![](https://badgen.net/bundlephobia/minzip/typeahead-standalone)](https://bundlephobia.com/package/typeahead-standalone)
+- is a highly customizable light-weight library [![~5kb](https://badgen.net/bundlephobia/minzip/typeahead-standalone)](https://bundlephobia.com/package/typeahead-standalone)
 - inbuilt support for multiple data sources - Local, Prefetch and Remote
 - suggestions calculated via a very efficient trie algorithm
 - remote requests are rate-limited by default

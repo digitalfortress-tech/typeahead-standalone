@@ -160,6 +160,22 @@ context('Typeahead', () => {
     cy.get('@input3').should('have.value', 'Dark Blu');
   });
 
+  it('Transforms data from prefetch', () => {
+    cy.intercept('GET', 'https://example.com/*', { fixture: 'toTransform-colors.json' }).as('getColors');
+    cy.get('#input-three-A').as('input3A').type('bl', { delay: 100 });
+    cy.wait('@getColors');
+    cy.get('.typeahead-test-three-A .tt-list').as('list').children().should('have.length', 5);
+  });
+
+  it('Transforms data from remote', () => {
+    cy.intercept('GET', 'https://example.com/get-suggestions/*', { fixture: 'toTransform-colors.json' }).as(
+      'getColors'
+    );
+    cy.get('#input-three-B').as('input3B').type('bl', { delay: 100 });
+    cy.wait('@getColors');
+    cy.get('.typeahead-test-three-B .tt-list').as('list').children().should('have.length', 5);
+  });
+
   it('Displays Templates', () => {
     cy.get('#input-four').as('input4').type('p', { delay: 100 });
     cy.get('.typeahead-test-four .tt-list').as('list').children().should('have.length', 4);

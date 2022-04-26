@@ -38,10 +38,34 @@
     <section class="section-three top-section">
       <form method="GET">
         <h3 class="subtitle">3. Grouped Results, Source: Local, Object Arr</h3>
-        <p class="details">groupIdentifier: 'group'</p>
+        <p class="details">groupIdentifier: 'group'; preventSubmit: true;</p>
         <div>
           <label for="input-three">My Fav Color</label>
           <input id="input-three" name="color-test-3" type="search" autocomplete="off" placeholder="Search...">
+          <button type="submit">OK</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="section-three-A top-section">
+      <form method="GET">
+        <h3 class="subtitle">3A. Transform Prefetch</h3>
+        <p class="details">{ name: '...' } to { id: '...' }; identifier: 'id'</p>
+        <div>
+          <label for="input-three-A">My Fav Color</label>
+          <input id="input-three-A" name="color-test-3A" type="search" autocomplete="off" placeholder="Search...">
+          <button type="submit">OK</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="section-three-B top-section">
+      <form method="GET">
+        <h3 class="subtitle">3B. Transform Remote</h3>
+        <p class="details">{ name: '...' } to { id: '...' }; identifier: 'id'</p>
+        <div>
+          <label for="input-three-B">My Fav Color</label>
+          <input id="input-three-B" name="color-test-3A" type="search" autocomplete="off" placeholder="Search...">
           <button type="submit">OK</button>
         </div>
       </form>

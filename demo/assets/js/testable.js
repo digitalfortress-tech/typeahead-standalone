@@ -329,6 +329,48 @@ const test3 = typeahead({
 });
 
 // eslint-disable-next-line no-undef
+const test3A = typeahead({
+  input: document.getElementById('input-three-A'),
+  source: {
+    prefetch: {
+      url: 'https://example.com/get-suggestions',
+      when: 'onFocus',
+    },
+    identifier: 'id',
+    transform: (data) => {
+      const newData = [];
+      data.forEach((element) => {
+        newData.push({ id: element.name.code });
+      });
+      return newData;
+    },
+  },
+  className: 'typeahead-test-three-A',
+  highlight: true,
+});
+
+// eslint-disable-next-line no-undef
+const test3B = typeahead({
+  input: document.getElementById('input-three-B'),
+  source: {
+    remote: {
+      url: 'https://example.com/get-suggestions/%QUERY',
+      wildcard: '%QUERY',
+    },
+    identifier: 'id',
+    transform: (data) => {
+      const newData = [];
+      data.forEach((element) => {
+        newData.push({ id: element.name.code });
+      });
+      return newData;
+    },
+  },
+  className: 'typeahead-test-three-B',
+  highlight: true,
+});
+
+// eslint-disable-next-line no-undef
 const test4 = typeahead({
   input: document.getElementById('input-four'),
   source: {
