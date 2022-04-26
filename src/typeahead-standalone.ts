@@ -165,9 +165,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   /**
    * Check if listContainer for typeahead is displayed
    */
-  function containerDisplayed(): boolean {
-    return listContainer.style.display !== 'none';
-  }
+  const containerDisplayed = () => listContainer.style.display !== 'none';
 
   /**
    * Clear typeahead state and hide listContainer
@@ -338,6 +336,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       return;
     }
 
+    storedInput = input.value;
     startFetch();
   }
 
@@ -378,7 +377,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       input.value = display(selected);
       return;
     }
-    // if at the end of the list, go to input box and restore storedInput
+    // if at the end of the list, go to input box and restore original input
     if (selected === items[maxLength - 1]) {
       selected = undefined;
       input.value = storedInput;
@@ -403,17 +402,15 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     const keyCode = ev.which || ev.keyCode || 0;
+    const containerVisible = containerDisplayed();
 
     if (keyCode === Keys.Up || keyCode === Keys.Down || keyCode === Keys.Esc) {
-      const containerVisible = containerDisplayed();
-
       if (keyCode === Keys.Esc) {
         clear();
       } else {
         if (!containerVisible || items.length < 1) {
           return;
         }
-        !storedInput && (storedInput = input.value);
         keyCode === Keys.Up ? selectPrev() : selectNext();
         update();
       }
@@ -446,7 +443,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       return;
     }
 
-    if (keyCode === Keys.Tab && containerDisplayed()) {
+    if (keyCode === Keys.Tab && containerVisible) {
       ev.preventDefault();
       useSelectedValue(true);
     }

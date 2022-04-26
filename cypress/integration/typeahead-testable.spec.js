@@ -149,6 +149,17 @@ context('Typeahead', () => {
     cy.get('@list').children().eq(3).should('have.text', 'Blue Darker');
   });
 
+  it('Stored query must be updated on input event', () => {
+    cy.get('#input-three').as('input3').type('blue', { delay: 100 });
+    cy.get('.typeahead-test-three .tt-list').as('list').children().should('have.length', 6);
+
+    cy.get('@input3').type('{downarrow}{enter}');
+    cy.get('@input3').should('have.value', 'Blue');
+
+    cy.get('@input3').clear().type('blue{uparrow}{backspace}{esc}');
+    cy.get('@input3').should('have.value', 'Dark Blu');
+  });
+
   it('Displays Templates', () => {
     cy.get('#input-four').as('input4').type('p', { delay: 100 });
     cy.get('.typeahead-test-four .tt-list').as('list').children().should('have.length', 4);

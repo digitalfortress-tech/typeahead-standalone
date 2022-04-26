@@ -325,6 +325,7 @@ const test3 = typeahead({
   },
   className: 'typeahead-test-three',
   highlight: true,
+  preventSubmit: true,
 });
 
 // eslint-disable-next-line no-undef
