@@ -53,6 +53,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   let debounceTimer: number | undefined;
   let remoteDebounceTimer: number | undefined;
   let fetchInProgress = false;
+  let storedInput = ''; // used only for keyboard navigation
 
   // init templates if they exist
   if (templates) {
@@ -175,6 +176,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     items = [];
     inputHint.value = '';
     selected = undefined;
+    storedInput = '';
     hide();
   }
 
@@ -344,7 +346,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    */
   function selectPrev(): void {
     const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
-    if (!selected || selected === items[0]) {
+    // if first item is selected and UP Key is pressed, focus input and restore original input
+    if (selected === items[0]) {
+      selected = undefined;
+      input.value = storedInput;
+      return;
+    }
+    // if focus is on input, and UP Key is pressed, select last item
+    if (!selected) {
       selected = items[maxLength - 1];
     } else {
       for (let i = maxLength - 1; i > 0; i--) {
@@ -354,6 +363,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         }
       }
     }
+
+    input.value = display(selected);
   }
 
   /**
@@ -361,16 +372,27 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    */
   function selectNext(): void {
     const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
-    if (!selected || selected === items[maxLength - 1]) {
+    // if nothing selected, select the first suggestion
+    if (!selected) {
       selected = items[0];
+      input.value = display(selected);
       return;
     }
+    // if at the end of the list, go to input box and restore storedInput
+    if (selected === items[maxLength - 1]) {
+      selected = undefined;
+      input.value = storedInput;
+      return;
+    }
+
     for (let i = 0; i < maxLength - 1; i++) {
       if (selected === items[i]) {
         selected = items[i + 1];
         break;
       }
     }
+
+    input.value = display(selected);
   }
 
   function keydownEventHandler(ev: KeyboardEvent): void {
@@ -391,6 +413,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         if (!containerVisible || items.length < 1) {
           return;
         }
+        !storedInput && (storedInput = input.value);
         keyCode === Keys.Up ? selectPrev() : selectNext();
         update();
       }
