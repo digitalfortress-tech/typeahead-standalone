@@ -12,17 +12,17 @@
 ---
 A fast fully-featured standalone autocomplete library
 
-**Typeahead-standalone.js**
+**🌟 Features**
 
-- is a blazing fast autocomplete library in pure javascript with **ZERO DEPENDENCIES**!
-- is a highly customizable light-weight library [![~5kb](https://badgen.net/bundlephobia/minzip/typeahead-standalone)](https://bundlephobia.com/package/typeahead-standalone)
-- inbuilt support for multiple data sources - Local, Prefetch and Remote
-- suggestions calculated via a very efficient trie algorithm
-- remote requests are rate-limited by default
-- supports all major browsers (sorry IE, no support for you)
+- 🚀 a blazing fast autocomplete library in pure javascript with **📦 0 DEPENDENCIES**!
+- 💡 a highly customizable light-weight library [![~4kb](https://badgen.net/bundlephobia/minzip/typeahead-standalone)](https://bundlephobia.com/package/typeahead-standalone)
+- ✨ inbuilt support for multiple data sources - Local, Prefetch and Remote
+- ⚡️ suggestions calculated via a very efficient trie algorithm
+- 🧱 remote requests rate-limited by default
+- 🌐 supports all major browsers (sorry IE, no support for you)
 ---
 
-### Demo
+### 🔥 Demo
 
 Here is a **[Live Demo](https://typeahead.digitalfortress.tech/)** of **typeahead-standalone.js** in action.
 
@@ -30,7 +30,7 @@ A preview of the basic example taken from the Live Demo:
 
 ![Basic example](./demo/basic-ex.gif)
 
-## Install
+## ➕ Install
 
 ```shell script
 # you can install typeahead with npm
@@ -44,25 +44,31 @@ Then include the library in your App/Page.
 **As a module,**
 ```javascript
 // using ES6 modules
-import typeahead from 'typeahead-standalone';
+import typeahead from 'typeahead-standalone'; // imports library (js)
+import 'typeahead-standalone/dist/basic.css'; // imports basic styles (css)
 
 // using CommonJS modules
 const typeahead = require('typeahead-standalone');
+require('typeahead-standalone/dist/basic.css');
 ```
 
 **In the browser context,**
 ```html
-<!-- Include the library -->
+<!-- Include the library & the basic styles -->
 <script src="./node_modules/typeahead-standalone/dist/typeahead-standalone.js"></script>
+<link rel="stylesheet" href="./node_modules/typeahead-standalone/dist/basic.css" />
 
-<!-- Alternatively, you can use a CDN with jsdelivr -->
+<!-- Alternatively, you can use a CDN. For example; use jsdelivr to get the latest version -->
 <script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"></script>
-<!-- or with unpkg.com -->
+<script src="https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css"></script>
+
+<!-- or use unpkg.com to get a specific version -->
 <script src="https://unpkg.com/typeahead-standalone@3.6.0/dist/typeahead-standalone.js"></script>
+<script src="https://unpkg.com/typeahead-standalone@3.6.0/dist/basic.css"></script>
 ```
 The library will be available as a global object at `window.typeahead`
 
-## Usage
+## 🌱 Usage
 
 Typeahead requires an `input` Element to attach itself to, and a `Data source` (local/remote) to display suggestions.
 
@@ -96,7 +102,7 @@ typeahead({
 });
 ```
 
-## <a id="configoptions">Configuration</a>
+## <a id="configoptions">🔧 Configuration</a>
 
 
 You can pass the following config options to `typeahead-standalone`:
@@ -168,15 +174,23 @@ source: {
 
 Checkout the **[Live Examples](https://typeahead.digitalfortress.tech/)** for further clarification.
 
-## Styling (css)
+---
+## 🎨 Styling (css)
 
-Some basic styling is added to typeahead by default. However the UI is completely upto you and is customizable to the very pixel. You can use the following classes to add/override styles.
+Some basic styling is provided with typeahead. The UI is completely upto you and is customizable to the very pixel. You can use the following classes to add/override styles.
 
 - The entire html is wrapped in a container with a class `typeahead-standalone`.
 - The input element gets an additional `tt-input` class.
 - The list of suggestions is wrapped in a container with a `tt-list` class. (A class `tt-hide` is added when no suggestions are available)
 - Each suggestion has a class `tt-suggestion` and if the suggestion is selected, then it has a `tt-selected` class additionally.
 
+
+<details>
+  <summary>
+  <b>Styling upto version 3.x.x</b>
+  </summary>
+
+You can add your own styles by targetting the parent selector `.typeahead-standalone`. For example, we can update the background color of every suggestion as seen below -
 ```css
 /* set background color for each suggestion */
 .typeahead-standalone .tt-list .tt-suggestion {
@@ -184,7 +198,7 @@ Some basic styling is added to typeahead by default. However the UI is completel
 }
 ```
 
-<strong>Note</strong>: To override default styling, set the config option `className` and use it as a selector. Lets say you set `className: "my-typeahead"`, then to override style on hovering/selecting a suggestion, you could use:
+To **override** default styling, set the config option `className` and use it as a selector. Lets say you set `className: "my-typeahead"`, then to override style on hovering/selecting a suggestion, you could use:
  ```css
 /* override styles */
 .typeahead-standalone.my-typeahead .tt-list .tt-suggestion:hover,
@@ -193,11 +207,69 @@ Some basic styling is added to typeahead by default. However the UI is completel
   background-color: white;
 }
 ```
+</details>
+
+<details>
+  <summary>
+  <b>Styling for version 4.x.x and above</b>
+  </summary>
+
+  Starting with `v4.0`, the JS and CSS has been separated allowing greater control over the style. The entire css can be retrieved either from the [CDN](https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css)  or from below and be copied directly into your project allowing you to discard/override any styles as necessary.
+
+  ```css
+/***** basic styles *****/
+.typeahead-standalone {
+    position: relative;
+    text-align: left;
+    color: #000;
+}
+.typeahead-standalone .tt-input {
+    z-index: 1;
+    background: transparent;
+    position: relative;
+}
+.typeahead-standalone .tt-hint {
+    position: absolute;
+    left: 0;
+    cursor: default;
+    user-select: none;
+    background: #fff;
+    color: silver;
+    z-index: 0;
+}
+.typeahead-standalone .tt-list {
+    background: #fff;
+    z-index: 1000;
+    box-sizing: border-box;
+    overflow: auto;
+    border: 1px solid rgba(50, 50, 50, 0.6);
+}
+.typeahead-standalone .tt-list.tt-hide {
+    display: none;
+}
+.typeahead-standalone .tt-list div[class^="tt-"] {
+    padding: 0 4px;
+}
+.typeahead-standalone .tt-list .tt-suggestion:hover,
+.typeahead-standalone .tt-list .tt-suggestion.tt-selected {
+    background: #55acee;
+    cursor: pointer;
+}
+.typeahead-standalone .tt-list .tt-suggestion .tt-highlight {
+    font-weight: 900;
+}
+.typeahead-standalone .tt-list .tt-group {
+    background: #eee;
+}
+```
+</details>
+
+
 You can also use templates to add a header, footer and further style each suggestion.
 
-### Templates
+### 💫 Templates
 
-Templates can be used to customize the rendering of the List. Their usage is completely optional.
+Templates can be used to customize the rendering of the List. Their usage is completely optional. Currently, there are 5 templates available -
 
 ```javascript
 templates: {
@@ -214,7 +286,7 @@ templates: {
 ```
 As seen above, each template takes a callback that must return a `string` which is later interpreted as HTML.
 
-Each template is wrapped in a `div` element with its corresponding class. i.e.
+Each template is wrapped in a `div` element with a corresponding class. i.e.
 - `header` => class `tt-header`
 - `footer` => class `tt-footer`
 - `suggestion` => class `tt-suggestion`
@@ -222,7 +294,7 @@ Each template is wrapped in a `div` element with its corresponding class. i.e.
 - `notFound` => class `tt-notFound`
 ---
 
-### API
+### ✨ API
 
 * [`typeahead.destroy()`](#typeaheaddestroy)
 
@@ -237,7 +309,7 @@ typeaheadInstance.destroy();
 
 ---
 
-### Error Codes
+### 💡 Error Codes
 
 Here is a small glossary of the possible errors codes that one may come across
 
@@ -250,16 +322,16 @@ Here is a small glossary of the possible errors codes that one may come across
 | e05 | Remote request failed |
 
 ---
-### Contribute
+### 🧑‍💻 Contribute
 
 Interested in contributing features and fixes?
 
 [Read more on contributing](./contributing.md).
 
-### Changelog
+### 📝 Changelog
 
 See the [Changelog](https://github.com/digitalfortress-tech/typeahead-standalone/wiki/Changelog)
 
-### License
+### 📄 License
 
 [MIT](LICENSE) © [DigitalFortress](https://digitalfortress.tech)

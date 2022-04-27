@@ -236,8 +236,13 @@
               To understand the working of this example, be sure to keep the network tab of your developer tools open.
               As soon as you focus on the search box above, a network request will the made to prefetch data. This happens because
               we set <code>when: 'onFocus'</code> which causes data to be prefetched on focussing the search input element.
-              By default, its value is <code>when: 'onInit'</code> meaning that data is prefetched / loaded as soon as
-              typeahead gets initialized.
+              By default, this property is <code>when: 'onInit'</code> meaning that data is prefetched / loaded as soon as
+              typeahead gets initialized. The <code>done</code> flag is optional & can be used to disable the prefetch request
+              programmatically. Its default value is <b>false</b>. It gets set to <b>true</b> automatically when data is prefetched
+              for the first time (to prevent multiple network requests). By setting <code>done: true</code>, the prefetch request will
+              not occur. The <code>process(suggestions)</code> callback is optional. It gets executed after the prefetch request
+              occurs. It receives the transformed suggestions as a parameter & as an example can be used to store the received
+              suggestions in <b>localStorage</b> to be used later.
             </li>
             <li>
               Now try typing "<b>A</b>"... you will see suggestions pop up instantaneously without making any request since the
@@ -257,6 +262,8 @@
             url:
             'https://raw.githubusercontent.com/digitalfortress-tech/typeahead-standalone/master/demo/assets/json/countries.json',
             when: 'onFocus', // default is `onInit`
+            done: false, // optional, default => false
+            process: (items) => {}, // optional, default => undefined
             },
             identifier: 'name',
             },
@@ -274,12 +281,14 @@
               <li>
                 Using templates is completely optional. There are 5 types of templates and you can use a few of them or all of them
                 according to your needs. All the templates can optionally contain HTML too which is parsed and rendered as expected.
+                All the templates accept a callback and they <b>MUST</b> return a <code>string</code>.
               </li>
               <li>
                 <b class="underline">Header, Footer</b>:
-                The <code>header</code> and <code>footer</code> template is a string that accepts any text/html and renders them in
-                the list. In the result tab below, when you search for "Red", you should see the header ("<b>Colors Found</b>") at
-                the top of the list and the footer ("<b>See more</b>") at the bottom of the list respectively.
+                The <code>header</code> and <code>footer</code> templates are callbacks that each return a string(text/HTML) and are
+                rendered at the top and the bottom of the suggestions list respectively. In the result tab below, when you search for
+                "Red", you should see the header ("<b>Colors Found</b>") at the top of the list and the footer ("<b>See more</b>") at
+                the bottom of the list.
               </li>
               <li>
                 <b class="underline">Suggestion</b>:
@@ -296,8 +305,9 @@
               </li>
               <li>
                 <b class="underline">Not Found</b>:
-                The <code>notFound</code> template is string/HTML that is rendered when no suggestions are available. In the
-                example, if you search for a non-existent color like "xyz", you should see the <b>notFound</b> template in action.
+                The <code>notFound</code> template is a callback that returns a string (text/HTML) and is rendered when no suggestions
+                are available. In the example, if you search for a non-existent color like "xyz", you should see the <b>notFound</b>
+                template in action.
               </li>
             </ul>
             <hr>
@@ -376,7 +386,7 @@
             identifier: 'title',
             dataTokens: ['artist', 'album'],
             },
-            // display: function (selectedItem) {
+            // display: (selectedItem) => {
             // return selectedItem.title + ' - ' + selectedItem.artist;
             // },
             templates: {
@@ -402,9 +412,11 @@
             <ul>
               <li>Depends on <a href="https://jquery.com/"><i>jQuery</i></a></li>
               <li>Does not support grouped suggestions</li>
+              <li>No support for prefetching suggestions</li>
               <li>Supports fewer templates than typeahead-standalone</li>
-              <li>Larger in terms of size (<a class="underline" href="https://bundlephobia.com/package/typeahead.js@0.11.1">~40kb
-                  minzipped</a> vs <a href="https://bundlephobia.com/package/typeahead-standalone@3.2.0" class="underline">~6kb
+              <li>10 times larger in terms of size (<a class="underline"
+                  href="https://bundlephobia.com/package/typeahead.js@0.11.1">~40kb
+                  minzipped</a> vs <a href="https://bundlephobia.com/package/typeahead-standalone" class="underline">~4kb
                   minzipped</a> for
                 typeahead-standalone)</li>
               <li>As of 2022, not maintained since 8 years</li>
@@ -420,9 +432,9 @@
               </ul>
               <h4>3. <a href="https://www.npmjs.com/package/suggestions" class="underline">Suggestions</a></h4>
               <ul>
-                <li>has a dependency on <a href="https://github.com/mattyork/fuzzy"><i>Fuzzy</i></a> and <a
+                <li>depends on <a href="https://github.com/mattyork/fuzzy"><i>Fuzzy</i></a> and <a
                     href="https://www.npmjs.com/package/xtend"><i>xtend</i></a></li>
-                <li>Does not support fetching remote data out of the box</li>
+                <li>Does not support fetching remote data</li>
                 <li>Does not have a true suggestion engine i.e. Fuzzy matching takes place</li>
                 <li>Does not support hints</li>
                 <li>Does not support style templates</li>
@@ -564,8 +576,10 @@
   <script src="https://storage.googleapis.com/app.klipse.tech/plugin_prod/js/klipse_plugin.min.js"></script>
   <script>
     if (dev) {
+      document.write('<link rel="stylesheet" href="./../dist/basic.css" \/>');
       document.write('<script src="./../dist/typeahead-standalone.js"><\/script>');
     } else {
+      document.write('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css" \/>');
       document.write('<script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"><\/script>');
     }
   </script>
