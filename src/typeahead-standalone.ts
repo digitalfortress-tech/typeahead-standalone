@@ -244,7 +244,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     clearListDOM();
 
     // function for rendering typeahead suggestions
-    const render = (item: T): HTMLDivElement | undefined => {
+    const render = (item: T): HTMLDivElement => {
       const itemElement = doc.createElement('div');
       itemElement.classList.add('tt-suggestion');
       if (templates?.suggestion) {
@@ -256,7 +256,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     };
 
     // function to render typeahead groups
-    const renderGroup = (groupName: string): HTMLDivElement | undefined => {
+    const renderGroup = (groupName: string): HTMLDivElement => {
       const groupDiv = doc.createElement('div');
       groupDiv.classList.add('tt-group');
       if (templates?.group) {
@@ -281,28 +281,28 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     // loop over suggestions
     for (const [index, item] of items.entries()) {
       if (index === limitSuggestions) break;
+
+      // attach group if available
       if (item[groupIdentifier] && !prevGroups.includes(item[groupIdentifier] as string)) {
         prevGroups.push(item[groupIdentifier] as string);
         const groupDiv = renderGroup(item[groupIdentifier] as string);
-        if (groupDiv) {
-          fragment.appendChild(groupDiv);
-        }
+        fragment.appendChild(groupDiv);
       }
-      const div = render(item);
-      if (div) {
-        div.addEventListener('click', function (ev: MouseEvent): void {
-          clear();
-          input.value = display(item);
-          ev.preventDefault();
-        });
-        if (item === selected) {
-          div.classList.add('tt-selected');
-        }
-        fragment.appendChild(div);
 
-        // highlight matched text
-        config.highlight && hightlight(div, [inputValue]);
+      // attach suggestion
+      const div = render(item);
+      div.addEventListener('click', function (ev: MouseEvent): void {
+        clear();
+        input.value = display(item);
+        ev.preventDefault();
+      });
+      if (item === selected) {
+        div.classList.add('tt-selected');
       }
+      fragment.appendChild(div);
+
+      // highlight matched text
+      config.highlight && hightlight(div, [inputValue]);
     }
 
     // Add footer template
@@ -315,11 +315,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     listContainer.appendChild(fragment);
 
-    if (hint) {
-      // update hint if its enabled
-      if (selected) updateHint(selected);
-      else updateHint(items[0]);
-    }
+    // update hint if its enabled
+    hint && updateHint(selected || items[0]);
 
     show();
   };

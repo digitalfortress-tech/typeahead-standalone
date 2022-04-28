@@ -52,7 +52,7 @@ describe('Typeahead Standalone', () => {
       expect(() => normalizer(colors, 'id')).toThrow();
     });
 
-    it('should throw when input is an array of objects + no identifier is given', () => {
+    it('Should throw when input is an array of objects + no identifier is given', () => {
       expect(() => normalizer(colorsObj)).toThrow();
     });
   });

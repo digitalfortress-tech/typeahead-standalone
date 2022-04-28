@@ -25,6 +25,18 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-two .tt-list .tt-highlight').first().should('have.text', 'Gr');
   });
 
+  it('Shows suggestions on focus', () => {
+    cy.get('#input-one').as('input1').type('g', { delay: 100 });
+    cy.get('.typeahead-test-one .tt-list').as('list').should('exist');
+    cy.get('@list').children().should('have.length', 4);
+    cy.get('@input1').focus().blur();
+    cy.get('.typeahead-test-one .tt-list.tt-hide').should('exist');
+    cy.get('@input1').focus();
+    cy.get('@list').should('exist');
+    cy.get('@list').children().should('have.length', 4);
+    cy.get('.typeahead-test-one .tt-list.tt-hide').should('not.exist');
+  });
+
   it('Sorts suggestions by giving preference to the first letter and the length of the input query', () => {
     cy.get('#input-two').as('input2').type('bl', { delay: 100 });
     cy.get('.typeahead-test-two .tt-list').as('list').children().should('have.length', 5);
@@ -241,7 +253,7 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'France, Paris');
   });
 
-  it('displays suggestions for multiple space-separated queries having correct/reverse order', () => {
+  it('Displays suggestions for multiple space-separated queries having correct/reverse order', () => {
     cy.get('#input-eight').as('input8').type('or', { delay: 100 });
     cy.get('.typeahead-test-eight .tt-list').as('list').children().should('have.length', 3);
     cy.get('@list').children('.tt-selected').should('have.length', 0);
@@ -262,7 +274,7 @@ context('Typeahead', () => {
     cy.get('@hint').should('have.value', 'shalom Jerusalem');
   });
 
-  it('displays correct hint for multiple space-separated queries', () => {
+  it('Displays correct hint for multiple space-separated queries', () => {
     cy.get('#input-eight').as('input8').type('    it', { delay: 100 });
     cy.get('.typeahead-test-eight .tt-hint').as('hint').should('have.value', '    it is good');
 
@@ -276,7 +288,7 @@ context('Typeahead', () => {
     cy.get('@hint').should('have.value', '');
   });
 
-  it('displays suggestions for data-collisions', () => {
+  it('Displays suggestions for data-collisions', () => {
     cy.get('#input-nine').as('input9').type('sh', { delay: 100 });
     cy.get('.typeahead-test-nine .tt-list')
       .as('list')
@@ -290,7 +302,7 @@ context('Typeahead', () => {
     });
   });
 
-  it('displays remote suggestions with custom requestOptions (POST with payload)', () => {
+  it('Displays remote suggestions with custom requestOptions (POST with payload)', () => {
     cy.intercept('POST', 'https://restcountries.com/v2/name/*', (req) => {
       expect(req.body).to.include({
         hello: 'world',
