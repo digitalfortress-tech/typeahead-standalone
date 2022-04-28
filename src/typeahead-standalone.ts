@@ -80,7 +80,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   // main wrapper
   const wrapper: HTMLSpanElement = doc.createElement('span');
-  wrapper.className = 'typeahead-standalone' + (config.className ? ` ${config.className}` : '');
+  wrapper.className = `typeahead-standalone${config.className ? ` ${config.className}` : ''}`;
 
   const inputClone: HTMLElement = input.cloneNode(true) as HTMLElement;
   inputClone.classList.add('tt-input');
@@ -161,11 +161,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       window.clearTimeout(remoteDebounceTimer);
     }
   };
-
-  /**
-   * Check if listContainer for typeahead is displayed
-   */
-  const containerDisplayed = () => listContainer.style.display !== 'none';
 
   /**
    * Clear typeahead state and hide listContainer
@@ -332,7 +327,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const inputEventHandler = (ev: KeyboardEvent): void => {
     const keyCode = ev.which || ev.keyCode || 0;
 
-    if (keyCode === Keys.Down && containerDisplayed()) {
+    if (keyCode === Keys.Down) {
       return;
     }
 
@@ -402,23 +397,17 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     const keyCode = ev.which || ev.keyCode || 0;
-    const containerVisible = containerDisplayed();
 
     if (keyCode === Keys.Up || keyCode === Keys.Down || keyCode === Keys.Esc) {
       if (keyCode === Keys.Esc) {
         clear();
-      } else {
-        if (!containerVisible || items.length < 1) {
-          return;
-        }
+      } else if (items.length) {
         keyCode === Keys.Up ? selectPrev() : selectNext();
         update();
       }
 
       ev.preventDefault();
-      if (containerVisible) {
-        ev.stopPropagation();
-      }
+      ev.stopPropagation();
 
       return;
     }
@@ -443,7 +432,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       return;
     }
 
-    if (keyCode === Keys.Tab && containerVisible) {
+    if (keyCode === Keys.Tab) {
       ev.preventDefault();
       useSelectedValue(true);
     }
