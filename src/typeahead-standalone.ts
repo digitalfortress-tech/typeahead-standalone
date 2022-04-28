@@ -16,7 +16,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const listContainer: HTMLDivElement = doc.createElement('div');
   const listContainerStyle = listContainer.style;
-  const debounceGlobal = 10;
   const debounceXHR = config.debounceRemote || 100;
   const preventSubmit = config.preventSubmit || false;
   const minLen = config.minLength || 1;
@@ -50,7 +49,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   let items: T[] = []; // suggestions
   let inputValue = '';
   let selected: T | undefined;
-  let debounceTimer: number | undefined;
   let remoteDebounceTimer: number | undefined;
   let fetchInProgress = false;
   let storedInput = ''; // used only for keyboard navigation
@@ -142,15 +140,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    */
   const hide = (): void => {
     listContainer.classList.add('tt-hide');
-  };
-
-  /**
-   * Clear debounce timer if assigned
-   */
-  const clearDebounceTimer = (): void => {
-    if (debounceTimer) {
-      window.clearTimeout(debounceTimer);
-    }
   };
 
   /**
@@ -443,28 +432,25 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   };
 
   const startFetch = (): void => {
-    clearDebounceTimer();
     clearRemoteDebounceTimer();
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
     if (val.length >= minLen) {
-      debounceTimer = window.setTimeout(function (): void {
-        inputValue = val;
-        calcSuggestions();
+      inputValue = val;
+      calcSuggestions();
 
-        // if remote source exists, first check remote cache before making any query
-        const thumbprint = JSON.stringify(inputValue);
-        if (remote && items.length < limitSuggestions && (remoteResponseCache[thumbprint] as [])?.length) {
-          calcSuggestions(remoteResponseCache[thumbprint] as []);
+      // if remote source exists, first check remote cache before making any query
+      const thumbprint = JSON.stringify(inputValue);
+      if (remote && items.length < limitSuggestions && (remoteResponseCache[thumbprint] as [])?.length) {
+        calcSuggestions(remoteResponseCache[thumbprint] as []);
+      }
+
+      update(); // update view
+
+      remoteDebounceTimer = window.setTimeout(function (): void {
+        if (items.length < limitSuggestions && !fetchInProgress) {
+          fetchDataFromRemote();
         }
-
-        update(); // update view
-
-        remoteDebounceTimer = window.setTimeout(function (): void {
-          if (items.length < limitSuggestions && !fetchInProgress) {
-            fetchDataFromRemote();
-          }
-        }, debounceXHR);
-      }, debounceGlobal);
+      }, debounceXHR);
     } else {
       inputValue = '';
       clear();
@@ -567,8 +553,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     suggestions.sort((a: Dictionary, b: Dictionary) => {
       const one = (a[identifier as string] as string).toLowerCase().startsWith(inputValue.toLowerCase());
       const two = (b[identifier as string] as string).toLowerCase().startsWith(inputValue.toLowerCase());
-      // @todo: test with dark blue
-      // @todo: test with blue dark
+
       if (one && !two) return -1;
 
       if (one && (a[identifier as string] as string).length < (b[identifier as string] as string).length) {
@@ -726,7 +711,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * This function will remove DOM elements and clear event handlers
    */
   const destroy = (): void => {
-    clearDebounceTimer();
     clearRemoteDebounceTimer();
     wrapper.replaceWith(input.cloneNode());
   };
