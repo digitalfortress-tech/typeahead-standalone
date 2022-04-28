@@ -291,7 +291,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       fragment.appendChild(div);
 
       // highlight matched text
-      config.highlight && hightlight(div, [inputValue]);
+      config.highlight && hightlight(div, inputValue);
     }
 
     // Add footer template
@@ -584,19 +584,16 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * @param Elm The listContainer element
    * @param pattern the string to highlight
    */
-  const hightlight = (Elm: HTMLElement, pattern: string[]): void => {
-    const getRegex = function (patterns: string[], wordsOnly: boolean) {
-      const escapedPatterns = [];
+  const hightlight = (Elm: HTMLElement, pattern: string): void => {
+    const getRegex = function (query: string, wordsOnly: boolean) {
+      const escapedQuery = escapeRegExp(query);
 
-      for (let i = 0, len = patterns.length; i < len; i++) {
-        const escapedWord = escapeRegExp(patterns[i]);
-        // @todo: add support diacritic insensitivity
-        // if (diacriticInsensitive) {
-        //   escapedWord = escapedWord.replace(/\S/g, accent_replacer);
-        // }
-        escapedPatterns.push(escapedWord);
-      }
-      const regexStr = wordsOnly ? '\\b(' + escapedPatterns.join('|') + ')\\b' : '(' + escapedPatterns.join('|') + ')';
+      // @todo: add support diacritic insensitivity
+      // if (diacriticInsensitive) {
+      //   escapedQuery = escapedQuery.replace(/\S/g, accent_replacer);
+      // }
+
+      const regexStr = wordsOnly ? '\\b(' + escapedQuery + ')\\b' : '(' + escapedQuery + ')';
       return new RegExp(regexStr, 'i');
     };
 
