@@ -15,9 +15,10 @@ A fast fully-featured standalone autocomplete library
 **🌟 Highlights 🌟**
 
 - 🚀 Blazing fast suggestions and autocompletion
-- 📦 Has **0 DEPENDENCIES** & is written in pure JS (typescript)
+- 📦 Has **0 DEPENDENCIES**! Written in pure JS (typescript)
+- 🎀 Framework agnostic! Usable with **any** framework (React, Vue, Svelte, etc)
 - 💡 Highly customizable and light-weight [![<4kb minzipped](https://badgen.net/bundlephobia/minzip/typeahead-standalone)](https://bundlephobia.com/package/typeahead-standalone)
-- ✨ In-built support for multiple data sources - Local, Prefetch and Remote
+- ⚜️ In-built support for multiple data sources - Local, Prefetch and Remote
 - ⚡️ Suggestions calculated via a very efficient trie algorithm
 - 🧱 Remote requests rate-limited by default
 - 🌐 Supports all major browsers (sorry IE, no support for you)
