@@ -12,14 +12,15 @@
 ---
 A fast fully-featured standalone autocomplete library
 
-**🌟 Features**
+**🌟 Highlights 🌟**
 
-- 🚀 a blazing fast autocomplete library in pure javascript with **📦 0 DEPENDENCIES**!
-- 💡 a highly customizable light-weight library [![~4kb](https://badgen.net/bundlephobia/minzip/typeahead-standalone)](https://bundlephobia.com/package/typeahead-standalone)
-- ✨ inbuilt support for multiple data sources - Local, Prefetch and Remote
-- ⚡️ suggestions calculated via a very efficient trie algorithm
-- 🧱 remote requests rate-limited by default
-- 🌐 supports all major browsers (sorry IE, no support for you)
+- 🚀 Blazing fast suggestions and autocompletion
+- 📦 Has **0 DEPENDENCIES** & is written in pure JS (typescript)
+- 💡 Highly customizable and light-weight [![<4kb minzipped](https://badgen.net/bundlephobia/minzip/typeahead-standalone)](https://bundlephobia.com/package/typeahead-standalone)
+- ✨ In-built support for multiple data sources - Local, Prefetch and Remote
+- ⚡️ Suggestions calculated via a very efficient trie algorithm
+- 🧱 Remote requests rate-limited by default
+- 🌐 Supports all major browsers (sorry IE, no support for you)
 ---
 
 ### 🔥 Demo
@@ -30,7 +31,7 @@ A preview of the basic example taken from the Live Demo:
 
 ![Basic example](./demo/basic-ex.gif)
 
-## ➕ Install
+## <a id="installLink">➕ Install</a>
 
 ```shell script
 # you can install typeahead with npm
@@ -54,23 +55,23 @@ require('typeahead-standalone/dist/basic.css');
 
 **In the browser context,**
 ```html
-<!-- Include the library & the basic styles -->
-<script src="./node_modules/typeahead-standalone/dist/typeahead-standalone.js"></script>
+<!-- Include the basic styles & the library -->
 <link rel="stylesheet" href="./node_modules/typeahead-standalone/dist/basic.css" />
+<script src="./node_modules/typeahead-standalone/dist/typeahead-standalone.js"></script>
 
-<!-- Alternatively, you can use a CDN. For example; use jsdelivr to get the latest version -->
+<!-- Alternatively, you can use a CDN. For example, use jsdelivr to get the latest version -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css" />
 <script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"></script>
-<script src="https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css"></script>
 
 <!-- or use unpkg.com to get a specific version -->
+<link rel="stylesheet" href="https://unpkg.com/typeahead-standalone@4.0.0/dist/basic.css" />
 <script src="https://unpkg.com/typeahead-standalone@4.0.0/dist/typeahead-standalone.js"></script>
-<script src="https://unpkg.com/typeahead-standalone@4.0.0/dist/basic.css"></script>
 ```
-The library will be available as a global object at `window.typeahead`
+The library will be available as a global object at **`window.typeahead`**
 
 ## 🌱 Usage
 
-Typeahead requires an `input` Element to attach itself to, and a `Data source` (local/remote) to display suggestions.
+Typeahead requires an **`input`** Element to attach itself to, and a **`Data source`** (local/remote) to display suggestions.
 
 Here is a very basic example (See [demo](#demo) for advanced examples)
 
@@ -316,7 +317,7 @@ Here is a small glossary of the possible errors codes that one may come across
 | Code | Description |
 | --------- | ----------- |
 | e01 | Missing input DOM element |
-| e02 | Missing source of suggestions. You need to atleast one of the 3 possible sources - local, prefetch or remote  |
+| e02 | Missing source of suggestions. You need to provide atleast one of the 3 possible sources - local, prefetch or remote  |
 | e03 | Identifier not defined |
 | e04 | Prefetch request failed |
 | e05 | Remote request failed |
