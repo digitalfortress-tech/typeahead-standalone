@@ -533,3 +533,47 @@ const test11 = typeahead({
     }
   },
 });
+
+// eslint-disable-next-line no-undef
+const test12 = typeahead({
+  input: document.getElementById('input-twelve'),
+  source: {
+    local: [
+      {
+        title: 'O Holy Night',
+        artist: 'Unknown Artist',
+        album: 'Unknown Album',
+      },
+      {
+        title: 'O Holy Night',
+        artist: 'Kutless',
+        album: 'This is Christmas',
+      },
+      {
+        title: 'O Holy Night',
+        artist: 'Mariah Carey',
+        album: 'Merry Christmas',
+      },
+    ],
+    identifier: 'title',
+    dataTokens: ['artist', 'album'],
+    identity: (item) => {
+      return `${item.title}##${item.artist}`;
+    },
+  },
+  className: 'typeahead-test-twelve',
+  highlight: true,
+  templates: {
+    suggestion: (item) => {
+      return (
+        '<div class="track"><div class="track-title">' +
+        item.title +
+        '</div><div class="track-details"><div class="track-artist">' +
+        item.artist +
+        '</div><div class="track-album">' +
+        item.album +
+        '</div></div></div>'
+      );
+    },
+  },
+});
