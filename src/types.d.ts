@@ -16,6 +16,7 @@ export interface typeaheadDataSource<T> {
   };
   transform?: (data: string[] | Dictionary[]) => string[] | Dictionary[];
   identifier?: 'label' | string;
+  identity?: (selectedItem: T) => string;
   dataTokens?: string[];
   groupIdentifier?: string;
 }

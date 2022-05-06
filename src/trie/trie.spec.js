@@ -9,6 +9,13 @@ const colors = [
   { label: 'Purple', value: 'PP', hash: 'purple' },
 ];
 
+const songs = [
+  { title: 'He is my everything', artist: 'Don Moen' },
+  { title: 'He is my everything', artist: 'Don Moen' },
+  { title: 'He is my everything', artist: 'Paul Wilbur' },
+  { title: 'He is my everything', artist: 'Paul Wilbur' },
+];
+
 describe('Trie algorithm', () => {
   it('Calling Trie methods directly must throw', () => {
     expect(() => Trie.update()).toThrow();
@@ -68,7 +75,7 @@ describe('Trie algorithm', () => {
 
   it('search(): Lists expected suggestions from Object array', () => {
     const trie = new Trie();
-    trie.add(colors, 'label');
+    trie.add(colors, 'label', (param) => `${param.label}`);
     const suggestions = trie.search('b');
     expect(suggestions).toStrictEqual([
       {
@@ -109,29 +116,35 @@ describe('Trie algorithm', () => {
     const words = ['romAn', 'romAneSquE', 'ROmanesCo', 'romanex', 'romaney', 'romanez', 'romanei', 'romanif'];
     const trie = new Trie();
     trie.add(words);
-    const suggestions = trie.search('romane', '', 2);
+    const suggestions = trie.search('romane', 2);
     expect(suggestions).toStrictEqual(['romanei', 'romanez']);
   });
 
   it('gets suggestions for same identifiers / collision test', () => {
     const trie = new Trie();
-    trie.add(colors, 'label'); // identifier (first is always identifier)
-    trie.add(colors, 'value'); // token
+    trie.add(colors, 'label', (param) => `${param.label}`); // identifier (first is always identifier)
+    trie.add(colors, 'value', (param) => `${param.label}`); // token
     const expectedResult = [
       { label: 'Peach', value: 'PP', hash: 'peach' },
       { label: 'Purple', value: 'PP', hash: 'purple' },
     ];
 
-    // search without identifier
+    // search must return both matching values
     let suggestions = trie.search('pp');
     expect(suggestions).toStrictEqual(expectedResult);
 
-    // search with identifier
-    suggestions = trie.search('pp', 'label');
-    expect(suggestions).toStrictEqual(expectedResult);
-
-    // search with token (does not return all results since it treats "value" keys as unique and that's what is expected)
-    suggestions = trie.search('pp', 'value');
+    suggestions = trie.search('pur');
     expect(suggestions).toStrictEqual([{ label: 'Purple', value: 'PP', hash: 'purple' }]);
+
+    // songs with same title and different authors and a custom identity fn
+    trie.clear();
+    trie.add(songs, 'title', (param) => `${param.title}##${param.artist}`);
+    trie.add(songs, 'artist', (param) => `${param.title}##${param.artist}`);
+
+    suggestions = trie.search('He is');
+    expect(suggestions).toHaveLength(2);
+
+    suggestions = trie.search('Wil');
+    expect(suggestions).toHaveLength(1);
   });
 });

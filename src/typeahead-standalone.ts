@@ -30,6 +30,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     return `${item[identifier]}`;
   };
   const display: (item: T) => string = config.display || displayCb;
+  const identity = config.source?.identity || displayCb;
   const onSubmit: (e: Event, item?: T) => void = config.onSubmit || NOOP;
   const dataTokens =
     config.source?.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
@@ -71,7 +72,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   }
 
   if (local) {
-    updateSearchIndex(deduplicateArr(normalizer(local, identifier) as T[], identifier) as T[]);
+    updateSearchIndex(normalizer(local, identifier) as T[]);
   }
 
   let input: HTMLInputElement = config.input;
@@ -459,14 +460,18 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const calcSuggestions = (newItems?: T[]): void => {
     // get suggestions
-    let suggestions: T[] = trie.search(inputValue.toLowerCase(), identifier, limitSuggestions);
-
-    // remove duplicates from suggestions to allow back-filling
-    suggestions = deduplicateArr(suggestions, identifier) as T[];
+    let suggestions: T[] = trie.search(inputValue.toLowerCase(), limitSuggestions);
 
     if (newItems?.length) {
-      suggestions = [...suggestions, ...newItems];
-      suggestions = deduplicateArr(suggestions, identifier) as T[];
+      let newSuggestions: T[] | Dictionary[] = [...suggestions, ...newItems];
+      newSuggestions = newSuggestions.map((value) => {
+        return {
+          key: identity(value as T),
+          value,
+        };
+      });
+
+      suggestions = (deduplicateArr(newSuggestions, 'key') as T[]).map((item) => item.value) as T[];
     }
 
     // sort by starting letter of the query
@@ -538,10 +543,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (!iterable.length) return;
 
     // add new items to the search index
-    trie.add(iterable, identifier);
+    trie.add(iterable, identifier, identity);
     if (dataTokens) {
       dataTokens.forEach((token) => {
-        trie.add(iterable, token);
+        trie.add(iterable, token, identity);
       });
     }
   }

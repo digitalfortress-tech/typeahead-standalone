@@ -146,6 +146,7 @@ source: {
     requestOptions: {}        // optional, default => undefined
   },
   identifier: '...',          // optional (required when source => Object[])
+  identity: (item) => string, // optional (determines uniqueness of each suggestion)
   dataTokens: ['...'],        // optional
   groupIdentifier: '...',     // optional, default => undefined
   transform: function (data) {
@@ -173,6 +174,22 @@ source: {
  Now if we wish to use the the text defined in the `color` property to appear as the suggestions, then the **identifier** must be set to **color**. (i.e. `identifier: "color"`)
 - **dataTokens**: `dataTokens: string[]` is an _optional_ property. It accepts an array of strings which represent the properties of the source object that should be added to the search index. This can be best understood with an example. Lets take the same example data source as shown above. What if you wanted to search colors by another property(_colorCode_) and not just by its identifier(_color_) ? That's exactly where **dataTokens** comes in. Set `dataTokens: ["colorCode"]`. If you now search for "**YW**", the suggestion "Yellow" pops up as expected.
 - **groupIdentifier**: If you wish to group your suggestions, set the groupIdentifier property. This is an optional property. Again, going with the same example data source as above, when you set `groupIdentifier: "shade"`, suggestions will be grouped by the property "**shade**". In this example, the colors _Green_ and _Olive_ will appear under the group "**Greenish**" (`shade`) whereas the color _Yellow_ will have no group.
+- **identity**: The `identity` function is used to determine uniqueness of each suggestion. It receives the suggestion as a parameter and must return a string unique to the given suggestion. This is an optional property and it defaults to returning the `identifier`. However, the default value might not work everytime. For example, consider the following code -
+```javascript
+/* Example Data source of Songs */
+[
+  { title: "God is Good", artist: "Don Moen" },
+  { title: "God is Good", artist: "Paul Wilbur" },
+  { title: "God is Good", artist: "Micheal Smith" },
+  { title: "El Shaddai", artist: "Amy Grant" },
+  ...
+]
+ ```
+ Lets assume the identifier is set to `title`. By default the `identity()` function uses the **identifier** property (i.e. the **title**) to determine uniqueness. So if you search for `God`, you will find only 1 suggestion displayed since there are 3 songs with the **exact same `title`** property. In order to show all 3 suggestions with different artists, you need to set the `identity` property such that it returns a unique string -
+ ```js
+ identity(item) => `${item.title}${item.artist}`;
+ ```
+It is **highly recommended** to use the `identity()` property to return a unique string when your data source is an array of Objects.
 
 Checkout the **[Live Examples](https://typeahead.digitalfortress.tech/)** for further clarification.
 

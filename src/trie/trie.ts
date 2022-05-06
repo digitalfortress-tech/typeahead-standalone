@@ -13,7 +13,7 @@ export const Trie = function (): TrieType {
    * Method used to add the given data to the trie.
    * Identifier is optional when data is a string|string[], but mandatory for Dictionary[]
    */
-  function add(data: string | string[] | Dictionary[], identifier = '') {
+  function add(data: string | string[] | Dictionary[], identifier = '', identity?: (item?: unknown) => void) {
     if (!data) return;
 
     let node = root;
@@ -35,8 +35,17 @@ export const Trie = function (): TrieType {
             node = (node[token] || (node[token] = {})) as Record<string, unknown>;
           }
 
-          // we store data within an array to avoid collisions
-          node[SENTINEL] = node[SENTINEL] ? [...(node[SENTINEL] as Dictionary[]), value] : [value];
+          const storable = {
+            key: typeof value === 'string' ? value : (identity && identity(value)) || JSON.stringify(value), // key is expected to be unique
+            value,
+          };
+
+          // store data within an array instead of an object to avoid being overwritten
+          if (!node[SENTINEL]) {
+            node[SENTINEL] = [storable];
+          } else {
+            node[SENTINEL] = deduplicateArr([...(node[SENTINEL] as Dictionary[]), storable], 'key');
+          }
         });
     });
   }
@@ -44,7 +53,7 @@ export const Trie = function (): TrieType {
   /**
    * Internal Method used to retrieve items in the trie beginning with the given prefix.
    */
-  function find(prefix: string, identifier?: string, limit?: number): string[] | Dictionary[] {
+  function find(prefix: string, limit?: number): string[] | Dictionary[] {
     let node = root;
     let matches: string[] | Dictionary[] = [];
     let token;
@@ -69,10 +78,6 @@ export const Trie = function (): TrieType {
         if (k === SENTINEL) {
           matches = (matches as Dictionary[]).concat(node[SENTINEL] as Dictionary[]);
 
-          // deduplicate matches, specific to typeahead
-          if (identifier) {
-            matches = deduplicateArr(matches, identifier);
-          }
           // limit found matches / truncate array
           if (limit && matches.length >= limit) {
             matches.length = limit;
@@ -93,27 +98,22 @@ export const Trie = function (): TrieType {
   /**
    * Search for query strings within the trie
    */
-  function search(query: string, identifier?: string, limit?: number) {
-    const searchTokens = spaceTokenizer(query);
-
-    // search for single token/query
-    if (searchTokens.length === 1) {
-      return find(searchTokens[0], identifier, limit);
-    }
+  function search(query: string, limit?: number) {
+    const queryTokens = spaceTokenizer(query.toLocaleLowerCase());
 
     // Search for multiple tokens/queries
     const objArrs: Dictionary[][] = [];
     let suggestions: string[] | Dictionary[] = [];
-    searchTokens.forEach((token) => {
+    queryTokens.forEach((token) => {
       // note that limit is not passed to "find()"
-      objArrs.push(find(token, identifier) as Dictionary[]);
+      objArrs.push(find(token) as Dictionary[]);
     });
 
     // get intersection of found suggestions
     suggestions = objArrs.reduce((acc: Dictionary[], currentArr: Dictionary[]) => {
       return acc.filter((accItem: Dictionary) => {
         return currentArr.some((currentArrItem: Dictionary) => {
-          return accItem[identifier as string] === currentArrItem[identifier as string];
+          return accItem['key'] === currentArrItem['key'];
         });
       });
     });
@@ -123,7 +123,7 @@ export const Trie = function (): TrieType {
       suggestions.length = limit;
     }
 
-    return suggestions;
+    return suggestions.map((item) => item.value) as Dictionary[];
   }
 
   function clear() {

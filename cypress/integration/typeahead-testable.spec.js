@@ -288,7 +288,7 @@ context('Typeahead', () => {
     cy.get('@hint').should('have.value', '');
   });
 
-  it('Displays suggestions for data-collisions', () => {
+  it('Displays suggestions for data-collisions with default identity function (identifier)', () => {
     cy.get('#input-nine').as('input9').type('sh', { delay: 100 });
     cy.get('.typeahead-test-nine .tt-list')
       .as('list')
@@ -300,6 +300,11 @@ context('Typeahead', () => {
     cy.get('@suggestions').each(($item) => {
       cy.wrap($item).should('not.contain.text', 'Sheeep');
     });
+  });
+
+  it('Display suggestions for data-collisions with custom identity function', () => {
+    cy.get('#input-twelve').as('input12').type('O night', { delay: 100 });
+    cy.get('.typeahead-test-twelve .tt-list').as('list').children().should('have.length', 3);
   });
 
   it('Displays remote suggestions with custom requestOptions (POST with payload)', () => {
