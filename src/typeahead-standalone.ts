@@ -12,6 +12,10 @@ import { Trie } from './trie/trie';
 import './style.less';
 
 export default function typeahead<T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult {
+  // check required params
+  if (!config.input) throw new Error('e01');
+  if (!config.source) throw new Error('e02');
+
   const doc = document;
 
   const listContainer: HTMLDivElement = doc.createElement('div');
@@ -24,28 +28,29 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const autoSelect = config.autoSelect || false;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
   const trie = new (Trie as any)();
-  const identifier = config.source?.identifier || 'label'; // label is the default identifier
-  const groupIdentifier = config.source?.groupIdentifier || '';
+  const identifier = config.source.identifier || 'label'; // label is the default identifier
+  const groupIdentifier = config.source.groupIdentifier || '';
   const displayCb = <T extends Dictionary>(item: T): string => {
     return `${item[identifier]}`;
   };
   const display: (item: T) => string = config.display || displayCb;
-  const identity = config.source?.identity || displayCb;
+  const identity = config.source.identity || displayCb;
   const onSubmit: (e: Event, item?: T) => void = config.onSubmit || NOOP;
   const dataTokens =
-    config.source?.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
+    config.source.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
   const remoteQueryCache: Dictionary = {};
   const remoteResponseCache: Dictionary = {};
-  const transform = config.source?.transform || ((data) => data);
-  const local = config.source?.local || null;
+  const transform = config.source.transform || ((data) => data);
+  const local = config.source.local || null;
   const remote =
-    config.source && config.source.remote && config.source.remote.url && config.source.remote.wildcard
-      ? config.source.remote
-      : null;
+    config.source.remote && config.source.remote.url && config.source.remote.wildcard ? config.source.remote : null;
   const prefetch =
-    config.source?.prefetch && config.source.prefetch.url
+    config.source.prefetch && config.source.prefetch.url
       ? { ...{ when: 'onInit', done: false }, ...config.source.prefetch }
       : null;
+
+  // validate presence of atleast one data-source
+  if (!local && !prefetch && !remote) throw new Error('e02');
 
   let items: T[] = []; // suggestions
   let inputValue = '';
@@ -61,14 +66,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     templates.notFound = typeof templates.notFound === 'function' ? templates.notFound : undefined;
     templates.group = typeof templates.group === 'function' ? templates.group : undefined;
     templates.suggestion = typeof templates.suggestion === 'function' ? templates.suggestion : undefined;
-  }
-
-  if (!config.input) {
-    throw new Error('e01');
-  }
-
-  if (!local && !prefetch && !remote) {
-    throw new Error('e02');
   }
 
   if (local) {
@@ -696,18 +693,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   };
 
   /**
-   * Fixes #26: on long clicks focus will be lost and display method will not be called
+   * Handle Long clicks
    */
   listContainer.addEventListener('mousedown', function (e: Event) {
     e.stopPropagation();
     e.preventDefault();
   });
-
-  /**
-   * Fixes #30: typeahead closes when scrollbar is clicked in IE
-   * See: https://stackoverflow.com/a/9210267/13172349
-   */
-  listContainer.addEventListener('focus', () => input.focus());
 
   /**
    * This function will remove DOM elements and clear event handlers

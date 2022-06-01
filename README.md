@@ -21,7 +21,7 @@ A fast fully-featured standalone autocomplete library
 - ⚜️ In-built support for multiple data sources - Local, Prefetch and Remote
 - ⚡️ Suggestions calculated via a very efficient trie algorithm
 - 🧱 Remote requests rate-limited by default
-- 🌐 Supports all major browsers (sorry IE, no support for you)
+- 🌐 Supports every major browser!
 ---
 
 ### 🔥 Demo
@@ -335,7 +335,7 @@ Here is a small glossary of the possible errors codes that one may come across
 | Code | Description |
 | --------- | ----------- |
 | e01 | Missing input DOM element |
-| e02 | Missing source of suggestions. You need to provide atleast one of the 3 possible sources - local, prefetch or remote  |
+| e02 | Missing/Incorrect source of suggestions. You must provide atleast one of the 3 possible sources - local, prefetch or remote with the expected source format ([Ref](#source)) |
 | e03 | Identifier not defined |
 | e04 | Prefetch request failed |
 | e05 | Remote request failed |

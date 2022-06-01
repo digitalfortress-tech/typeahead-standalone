@@ -6,7 +6,7 @@ import { deduplicateArr, spaceTokenizer } from '../helpers';
 export const Trie = function (): TrieType {
   let root: Record<string, unknown> = {};
 
-  // constant to mark the end of a string
+  // marks the end of a string
   const SENTINEL = String.fromCharCode(0);
 
   /**
@@ -110,13 +110,11 @@ export const Trie = function (): TrieType {
     });
 
     // get intersection of found suggestions
-    suggestions = objArrs.reduce((acc: Dictionary[], currentArr: Dictionary[]) => {
-      return acc.filter((accItem: Dictionary) => {
-        return currentArr.some((currentArrItem: Dictionary) => {
-          return accItem['key'] === currentArrItem['key'];
-        });
-      });
-    });
+    suggestions = objArrs.reduce((acc: Dictionary[], currentArr: Dictionary[]) =>
+      acc.filter((accItem: Dictionary) =>
+        currentArr.some((currentArrItem: Dictionary) => accItem['key'] === currentArrItem['key'])
+      )
+    );
 
     // truncate suggestions to limit
     if (limit && suggestions.length > limit) {
