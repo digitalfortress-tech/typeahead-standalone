@@ -28,7 +28,7 @@ A fast fully-featured standalone autocomplete library
 
 Here is a **[Live Demo](https://typeahead.digitalfortress.tech/)** of **typeahead-standalone.js** in action.
 
-A preview of the basic example taken from the Live Demo:
+A preview of the basic example taken from the Demo:
 
 ![Basic example](./demo/basic-ex.gif)
 
@@ -65,8 +65,8 @@ require('typeahead-standalone/dist/basic.css');
 <script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"></script>
 
 <!-- or use unpkg.com to get a specific version -->
-<link rel="stylesheet" href="https://unpkg.com/typeahead-standalone@4.1.0/dist/basic.css" />
-<script src="https://unpkg.com/typeahead-standalone@4.1.0/dist/typeahead-standalone.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/typeahead-standalone@4.2.0/dist/basic.css" />
+<script src="https://unpkg.com/typeahead-standalone@4.2.0/dist/typeahead-standalone.js"></script>
 ```
 The library will be available as a global object at **`window.typeahead`**
 
