@@ -1,24 +1,33 @@
 export type Dictionary<T = unknown> = Record<string, T>;
 
 export interface typeaheadDataSource<T> {
-  local?: string[] | T[];
-  remote?: {
-    url: string;
-    wildcard: string;
-    requestOptions?: Dictionary;
-  };
-  prefetch?: {
+  transform?: (data: string[] | Dictionary[]) => string[] | Dictionary[];
+  identifier?: 'label' | string;
+  identity?: (selectedItem: T) => string;
+  dataTokens?: string[];
+  groupIdentifier?: string;
+}
+
+export interface LocalDataSource<T> extends typeaheadDataSource<T> {
+  local: string[] | T[];
+}
+
+export interface PrefetchDataSource<T> extends typeaheadDataSource<T> {
+  prefetch: {
     url: string;
     done: boolean;
     when?: 'onInit' | 'onFocus';
     process?: (items: T[]) => void;
     requestOptions?: Dictionary;
   };
-  transform?: (data: string[] | Dictionary[]) => string[] | Dictionary[];
-  identifier?: 'label' | string;
-  identity?: (selectedItem: T) => string;
-  dataTokens?: string[];
-  groupIdentifier?: string;
+}
+
+export interface RemoteDataSource<T> extends typeaheadDataSource<T> {
+  remote: {
+    url: string;
+    wildcard: string;
+    requestOptions?: Dictionary;
+  };
 }
 
 export interface typeaheadHtmlTemplates<T extends Dictionary> {
@@ -42,7 +51,7 @@ export interface typeaheadConfig<T extends Dictionary> {
   onSubmit?: (e: Event, selectedItem?: T) => void;
   debounceRemote?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
-  source: typeaheadDataSource<T>;
+  source: LocalDataSource<T> | PrefetchDataSource<T> | RemoteDataSource<T>;
   templates?: typeaheadHtmlTemplates<T>;
 }
 

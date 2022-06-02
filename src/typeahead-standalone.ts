@@ -4,7 +4,15 @@
  * MIT License
  */
 
-import type { typeaheadResult, typeaheadConfig, typeaheadHtmlTemplates, Dictionary } from './types';
+import type {
+  typeaheadResult,
+  typeaheadConfig,
+  typeaheadHtmlTemplates,
+  Dictionary,
+  LocalDataSource,
+  RemoteDataSource,
+  PrefetchDataSource,
+} from './types';
 import { Keys } from './constants';
 import { deduplicateArr, escapeRegExp, NOOP, normalizer } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
@@ -41,12 +49,16 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const remoteQueryCache: Dictionary = {};
   const remoteResponseCache: Dictionary = {};
   const transform = config.source.transform || ((data) => data);
-  const local = config.source.local || null;
+  const local = (config.source as LocalDataSource<T>).local || null;
   const remote =
-    config.source.remote && config.source.remote.url && config.source.remote.wildcard ? config.source.remote : null;
+    (config.source as RemoteDataSource<T>).remote &&
+    (config.source as RemoteDataSource<T>).remote.url &&
+    (config.source as RemoteDataSource<T>).remote.wildcard
+      ? (config.source as RemoteDataSource<T>).remote
+      : null;
   const prefetch =
-    config.source.prefetch && config.source.prefetch.url
-      ? { ...{ when: 'onInit', done: false }, ...config.source.prefetch }
+    (config.source as PrefetchDataSource<T>).prefetch && (config.source as PrefetchDataSource<T>).prefetch.url
+      ? { ...{ when: 'onInit', done: false }, ...(config.source as PrefetchDataSource<T>).prefetch }
       : null;
 
   // validate presence of atleast one data-source
