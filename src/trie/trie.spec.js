@@ -23,7 +23,7 @@ describe('Trie algorithm', () => {
   });
 
   it('add(): Passing Object[] without identifier must not be added to trie', () => {
-    const trie = new Trie();
+    const trie = Trie();
     trie.add([
       { name: 'Blue', value: 'BL', hash: 'blue' },
       { name: 'Brown', value: 'BR', hash: 'brown' },
@@ -36,17 +36,17 @@ describe('Trie algorithm', () => {
 
   it('add(): passing falsy values to add must not throw', () => {
     expect(() => {
-      const trie = new Trie();
+      const trie = Trie();
       trie.add();
     }).not.toThrow();
     expect(() => {
-      const trie = new Trie();
+      const trie = Trie();
       trie.add('roman');
     }).not.toThrow();
   });
 
   it('add(): Passing single strings must be added to trie', () => {
-    const trie = new Trie();
+    const trie = Trie();
     trie.add('John');
     trie.add('James');
     let suggestions = trie.search('j');
@@ -54,27 +54,27 @@ describe('Trie algorithm', () => {
   });
 
   it('search(): Passing null/undefined instead of string must throw', () => {
-    const trie = new Trie();
+    const trie = Trie();
     trie.add(['roman', 'romanesque']);
     expect(() => trie.search()).toThrow();
   });
 
   it('search(): Passing empty string returns all items in tree', () => {
-    const trie = new Trie();
+    const trie = Trie();
     trie.add(['roman', 'romanesque']);
     expect(trie.search('')).toStrictEqual(['roman', 'romanesque']);
   });
 
   it('search(): Lists expected suggestions from String array', () => {
     const words = ['roman', 'romanesque', 'romanesco', 'cat', 'category', 'romanei', 'another romaneid'];
-    const trie = new Trie();
+    const trie = Trie();
     trie.add(words);
     const suggestions = trie.search('romane');
     expect(suggestions).toStrictEqual(['romanei', 'another romaneid', 'romanesco', 'romanesque']);
   });
 
   it('search(): Lists expected suggestions from Object array', () => {
-    const trie = new Trie();
+    const trie = Trie();
     trie.add(colors, 'label', (param) => `${param.label}`);
     const suggestions = trie.search('b');
     expect(suggestions).toStrictEqual([
@@ -106,7 +106,7 @@ describe('Trie algorithm', () => {
 
   it('supports case insensitive prefix', () => {
     const words = ['romAn', 'romAneSquE', 'ROmanesCo', 'cat', 'category', 'romanei', 'another romaneid'];
-    const trie = new Trie();
+    const trie = Trie();
     trie.add(words);
     const suggestions = trie.search('romane');
     expect(suggestions).toStrictEqual(['romanei', 'another romaneid', 'ROmanesCo', 'romAneSquE']);
@@ -114,14 +114,14 @@ describe('Trie algorithm', () => {
 
   it('limits suggestions to 2', () => {
     const words = ['romAn', 'romAneSquE', 'ROmanesCo', 'romanex', 'romaney', 'romanez', 'romanei', 'romanif'];
-    const trie = new Trie();
+    const trie = Trie();
     trie.add(words);
     const suggestions = trie.search('romane', 2);
     expect(suggestions).toStrictEqual(['romanei', 'romanez']);
   });
 
   it('gets suggestions for same identifiers / collision test', () => {
-    const trie = new Trie();
+    const trie = Trie();
     trie.add(colors, 'label', (param) => `${param.label}`); // identifier (first is always identifier)
     trie.add(colors, 'value', (param) => `${param.label}`); // token
     const expectedResult = [

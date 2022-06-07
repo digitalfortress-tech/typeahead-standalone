@@ -1,3 +1,5 @@
+import { TrieType } from './trie/types';
+
 export type Dictionary<T = unknown> = Record<string, T>;
 
 export interface typeaheadDataSource<T> {
@@ -55,7 +57,7 @@ export interface typeaheadConfig<T extends Dictionary> {
   templates?: typeaheadHtmlTemplates<T>;
 }
 
-export interface typeaheadResult {
+export interface typeaheadResult<T extends Dictionary> {
   destroy: () => void;
-  trie?: unknown;
+  trie?: TrieType<T>;
 }

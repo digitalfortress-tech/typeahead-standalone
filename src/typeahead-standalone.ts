@@ -19,7 +19,7 @@ import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
 import './style.less';
 
-export default function typeahead<T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult {
+export default function typeahead<T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult<T> {
   // check required params
   if (!config.input) throw new Error('e01');
   if (!config.source || !isObject(config.source)) throw new Error('e02');
@@ -35,7 +35,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const hint = config.hint === false ? false : true;
   const autoSelect = config.autoSelect || false;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
-  const trie = new (Trie as any)();
+  const trie = Trie();
   const identifier = config.source.identifier || 'label'; // label is the default identifier
   const groupIdentifier = config.source.groupIdentifier || '';
   const displayCb = <T extends Dictionary>(item: T): string => {
@@ -469,7 +469,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const calcSuggestions = (newItems?: T[]): void => {
     // get suggestions
-    let suggestions: T[] = trie.search(inputValue.toLowerCase(), limitSuggestions);
+    let suggestions: T[] = trie.search(inputValue.toLowerCase(), limitSuggestions) as T[];
 
     if (newItems?.length) {
       let newSuggestions: T[] | Dictionary[] = [...suggestions, ...newItems];

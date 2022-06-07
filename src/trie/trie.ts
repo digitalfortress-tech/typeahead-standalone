@@ -3,7 +3,7 @@ import type { TrieType } from './types';
 import { deduplicateArr, spaceTokenizer } from '../helpers';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
-export const Trie = function (): TrieType {
+export const Trie: TrieType<any> = () => {
   let root: Record<string, unknown> = {};
 
   // marks the end of a string
