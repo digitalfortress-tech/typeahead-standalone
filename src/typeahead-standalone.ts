@@ -14,7 +14,7 @@ import type {
   PrefetchDataSource,
 } from './types';
 import { Keys } from './constants';
-import { deduplicateArr, escapeRegExp, NOOP, normalizer } from './helpers';
+import { deduplicateArr, escapeRegExp, isObject, NOOP, normalizer } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
 import './style.less';
@@ -22,7 +22,7 @@ import './style.less';
 export default function typeahead<T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult {
   // check required params
   if (!config.input) throw new Error('e01');
-  if (!config.source) throw new Error('e02');
+  if (!config.source || !isObject(config.source)) throw new Error('e02');
 
   const doc = document;
 
