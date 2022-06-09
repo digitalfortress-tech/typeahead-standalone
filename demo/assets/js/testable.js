@@ -16,6 +16,7 @@ const colors = [
   { name: 'Pink', value: 'PI', hash: 'pink' },
   { name: 'Purple', value: 'PR', hash: 'purple' },
   { name: 'Grey', value: 'GR', hash: 'grey' },
+  { name: 'Light Grey [GRL]', value: 'GRL', hash: '#352e2e', group: 'Shades of Black' },
   { name: 'Brown', value: 'BR', hash: 'brown' },
   { name: 'Black', value: 'BK', hash: 'black', group: 'Shades of Black' },
   { name: 'Black Light', value: 'LBK', hash: '#352e2e', group: 'Shades of Black' },

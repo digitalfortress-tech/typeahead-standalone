@@ -680,7 +680,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       inputHint.value = '';
     } else {
       inputHint.value = (rawInput.replace(/\s?$/, '') +
-        display(selectedItem).replace(new RegExp(inputValue, 'i'), '')) as string;
+        display(selectedItem).replace(new RegExp(escapeRegExp(inputValue), 'i'), '')) as string;
     }
   };
 
