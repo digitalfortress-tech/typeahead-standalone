@@ -20,6 +20,11 @@ context('Typeahead', () => {
     cy.get('@hint2').should('have.value', 'black light - LBK');
   });
 
+  it('Should escape Regex special chars within the hint', () => {
+    cy.get('#input-two').clear().type('light grey [gr', { delay: 100 });
+    cy.get('.typeahead-test-two .tt-hint').should('have.value', 'light grey [grL] - GRL');
+  });
+
   it('Highlights matched text', () => {
     cy.get('#input-two').as('input2').type('gr', { delay: 100 });
     cy.get('.typeahead-test-two .tt-list .tt-highlight').first().should('have.text', 'Gr');
@@ -124,10 +129,10 @@ context('Typeahead', () => {
 
   it('Submits correct data', () => {
     cy.get('#input-two').type('li', { delay: 100 });
-    cy.get('.typeahead-test-two .tt-list').as('list').children().eq(1).should('have.text', 'Blue Extra Light');
+    cy.get('.typeahead-test-two .tt-list').as('list').children().eq(2).should('have.text', 'Blue Extra Light');
 
     // typing {tab} key is not supported yet
-    cy.get('#input-two').type('{downarrow}{enter}');
+    cy.get('#input-two').type('{downarrow}{downarrow}{enter}');
     cy.get('#input-two').should('have.value', 'Blue Extra Light - LBLX');
 
     cy.get('.section-two button').click();

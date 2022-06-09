@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             : i > this.previousTop &&
               (o('#mainNav').removeClass('is-visible'),
               s < i && !o('#mainNav').hasClass('is-fixed') && o('#mainNav').addClass('is-fixed')),
-          (this.previousTop = i);
+            (this.previousTop = i);
         }
       );
     }
@@ -100,7 +100,7 @@ const makeSticky = () => {
 // Make Pub sticky after a small delay
 setTimeout(makeSticky, 3e3);
 
-var colors = [
+let dataset = [
   { name: 'Red', value: 'RD', hash: 'red' },
   { name: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
   { name: 'Dark Blue', value: 'DBLD', hash: 'darkblue', group: 'Shades of Blue' },
@@ -120,20 +120,28 @@ var colors = [
   { name: 'Grey', value: 'GRY', hash: 'grey' },
   { name: 'Brown', value: 'BR', hash: 'brown' },
   { name: 'Black', value: 'BK', hash: 'black', group: 'Shades of Black' },
-  { name: 'Black Light', value: 'LBK', hash: '#352e2e', group: 'Shades of Black' },
+  { name: 'Black Light', value: 'LBK', hash: '#352f2e', group: 'Shades of Black' },
 ];
 
-var input = document.getElementById('searchInput');
+// dataset = [
+//   'BART [4, BAA]',
+//   'BARTLFI [2207, BAA]',
+//   'BART23 [1081, BAA]',
+//   'BART23BER [1140, BAA]',
+//   'BART123 [1082, BAA]',
+// ];
 
-var instance;
+const input = document.getElementById('searchInput');
+
+let instance;
 
 // eslint-disable-next-line no-undef
 if (dev) {
   // eslint-disable-next-line no-undef
   instance = typeahead({
-    input: input,
+    input,
     source: {
-      local: colors,
+      local: dataset,
       identifier: 'name',
       groupIdentifier: 'group',
       dataTokens: ['value'],
