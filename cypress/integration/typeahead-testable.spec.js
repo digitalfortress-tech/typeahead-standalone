@@ -115,16 +115,19 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Black Light');
   });
 
-  it('Uses custom display config option', () => {
-    cy.get('#input-two').type('ye', { delay: 100 });
+  it('Uses custom display() function with optional arg', () => {
+    cy.get('#input-two').as('input2').type('ye', { delay: 100 });
     cy.get('.typeahead-test-two .tt-list').as('list').children().first().should('have.length', 1);
     cy.get('.typeahead-test-two .tt-hint').should('have.value', 'yellow - YW');
     cy.get('@list').children().first().click();
-    cy.get('#input-two').should('have.value', 'Yellow - YW');
+    cy.get('@input2').should('have.value', 'Yellow - YW');
+    cy.get('#input2-hidden-field').as('hiddenField').should('have.text', 'Evnt-click');
 
     // typing {tab} key is not supported yet
-    cy.get('#input-two').clear().type('ye{enter}');
-    cy.get('#input-two').should('have.value', 'Yellow - YW');
+    cy.get('@input2').clear().type('ye{enter}', { delay: 100 });
+    cy.get('@input2').should('have.value', 'Yellow - YW');
+    // verify that 2nd optional arg was used to set hidden field
+    cy.get('@hiddenField').should('have.text', 'Evnt-keydown');
   });
 
   it('Submits correct data', () => {

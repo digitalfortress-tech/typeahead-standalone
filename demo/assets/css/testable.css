@@ -122,3 +122,8 @@ label {
   color: #fff;
   background-color: #000;
 }
+
+/* Generic */
+.hidden {
+  display: none;
+}

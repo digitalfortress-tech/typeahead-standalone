@@ -309,7 +309,10 @@ const test2 = typeahead({
   className: 'typeahead-test-two',
   minLength: 2,
   highlight: true,
-  display: (selectedItem) => {
+  display: (selectedItem, e) => {
+    if (e) {
+      document.querySelector('#input2-hidden-field').innerHTML = `Evnt-${e.type}`;
+    }
     return selectedItem.name + ' - ' + selectedItem.value;
   },
   preventSubmit: true,
