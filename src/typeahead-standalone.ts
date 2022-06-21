@@ -41,7 +41,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const displayCb = <T extends Dictionary>(item: T): string => {
     return `${item[identifier]}`;
   };
-  const display: (item: T) => string = config.display || displayCb;
+  const display: (item: T, e?: MouseEvent | KeyboardEvent | null) => string = config.display || displayCb;
   const identity = config.source.identity || displayCb;
   const onSubmit: (e: Event, item?: T) => void = config.onSubmit || NOOP;
   const dataTokens =
@@ -292,7 +292,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       const div = render(item);
       div.addEventListener('click', function (ev: MouseEvent): void {
         clear();
-        input.value = display(item);
+        input.value = display(item, ev);
         ev.preventDefault();
       });
       if (item === selected) {
@@ -334,7 +334,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   /**
    * Select the previous item in suggestions
    */
-  const selectPrev = (): void => {
+  const selectPrev = (ev: KeyboardEvent): void => {
     const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
     // if first item is selected and UP Key is pressed, focus input and restore original input
     if (selected === items[0]) {
@@ -354,21 +354,21 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       }
     }
 
-    input.value = display(selected);
+    input.value = display(selected, ev);
   };
 
   /**
    * Select the next item in suggestions
    */
-  const selectNext = (): void => {
+  const selectNext = (ev: KeyboardEvent): void => {
     const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
     // if nothing selected, select the first suggestion
     if (!selected) {
       selected = items[0];
-      input.value = display(selected);
+      input.value = display(selected, ev);
       return;
     }
-    // if at the end of the list, go to input box and restore original input
+    // if we're at the end of the list, go to input box and restore original input
     if (selected === items[maxLength - 1]) {
       selected = undefined;
       input.value = storedInput;
@@ -382,7 +382,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       }
     }
 
-    input.value = display(selected);
+    input.value = display(selected, ev);
   };
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
@@ -398,7 +398,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       if (keyCode === Keys.Esc) {
         clear();
       } else if (items.length) {
-        keyCode === Keys.Up ? selectPrev() : selectNext();
+        keyCode === Keys.Up ? selectPrev(ev) : selectNext(ev);
         update();
       }
 
@@ -415,7 +415,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       if (selected) {
         const item = selected;
         clear();
-        input.value = display(item);
+        input.value = display(item, ev);
         return item;
       }
     };

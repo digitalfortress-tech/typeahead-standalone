@@ -49,7 +49,7 @@ export interface typeaheadConfig<T extends Dictionary> {
   hint?: boolean;
   autoSelect?: boolean;
   highlight?: boolean;
-  display?: (selectedItem: T) => string;
+  display?: (selectedItem: T, ev?: MouseEvent | KeyboardEvent | null) => string;
   onSubmit?: (e: Event, selectedItem?: T) => void;
   debounceRemote?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
