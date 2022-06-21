@@ -19,7 +19,7 @@ A fast fully-featured standalone autocomplete library
 - 🎀 Framework agnostic! Usable with **any** framework (React, Vue, Svelte, etc)
 - 💡 Highly customizable and light-weight [![<4kb minzipped](https://badgen.net/bundlephobia/minzip/typeahead-standalone)](https://bundlephobia.com/package/typeahead-standalone)
 - ⚜️ In-built support for multiple data sources - Local, Prefetch and Remote
-- ⚡️ Suggestions calculated via a very efficient trie algorithm
+- ⚡️ Suggestions calculated via a very efficient algorithm based on trie data structure
 - 🧱 Remote requests rate-limited by default
 - 🌐 Supports every major browser!
 ---
@@ -121,13 +121,13 @@ You can pass the following config options to `typeahead-standalone`:
 |`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`)|`undefined`|
 |`templates`|An object containing templates for header, footer, suggestion, group and notFound state. See [templates section](#templates) for clarification |`undefined`|
 |`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|
-|`preventSubmit`|If your input element is used inside a form element, this flag allows to prevent the default submit action when ENTER is pressed.|`false`|
+|`preventSubmit`|If your input element is used inside a form element, this flag allows to prevent the default submit action when the ENTER key is pressed.|`false`|
 |`onSubmit(event, selectedItem?)`|When you want to use typeahead outside a form element, this handler can be used to process/submit the input value. Gets triggered on hitting the ENTER key. First parameter is the keyboard Event and the 2nd parameter is the selected item or undefined if no item was selected|`undefined`|
-|`display(selectedItem) => string`|This callback is executed when the user selects an item from the suggestions. The current suggestion/item is passed as a parameter and it must return a string which is set as the input's value |Returns the string representation of the selected item|
+|`display(selectedItem, event?) => string`|This callback is executed when the user selects an item from the suggestions. The current suggestion/item is passed as a parameter and it **must return a string** which is set as the input's value. The 2nd *optional* parameter `event` is a Mouse/Keyboard event which can be used to track user interaction or for analytics. It defaults to `null`. |Returns the string representation of the selected item|
 
 ---
 
-### Source
+### 🔌 Source
 
 This is the source of data from which suggestions will be provided. This is the expected format of the source object.
 ```
@@ -159,8 +159,8 @@ source: {
 - **Prefetch**: The `prefetch` data source is used when you want to preload suggestions from a remote endpoint in advance. You must provide the `url` parameter that points to the endpoint that will return suggestions. You can provide an optional `when` parameter which defines when the prefetch request should occur. It defaults to `onInit` meaning that suggestions will be preloaded as soon as typeahead gets initialized. You can set it to `onFocus` which will cause suggestions to be preloaded only when the user focuses the search input box. The `done` flag is optional & can be used to disable the prefetch request programmatically. Its default value is `false`. It gets set to `true` automatically when data is prefetched for the first time (to prevent multiple network requests). By setting `done: true`, the prefetch request will not occur. An example use-case to do this is when you are using *localStorage* to store suggestions but the *localStorage* already had stored suggestions previously thereby eliminating the need to prefetch data again. The `process(suggestions)` callback is optional. It gets executed after the prefetch request occurs. It receives the transformed suggestions as a parameter & as an example can be used to store the received suggestions in *localStorage* to be used later.
 - **Remote**: The `remote` data source is used when you want to interrogate a remote endpoint to fetch data.
 - **Wildcard**: While using the `remote` data source, you must set the `url` and the `wildcard` options. `wildcard` will be replaced with the search string while executing the request.
-- **RequestOptions**: The [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) API is used to query remote endpoints.  You may provide an object of [requestOptions](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options) to customize the outgoing request. By default the query type is GET.
-- **Transform**: You can provide an optional `transform` function which gets called immediately after the prefetch/remote endpoint returns a response. You can modify the response before it gets processed by typeahead.
+- **RequestOptions**: The [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) API is used to query remote endpoints.  You may provide an object of [requestOptions](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options) to customize the outgoing request. By default the query type is `GET`.
+- **Transform**: You can provide an optional `transform()` function which gets called immediately after the prefetch/remote endpoint returns a response. You can modify the response before it gets processed by typeahead.
 - **Identifier**: An `identifier` is required when the data source is an array of objects. An `identifier` is used to identify which property of the object should be used as the text for displaying the suggestions. For example, lets say the data source is something like this:
 ```javascript
 /* Example Data source */
@@ -174,7 +174,7 @@ source: {
  Now if we wish to use the the text defined in the `color` property to appear as the suggestions, then the **identifier** must be set to **color**. (i.e. `identifier: "color"`)
 - **dataTokens**: `dataTokens: string[]` is an _optional_ property. It accepts an array of strings which represent the properties of the source object that should be added to the search index. This can be best understood with an example. Lets take the same example data source as shown above. What if you wanted to search colors by another property(_colorCode_) and not just by its identifier(_color_) ? That's exactly where **dataTokens** comes in. Set `dataTokens: ["colorCode"]`. If you now search for "**YW**", the suggestion "Yellow" pops up as expected.
 - **groupIdentifier**: If you wish to group your suggestions, set the groupIdentifier property. This is an optional property. Again, going with the same example data source as above, when you set `groupIdentifier: "shade"`, suggestions will be grouped by the property "**shade**". In this example, the colors _Green_ and _Olive_ will appear under the group "**Greenish**" (`shade`) whereas the color _Yellow_ will have no group.
-- **identity**: The `identity` function is used to determine uniqueness of each suggestion. It receives the suggestion as a parameter and must return a string unique to the given suggestion. This is an optional property and it defaults to returning the `identifier`. However, the default value might not work everytime. For example, consider the following code -
+- **identity**: The `identity()` function is used to determine uniqueness of each suggestion. It receives the suggestion as a parameter and must return a string unique to the given suggestion. This is an optional property and it defaults to returning the `identifier`. However, the default value might not work everytime. For example, consider the following code -
 ```javascript
 /* Example Data source of Songs */
 [
@@ -322,8 +322,8 @@ Each template is wrapped in a `div` element with a corresponding class. i.e.
 Destroys the typeahead instance, removes all event handlers and cleans up the DOM. Can be used once when you no more want to have suggestions.
 
 ```javascript
-var typeaheadInstance = typeahead({ /* options */ });
-typeaheadInstance.destroy();
+const instance = typeahead({ /* options */ });
+instance.destroy();
 ```
 
 ---
