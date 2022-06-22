@@ -13,10 +13,6 @@ p {
   margin: 30px 0;
 }
 
-p a {
-  text-decoration: underline;
-}
-
 h1,
 h2,
 h3,
@@ -28,15 +24,21 @@ h6 {
 }
 
 a {
-  color: #212529;
-  -webkit-transition: all 0.2s;
-  -moz-transition: all 0.2s;
-  transition: all 0.2s;
+  color: #1393e0;
+  transition: all 0.5s;
+  padding-bottom: 6px;
+  background: linear-gradient(to right, #00d1b1 0%, #278fc6 98%);
+  background-size: 0px 2px;
+  background-repeat: no-repeat;
+  background-position: left 85%;
 }
-
-a:focus,
-a:hover {
-  color: #0085a1;
+a:hover, a:active {
+  background-size: 100% 2px;
+  color: #1393e0;
+  text-decoration: none;
+}
+a:visited, a:focus {
+  color: #0091b1;
 }
 
 blockquote {
@@ -431,6 +433,15 @@ footer .copyright {
   font-size: 14px;
   margin-bottom: 0;
   text-align: center;
+}
+
+.social-icons a {
+  color: #212529;
+}
+
+.social-icons a:hover {
+  background-size: 0px 2px;
+  color: #1393e0;
 }
 
 .btn {
