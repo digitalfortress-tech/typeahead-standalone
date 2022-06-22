@@ -286,6 +286,29 @@ header.masthead .post-heading .meta a {
   }
 }
 
+.containerEl {
+  margin: 0 16px;
+}
+
+.nav-submenu {
+  position: sticky;
+  top: 80px;
+  border-right: 1px solid #e9e4e4;
+  align-self: flex-start;
+}
+
+.nav-submenu {
+  font-size: 18px;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 992px) {
+  .nav-submenu {
+    display: none;
+  }
+}
+
 .post-preview > a {
   color: #212529;
 }
