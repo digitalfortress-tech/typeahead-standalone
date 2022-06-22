@@ -25,24 +25,28 @@
     const mode = urlParams.get('mode');
     const dev = typeof mode === "string" && mode.toLowerCase() === 'dev' ? true : false;
 
-        window.klipse_settings = {  // input
+    window.klipse_settings = {  // input
       selector_eval_js: ".eval-js",
-        codemirror_options_in: {
-          indentUnit: 2,
-          tabSize: 2,
-          // lineWrapping: true,
-          lineNumbers: true,
-          matchBrackets: true,
-          theme: 'solarized dark',
-        },
-        codemirror_options_out: {   // output
-          // lineNumbers: true,
-          theme: 'solarized dark',
-          tabSize: 2,
-        }
+      codemirror_options_in: {
+        indentUnit: 2,
+        tabSize: 2,
+        // lineWrapping: true,
+        lineNumbers: true,
+        matchBrackets: true,
+        theme: 'solarized dark',
+      },
+      codemirror_options_out: {   // output
+        // lineNumbers: true,
+        theme: 'solarized dark',
+        tabSize: 2,
+      }
     };
   </script>
   <link rel="canonical" href="https://typeahead.digitalfortress.tech/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/img/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon/favicon-16x16.png">
+  <link rel="manifest" href="./assets/img/favicon/site.webmanifest">
 </head>
 
 <body>
