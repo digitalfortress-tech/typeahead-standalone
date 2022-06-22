@@ -109,12 +109,12 @@
       <nav class="col-lg-2 nav-submenu">
         <h5>Appendix</h5>
         <ul>
-          <li><a title="" href="/docs">Local Data</a></li>
-          <li><a title="" href="/docs">Remote Data</a></li>
-          <li><a title="" href="/docs">Prefetched Data</a></li>
-          <li><a title="" href="/docs">Templates</a></li>
-          <li><a title="" href="/docs">Data-Tokens</a></li>
-          <li><a title="" href="/docs">Comparison</a></li>
+          <li><a title="" href="#localdata">Local Data</a></li>
+          <li><a title="" href="#remotedata">Remote Data</a></li>
+          <li><a title="" href="#prefetcheddata">Prefetched Data</a></li>
+          <li><a title="" href="#templates">Templates</a></li>
+          <li><a title="" href="#datatokens">Data-Tokens</a></li>
+          <li><a title="" href="#comparison">Comparison</a></li>
         </ul>
       </nav>
       <div class="col-lg-7 col-md-12 pd-btm-15">
@@ -124,7 +124,7 @@
           <h2>Live Examples</h2>
           <hr />
           <br />
-          <h4>1. Autocomplete with Local Data (Identifier + Groups)</h4>
+          <h4 id="localdata">1. Autocomplete with Local Data (Identifier + Groups)</h4>
           <div class="search-container">
             <div class="padding-v15">Try typing the letter "<b>G</b>" or "<b>P</b>"...</div>
             <input type="search" id="liveSearch1" autocomplete="off" placeholder="Search Color...">
@@ -185,7 +185,7 @@
         <hr />
 
         <section class="js-fiddle">
-          <h4>2. Autocomplete with Remote Data (retrieved via AJAX)</h4>
+          <h4 id="remotedata">2. Autocomplete with Remote Data (retrieved via AJAX)</h4>
           <div class="search-container">
             <input type="search" id="liveSearch2" autocomplete="off" placeholder="Search Countries...">
           </div>
@@ -231,7 +231,7 @@
         <hr />
 
         <section class="js-fiddle">
-          <h4>3. Autocomplete with Prefetched Data (retrieved via AJAX)</h4>
+          <h4 id="prefetcheddata">3. Autocomplete with Prefetched Data (retrieved via AJAX)</h4>
           <div class="search-container">
             <input type="search" id="liveSearch3" autocomplete="off" placeholder="Search Countries...">
           </div>
@@ -279,7 +279,7 @@
           <hr />
 
           <section class="js-fiddle">
-            <h4>4. Typeahead-standalone with Templates</h4>
+            <h4 id="templates">4. Typeahead-standalone with Templates</h4>
           The following JS fiddle demonstrates how you could style every aspect of your typeahead instance by using the config
           option - <code>templates</code>.
             <ul>
@@ -324,7 +324,7 @@
         </section>
 
         <section class="js-fiddle">
-          <h4>5. Autocomplete with Data Tokens and custom display option</h4>
+          <h4 id="datatokens">5. Autocomplete with Data Tokens and custom display option</h4>
           <div class="search-container">
             <input type="search" id="liveSearch5" autocomplete="off" placeholder="Search Songs...">
           </div>
@@ -407,7 +407,7 @@
           </section>
 
           <section class="typeaheadComparison">
-            <h3>Typeahead-standalone Comparison</h3>
+            <h3 id="comparison">Typeahead-standalone Comparison</h3>
             <p>This library is inspired by the original <a href="https://twitter.github.io/typeahead.js/">Twitter-typeahead
                 library</a> with a few performance improvements and a few additional features.
               <br>
