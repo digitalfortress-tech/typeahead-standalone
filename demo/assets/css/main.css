@@ -46,6 +46,11 @@ blockquote {
   color: #868e96;
 }
 
+ul {
+  list-style: none;
+  padding: 0;
+}
+
 .section-heading {
   font-size: 36px;
   font-weight: 700;
@@ -301,12 +306,23 @@ header.masthead .post-heading .meta a {
   top: 80px;
   border-right: 1px solid #e9e4e4;
   align-self: flex-start;
-}
-
-.nav-submenu {
   font-size: 18px;
   font-weight: 600;
   overflow: hidden;
+  height: 100vh;
+}
+
+.nav-submenu li {
+  padding: 6px 0;
+  border-bottom: 1px solid #e9e4e4;
+}
+
+.nav-submenu li:last-child {
+  border: 0;
+}
+
+.nav-submenu h5 {
+  padding: 12px 0;
 }
 
 @media only screen and (max-width: 992px) {
@@ -559,6 +575,10 @@ adapted from a snippet
 
 .underline {
   text-decoration: underline;
+}
+
+.center {
+  text-align: center;
 }
 
 .search-container {
