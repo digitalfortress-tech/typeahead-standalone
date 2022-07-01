@@ -41,6 +41,16 @@ a:visited, a:focus {
   color: #0091b1;
 }
 
+a.simple-link {
+  background-size: 0;
+}
+.submenu-link, .submenu-link:visited, .submenu-link:focus {
+  color: #000;
+}
+.submenu-link.active {
+  color: green;
+}
+
 blockquote {
   font-style: italic;
   color: #868e96;
@@ -304,12 +314,11 @@ header.masthead .post-heading .meta a {
 .nav-submenu {
   position: sticky;
   top: 80px;
-  border-right: 1px solid #e9e4e4;
+  padding-bottom: 80px;
   align-self: flex-start;
   font-size: 18px;
   font-weight: 600;
   overflow: hidden;
-  height: 100vh;
 }
 
 .nav-submenu li {
@@ -323,6 +332,11 @@ header.masthead .post-heading .meta a {
 
 .nav-submenu h5 {
   padding: 12px 0;
+}
+
+#mainSection {
+  border-left: 1px solid #e9e4e4;
+  border-right: 1px solid #e9e4e4;
 }
 
 @media only screen and (max-width: 992px) {
@@ -674,4 +688,24 @@ adapted from a snippet
 .stickyElx {
   transition: all 0.5s;
   z-index: 1;
+}
+
+ul.feature-list {
+  padding: 0 0 0 25px;
+}
+ul.feature-list li {
+  margin-bottom: 5px;
+}
+.bottom-nav {
+  float: right;
+  padding: 10px 0;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.bottom-nav div {
+  color: #7f7f7f;
+  font-size: 14px;
+}
+.bottom-nav a {
+  color: #000;
 }

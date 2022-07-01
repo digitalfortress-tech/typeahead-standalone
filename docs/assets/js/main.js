@@ -63,9 +63,18 @@ $('.submenu-link').click(function (e) {
 });
 
 function loadFragment(name) {
+  if (!name || name === './') {
+    // load base template
+    name = 'intro';
+  }
   $('#mainSection').load(`pages/${name.replace('#', '')}.html`, function (resp, status) {
     if (status == 'error') {
       $('#mainSection').load('pages/404.html');
+    } else {
+      // manage active class
+      $('.submenu-link').removeClass('active');
+      name === 'intro' ? (name = './') : '';
+      $('.submenu-link[href="' + name + '"]').addClass('active');
     }
   });
 }
