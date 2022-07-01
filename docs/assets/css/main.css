@@ -709,3 +709,6 @@ ul.feature-list li {
 .bottom-nav a {
   color: #000;
 }
+.beforePubbCard .chip {
+  padding: 3px 0;
+}
