@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             : i > this.previousTop &&
               (o('#mainNav').removeClass('is-visible'),
               s < i && !o('#mainNav').hasClass('is-fixed') && o('#mainNav').addClass('is-fixed')),
-            (this.previousTop = i);
+          (this.previousTop = i);
         }
       );
     }
@@ -51,6 +51,8 @@ $(document).ready(function () {
   window.onhashchange = function () {
     loadFragment(window.location.hash);
   };
+
+  init();
 });
 
 $('.submenu-link').click(function (e) {
@@ -68,6 +70,9 @@ function loadFragment(name) {
     name = 'intro';
   }
   $('#mainSection').load(`pages/${name.replace('#', '')}.html`, function (resp, status) {
+    // init once fragment is loaded (attach events etc)
+    init();
+
     if (status == 'error') {
       $('#mainSection').load('pages/404.html');
     } else {
@@ -78,6 +83,33 @@ function loadFragment(name) {
     }
   });
 }
+
+/** Init core functions */
+function init() {
+  syntaxHighlight();
+
+  // attach event listener
+  $('.codeContainer .copy').on('click', function () {
+    const that = $(this);
+    copyToClipboard($(this).parent().find('code').text().trim()).then(function () {
+      that.find('i').removeClass('fa-copy').addClass('fa-check-circle').attr('title', 'Copied');
+      setTimeout(function () {
+        that.find('i').removeClass('fa-check-circle').addClass('fa-copy').attr('title', 'Copy to Clipboard');
+      }, 3000);
+    });
+  });
+}
+
+function syntaxHighlight() {
+  document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+}
+
+function copyToClipboard(text) {
+  return navigator.clipboard.writeText(text);
+}
+
 // handle sticky elements
 const stickyEl = (El, stickyConf) => {
   if (!El || !(El instanceof HTMLElement) || !stickyConf || stickyConf.constructor !== Object) return null;

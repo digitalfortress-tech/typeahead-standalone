@@ -44,9 +44,14 @@ a:visited, a:focus {
 a.simple-link {
   background-size: 0;
 }
+a.tab-link {
+  color: #545454;
+  background-color: #efefef;
+}
 .submenu-link, .submenu-link:visited, .submenu-link:focus {
   color: #000;
 }
+.submenu-link:hover,
 .submenu-link.active {
   color: green;
 }
@@ -601,6 +606,51 @@ adapted from a snippet
 
 .padding-v15 {
   padding: 15px 0;
+}
+
+.codeContainer {
+  background: #303030;
+  margin: 10px 0;
+  border-radius: 4px;
+  padding: 20px 15px;
+  box-shadow: 0 7px 20px #00000038;
+  position: relative;
+}
+
+.codeContainer .lang, .codeContainer .copy {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  color: white;
+}
+
+.codeContainer .lang {
+  color: silver;
+  top: 5px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.codeContainer .copy {
+  top: 25px;
+  opacity: 0;
+  transition: 0.2s ease opacity;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.codeContainer:hover .copy {
+  opacity: 1;
+}
+
+.tab-content {
+  padding: 10px;
+}
+
+.tabContainer .nav-tabs .nav-link.active {
+  color: green;
+  font-weight: 600;
+  border-bottom: 3px solid green;
 }
 
 [type=search] {
