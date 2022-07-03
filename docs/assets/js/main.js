@@ -60,7 +60,8 @@ $('.submenu-link').click(function (e) {
   const pg = $(this).attr('href');
   loadFragment(pg);
 
-  document.getElementById('mainSection').scrollIntoView({ behavior: 'smooth' });
+  console.log('fired :>> ');
+  document.getElementById('mainSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
   window.history.pushState('', document.title, pg);
 });
 
@@ -91,17 +92,22 @@ function init() {
   // attach event listener
   $('.codeContainer .copy').on('click', function () {
     const that = $(this);
-    copyToClipboard($(this).parent().find('code').text().trim()).then(function () {
+    copyToClipboard($(this).parent().find('pre').text().trim()).then(function () {
       that.find('i').removeClass('fa-copy').addClass('fa-check-circle').attr('title', 'Copied');
       setTimeout(function () {
         that.find('i').removeClass('fa-check-circle').addClass('fa-copy').attr('title', 'Copy to Clipboard');
       }, 3000);
     });
   });
+
+  // attach listener for bottom-nav
+  $('.bottom-nav .submenu-link').click(function () {
+    document.getElementById('mainSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 }
 
 function syntaxHighlight() {
-  document.querySelectorAll('pre code').forEach((el) => {
+  document.querySelectorAll('pre').forEach((el) => {
     hljs.highlightElement(el);
   });
 }

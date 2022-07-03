@@ -61,6 +61,34 @@ blockquote {
   color: #868e96;
 }
 
+pre {
+  margin: 0;
+  padding: 10px 0 5px;
+}
+
+/* Works on Firefox */
+pre {
+  scrollbar-width: thin;
+  scrollbar-color: #303030 #616161;
+}
+
+/* Works on Chrome, Edge, and Safari */
+pre::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+pre::-webkit-scrollbar-track {
+  background: #303030;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background-color: #616161;
+  border-radius: 4px;
+  width: 4px;
+  border: 1px solid black;
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -621,13 +649,14 @@ adapted from a snippet
   position: absolute;
   right: 10px;
   top: 50%;
-  color: white;
+  color: #fff;
+  background: #303030;
 }
 
 .codeContainer .lang {
-  color: silver;
+  color: #80ec0c;
   top: 5px;
-  text-transform: uppercase;
+  font-weight: 600;
   font-size: 12px;
 }
 
@@ -641,6 +670,10 @@ adapted from a snippet
 
 .codeContainer:hover .copy {
   opacity: 1;
+}
+
+.codeContainer code, .codeContainer pre {
+  font-size: 14px;
 }
 
 .tab-content {
@@ -747,12 +780,17 @@ ul.feature-list li {
   margin-bottom: 5px;
 }
 .bottom-nav {
-  float: right;
   padding: 10px 0;
   font-weight: 600;
   text-transform: uppercase;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
 }
-.bottom-nav div {
+.bottom-nav-right {
+  /* float: right; */
+}
+.bottom-nav .label {
   color: #7f7f7f;
   font-size: 14px;
 }
