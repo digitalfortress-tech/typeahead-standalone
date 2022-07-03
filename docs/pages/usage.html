@@ -1,3 +1,171 @@
-<h1>
-  Usage
-</h1>
+<h2>Usage</h2>
+<p>Typeahead-standalone.js usage guide in detail. There are 3 basic steps to be followed as explained below...</p>
+<hr>
+
+<h4>1. HTML <i class="fab fa-html5"></i></h4>
+
+<p>Add an <b><code>input</code></b> element to your HTML</p>
+
+<div class="tabContainer padding-v15">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-link active simple-link tab-link" id="nav-basic-tab" data-toggle="tab" href="#nav-basic" role="tab" aria-controls="nav-basic" aria-selected="true">Basic</a>
+      <a class="nav-link simple-link tab-link" id="nav-advanced-tab" data-toggle="tab" href="#nav-advanced" role="tab" aria-controls="nav-advanced" aria-selected="false">Advanced</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-basic-tab">
+      <div class="codeContainer">
+        <span class="lang">HTML</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs">&#60;input id="typeahead" placeholder="search"&#62;</pre>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="nav-advanced" role="tabpanel" aria-labelledby="nav-advanced-tab">
+      <div class="codeContainer">
+        <span class="lang">HTML</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs">&#60;input id="typeahead" type="search" placeholder="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048"&#62;</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+<h4>2. Import the library 📦️</h4>
+
+<p>Import the javascript <i class="fad fa-code"></i> and the CSS <i class="fab fa-css3-alt"></i> into your project/app. <b>Note:</b> It is recommended to directly override the default styles instead of importing them.</p>
+<div class="tabContainer padding-v15">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-link active simple-link tab-link" id="nav-js-tab" data-toggle="tab" href="#nav-js" role="tab" aria-controls="nav-js" aria-selected="true">Javascript</a>
+      <a class="nav-link simple-link tab-link" id="nav-html-tab" data-toggle="tab" href="#nav-html" role="tab" aria-controls="nav-html" aria-selected="false">HTML</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade" id="nav-html" role="tabpanel" aria-labelledby="nav-html-tab">
+      <div class="codeContainer">
+        <span class="lang">HTML</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-html language-xml">
+&#60;head&#62;
+  &#60;link rel="stylesheet" href="https://cdn.jscript.net/npm/typeahead-standalone/dist/basic.css" /&#62;
+&#60;/head&#62;
+
+&#60;body&#62;
+  &#60;script src="https://cdn.jscript.net/npm/typeahead-standalone"&#62;&#60;/script&#62;
+&#60;/body&#62;</pre>
+      </div>
+    </div>
+    <div class="tab-pane fade show active" id="nav-js" role="tabpanel" aria-labelledby="nav-js-tab">
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-javascript">
+// using ES6 modules
+import typeahead from 'typeahead-standalone';
+import 'typeahead-standalone/dist/basic.css';
+
+// using RequireJS
+const typeahead = require('typeahead-standalone');
+require('typeahead-standalone/dist/basic.css');</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<hr>
+<h4>3. Initialize & configure ⚙️</h4>
+
+<p>Initialize typeahead-standalone.js by passing to it the required configuration parameters</p>
+
+<div class="tabContainer padding-v15">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-link active simple-link tab-link" id="nav-jscript-tab" data-toggle="tab" href="#nav-jscript" role="tab" aria-controls="nav-jscript" aria-selected="true">Javascript</a>
+      <a class="nav-link simple-link tab-link" id="nav-html2-tab" data-toggle="tab" href="#nav-html2" role="tab" aria-controls="nav-html2" aria-selected="false">HTML</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-jscript" role="tabpanel" aria-labelledby="nav-jscript-tab">
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js language-javascript">
+// input element to attach to
+const inputElement = document.getElementById("typeahead");
+
+const instance = typeahead({
+  input: inputElement,
+  source: {
+    local: ['Grey', 'Brown', 'Black', 'Blue'],
+  }
+});</pre>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="nav-html2" role="tabpanel" aria-labelledby="nav-html2-tab">
+      <div class="codeContainer">
+        <span class="lang">HTML</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-html language-xml">
+&#60;body&#62;
+  &#60;script src="https://cdn.jscript.net/npm/typeahead-standalone"&#62;&#60;/script&#62;
+  &#60;script&#62;
+    // input element to attach to
+    const inputElement = document.getElementById("typeahead");
+
+    const instance = typeahead({
+      input: inputElement,
+      source: {
+        local: ['Grey', 'Brown', 'Black', 'Blue'],
+      }
+    });
+  &#60;/script&#62;
+&#60;/body&#62;</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+<h4>✨ Demo ✨</h4>
+
+<p>
+  Here is a live demo in action. Feel free to tinker with it to see the results in real-time.
+
+  <div id="demo-basic">
+    <div class="input-container">
+      <input type="text" id="typeahead" placeholder="Search Colors">
+    </div>
+    <div class="eval-js">
+      typeahead({
+        input: document.getElementById('typeahead'),
+        highlight: true,
+        source: {
+          local: ['Grey', 'Brown', 'Black', 'Blue'],
+        }
+      });
+    </div>
+    <p><b>Note:</b> Due to limitations in the live-editor, the <code>hint</code> might not work as expected,
+      however you can head over to <a href="https://jsfiddle.net/niketpathak/xp4mw769/" title="Basic demo jsfiddle for Typeahead-standalone.js">jsfiddle</a> for a complete sandboxed test environment.</p>
+  </div>
+</p>
+
+<hr>
+<div class="bottom-nav">
+  <div class="bottom-nav-right">
+    <div class="label">Next <i class="fad fa-chevron-double-right"></i></div>
+    <a title="Configuration" href="#config" class="submenu-link">Config</a>
+  </div>
+  <div class="bottom-nav-left">
+    <div class="label"><i class="fad fa-chevron-double-left"></i> Previous</div>
+    <a title="Install" href="#install" class="submenu-link">Install</a>
+  </div>
+</div>
+
+<script>
+  console.log('window.klipse_settings :>> ', window.klipse_settings);
+  klipse.plugin.klipsify(document.querySelector('#demo-basic .eval-js'), window.klipse_settings, 'eval-javascript');
+  setTimeout(styleKlipseSnippet, 500);
+</script>

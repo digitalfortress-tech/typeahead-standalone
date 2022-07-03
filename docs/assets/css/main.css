@@ -672,8 +672,16 @@ adapted from a snippet
   opacity: 1;
 }
 
-.codeContainer code, .codeContainer pre {
+.codeContainer code, .codeContainer pre, .klipse-snippet, .klipse-result {
   font-size: 14px;
+}
+
+.klipse-result::before {
+  background: #002b35;
+  content: "🔻 CONSOLE 🔻";
+  color: #8d8d8d;
+  display: block;
+  text-align: center;"
 }
 
 .tab-content {
@@ -787,9 +795,6 @@ ul.feature-list li {
   flex-direction: row-reverse;
   justify-content: space-between;
 }
-.bottom-nav-right {
-  /* float: right; */
-}
 .bottom-nav .label {
   color: #7f7f7f;
   font-size: 14px;
@@ -799,4 +804,12 @@ ul.feature-list li {
 }
 .beforePubbCard .chip {
   padding: 3px 0;
+}
+#demo-basic .input-container {
+  padding: 10px 0 25px;
+  text-align: center;
+}
+#demo-basic .input-container input {
+  border-radius: 4px;
+  padding-left: 5px;
 }

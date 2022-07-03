@@ -60,7 +60,6 @@ $('.submenu-link').click(function (e) {
   const pg = $(this).attr('href');
   loadFragment(pg);
 
-  console.log('fired :>> ');
   document.getElementById('mainSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
   window.history.pushState('', document.title, pg);
 });
@@ -110,6 +109,18 @@ function syntaxHighlight() {
   document.querySelectorAll('pre').forEach((el) => {
     hljs.highlightElement(el);
   });
+}
+
+/** Manually add dark theme classes */
+function styleKlipseSnippet() {
+  const snippet = document.querySelector('.klipse-snippet .CodeMirror.cm-s-default');
+  const output = document.querySelector('.klipse-result .CodeMirror.cm-s-default');
+  if (snippet && output) {
+    [snippet, output].forEach((el) => {
+      el.classList.add('cm-s-solarized', 'cm-s-dark');
+      el.classList.remove('cm-s-default');
+    });
+  }
 }
 
 function copyToClipboard(text) {
