@@ -1,3 +1,59 @@
-<h1>
-  Configuration
-</h1>
+<h2>Configuration</h2>
+<p>
+  Typeahead-standalone.js provides several configuration options to fine-tune and customize autocompletion.
+  We list all available config options below. Of these, only the first two are required whereas the rest use sensible default values.
+</p>
+<hr>
+
+<h4>1. input (<code>Required</code>)</h4>
+
+<p>This is the DOM input element typeahead will attach itself to. It is a required property and an error is thrown if it is missing</p>
+
+<div class="tabContainer padding-v15">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-link active simple-link tab-link" id="nav-js1-tab" data-toggle="tab" href="#nav-js1" role="tab" aria-controls="nav-js1" aria-selected="true">Javascript</a>
+      <a class="nav-link simple-link tab-link" id="nav-html1-tab" data-toggle="tab" href="#nav-html1" role="tab" aria-controls="nav-html1" aria-selected="false">HTML</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-js1" role="tabpanel" aria-labelledby="nav-js1-tab">
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector('.myInput'),  // required
+})</pre>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="nav-html1" role="tabpanel" aria-labelledby="nav-html1-tab">
+      <div class="codeContainer">
+        <span class="lang">HTML</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-html language-xml">&#60;input id="typeahead" placeholder="myInput"&#62;</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+<h4>2. source (<code>Required</code>)</h4>
+
+
+<hr>
+<h4>3. minLength</h4>
+
+
+
+<hr>
+<div class="bottom-nav">
+  <div class="bottom-nav-right">
+    <div class="label">Next <i class="fad fa-chevron-double-right"></i></div>
+    <a title="Styles" href="#styles" class="submenu-link">Styles</a>
+  </div>
+  <div class="bottom-nav-left">
+    <div class="label"><i class="fad fa-chevron-double-left"></i> Previous</div>
+    <a title="Usage" href="#usage" class="submenu-link">Usage</a>
+  </div>
+</div>
