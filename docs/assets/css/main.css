@@ -681,7 +681,7 @@ adapted from a snippet
 
 .klipse-result::before {
   background: #002b35;
-  content: "🔻 CONSOLE 🔻";
+  content: "🔻 Console O/P 🔻";
   color: #8d8d8d;
   display: block;
   text-align: center;"
@@ -808,11 +808,11 @@ ul.feature-list li {
 .beforePubbCard .chip {
   padding: 3px 0;
 }
-#demo-basic .input-container {
+.demo-input-container {
   padding: 10px 0 25px;
   text-align: center;
 }
-#demo-basic .input-container input {
+.demo-input-container input {
   border-radius: 4px;
   padding-left: 5px;
 }

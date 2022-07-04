@@ -49,11 +49,17 @@
         <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
         <pre class="hljs language-html language-xml">
 &#60;head&#62;
-  &#60;link rel="stylesheet" href="https://cdn.jscript.net/npm/typeahead-standalone/dist/basic.css" /&#62;
+  &#60;!-- Include Locally --&#62;
+  &#60;link rel="stylesheet" href="./node_modules/typeahead-standalone/dist/basic.css" /&#62;
+  &#60;!-- OR include via CDN --&#62;
+  &#60;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css" /&#62;
 &#60;/head&#62;
 
 &#60;body&#62;
-  &#60;script src="https://cdn.jscript.net/npm/typeahead-standalone"&#62;&#60;/script&#62;
+  &#60;!-- Include Locally --&#62;
+  &#60;script src="./node_modules/typeahead-standalone/dist/typeahead-standalone.js"&#62;&#60;/script&#62;
+  &#60;!-- OR include via CDN --&#62;
+  &#60;script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"&#62;&#60;/script&#62;
 &#60;/body&#62;</pre>
       </div>
     </div>
@@ -110,7 +116,7 @@ const instance = typeahead({
         <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
         <pre class="hljs language-html language-xml">
 &#60;body&#62;
-  &#60;script src="https://cdn.jscript.net/npm/typeahead-standalone"&#62;&#60;/script&#62;
+  &#60;script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"&#62;&#60;/script&#62;
   &#60;script&#62;
     // input element to attach to
     const inputElement = document.getElementById("typeahead");
@@ -135,7 +141,7 @@ const instance = typeahead({
   Here is a live demo in action. Feel free to tinker with it to see the results in real-time.
 
   <div id="demo-basic">
-    <div class="input-container">
+    <div class="demo-input-container">
       <input type="text" id="typeahead" placeholder="Search Colors">
     </div>
     <div class="eval-js">
@@ -165,7 +171,6 @@ const instance = typeahead({
 </div>
 
 <script>
-  console.log('window.klipse_settings :>> ', window.klipse_settings);
   klipse.plugin.klipsify(document.querySelector('#demo-basic .eval-js'), window.klipse_settings, 'eval-javascript');
-  setTimeout(styleKlipseSnippet, 500);
+  setTimeout(styleKlipseSnippets, 1000);
 </script>

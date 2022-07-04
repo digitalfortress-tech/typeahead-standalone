@@ -5,7 +5,7 @@
 </p>
 <hr>
 
-<h4>1. input (<code>Required</code>)</h4>
+<h4>1. 🔤 input (<code>Required</code>)</h4>
 
 <p>This is the DOM input element typeahead will attach itself to. It is a required property and an error is thrown if it is missing</p>
 
@@ -38,12 +38,495 @@ typeahead({
 </div>
 
 <hr>
-<h4>2. source (<code>Required</code>)</h4>
+<h4>2. 🔌 source (<code>Required</code>)</h4>
+
+<p>
+  This is the source of data from which suggestions are calculated. There are 3 types of source that can be used
+  - <b>local</b>, <b>remote</b> and <b>prefetch</b>. While using all of them is not mandatory, using atleast one of them
+  is! You may even use a combination of 2 or more source types.
+</p>
+
+<div class="tabContainer padding-v15">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-link active simple-link tab-link" id="nav-local-tab" data-toggle="tab" href="#nav-local" role="tab" aria-controls="nav-local" aria-selected="true">Local</a>
+      <a class="nav-link simple-link tab-link" id="nav-remote-tab" data-toggle="tab" href="#nav-remote" role="tab" aria-controls="nav-remote" aria-selected="false">Remote</a>
+      <a class="nav-link simple-link tab-link" id="nav-prefetch-tab" data-toggle="tab" href="#nav-prefetch" role="tab" aria-controls="nav-prefetch" aria-selected="false">Prefetch</a>
+      <a class="nav-link simple-link tab-link" id="nav-combination-tab" data-toggle="tab" href="#nav-combination" role="tab" aria-controls="nav-combination" aria-selected="false">Combination</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-local" role="tabpanel" aria-labelledby="nav-local-tab">
+      <p>
+        The local data source is used when you want to provide suggestions from a local source like a variable.
+      </p>
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+// Local data source
+const superheroes = ['Superman', 'Flash', 'Captain America'];
+
+typeahead({
+  input: document.querySelector('.myInput'),
+  source: {
+    local: superheroes
+  }
+});</pre>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="nav-remote" role="tabpanel" aria-labelledby="nav-remote-tab">
+      <p>
+        The remote data source is used when you want to interrogate a remote endpoint to fetch data.
+      </p>
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector('.myInput'),
+  source: {
+    remote: {
+      url: 'https://remoteapi.com/%QUERY',
+      wildcard: '%QUERY',
+      requestOptions: {}  // optional, default => undefined
+    },
+  }
+});</pre>
+      </div>
+      <p>
+        The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API" title="Fetch API">Fetch API</a> is used to make http requests.
+      </p>
+      <h5 class="underline">Properties</h5>
+      <ol>
+        <li><code>url</code> <b>(<code>*</code>Required)</b> - contains the URL to which http requests are made to retrieve the suggestions.</li>
+        <li><code>wildcard</code> <b>(<code>*</code>Required)</b> - The string that is replaced with the user's input while executing the http request.</li>
+        <li><code>requestOptions</code> - By default, the <b>GET</b> method is used to make http requests. To use <b>POST</b> method, you can provide a
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options" title="Fetch API request options">requestOptions</a> property.</li>
+      </ol>
+      <p>
+        The response of the http requests is cached ensuring that no multiple/unnecessary requests are made for the same input/search query.
+      </p>
+    </div>
+    <div class="tab-pane fade" id="nav-prefetch" role="tabpanel" aria-labelledby="nav-prefetch-tab">
+      <p>
+        The prefetch data source is used when you want to preload suggestions from a remote endpoint in advance.
+        Preloaded suggestions get added to the search index and are ready to be displayed instantly.
+      </p>
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector('.myInput'),
+  source: {
+    prefetch: {
+      url: 'https://remoteapi.com/load-suggestions',
+      when: 'onFocus',          // optional, default => 'onInit'
+      done: false,              // optional, default => false
+      process: (items) => void, // optional, default => undefined
+      requestOptions: {}        // optional, default => undefined
+    }
+  }
+});</pre>
+      </div>
+      <p>
+        The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API" title="Fetch API">Fetch API</a> is used to make the prefetch http request.
+      </p>
+      <h5 class="underline">Properties</h5>
+      <ol>
+        <li><code>url</code> <b>(<code>*</code>Required)</b> - contains the URL to which the prefetch request is made to preload suggestions. </li>
+        <li><code>when</code> - defines when the prefetch request should occur. Defaults to <b>onInit</b> i.e suggestions are preloaded when typeahead is initialized.
+      You can set it to <b>onFocus</b> i.e. preload suggestions only when the user focuses the input element.</li>
+        <li><code>done</code> - A boolean used to enable/disable the prefetch request programmatically.</li>
+        <li><code>process(suggestions) => {}</code> - A callback that gets executed after the prefetch request occurs.
+          It receives the suggestions as a parameter. It can be used to process the received suggestions as desired.</li>
+        <li><code>requestOptions</code> - By default, the <b>GET</b> method is used to make http requests. To use <b>POST</b> method, you can provide a
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options" title="Fetch API request options">requestOptions</a> property.</li>
+      </ol>
+
+    </div>
+    <div class="tab-pane fade" id="nav-combination" role="tabpanel" aria-labelledby="nav-combination-tab">
+      <p>
+        The source can also be a combination of any two or more source types.
+        An example using all 3 source-types is shown below.
+      </p>
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector('.myInput'),
+  source: {
+    local: ['Superman', 'Flash', 'Captain America'],
+    prefetch: {
+      url: 'https://remoteapi.com/load-suggestions',
+      when: 'onFocus',          // optional, default => 'onInit'
+      done: false,              // optional, default => false
+      process: (items) => void, // optional, default => undefined
+      requestOptions: {}        // optional, default => undefined
+    },
+    remote: {
+      url: 'https://remoteapi.com/%QUERY',
+      wildcard: '%QUERY',
+      requestOptions: {}        // optional, default => undefined
+    }
+  }
+});</pre>
+      </div>
+      <p>
+        Here, data from the local source gets added to the search index first.
+        Then data from the prefetch source gets added to the search index.
+        The remote source is used only when there are few or no matching suggestions available in the
+        search index. The suggestions from the remote source also get added to the search index.
+      </p>
+      <p>
+        <b>Note:</b> If there are duplicate suggestions coming from multiple sources, they will be merged. See
+        advanced source configuration for further customization.
+      </p>
+    </div>
+  </div>
+</div>
+
+<hr>
+<h5 class="underline">Suggestion Data-Type</h5>
+<p>
+  The expected format of suggestions (<code>data</code>) can be of 2 types:
+  <br>- <b><code>String[]</code> (i.e. an array of Strings)</b> OR
+  <br>- <b><code>Object[]</code> (i.e. an array of Objects)</b>
+</p>
+<p>
+  In the example below, for the sake of simplicity, we will only use <code>local</code> source
+  but the idea is valid for all types of sources (i.e. local, remote & prefetch)
+</p>
+
+<div class="tabContainer padding-v15">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-link active simple-link tab-link" id="nav-str-tab" data-toggle="tab" href="#nav-str" role="tab" aria-controls="nav-str" aria-selected="true">String Array</a>
+      <a class="nav-link simple-link tab-link" id="nav-obj-tab" data-toggle="tab" href="#nav-obj" role="tab" aria-controls="nav-obj" aria-selected="false">Object Array</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-str" role="tabpanel" aria-labelledby="nav-str-tab">
+      <p>
+        When the suggestion data is an array of Strings, no additional configuration is needed
+        and the suggestions are calculated out of the box.
+      </p>
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+// Data source as an array of Strings
+const superheroes = ['Superman', 'Flash', 'Captain America'];
+
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: superheroes
+  }
+});</pre>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="nav-obj" role="tabpanel" aria-labelledby="nav-obj-tab">
+      <p>
+        When the suggestion data is an array of Objects, the <code>identifier</code> property must be set.
+        An <b>identifier</b> is used to identify which property of the object
+        should be used as the text for displaying the suggestions. This identifier is expected to be unique.
+
+      </p>
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+// Data source as an array of Objects
+const superheroes = [
+  { code: "Superman", name: "Clark Kent"},
+  { code: "Flash", name: "Barry Allen"},
+  { code: "Captain America", name: "Steve Rogers"},
+];
+
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: superheroes,
+    identifier: "code",
+  }
+});
+        </pre>
+      </div>
+      <p>
+        Certain additional parameters are available when the data source is an array of objects.
+        This has been detailed below.
+      </p>
+    </div>
+  </div>
+</div>
+
+<hr>
+<h5 class="underline">Advanced Source Configuration</h5>
+
+<p>
+  When the suggestion data is an array of objects, a few additional parameters are available for
+  more customization. All of these advanced configurations are completely optional.
+  For the sake of simplicity, we stick to using only the local data source
+  in the examples below
+</p>
+
+<div class="tabContainer padding-v15">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-link active simple-link tab-link" id="nav-gidentifier-tab" data-toggle="tab" href="#nav-gidentifier" role="tab" aria-controls="nav-gidentifier" aria-selected="true">groupIdentifier</a>
+      <a class="nav-link simple-link tab-link" id="nav-dtokens-tab" data-toggle="tab" href="#nav-dtokens" role="tab" aria-controls="nav-dtokens" aria-selected="false">dataTokens</a>
+      <a class="nav-link simple-link tab-link" id="nav-identity-tab" data-toggle="tab" href="#nav-identity" role="tab" aria-controls="nav-identity" aria-selected="false">identity</a>
+      <a class="nav-link simple-link tab-link" id="nav-transform-tab" data-toggle="tab" href="#nav-transform" role="tab" aria-controls="nav-transform" aria-selected="false">transform</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-gidentifier" role="tabpanel" aria-labelledby="nav-gidentifier-tab">
+      <p>
+        The <code>groupIdentifier</code> source config option is used when you wish to group suggestions together
+      </p>
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+// Local data source
+const colors = [
+  { id: 1, color: "Yellow", colorCode: "YW" },
+  { id: 2, color: "Green", colorCode: "GN", shade: "Greenish" },
+  { id: 3, color: "Olive", colorCode: "OV", shade: "Greenish" },
+  // ...
+];
+
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: colors,
+    identifier: "color",
+    groupIdentifier: "shade"  // optional
+  }
+});</pre>
+      </div>
+      <p>
+        In the above example, the colors Green and Olive will grouped together & will appear under the label "Greenish"
+        (i.e. value of the property defined by <code> groupIdentifier</code> option)
+        whereas the color Yellow will have no group.
+      </p>
+    </div>
+    <div class="tab-pane fade" id="nav-dtokens" role="tabpanel" aria-labelledby="nav-dtokens-tab">
+      <p>
+        The <code>dataTokens</code> config option accepts an array of strings (which are properties of the source object)
+        that should be added to the search index. In other words, when you want your suggestions to be searchable
+        not just by the property defined by the <code>identifier</code> option, but also by other properties,
+        you list those properties in the <b>dataTokens</b> config option.
+      </p>
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+// Local data source
+const colors = [
+  { id: 1, color: "Yellow", colorCode: "YW" },
+  { id: 2, color: "Green", colorCode: "GN", shade: "Greenish" },
+  { id: 3, color: "Olive", colorCode: "OV", shade: "Greenish" },
+  // ...
+];
+
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: colors,
+    identifier: "color",
+    dataTokens: ["colorCode"]  // optional
+  }
+});</pre>
+      </div>
+      <p>
+        Given the data-source as seen in the example above, what if we wanted to search colors by another property(<b>colorCode</b>)
+        and not just by its identifier(<b>color</b>) ? That's exactly where dataTokens comes in. By setting
+        <code>dataTokens: ["colorCode"]</code>, we add the values defined in the colorCode property to the search index.
+        Thereafter, if we search for "YW" (case-insensitive), the suggestion "Yellow" pops up as expected.
+      </p>
+
+    </div>
+    <div class="tab-pane fade" id="nav-identity" role="tabpanel" aria-labelledby="nav-identity-tab">
+      <p>
+        The <code>identity()</code> function is used to determine <b>uniqueness</b> of each suggestion.
+        It receives the suggestion as a parameter and must return a string unique to the given suggestion.
+        This is an optional property and it defaults to returning the <code>identifier</code>.
+        However, the default value might not work everytime. For example, consider the following code -
+      </p>
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+// Local data source
+const songs = [
+  { title: "God is Good", artist: "Don Moen" },
+  { title: "God is Good", artist: "Paul Wilbur" },
+  { title: "God is Good", artist: "Micheal Smith" },
+  { title: "El Shaddai", artist: "Amy Grant" },
+  // ...
+];
+
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: songs,
+    identifier: "title",
+    // identity(suggestion) => `${suggestion.title}${suggestion.artist}`
+  }
+});</pre>
+      </div>
+      <p>
+        Given the data-source and the identifier as seen in the example above,
+        if you search for "<i>God</i>", you will find only 1 suggestion displayed instead of 3. This is because there are
+        3 songs with the exact same title (identifier) property. The <code>identifier</code> which is expected to be unique,
+        is not unique! In real world applications, such a scenario is very well possible. To handle such collisions, we use
+        the <code>identity()</code> callback which <b>returns a unique string</b>.
+      </p>
+      <p>
+        In this case, we know that even though the song title's are the same, the artists aren't. So we simply
+        return a string which concatenates the title & the artist ensuring the returned strings
+        will always be unique. i.e.
+
+        <br><h6><code>identity(suggestion) => `${suggestion.title}${suggestion.artist}`</code></h6><br>
+
+        Ideally, if there was a unique <code>id</code> property available within the songs data,
+        you could have simply returned the id (instead of concatenating 2 properties) from the identity callback
+        to resolve the issue.
+      </p>
+
+    </div>
+    <div class="tab-pane fade" id="nav-transform" role="tabpanel" aria-labelledby="nav-transform-tab">
+      <p>
+        An optional <code>transform()</code> function is available when you need to modify the http response
+        while using the remote/prefetch source types. This is particularly useful in situations where you are consuming
+        a public API & over which you have no control, but you need to adapt its response as per your requirements.
+        The transform callback is executed before the response gets processed by typeahead.
+      </p>
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+// lets assume the remote endpoint returns data in the format
+[
+  { id: 1, capital: "Paris", country: "France" },
+  { id: 2, capital: "London", country: "UK" },
+  { id: 3, capital: "Washington DC", country: "USA" },
+  // ...
+]
+
+typeahead({
+  input: document.querySelector('.myInput'),
+  source: {
+    remote: {
+      url: 'https://remoteapi.com/%QUERY',
+      wildcard: '%QUERY',
+    },
+    identifier: "place",
+    transform: (data) => {  // optional
+      // transforms and returns data in the format
+      // [{ id: 1, place: "Paris, France" }, ...]
+      return data.map(item => ({
+        id: item.id,
+        place: `${item.capital}, ${item.country}`
+      }));
+    }
+  }
+});</pre>
+      </div>
+      <p>
+        Here, we have used the <code>transform</code> callback to modify the original remote response and
+        return the modified response that contains a new property <code>place</code>.
+        We are now free to use this new property anywhere we like. (we used it as the <code>identifier</code>).
+      </p>
+      <p>
+        The <b>transform</b> callback can additionaly be used to - flatten an array/object, add/remove properties to/from the response object,
+        change the response format to match with a custom schema and so on...
+      </p>
+    </div>
+  </div>
+</div>
+
+<hr>
+<h4>3. 📏 minLength</h4>
+
+<p>
+  The <code>minLength</code> <i>(integer)</i> defines the minimum number of characters required to be entered in order to trigger the calculation of suggestions.
+  Its default value is <b>1</b>.
+</p>
+<div class="live-demo">
+  <div class="demo-input-container">
+    <input type="text" id="typeahead-minlength-eg" placeholder="Search Colors...">
+  </div>
+  <div class="eval-js">
+    typeahead({
+      input: document.getElementById('typeahead-minlength-eg'),
+      source: {
+        local: ['Grey', 'Black', 'Blue', 'Green'],
+      },
+      minLength: 2, // default - 1
+    });
+  </div>
+</div>
+<p>
+  If you try typing "<b>gr</b>" or "<b>bl</b>" (i.e. 2 characters) in the input box above, you should see the expected suggestions.
+  Feel free to change the value of <code>minLength</code> or remove it altogether and observe the reflected changes.
+</p>
 
 
 <hr>
-<h4>3. minLength</h4>
+<h4>4. ⏹ limit</h4>
 
+<p>
+  The <code>limit</code> <i>(integer)</i> config option specifies the maximum number of suggestions that should be displayed.
+  By default <b>5</b> suggestions are shown.
+</p>
+<div class="live-demo">
+  <div class="demo-input-container">
+    <input type="text" id="typeahead-limit-eg" placeholder="Search Colors...">
+  </div>
+  <div class="eval-js">
+    typeahead({
+      input: document.getElementById('typeahead-limit-eg'),
+      source: {
+        local: ['Brown', 'Black', 'Blue', 'Beige', 'Blond', 'Bronze', 'Burgundy'],
+      },
+      limit: 3, // default - 5
+    });
+  </div>
+</div>
+<p>
+  If you try typing "<b>b</b>" in the input box above, you should see only 3 suggestions despite having 7 matching suggestions.
+  Feel free to change the value of <code>limit</code> or remove it altogether and observe the reflected changes.
+</p>
+
+<h4>5. ⏹ highlight</h4>
+
+<p>
+  The <code>highlight</code> <i>(Boolean)</i> config option causes the matching letters between the search query and the available suggestions to be highlighted.
+  A class <code>tt-highlight</code> is added to facilitate styling.
+  By default, matching letters are not highlighted.
+</p>
+<div class="live-demo">
+  <div class="demo-input-container">
+    <input type="text" id="typeahead-highlight-eg" placeholder="Search Superheroes...">
+  </div>
+  <div class="eval-js">
+    typeahead({
+      input: document.getElementById('typeahead-highlight-eg'),
+      source: {
+        local: ['Superman', 'Batman', 'Flash', 'Aquaman', 'Wonder woman'],
+      },
+      highlight: true, // default - undefined
+    });
+  </div>
+</div>
+<p>
+  If you try typing "<b>wo</b>" in the input box above, you should see these letters highlighed within the suggestion showed.
+</p>
 
 
 <hr>
@@ -57,3 +540,9 @@ typeahead({
     <a title="Usage" href="#usage" class="submenu-link">Usage</a>
   </div>
 </div>
+
+<script>
+  const liveDemoElements = document.querySelectorAll('.live-demo .eval-js');
+  liveDemoElements.forEach(El => klipse.plugin.klipsify(El, window.klipse_settings, 'eval-javascript'));
+  setTimeout(styleKlipseSnippets, 1000);
+</script>
