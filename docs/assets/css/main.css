@@ -240,13 +240,15 @@ img::-moz-selection {
 header.masthead {
   margin-bottom: 50px;
   background: no-repeat center center;
-  background-color: #868e96;
+  background-color: #2b462d;
   background-attachment: scroll;
   position: relative;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
   background-size: cover;
+}
+@media only screen and (min-width: 1200px) {
+  header.masthead {
+    background-size: auto;
+  }
 }
 
 header.masthead .overlay {
@@ -256,7 +258,8 @@ header.masthead .overlay {
   height: 100%;
   width: 100%;
   background-color: #212529;
-  opacity: 0.5;
+  /* opacity: 0.5; */
+  opacity: 0.1;
 }
 
 header.masthead .page-heading,
@@ -812,4 +815,24 @@ ul.feature-list li {
 #demo-basic .input-container input {
   border-radius: 4px;
   padding-left: 5px;
+}
+.page-heading h1 {
+  opacity: 0;
+}
+.lower-tagline {
+  color: #fff;
+  text-align: center;
+  padding-bottom: 15px;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@media only screen and (max-width: 992px) {
+  .lower-tagline {
+    position: absolute;
+    bottom: 10%;
+    width: 100%;
+    left: 0;
+    font-size: 16px;
+    padding: 0 30px;
+  }
 }

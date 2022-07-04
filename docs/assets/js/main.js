@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             : i > this.previousTop &&
               (o('#mainNav').removeClass('is-visible'),
               s < i && !o('#mainNav').hasClass('is-fixed') && o('#mainNav').addClass('is-fixed')),
-          (this.previousTop = i);
+            (this.previousTop = i);
         }
       );
     }
@@ -215,12 +215,12 @@ let dataset = [
 //   'BART123 [1082, BAA]',
 // ];
 
+let typeaheadTest = false;
 const input = document.getElementById('searchInput');
 
 let instance;
-
 // eslint-disable-next-line no-undef
-if (dev) {
+if (typeaheadTest) {
   // eslint-disable-next-line no-undef
   instance = typeahead({
     input,
