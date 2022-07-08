@@ -73,6 +73,14 @@ describe('Trie algorithm', () => {
     expect(suggestions).toStrictEqual(['romanei', 'another romaneid', 'romanesco', 'romanesque']);
   });
 
+  it('search(): Lists expected suggestions from space separated String array', () => {
+    const words = ['Superman', 'Batman', 'Flash', 'Aquaman', 'Wonder woman'];
+    const trie = Trie();
+    trie.add(words);
+    const suggestions = trie.search('wo');
+    expect(suggestions).toStrictEqual(['Wonder woman']);
+  });
+
   it('search(): Lists expected suggestions from Object array', () => {
     const trie = Trie();
     trie.add(colors, 'label', (param) => `${param.label}`);
