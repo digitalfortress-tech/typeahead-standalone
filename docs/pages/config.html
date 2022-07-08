@@ -1,7 +1,7 @@
 <h2>Configuration</h2>
 <p>
   Typeahead-standalone.js provides several configuration options to fine-tune and customize autocompletion.
-  We list all available config options below. Of these, only the first two are required whereas the rest use sensible default values.
+  We list all available config options below. Of these, only the first two are required whereas the rest are optional that use sensible default values.
 </p>
 <hr>
 
@@ -503,12 +503,13 @@ typeahead({
   Feel free to change the value of <code>limit</code> or remove it altogether and observe the reflected changes.
 </p>
 
-<h4>5. ⏹ highlight</h4>
+<hr>
+<h4>5. <i class="fad fa-highlighter"></i> highlight</h4>
 
 <p>
   The <code>highlight</code> <i>(Boolean)</i> config option causes the matching letters between the search query and the available suggestions to be highlighted.
-  A class <code>tt-highlight</code> is added to facilitate styling.
-  By default, matching letters are not highlighted.
+  When set to <code>true</code>, the basic styling makes the matched letters <b>bold</b>.
+  A class <code>tt-highlight</code> is added to facilitate further styling.
 </p>
 <div class="live-demo">
   <div class="demo-input-container">
@@ -525,9 +526,258 @@ typeahead({
   </div>
 </div>
 <p>
-  If you try typing "<b>wo</b>" in the input box above, you should see these letters highlighed within the suggestion showed.
+  If you try typing "<b>wo</b>" in the input box above, you should see the letters <b>wo</b> highlighed within the list of suggestions.
+  By default, this option is <code>undefined</code>, i.e. matching letters are not highlighted.
 </p>
 
+<hr>
+<h4>6. 💡 hint</h4>
+
+<p>
+  The <code>hint</code> <i>(Boolean)</i> config option updates the input placeholder to be equal to the first matched suggestion.
+  A class <code>tt-hint</code> is added to facilitate further styling.
+</p>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: ['Superman', 'Batman', 'Flash', 'Aquaman', 'Wonder woman'],
+    hint: true, // default - true
+  }
+});</pre>
+</div>
+<p>
+  By default, the <code>hint</code> config option is set to <code>true</code>.
+</p>
+
+<hr>
+<h4>7. <i class="fad fa-ballot-check"></i> autoSelect</h4>
+
+<p>
+  The <code>autoSelect</code> <i>(Boolean)</i> config option, when set to <code>true</code>,
+  simply pre-selects the first displayed suggestion. Pressing the <kbd>Enter</kbd> key will
+  fill the input box with the selected suggestion.
+</p>
+<div class="live-demo">
+  <div class="demo-input-container">
+    <input type="text" id="typeahead-autoselect-eg" placeholder="Search Countries...">
+  </div>
+  <div class="eval-js">
+    typeahead({
+      input: document.getElementById('typeahead-autoselect-eg'),
+      source: {
+        local: ['USA', 'UK', 'UAE', 'France', 'Finland'],
+      },
+      autoSelect: true, // default - false
+    });
+  </div>
+</div>
+<p>
+  By default, <code>autoSelect</code> is set to <code>false</code>. The selected suggestion has a blue background by default
+  but a class <code>tt-selected</code> permits further styling.
+</p>
+
+<hr>
+<h4>8. <i class="fas fa-tv-alt"></i> display</h4>
+
+<p>
+  The <code>display</code> config option is a callback that is executed when the user selects an item from the suggestions.
+  The selected suggestion is passed as a parameter and it <b>must return a string</b> which is then set as the input's value.
+  The display function also affects the input's placeholder.
+</p>
+<p>
+  The 2nd optional parameter <b>event</b> is a Mouse/Keyboard event which can be used to track user interaction or for analytics.
+</p>
+<div class="live-demo">
+  <div class="demo-input-container">
+    <input type="text" id="typeahead-display-eg" placeholder="Search Places...">
+  </div>
+  <div class="eval-js">
+    const places = [
+      { name: 'Paris', country: 'France'},
+      { name: 'London', country: 'UK'},
+      { name: 'Moscow', country: 'Russia'},
+      // ...
+    ]
+
+    typeahead({
+      input: document.getElementById('typeahead-display-eg'),
+      source: {
+        local: places,
+        identifier: 'name'
+      },
+      display: (selectedItem, event) => {
+        if (event) {
+          // do something
+          // alert("event type is - " + event.type);
+        }
+
+        return `${selectedItem.name}, ${selectedItem.country}`;
+      }
+    });
+  </div>
+</div>
+<p>
+  The <code>display()</code> callback is optional and by default,
+  it returns the string representation (usually the <code>identifier</code>) of the selected item.
+</p>
+<p>
+  In the above input box, if you try searching for <i>Paris</i>, you will see the placeholder value to be "<i>Paris, France</i>",
+  which is set by the <code>display</code> callback. Also if you select the displayed suggestion, either by mouse click/touch or
+  via the keyboard, the input value will similarly be set to "<i>Paris, France</i>".
+</p>
+
+<hr>
+<h4>9. ❎ preventSubmit</h4>
+
+<p>
+  The <code>preventSubmit</code> <i>(Boolean)</i> config option is used to prevent the default submit action
+  when the input is used inside a form element. It defaults to <code>false</code>
+</p>
+
+<div class="tabContainer padding-v15">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-link active simple-link tab-link" id="nav-html2-tab" data-toggle="tab" href="#nav-html2" role="tab" aria-controls="nav-html2" aria-selected="true">HTML</a>
+      <a class="nav-link simple-link tab-link" id="nav-jscript2-tab" data-toggle="tab" href="#nav-jscript2" role="tab" aria-controls="nav-jscript2" aria-selected="false">Javascript</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade" id="nav-jscript2" role="tabpanel" aria-labelledby="nav-jscript2-tab">
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js language-javascript">
+typeahead({
+  input: document.querySelector("#typeahead"),
+  source: {
+    local: ['Superman', 'Batman', 'Flash', 'Aquaman', 'Wonder woman'],
+  },
+  preventSubmit: true,  // default - false
+});</pre>
+      </div>
+    </div>
+    <div class="tab-pane fade show active" id="nav-html2" role="tabpanel" aria-labelledby="nav-html2-tab">
+      <div class="codeContainer">
+        <span class="lang">HTML</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-html language-xml">
+&#60;body&#62;
+  &#60;form action="#" method="get" &#62;
+    &#60;input type="search" id="typeahead" placeholder="Search..."&#62;
+  &#60;/form&#62;
+&#60;/body&#62;</pre>
+      </div>
+    </div>
+  </div>
+</div>
+<p>
+  When the input element is used inside a form element, the default action on hitting the <kbd>Enter</kbd> key is to
+  submit the form. The <code>preventSubmit</code> flag can be used to prevent this default behavior.
+  To later submit the form manually, you can use the <code>onSubmit</code> callback config option.
+</p>
+
+<hr>
+<h4>10. <i class="fad fa-paper-plane"></i> onSubmit</h4>
+
+<p>
+  The <code>onSubmit</code> config option is a callback that get triggered on hitting the <kbd>Enter</kbd> key.
+  It receives the keyboard <b>event</b> as the first parameter and the <b>selectedSuggestion</b> as the second parameter.
+  (i.e. only if a suggestion was selected, otherwise the 2nd parameter is undefined.)
+</p>
+<p>
+  The main utility of this callback handler is to submit the form manually especially when the input element is being used outside of a form element.
+</p>
+<div class="live-demo">
+  <div class="demo-input-container">
+    <input type="text" id="typeahead-onsubmit-eg" placeholder="Search Countries...">
+  </div>
+  <div class="eval-js">
+    typeahead({
+      input: document.getElementById('typeahead-onsubmit-eg'),
+      source: {
+        local: ['USA', 'UK', 'UAE', 'France', 'Finland'],
+      },
+      onSubmit: (e, selectedSuggestion) => {
+        const query = e.target.value;
+        alert(`input -> ${query}, eventType -> ${e.type}`);
+
+        if (selectedSuggestion) {
+          alert('Selected suggestion - ' + JSON.stringify(selectedSuggestion));
+        }
+      }
+    });
+  </div>
+</div>
+<p>
+  If you try to search for <i>"Fr"</i>, and hit the <kbd>Enter</kbd> key, the <code>onSubmit</code> callback should be triggered.
+  You will see a single alert message. But if you search for <i>"Fr"</i>, and then select the first suggestion
+  (for example by pressing the down arrow key) and then hit <kbd>Enter</kbd>, you should see 2 alert messages as expected.
+</p>
+
+<hr>
+<h4>11. ⏳ debounceRemote</h4>
+
+<p>
+  The <code>debounceRemote</code> <i>(Int)</i> config option is used to delay execution of
+  http requests (in milliseconds).
+</p>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    remote: {
+      // ...
+    }
+  },
+  debounceRemote: 300 // optional (in milliseconds)
+});</pre>
+</div>
+<p>
+  The default value of <code>debounceRemote</code> is set to <code>100</code>ms.
+</p>
+
+<hr>
+<h4>12. <i class="fas fa-code"></i> className</h4>
+
+<p>
+  The <code>className</code> <i>(String)</i> config option is used add an additional class to the
+  container of typeahead-standalone. This is useful to add/override CSS.
+</p>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    // ...
+  },
+  className: "my-search-box" // optional
+});</pre>
+</div>
+<p>
+  The container has a class <code>typeahead-standalone</code> by default.
+</p>
+
+<hr>
+<h4>13. 🎨 templates</h4>
+
+<p>
+  The <code>templates</code> config option is used to customize the
+  rendering of the list of suggestions.
+</p>
+<p>
+  There are 5 templates available to style your list of suggestions.
+  These have been detailed in the section dedicated for
+  <a title="Styles" href="#styles" class="submenu-link"><b>styles</b></a>.
+</p>
 
 <hr>
 <div class="bottom-nav">

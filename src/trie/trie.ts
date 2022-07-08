@@ -24,7 +24,6 @@ export const Trie: TrieType<any> = () => {
       // we tokenize the incoming data to make search possible by fragments
       const dataTokens =
         typeof value === 'string' ? spaceTokenizer(value) : spaceTokenizer((value[identifier] as string) || '');
-      console.log('dataTokens :>> ', dataTokens);
       dataTokens
         .filter((item) => item) // filter out falsy values
         .forEach((prefix) => {
@@ -49,8 +48,6 @@ export const Trie: TrieType<any> = () => {
           }
         });
     });
-
-    console.log('root :>> ', root);
   }
 
   /**
@@ -110,11 +107,8 @@ export const Trie: TrieType<any> = () => {
     let suggestions: string[] | Dictionary[] = [];
     queryTokens.forEach((token) => {
       // note that limit is not passed to "find()"
-      console.log('find(token) :>> ', find(token));
       objArrs.push(find(token) as Dictionary[]);
     });
-
-    // console.log('objArrs :>> ', objArrs);
 
     // get intersection of found suggestions
     suggestions = objArrs.reduce((acc: Dictionary[], currentArr: Dictionary[]) =>
@@ -127,8 +121,6 @@ export const Trie: TrieType<any> = () => {
     if (limit && suggestions.length > limit) {
       suggestions.length = limit;
     }
-
-    console.log('suggestions :>> ', suggestions);
 
     return suggestions.map((item) => item.value) as Dictionary[];
   }
