@@ -1,3 +1,178 @@
-<h1>
-  Style
-</h1>
+<h2>
+  Styles
+</h2>
+<p>
+  The UI of typeahead-standalone is completely upto the user and is customizable to the very pixel.
+  Some basic styling is provided for a seamless integration.
+</p>
+<p>
+  There are 2 parts to handle styling...
+</p>
+
+<hr>
+<h4>1. 🎨 Templates</h4>
+
+<p>
+  <code>templates</code> (<i>type: Object</i>) are used to customize the rendering of the list of suggestions. In other words,
+  templates allow you to <b>add html</b> that is injected into the list of suggestions.
+  There are 5 types of templates available. All of them  <i>optional</i>.
+</p>
+
+<h5 class="underline">Types of templates</h5>
+  <ol>
+    <li><code>header</code> - Rendered at the top of the list.</li>
+    <li><code>footer</code> - Rendered at the bottom of the list.</li>
+    <li><code>suggestion</code> - Renders a single suggestion.</li>
+    <li><code>group</code> - Renders the group title.</li>
+    <li><code>notFound</code> - Rendered when no suggestions are found.</li>
+  </ol>
+<p>
+  A typical example can be seen below -
+</p>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: ['Superman', 'Batman', 'Flash', 'Aquaman'],
+  },
+  templates: {
+    header: () => '&#60;h1&#62;Superheroes&#60;/h1&#62;',     /* Rendered at the top of the list */
+    footer: () => '&#60;a href="#"&#62;See more&#60;/a&#62;', /* Rendered at the bottom of the list */
+    suggestion: (item) => {                   /* Renders a single suggestion */
+      return `&#60;div class="suggestion-label"&#62;${item.label}&#60;/div&#62;`;
+    },
+    group: (groupName) => {                   /* Renders the group title */
+      return `&#60;span class="group-label"&#62;${groupName}&#60;/span&#62;`;
+    },
+    notFound: () => '&#60;b&#62;Nothing Found&#60;/b&#62;',   /* Rendered if no suggestions are found */
+  }
+});</pre>
+</div>
+
+<p>
+  As seen, each template is <b>a function that returns a string</b> which is <b>interpreted as HTML</b>.
+  To facilitate styling, each template is wrapped in a <code>div</code> element with a corresponding class. i.e.
+</p>
+<p>
+  <ul>
+    <li>header => class <code>tt-header</code></li>
+    <li>footer => class <code>tt-footer</code></li>
+    <li>suggestion => class <code>tt-suggestion</code></li>
+    <li>group => class <code>tt-group</code></li>
+    <li>notFound => class <code>tt-notFound</code></li>
+  </ul>
+</p>
+<p>
+  Here's a demo showing the usage of templates in action...
+</p>
+<script async src="//jsfiddle.net/niketpathak/2bfnq7k5/embed/result,js,html,css/dark/"></script>
+
+
+<hr>
+<h4>2. 💄 Overriding/Rewriting the default Styles</h4>
+
+<p>
+  Typeahead standalone comes with some basic styles which are completely optional.
+  To customize, you can either override the basic styles or you could directly rewrite them.
+</p>
+
+<h5 class="underline">Rewriting Styles</h5>
+
+<p>
+  Since typeahead-standalone has only a few lines of css, it is pretty simple to
+  rewrite the styles. We <b>recommend</b> rewriting the styles for a greater control.
+</p>
+<p>
+  To rewrite styles, you can grab the latest version of the stylesheet from the
+  <a href="https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css" title="typeahead-standalone default styles CDN">CDN</a>.
+  Then, all you need to do is either add, update or delete CSS as per your liking.
+</p>
+
+<h5 class="underline">Overriding Styles</h5>
+
+<p>
+  You can also choose to override the basic styles. In this case, the <code>className</code> config option
+  can be used to override styles using
+  <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity">CSS Specificity</a>.
+</p>
+
+<div class="tabContainer padding-v15">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-link active simple-link tab-link" id="nav-js-tab" data-toggle="tab" href="#nav-js" role="tab" aria-controls="nav-js" aria-selected="true">Javascript</a>
+      <a class="nav-link simple-link tab-link" id="nav-css-tab" data-toggle="tab" href="#nav-css" role="tab" aria-controls="nav-css" aria-selected="false">CSS</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-js" role="tabpanel" aria-labelledby="nav-js-tab">
+      <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-javascript">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: ['Superman', 'Batman', 'Flash', 'Aquaman'],
+  },
+  className: 'typeahead-example'
+});</pre>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="nav-css" role="tabpanel" aria-labelledby="nav-css-tab">
+      <div class="codeContainer">
+        <span class="lang">CSS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-css language">
+/* Example to override the style of the list of suggestions */
+.typeahead-standalone.typeahead-example .tt-list {
+  background: #292727;
+  color: #fff;
+  border: 1px solid #6d6b6b;
+  border-radius: 4px;
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>
+  As seen in the above snippet, using the <code>className</code> config option, we were able to
+  override the style for the list of suggestions using higher css specificity.
+</p>
+
+<h5 class="underline">Wrapper Classes</h5>
+
+<p>
+  To facilitate overriding/rewriting styles, all important elements within typeahead-standalone have
+  a <code>class</code> added to them, which are at your disposal. They are listed below...
+</p>
+
+<ol>
+  <li>The entire html is wrapped in a container with a class <code>typeahead-standalone</code>.</li>
+  <li>The input element has a <code>tt-input</code> class.</li>
+  <li>The hint element has a <code>tt-hint</code> class.</li>
+  <li>The list of suggestions is wrapped in a container with a <code>tt-list</code> class.</li>
+  <li>A class <code>tt-hide</code> is added to the list when no suggestions are available.</li>
+  <li>Each suggestion has a class <code>tt-suggestion</code>.</li>
+  <li>If a suggestion is selected, then it has a <code>tt-selected</code> class.</li>
+</ol>
+
+<p>
+  The CSS tab in the JS fiddle <i>(found in the templates section above)</i> has several examples of using
+  the wrapper classes to add/override styles.
+</p>
+
+<hr>
+<div class="bottom-nav">
+  <div class="bottom-nav-right">
+    <div class="label">Next <i class="fad fa-chevron-double-right"></i></div>
+    <a title="References" href="#references" class="submenu-link simple-link">References</a>
+  </div>
+  <div class="bottom-nav-left">
+    <div class="label"><i class="fad fa-chevron-double-left"></i> Previous</div>
+    <a title="Config" href="#config" class="submenu-link">Config</a>
+  </div>
+</div>
