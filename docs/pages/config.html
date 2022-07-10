@@ -227,6 +227,23 @@ typeahead({
   }
 });</pre>
       </div>
+      <p>
+        <b><i class="fas fa-info-circle"></i> Note:</b> Internally, the source data gets normalised for further
+        processing. In the case of the above example, the normalised data would be
+      </p>
+        <div class="codeContainer">
+        <span class="lang">JS</span>
+        <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+        <pre class="hljs language-js">
+/* Normalised Data */
+[
+  { label: "Superman" },
+  { label: "Flash" },
+  // ...
+]</pre>
+      </div>
+      The string array gets converted into an object array with the format <code>label: "value"</code>.
+      The <b>label</b> acts like a default <code>identifier</code>.
     </div>
     <div class="tab-pane fade" id="nav-obj" role="tabpanel" aria-labelledby="nav-obj-tab">
       <p>
@@ -309,7 +326,7 @@ typeahead({
 });</pre>
       </div>
       <p>
-        In the above example, the colors Green and Olive will grouped together & will appear under the label "Greenish"
+        In the above example, the colors <i>Green</i> and <i>Olive</i> will grouped together & will appear under the label <i>"Greenish"</i>
         (i.e. value of the property defined by <code> groupIdentifier</code> option)
         whereas the color Yellow will have no group.
       </p>
@@ -454,7 +471,7 @@ typeahead({
 <h4>3. 📏 minLength</h4>
 
 <p>
-  The <code>minLength</code> <i>(integer)</i> defines the minimum number of characters required to be entered in order to trigger the calculation of suggestions.
+  The <code>minLength</code> <i>(Type: integer)</i> defines the minimum number of characters required to be entered in order to trigger the calculation of suggestions.
   Its default value is <b>1</b>.
 </p>
 <div class="live-demo">
@@ -507,7 +524,7 @@ typeahead({
 <h4>5. <i class="fad fa-highlighter"></i> highlight</h4>
 
 <p>
-  The <code>highlight</code> <i>(Boolean)</i> config option causes the matching letters between the search query and the available suggestions to be highlighted.
+  The <code>highlight</code> <i>(Type: Boolean)</i> config option causes the matching letters between the search query and the available suggestions to be highlighted.
   When set to <code>true</code>, the basic styling makes the matched letters <b>bold</b>.
   A class <code>tt-highlight</code> is added to facilitate further styling.
 </p>
@@ -534,7 +551,7 @@ typeahead({
 <h4>6. 💡 hint</h4>
 
 <p>
-  The <code>hint</code> <i>(Boolean)</i> config option updates the input placeholder to be equal to the first matched suggestion.
+  The <code>hint</code> <i>(Type: Boolean)</i> config option updates the input placeholder to be equal to the first matched suggestion.
   A class <code>tt-hint</code> is added to facilitate further styling.
 </p>
 <div class="codeContainer">
@@ -557,7 +574,7 @@ typeahead({
 <h4>7. <i class="fad fa-ballot-check"></i> autoSelect</h4>
 
 <p>
-  The <code>autoSelect</code> <i>(Boolean)</i> config option, when set to <code>true</code>,
+  The <code>autoSelect</code> <i>(Type: Boolean)</i> config option, when set to <code>true</code>,
   simply pre-selects the first displayed suggestion. Pressing the <kbd>Enter</kbd> key will
   fill the input box with the selected suggestion.
 </p>
@@ -626,7 +643,7 @@ typeahead({
 </p>
 <p>
   In the above input box, if you try searching for <i>Paris</i>, you will see the placeholder value to be "<i>Paris, France</i>",
-  which is set by the <code>display</code> callback. Also if you select the displayed suggestion, either by mouse click/touch or
+  which is set by the <code>display</code> callback. Also, if you select the displayed suggestion, either by mouse click/touch or
   via the keyboard, the input value will similarly be set to "<i>Paris, France</i>".
 </p>
 
@@ -634,7 +651,7 @@ typeahead({
 <h4>9. ❎ preventSubmit</h4>
 
 <p>
-  The <code>preventSubmit</code> <i>(Boolean)</i> config option is used to prevent the default submit action
+  The <code>preventSubmit</code> <i>(Type: Boolean)</i> config option is used to prevent the default submit action
   when the input is used inside a form element. It defaults to <code>false</code>
 </p>
 
@@ -722,7 +739,7 @@ typeahead({
 <h4>11. ⏳ debounceRemote</h4>
 
 <p>
-  The <code>debounceRemote</code> <i>(Int)</i> config option is used to delay execution of
+  The <code>debounceRemote</code> <i>(Type: Integer)</i> config option is used to delay execution of
   http requests (in milliseconds).
 </p>
 <div class="codeContainer">
@@ -747,7 +764,7 @@ typeahead({
 <h4>12. <i class="fas fa-code"></i> className</h4>
 
 <p>
-  The <code>className</code> <i>(String)</i> config option is used add an additional class to the
+  The <code>className</code> <i>(Type: String)</i> config option is used add an additional class to the
   container of typeahead-standalone. This is useful to add/override CSS.
 </p>
 <div class="codeContainer">

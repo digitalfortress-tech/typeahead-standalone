@@ -373,6 +373,7 @@ header.masthead .post-heading .meta a {
 #mainSection {
   border-left: 1px solid #e9e4e4;
   border-right: 1px solid #e9e4e4;
+  margin-bottom: 25px;
 }
 
 @media only screen and (max-width: 992px) {

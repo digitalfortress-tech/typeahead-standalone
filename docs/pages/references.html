@@ -1,0 +1,115 @@
+<h2>
+  References
+</h2>
+<p>
+  Here we list references of error codes, API details, general information on how to report bugs, suggest ideas
+  or details on how to contribute to the project.
+</p>
+
+<hr>
+<h4>1. ✨ API</h4>
+
+<p>There is a single method <code>destroy()</code> exposed by typeahead-standalone</p>
+
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+/* Setup typeahead */
+const instance = typeahead({ /* config options */ });
+
+/* Destroy typeahead */
+instance.destroy();
+</pre>
+</div>
+<p>
+  The <code>destroy()</code> method destroys the typeahead instance, removes all event handlers and cleans up the DOM.
+  It can be used when you want to deactivate autocompletion completely.
+</p>
+
+<hr>
+<h4>2. ⛔️ Error Codes</h4>
+
+<p>A small glossary of the possible errors codes that one may come across</p>
+
+<table class="table table-striped table-hover table-bordered">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Code</th>
+      <th scope="col">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row"><code>e01</code></th>
+      <td>Missing input DOM element</td>
+    </tr>
+    <tr>
+      <th scope="row"><code>e02</code></th>
+      <td>
+        Missing/Incorrect source of suggestions.
+        You must provide atleast one of the 3 possible sources - local, prefetch or remote with the expected source format
+        <a href="#config" class="submenu-link">(Ref)</a>
+      </td>
+    </tr>
+    <tr>
+      <th scope="row"><code>e03</code></th>
+      <td>Identifier not defined</td>
+    </tr>
+    <tr>
+      <th scope="row"><code>e04</code></th>
+      <td>Prefetch request failed</td>
+    </tr>
+    <tr>
+      <th scope="row"><code>e05</code></th>
+      <td>Remote request failed</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+<h4>3. 🌐 Support</h4>
+
+<p>
+  For general questions or new ideas for typeahead-standalone.js, please start a
+  <a href="https://github.com/digitalfortress-tech/typeahead-standalone/discussions" title="Github Discussions typeahead-standalone.js">discussion on Github</a>.
+</p>
+
+<p>
+  For technical queries, please post your question on
+  <a href="https://stackoverflow.com/questions/tagged/typeahead-standalone" title="Stackoverflow tag - typeahead-standalone">Stack Overflow</a>.
+</p>
+
+<hr>
+<h4>4. 🧑‍💻 Contributions</h4>
+
+<p>
+  Contributions and suggestions are always welcome! Here are the steps to start contributing -
+</p>
+
+<ol>
+  <li>Fork the <a href="https://github.com/digitalfortress-tech/typeahead-standalone.git" title="Fork Typeahead-standalone">repository</a></li>
+  <li>Create your feature branch (<code>git checkout -b feature/fooBar</code>)</li>
+  <li>Commit your changes (<code>git commit -am 'Add some fooBar'</code>)</li>
+  <li>Ensure your branch is not behind (<code>git rebase origin master</code>)</li>
+  <li>Push to the branch (<code>git push origin feature/fooBar</code>)</li>
+  <li>Create a new Pull Request</li>
+</ol>
+
+<p>
+  Additional info can be found in
+  <a href="https://github.com/digitalfortress-tech/typeahead-standalone/blob/master/contributing.md" title="contributing.md">contributing.md</a>.
+</p>
+
+
+<hr>
+<div class="bottom-nav">
+  <div class="bottom-nav-right">
+    <div class="label">Next <i class="fad fa-chevron-double-right"></i></div>
+    <a title="" href="#" class="submenu-link">Playground</a>
+  </div>
+  <div class="bottom-nav-left">
+    <div class="label"><i class="fad fa-chevron-double-left"></i> Previous</div>
+    <a title="Styles" href="#styles" class="submenu-link">Styles</a>
+  </div>
+</div>

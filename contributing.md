@@ -44,7 +44,7 @@ We're always looking for more opinions on discussions in the issue tracker. It's
 
 ## Code Style
 Follow the [xo](https://github.com/sindresorhus/xo) style.
-Using two spaces for identation and no [semicolons](http://blog.izs.me/post/2353458699/an-open-letter-to-javascript-leaders-regarding).
+Using two spaces for identation and semicolons at the end of every statement.
 
 ## Commit Message Emoji
 

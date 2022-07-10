@@ -199,9 +199,11 @@ Checkout the **[Live Examples](https://typeahead.digitalfortress.tech/)** for fu
 Some basic styling is provided with typeahead. The UI is completely upto you and is customizable to the very pixel. You can use the following classes to add/override styles.
 
 - The entire html is wrapped in a container with a class `typeahead-standalone`.
-- The input element gets an additional `tt-input` class.
+- The input element has a `tt-input` class.
+- The hint element has a `tt-hint` class.
 - The list of suggestions is wrapped in a container with a `tt-list` class. (A class `tt-hide` is added when no suggestions are available)
 - Each suggestion has a class `tt-suggestion` and if the suggestion is selected, then it has a `tt-selected` class additionally.
+- If the highlight config option is set to *true*, every highlighted text block has a `tt-highlight` class.
 
 
 <details>
