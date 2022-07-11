@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             : i > this.previousTop &&
               (o('#mainNav').removeClass('is-visible'),
               s < i && !o('#mainNav').hasClass('is-fixed') && o('#mainNav').addClass('is-fixed')),
-          (this.previousTop = i);
+            (this.previousTop = i);
         }
       );
     }
@@ -42,6 +42,8 @@ document.addEventListener('DOMContentLoaded', function () {
 /*****************************************************************************************/
 /************************************** CUSTOM *******************************************/
 /*****************************************************************************************/
+// Keep reference of stickyEvt handler
+let stickyEvtHandler;
 
 // handle loading fragments
 $(document).ready(function () {
@@ -80,6 +82,11 @@ function loadFragment(name) {
       $('.submenu-link').removeClass('active');
       name === 'intro' ? (name = './') : '';
       $('.submenu-link[href="' + name + '"]').addClass('active');
+
+      // recalculate stickyness
+      removeStickyHandler();
+      setTimeout(removeStickyHandler, 1500);
+      setTimeout(makeSticky, 2e3);
     }
   });
 }
@@ -115,6 +122,13 @@ function copyToClipboard(text) {
   return navigator.clipboard.writeText(text);
 }
 
+function removeStickyHandler() {
+  if (stickyEvtHandler) {
+    window.removeEventListener('scroll', stickyEvtHandler);
+    stickyEvtHandler = undefined;
+  }
+}
+
 // handle sticky elements
 const stickyEl = (El, stickyConf) => {
   if (!El || !(El instanceof HTMLElement) || !stickyConf || stickyConf.constructor !== Object) return null;
@@ -132,7 +146,7 @@ const stickyEl = (El, stickyConf) => {
     endPos = window.pageYOffset + afterEl.getBoundingClientRect().top;
   }
 
-  const eventHandler = () => {
+  stickyEvtHandler = () => {
     if (!ticking) {
       scrollPos = window.scrollY;
       window.requestAnimationFrame(() => {
@@ -154,8 +168,8 @@ const stickyEl = (El, stickyConf) => {
     }
   };
 
-  window.addEventListener('scroll', eventHandler);
-  return eventHandler;
+  window.addEventListener('scroll', stickyEvtHandler);
+  return stickyEvtHandler;
 };
 
 const makeSticky = () => {
