@@ -3,6 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/typeahead-standalone.svg)](https://www.npmjs.com/package/typeahead-standalone)
 [![Build Status](https://travis-ci.org/niketpathak/typeahead-standalone.svg?branch=master)](https://travis-ci.org/niketpathak/typeahead-standalone)
 [![code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![CDN Hits](https://data.jsdelivr.com/v1/package/npm/typeahead-standalone/badge?style=rounded)](https://www.jsdelivr.com/package/npm/typeahead-standalone)
 ![Downloads](https://img.shields.io/npm/dt/typeahead-standalone)
 ![maintained](https://img.shields.io/badge/maintained-yes-blueviolet)
 [![License](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -24,11 +25,11 @@ A fast fully-featured standalone autocomplete library
 - 🌐 Supports every major browser!
 ---
 
-### 🔥 Demo
+### 🔥 Demo/Docs
 
-Here is a **[Live Demo](https://typeahead.digitalfortress.tech/)** of **typeahead-standalone.js** in action.
+Here is a **[complete Docs with Live Demo](https://typeahead.digitalfortress.tech/)** of **typeahead-standalone.js**.
 
-A preview of the basic example taken from the Demo:
+Preview of a basic example:
 
 ![Basic example](./demo/basic-ex.gif)
 
