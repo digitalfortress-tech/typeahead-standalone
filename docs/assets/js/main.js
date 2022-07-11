@@ -111,20 +111,6 @@ function syntaxHighlight() {
   });
 }
 
-/** Manually add dark theme classes */
-function styleKlipseSnippets() {
-  const snippet = document.querySelectorAll('.klipse-snippet .CodeMirror.cm-s-default');
-  const output = document.querySelectorAll('.klipse-result .CodeMirror.cm-s-default');
-  if (snippet.length && output.length) {
-    [snippet, output].forEach((collection) => {
-      collection.forEach((el) => {
-        el.classList.add('cm-s-solarized', 'cm-s-dark');
-        el.classList.remove('cm-s-default');
-      });
-    });
-  }
-}
-
 function copyToClipboard(text) {
   return navigator.clipboard.writeText(text);
 }

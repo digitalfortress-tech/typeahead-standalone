@@ -474,25 +474,21 @@ typeahead({
   The <code>minLength</code> <i>(Type: integer)</i> defines the minimum number of characters required to be entered in order to trigger the calculation of suggestions.
   Its default value is <b>1</b>.
 </p>
-<div class="live-demo">
-  <div class="demo-input-container">
-    <input type="text" id="typeahead-minlength-eg" placeholder="Search Colors...">
-  </div>
-  <div class="eval-js">
-    typeahead({
-      input: document.getElementById('typeahead-minlength-eg'),
-      source: {
-        local: ['Grey', 'Black', 'Blue', 'Green'],
-      },
-      minLength: 2, // default - 1
-    });
-  </div>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: ['Superman', 'Batman', 'Flash', 'Aquaman', 'Wonder woman'],
+  },
+  minLength: 2, // default - 1
+});</pre>
 </div>
 <p>
-  If you try typing "<b>gr</b>" or "<b>bl</b>" (i.e. 2 characters) in the input box above, you should see the expected suggestions.
-  Feel free to change the value of <code>minLength</code> or remove it altogether and observe the reflected changes.
+  As per the example, autocompletion will be triggered only after a minimum of 2 characters have been entered.
 </p>
-
 
 <hr>
 <h4>4. ⏹ limit</h4>
@@ -501,23 +497,20 @@ typeahead({
   The <code>limit</code> <i>(integer)</i> config option specifies the maximum number of suggestions that should be displayed.
   By default <b>5</b> suggestions are shown.
 </p>
-<div class="live-demo">
-  <div class="demo-input-container">
-    <input type="text" id="typeahead-limit-eg" placeholder="Search Colors...">
-  </div>
-  <div class="eval-js">
-    typeahead({
-      input: document.getElementById('typeahead-limit-eg'),
-      source: {
-        local: ['Brown', 'Black', 'Blue', 'Beige', 'Blond', 'Bronze', 'Burgundy'],
-      },
-      limit: 3, // default - 5
-    });
-  </div>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: ['Brown', 'Black', 'Blue', 'Beige', 'Blond', 'Bronze', 'Burgundy'],
+  },
+  limit: 3, // default - 5
+});</pre>
 </div>
 <p>
-  If you try typing "<b>b</b>" in the input box above, you should see only 3 suggestions despite having 7 matching suggestions.
-  Feel free to change the value of <code>limit</code> or remove it altogether and observe the reflected changes.
+  Going by the above snippet, a maximum of 3 suggestions will be displayed even if there are more suggestions available.
 </p>
 
 <hr>
@@ -528,22 +521,19 @@ typeahead({
   When set to <code>true</code>, the basic styling makes the matched letters <b>bold</b>.
   A class <code>tt-highlight</code> is added to facilitate further styling.
 </p>
-<div class="live-demo">
-  <div class="demo-input-container">
-    <input type="text" id="typeahead-highlight-eg" placeholder="Search Superheroes...">
-  </div>
-  <div class="eval-js">
-    typeahead({
-      input: document.getElementById('typeahead-highlight-eg'),
-      source: {
-        local: ['Superman', 'Batman', 'Flash', 'Aquaman', 'Wonder woman'],
-      },
-      highlight: true, // default - undefined
-    });
-  </div>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: ['Superman', 'Batman', 'Flash', 'Aquaman', 'Wonder woman'],
+  },
+  highlight: true, // default - undefined
+});</pre>
 </div>
 <p>
-  If you try typing "<b>wo</b>" in the input box above, you should see the letters <b>wo</b> highlighed within the list of suggestions.
   By default, this option is <code>undefined</code>, i.e. matching letters are not highlighted.
 </p>
 
@@ -551,8 +541,8 @@ typeahead({
 <h4>6. 💡 hint</h4>
 
 <p>
-  The <code>hint</code> <i>(Type: Boolean)</i> config option updates the input placeholder to be equal to the first matched suggestion.
-  A class <code>tt-hint</code> is added to facilitate further styling.
+  The <code>hint</code> <i>(Type: Boolean)</i> config option updates the input's placeholder to be equal to the first matched suggestion.
+  Pressing the <kbd>Tab</kbd> key will set the input's value to the placeholder's current value.
 </p>
 <div class="codeContainer">
   <span class="lang">JS</span>
@@ -562,12 +552,13 @@ typeahead({
   input: document.querySelector(".myInput"),
   source: {
     local: ['Superman', 'Batman', 'Flash', 'Aquaman', 'Wonder woman'],
-    hint: true, // default - true
-  }
+  },
+  hint: true // default - true
 });</pre>
 </div>
 <p>
   By default, the <code>hint</code> config option is set to <code>true</code>.
+  A class <code>tt-hint</code> is added to facilitate styling.
 </p>
 
 <hr>
@@ -578,19 +569,17 @@ typeahead({
   simply pre-selects the first displayed suggestion. Pressing the <kbd>Enter</kbd> key will
   fill the input box with the selected suggestion.
 </p>
-<div class="live-demo">
-  <div class="demo-input-container">
-    <input type="text" id="typeahead-autoselect-eg" placeholder="Search Countries...">
-  </div>
-  <div class="eval-js">
-    typeahead({
-      input: document.getElementById('typeahead-autoselect-eg'),
-      source: {
-        local: ['USA', 'UK', 'UAE', 'France', 'Finland'],
-      },
-      autoSelect: true, // default - false
-    });
-  </div>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: ['USA', 'UK', 'UAE', 'France', 'Finland'],
+  },
+  autoSelect: true, // default - false
+});</pre>
 </div>
 <p>
   By default, <code>autoSelect</code> is set to <code>false</code>. The selected suggestion has a blue background by default
@@ -608,35 +597,42 @@ typeahead({
 <p>
   The 2nd optional parameter <b>event</b> is a Mouse/Keyboard event which can be used to track user interaction or for analytics.
 </p>
-<div class="live-demo">
-  <div class="demo-input-container">
-    <input type="text" id="typeahead-display-eg" placeholder="Search Places...">
-  </div>
-  <div class="eval-js">
-    const places = [
-      { name: 'Paris', country: 'France'},
-      { name: 'London', country: 'UK'},
-      { name: 'Moscow', country: 'Russia'},
-      // ...
-    ]
+<div class="codepen" data-height="400" data-theme-id="dark" data-default-tab="js,result" data-preview="true" data-editable="true"  data-prefill='{"title":"Typeahead-standalone display() config option Demo","tags":[],"scripts":[],"stylesheets":[]}'>
+  <pre data-lang="html">
+&lt;!-- Include assets -->
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css" />
+&lt;script src="https://cdn.jsdelivr.net/npm/typeahead-standalone">&lt;/script>
 
-    typeahead({
-      input: document.getElementById('typeahead-display-eg'),
-      source: {
-        local: places,
-        identifier: 'name'
-      },
-      display: (selectedItem, event) => {
-        if (event) {
-          // do something
-          // alert("event type is - " + event.type);
-        }
+&lt;!-- input element -->
+&lt;input type="search" id="typeahead-display-eg" autocomplete="off" placeholder="Search Places...">
+</pre>
 
-        return `${selectedItem.name}, ${selectedItem.country}`;
-      }
-    });
-  </div>
+<pre data-lang="js">
+const places = [
+  { name: 'Paris', country: 'France'},
+  { name: 'London', country: 'UK'},
+  { name: 'Moscow', country: 'Russia'},
+  // ...
+]
+
+typeahead({
+  input: document.getElementById('typeahead-display-eg'),
+  source: {
+    local: places,
+    identifier: 'name'
+  },
+  display: (selectedItem, event) => {
+    if (event) {
+      // do something
+      // alert("event type is - " + event.type);
+    }
+
+    return `${selectedItem.name}, ${selectedItem.country}`;
+  }
+});
+</pre>
 </div>
+
 <p>
   The <code>display()</code> callback is optional and by default,
   it returns the string representation (usually the <code>identifier</code>) of the selected item.
@@ -644,7 +640,7 @@ typeahead({
 <p>
   In the above input box, if you try searching for <i>Paris</i>, you will see the placeholder value to be "<i>Paris, France</i>",
   which is set by the <code>display</code> callback. Also, if you select the displayed suggestion, either by mouse click/touch or
-  via the keyboard, the input value will similarly be set to "<i>Paris, France</i>".
+  via the keyboard, the input's value will similarly be set to "<i>Paris, France</i>".
 </p>
 
 <hr>
@@ -701,33 +697,38 @@ typeahead({
 <h4>10. <i class="fad fa-paper-plane"></i> onSubmit</h4>
 
 <p>
-  The <code>onSubmit</code> config option is a callback that get triggered on hitting the <kbd>Enter</kbd> key.
+  The <code>onSubmit</code> config option is a callback that gets triggered on hitting the <kbd>Enter</kbd> key.
   It receives the keyboard <b>event</b> as the first parameter and the <b>selectedSuggestion</b> as the second parameter.
   (i.e. only if a suggestion was selected, otherwise the 2nd parameter is undefined.)
 </p>
 <p>
   The main utility of this callback handler is to submit the form manually especially when the input element is being used outside of a form element.
 </p>
-<div class="live-demo">
-  <div class="demo-input-container">
-    <input type="text" id="typeahead-onsubmit-eg" placeholder="Search Countries...">
-  </div>
-  <div class="eval-js">
-    typeahead({
-      input: document.getElementById('typeahead-onsubmit-eg'),
-      source: {
-        local: ['USA', 'UK', 'UAE', 'France', 'Finland'],
-      },
-      onSubmit: (e, selectedSuggestion) => {
-        const query = e.target.value;
-        alert(`input -> ${query}, eventType -> ${e.type}`);
+<div class="codepen" data-height="400" data-theme-id="dark" data-default-tab="js,result" data-preview="true" data-editable="true"  data-prefill='{"title":"Typeahead-standalone onSubmit() config option Demo","tags":[],"scripts":[],"stylesheets":[]}'>
+<pre data-lang="html">
+&lt;!-- Include assets -->
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css" />
+&lt;script src="https://cdn.jsdelivr.net/npm/typeahead-standalone">&lt;/script>
 
-        if (selectedSuggestion) {
-          alert('Selected suggestion - ' + JSON.stringify(selectedSuggestion));
-        }
-      }
-    });
-  </div>
+&lt;!-- input element -->
+&lt;input type="search" id="typeahead-onsubmit-eg" placeholder="Search Countries..." autocomplete="off">
+</pre>
+<pre data-lang="js">
+typeahead({
+  input: document.getElementById('typeahead-onsubmit-eg'),
+  source: {
+    local: ['USA', 'UK', 'UAE', 'France', 'Finland'],
+    identifier: 'name'
+  },
+  onSubmit: (e, selectedSuggestion) => {
+    const query = e.target.value;
+    alert(`input -> ${query}, eventType -> ${e.type}`);
+
+    if (selectedSuggestion) {
+      alert('Selected suggestion - ' + JSON.stringify(selectedSuggestion));
+    }
+  }
+});</pre>
 </div>
 <p>
   If you try to search for <i>"Fr"</i>, and hit the <kbd>Enter</kbd> key, the <code>onSubmit</code> callback should be triggered.
@@ -808,8 +809,4 @@ typeahead({
   </div>
 </div>
 
-<script>
-  const liveDemoElements = document.querySelectorAll('.live-demo .eval-js');
-  liveDemoElements.forEach(El => klipse.plugin.klipsify(El, window.klipse_settings, 'eval-javascript'));
-  setTimeout(styleKlipseSnippets, 1000);
-</script>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>

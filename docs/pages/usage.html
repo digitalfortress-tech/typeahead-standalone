@@ -139,24 +139,28 @@ const instance = typeahead({
 
 <p>
   Here is a live demo in action. Feel free to tinker with it to see the results in real-time.
-
-  <div id="demo-basic">
-    <div class="demo-input-container">
-      <input type="text" id="typeahead" placeholder="Search Colors">
-    </div>
-    <div class="eval-js">
-      typeahead({
-        input: document.getElementById('typeahead'),
-        highlight: true,
-        source: {
-          local: ['Grey', 'Brown', 'Black', 'Blue'],
-        }
-      });
-    </div>
-    <p><b>Note:</b> Due to limitations in the live-editor, the <code>hint</code> might not work as expected,
-      however you can head over to <a href="https://jsfiddle.net/niketpathak/xp4mw769/" title="Basic demo jsfiddle for Typeahead-standalone.js">jsfiddle</a> for a complete sandboxed test environment.</p>
-  </div>
 </p>
+
+<div class="codepen" data-height="300" data-theme-id="dark" data-default-tab="js,result" data-preview="true" data-editable="true"  data-prefill='{"title":"Typeahead-standalone Usage Demo","tags":[],"scripts":[],"stylesheets":[]}'>
+  <pre data-lang="html">
+&lt;!-- Include assets -->
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css" />
+&lt;script src="https://cdn.jsdelivr.net/npm/typeahead-standalone">&lt;/script>
+
+&lt;!-- input element -->
+&lt;input type="search" id="colorSearch" autocomplete="off" placeholder="Search Colors...">
+</pre>
+
+<pre data-lang="js">
+typeahead({
+  input: document.getElementById('colorSearch'),
+  highlight: true,
+  source: {
+    local: ['Grey', 'Brown', 'Black', 'Blue'],
+  }
+});
+</pre>
+</div>
 
 <hr>
 <div class="bottom-nav">
@@ -170,7 +174,5 @@ const instance = typeahead({
   </div>
 </div>
 
-<script>
-  klipse.plugin.klipsify(document.querySelector('#demo-basic .eval-js'), window.klipse_settings, 'eval-javascript');
-  setTimeout(styleKlipseSnippets, 1000);
-</script>
+
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>

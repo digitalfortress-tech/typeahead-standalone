@@ -809,14 +809,6 @@ ul.feature-list li {
 .beforePubbCard .chip {
   padding: 3px 0;
 }
-.demo-input-container {
-  padding: 10px 0 25px;
-  text-align: center;
-}
-.demo-input-container input {
-  border-radius: 4px;
-  padding-left: 5px;
-}
 .page-heading h1 {
   opacity: 0;
 }
