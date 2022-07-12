@@ -49,6 +49,7 @@ export interface typeaheadConfig<T extends Dictionary> {
   hint?: boolean;
   autoSelect?: boolean;
   highlight?: boolean;
+  diacritics?: boolean;
   display?: (selectedItem: T, ev?: MouseEvent | KeyboardEvent | null) => string;
   onSubmit?: (e: Event, selectedItem?: T) => void;
   debounceRemote?: number;

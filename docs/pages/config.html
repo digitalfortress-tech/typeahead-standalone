@@ -762,7 +762,32 @@ typeahead({
 </p>
 
 <hr>
-<h4>12. <i class="fas fa-code"></i> className</h4>
+<h4>12. <i class="fas fa-language"></i> diacritics</h4>
+
+<p>
+  The <code>diacritics</code> <i>(Type: Boolean)</i> config option is used to enable/disable
+  language diacritics supported search. This means that characters with accents (<i>example input - èąśćńżóźćę</i>)
+  get converted into their non-accented counterpart (<i>example output - eascnzozce</i>).
+</p>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    // ...
+  },
+  diacritics: true // optional (default -> undefined)
+});</pre>
+</div>
+<p>
+  The default value of <code>diacritics</code> is <code>undefined</code> i.e. accents are not converted into their
+  non-accented counterparts.
+</p>
+
+<hr>
+<h4>13. <i class="fas fa-code"></i> className</h4>
 
 <p>
   The <code>className</code> <i>(Type: String)</i> config option is used add an additional class to the
@@ -785,7 +810,7 @@ typeahead({
 </p>
 
 <hr>
-<h4>13. 🎨 templates</h4>
+<h4>14. 🎨 templates</h4>
 
 <p>
   The <code>templates</code> config option is used to customize the

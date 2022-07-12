@@ -27,7 +27,7 @@ A fast fully-featured standalone autocomplete library
 
 ### 🔥 Demo/Docs
 
-Here is a **[complete Docs with Live Demo](https://typeahead.digitalfortress.tech/)** of **typeahead-standalone.js**.
+Find here **[detailed Docs with Live Demos](https://typeahead.digitalfortress.tech/)** for **typeahead-standalone.js**.
 
 Preview of a basic example:
 
@@ -119,6 +119,7 @@ You can pass the following config options to `typeahead-standalone`:
 |`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is added to facilitate styling|`undefined`|
 |`autoSelect`| If set to true, pre-selects the first displayed suggestion |`false`|
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
+|`diacritics`| Flag to enable/disable language diacritics supported search (i.e. search by converting accented characters into their non-accented counterparts)|`undefined`|
 |`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`)|`undefined`|
 |`templates`|An object containing templates for header, footer, suggestion, group and notFound state. See [templates section](#templates) for clarification |`undefined`|
 |`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|

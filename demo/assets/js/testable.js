@@ -581,3 +581,14 @@ const test12 = typeahead({
     },
   },
 });
+
+// eslint-disable-next-line no-undef
+const test13 = typeahead({
+  input: document.getElementById('input-thirteen'),
+  source: {
+    local: ['creme brulee', 'crème brulée', 'ascnzołzce'],
+  },
+  className: 'typeahead-test-thirteen',
+  highlight: true,
+  diacritics: true,
+});

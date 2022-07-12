@@ -467,9 +467,17 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
   };
 
+  const formatQuery = (ip = '') => {
+    if (config.diacritics) {
+      ip = ip.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+    }
+
+    return ip.toLowerCase();
+  };
+
   const calcSuggestions = (newItems?: T[]): void => {
     // get suggestions
-    let suggestions: T[] = trie.search(inputValue.toLowerCase(), limitSuggestions) as T[];
+    let suggestions: T[] = trie.search(formatQuery(inputValue), limitSuggestions) as T[];
 
     if (newItems?.length) {
       let newSuggestions: T[] | Dictionary[] = [...suggestions, ...newItems];
@@ -600,13 +608,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    */
   const hightlight = (Elm: HTMLElement, pattern: string): void => {
     const getRegex = function (query: string, wordsOnly: boolean) {
-      const escapedQuery = escapeRegExp(query);
-
-      // @todo: add support diacritic insensitivity
-      // if (diacriticInsensitive) {
-      //   escapedQuery = escapedQuery.replace(/\S/g, accent_replacer);
-      // }
-
+      const escapedQuery = escapeRegExp(formatQuery(query));
       const regexStr = wordsOnly ? '\\b(' + escapedQuery + ')\\b' : '(' + escapedQuery + ')';
       return new RegExp(regexStr, 'i');
     };
@@ -670,17 +672,16 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     // if raw string is not part of suggestion, hide the hint
     if (
       selectedItem[identifier] === rawInput || // if input string is exactly the same as selectedItem
-      (selectedItem[identifier] as string).toLocaleLowerCase().indexOf(
-        rawInput
+      (selectedItem[identifier] as string).toLowerCase().indexOf(
+        formatQuery(rawInput)
           .replace(/\s{2,}/g, ' ')
           .trimStart()
-          .toLocaleLowerCase()
       ) !== 0
     ) {
       inputHint.value = '';
     } else {
-      inputHint.value = (rawInput.replace(/\s?$/, '') +
-        display(selectedItem).replace(new RegExp(escapeRegExp(inputValue), 'i'), '')) as string;
+      inputHint.value = (formatQuery(rawInput).replace(/\s?$/, '') +
+        display(selectedItem).replace(new RegExp(escapeRegExp(formatQuery(inputValue)), 'i'), '')) as string;
     }
   };
 

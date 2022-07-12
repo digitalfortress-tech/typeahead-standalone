@@ -28,7 +28,7 @@ export const Trie: TrieType<any> = () => {
         .filter((item) => item) // filter out falsy values
         .forEach((prefix) => {
           node = root;
-          prefix = prefix.toLocaleLowerCase(); // make search case insensitive
+          prefix = prefix.toLowerCase(); // make search case insensitive
 
           for (let i = 0, l = prefix.length; i < l; i++) {
             token = prefix[i];
@@ -100,7 +100,7 @@ export const Trie: TrieType<any> = () => {
    * Search for query strings within the trie
    */
   function search(query: string, limit?: number) {
-    const queryTokens = spaceTokenizer(query.toLocaleLowerCase());
+    const queryTokens = spaceTokenizer(query.toLowerCase());
 
     // Search for multiple tokens/queries
     const objArrs: Dictionary[][] = [];
