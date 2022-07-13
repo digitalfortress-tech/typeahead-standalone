@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 /*****************************************************************************************/
 // Keep reference of stickyEvt handler
 let stickyEvtHandler;
+let previousFragment;
 
 // handle loading fragments
 $(document).ready(function () {
@@ -51,10 +52,14 @@ $(document).ready(function () {
     loadFragment(window.location.hash);
   }
   window.onhashchange = function () {
-    loadFragment(window.location.hash);
+    loadFragment(window.location.hash, false);
   };
 
   init();
+});
+
+window.addEventListener('load', () => {
+  makeSticky();
 });
 
 $('.submenu-link').click(function (e) {
@@ -62,32 +67,58 @@ $('.submenu-link').click(function (e) {
   const pg = $(this).attr('href');
   loadFragment(pg);
 
-  document.getElementById('mainSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
   window.history.pushState('', document.title, pg);
 });
 
-function loadFragment(name) {
-  if (!name || name === './') {
+function loadFragment(fragment, firstLoad = true) {
+  if (!fragment || fragment === './') {
     // load base template
-    name = 'intro';
+    fragment = 'intro';
   }
-  $('#mainSection').load(`pages/${name.replace('#', '')}.html`, function (resp, status) {
+
+  // handle sections if existing
+  let subSection = null;
+  if (fragment.indexOf('?') !== -1) {
+    const urlParts = fragment.split('?');
+    fragment = urlParts[0];
+    const params = new URLSearchParams(urlParts[1]);
+    subSection = params.get('id');
+  }
+
+  $('#mainSection').load(`pages/${fragment.replace('#', '')}.html`, function (resp, status) {
     // init once fragment is loaded (attach events etc)
     init();
 
     if (status == 'error') {
       $('#mainSection').load('pages/404.html');
-    } else {
-      // manage active class
-      $('.submenu-link').removeClass('active');
-      name === 'intro' ? (name = './') : '';
-      $('.submenu-link[href="' + name + '"]').addClass('active');
+      return;
+    }
 
-      // recalculate stickyness
+    // manage active class
+    $('.submenu-link').removeClass('active');
+    fragment === 'intro' ? (fragment = './') : '';
+    $('.submenu-link[href="' + fragment + '"]').addClass('active');
+
+    // recalculate stickyness
+    if (previousFragment && previousFragment !== fragment) {
       removeStickyHandler();
-      setTimeout(removeStickyHandler, 1500);
       setTimeout(makeSticky, 2e3);
     }
+
+    /* scroll to top of fragment */
+    if (!subSection) {
+      document.getElementById('mainSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (!firstLoad) {
+      /* subSection exists, scroll to subSection */
+      document.getElementById(subSection)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      /*  first page load. subSection exists, scroll to subSection */
+      window.addEventListener('load', () => {
+        document.getElementById(subSection)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    previousFragment = fragment;
   });
 }
 
@@ -104,11 +135,6 @@ function init() {
         that.find('i').removeClass('fa-check-circle').addClass('fa-copy').attr('title', 'Copy to Clipboard');
       }, 3000);
     });
-  });
-
-  // attach listener for bottom-nav
-  $('.bottom-nav .submenu-link').click(function () {
-    document.getElementById('mainSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 }
 
@@ -178,10 +204,7 @@ const makeSticky = () => {
   stickyEl(stickyGAdv, {
     beforeEl: document.querySelector('.beforePubbCard'),
     afterEl: document.querySelector('.subscribe-area'),
-    offsetTop: 120,
+    offsetTop: 60,
     offsetBottom: 100,
   });
 };
-
-// Make Pub sticky after a small delay
-setTimeout(makeSticky, 3e3);

@@ -56,6 +56,11 @@ a.tab-link {
   color: green;
 }
 
+a.section-link:hover,
+.section-link.active {
+  color: #1393e0;
+}
+
 blockquote {
   font-style: italic;
   color: #868e96;
@@ -717,6 +722,10 @@ adapted from a snippet
   font-size: 14px;
 }
 
+.section-link code {
+  color: #e83e8c;
+}
+
 .klipse-result::before {
   background: #002b35;
   content: "🔻 Console O/P 🔻";
@@ -812,7 +821,7 @@ adapted from a snippet
   width: 100%;
   overflow: hidden;
   max-height: 600px;
-  margin-bottom: 20px;
+  margin: 20px 0;
   padding: 0 30px;
 }
 
