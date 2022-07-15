@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://typeahead.digitalfortress.tech/sitemap.xml
