@@ -61,6 +61,10 @@ a.section-link:hover,
   color: #1393e0;
 }
 
+a.section-link.internal-section-link {
+  color: #1393e0;
+}
+
 blockquote {
   font-style: italic;
   color: #868e96;
@@ -822,7 +826,6 @@ adapted from a snippet
   overflow: hidden;
   max-height: 600px;
   margin: 20px 0;
-  padding: 0 30px;
 }
 
 /* add transition to sticky element */
