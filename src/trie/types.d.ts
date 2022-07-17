@@ -6,4 +6,8 @@ export interface TrieAPI<T extends Dictionary> {
   clear(): void;
 }
 
-export type TrieType<T extends Dictionary> = () => TrieAPI<T>;
+export interface TrieConfig {
+  hasDiacritics?: boolean;
+}
+
+export type TrieType<T extends Dictionary> = (config?: TrieConfig) => TrieAPI<T>;

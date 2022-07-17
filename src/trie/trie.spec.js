@@ -53,12 +53,6 @@ describe('Trie algorithm', () => {
     expect(suggestions).toStrictEqual(['James', 'John']);
   });
 
-  it('search(): Passing null/undefined instead of string must throw', () => {
-    const trie = Trie();
-    trie.add(['roman', 'romanesque']);
-    expect(() => trie.search()).toThrow();
-  });
-
   it('search(): Passing empty string returns all items in tree', () => {
     const trie = Trie();
     trie.add(['roman', 'romanesque']);
@@ -110,6 +104,31 @@ describe('Trie algorithm', () => {
         value: 'BL',
       },
     ]);
+  });
+
+  it('search(): Lists expected suggestions with diacritics enabled', () => {
+    const words = ['Kraków', 'Łódź', 'Wrocław', 'Gdańsk', 'Częstochowa', 'Bielsko-Biała', 'Rzeszów', 'Ruda Śląska'];
+    const trie = Trie({ hasDiacritics: true });
+    trie.add(words);
+    let suggestions = trie.search('Krako');
+    expect(suggestions).toStrictEqual(['Kraków']);
+
+    suggestions = trie.search('Gdań');
+    expect(suggestions).toStrictEqual(['Gdańsk']);
+  });
+
+  it('search(): Lists expected suggestions with diacritics disabled', () => {
+    const words = ['Kraków', 'Łódź', 'Wrocław', 'Gdańsk', 'Częstochowa', 'Bielsko-Biała', 'Rzeszów', 'Ruda Śląska'];
+    const trie = Trie();
+    trie.add(words);
+    let suggestions = trie.search('Krako');
+    expect(suggestions).toStrictEqual([]);
+
+    suggestions = trie.search('Gdan');
+    expect(suggestions).toStrictEqual([]);
+
+    suggestions = trie.search('Łó');
+    expect(suggestions).toStrictEqual(['Łódź']);
   });
 
   it('supports case insensitive prefix', () => {

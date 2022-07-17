@@ -767,22 +767,29 @@ typeahead({
 <p>
   The <code>diacritics</code> <i>(Type: Boolean)</i> config option is used to enable/disable
   language diacritics supported search. This means that characters with accents (<i>example input - èąśćńżóźćę</i>)
-  get converted into their non-accented counterpart (<i>example output - eascnzozce</i>).
+  match with their non-accented counterparts (<i>example output - eascnzozce</i>).
 </p>
-<div class="codeContainer">
-  <span class="lang">JS</span>
-  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
-  <pre class="hljs language-js">
+<div class="codepen" data-height="400" style="height:400px; overflow: auto;" data-theme-id="dark" data-default-tab="js,result" data-preview="true" data-editable="true"  data-prefill='{"title":"Typeahead-standalone onSubmit() config option Demo","tags":[],"scripts":[],"stylesheets":[]}'>
+<pre data-lang="html">
+&lt;!-- Include assets -->
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css" />
+&lt;script src="https://cdn.jsdelivr.net/npm/typeahead-standalone">&lt;/script>
+
+&lt;!-- input element -->
+&lt;input type="search" id="diacritics-example" placeholder="Search Places..." autocomplete="off">
+</pre>
+<pre data-lang="js">
 typeahead({
-  input: document.querySelector(".myInput"),
+  input: document.getElementById('diacritics-example'),
   source: {
-    // ...
+    local: [ 'Kraków', 'Gdańsk', 'Częstochowa', 'Ruda Śląska', 'Rhône', 'Évry', 'Épinal', 'Essonne'],
   },
-  diacritics: true // optional (default -> undefined)
+  highlight: true,
+  diacritics: true,
 });</pre>
 </div>
 <p>
-  The default value of <code>diacritics</code> is <code>undefined</code> i.e. accents are not converted into their
+  The default value of <code>diacritics</code> is <code>undefined</code> i.e. accents are not converted/matched with their
   non-accented counterparts.
 </p>
 

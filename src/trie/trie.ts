@@ -1,13 +1,25 @@
 import { Dictionary } from '../types';
 import type { TrieType } from './types';
-import { deduplicateArr, spaceTokenizer } from '../helpers';
+import { deduplicateArr, spaceTokenizer, diacritics } from '../helpers';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
-export const Trie: TrieType<any> = () => {
+export const Trie: TrieType<any> = (config = {}) => {
+  const { hasDiacritics } = config;
   let root: Record<string, unknown> = {};
 
   // marks the end of a string
   const SENTINEL = String.fromCharCode(0);
+
+  /**
+   * Returns data/query tokens
+   */
+  function tokenize(value = '') {
+    if (hasDiacritics) {
+      value = diacritics(value);
+    }
+    // make search case insensitive
+    return spaceTokenizer(value.toLowerCase());
+  }
 
   /**
    * Method used to add the given data to the trie.
@@ -22,13 +34,11 @@ export const Trie: TrieType<any> = () => {
 
     data.forEach((value: string | Dictionary) => {
       // we tokenize the incoming data to make search possible by fragments
-      const dataTokens =
-        typeof value === 'string' ? spaceTokenizer(value) : spaceTokenizer((value[identifier] as string) || '');
+      const dataTokens = tokenize(typeof value === 'string' ? value : (value[identifier] as string));
       dataTokens
         .filter((item) => item) // filter out falsy values
         .forEach((prefix) => {
           node = root;
-          prefix = prefix.toLowerCase(); // make search case insensitive
 
           for (let i = 0, l = prefix.length; i < l; i++) {
             token = prefix[i];
@@ -100,7 +110,7 @@ export const Trie: TrieType<any> = () => {
    * Search for query strings within the trie
    */
   function search(query: string, limit?: number) {
-    const queryTokens = spaceTokenizer(query.toLowerCase());
+    const queryTokens = tokenize(query);
 
     // Search for multiple tokens/queries
     const objArrs: Dictionary[][] = [];

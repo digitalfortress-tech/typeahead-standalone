@@ -14,6 +14,8 @@ export const deduplicateArr = (iterable: Dictionary[], prop: string): Dictionary
 
 export const spaceTokenizer = (tokenString: string): string[] => tokenString.trim().split(/\s+/);
 
+export const diacritics = (txt = '') => txt.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
 /****** helpers specific to typeahead  *****/
 
 export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionary[] | T[], identifier: string): T[] => {

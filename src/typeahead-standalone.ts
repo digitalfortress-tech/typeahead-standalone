@@ -14,7 +14,7 @@ import type {
   PrefetchDataSource,
 } from './types';
 import { Keys } from './constants';
-import { deduplicateArr, escapeRegExp, isObject, NOOP, normalizer } from './helpers';
+import { deduplicateArr, diacritics, escapeRegExp, isObject, NOOP, normalizer } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
 import './style.less';
@@ -35,7 +35,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const hint = config.hint === false ? false : true;
   const autoSelect = config.autoSelect || false;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
-  const trie = Trie();
+  const trie = Trie({ hasDiacritics: config.diacritics });
   const identifier = config.source.identifier || 'label'; // label is the default identifier
   const groupIdentifier = config.source.groupIdentifier || '';
   const displayCb = <T extends Dictionary>(item: T): string => {
@@ -469,7 +469,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const formatQuery = (ip = '') => {
     if (config.diacritics) {
-      ip = ip.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+      ip = diacritics(ip);
     }
 
     return ip.toLowerCase();
@@ -477,7 +477,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const calcSuggestions = (newItems?: T[]): void => {
     // get suggestions
-    let suggestions: T[] = trie.search(formatQuery(inputValue), limitSuggestions) as T[];
+    let suggestions: T[] = trie.search(inputValue, limitSuggestions) as T[];
 
     if (newItems?.length) {
       let newSuggestions: T[] | Dictionary[] = [...suggestions, ...newItems];
@@ -607,14 +607,19 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * @param pattern the string to highlight
    */
   const hightlight = (Elm: HTMLElement, pattern: string): void => {
-    const getRegex = function (query: string, wordsOnly: boolean) {
-      const escapedQuery = escapeRegExp(formatQuery(query));
+    const getRegex = (query: string, wordsOnly: boolean) => {
+      const escapedQuery = escapeRegExp(query);
       const regexStr = wordsOnly ? '\\b(' + escapedQuery + ')\\b' : '(' + escapedQuery + ')';
       return new RegExp(regexStr, 'i');
     };
 
-    const hightlightTextNode = function (textNode: Text) {
-      const match = regex.exec(textNode.data);
+    const hightlightTextNode = (textNode: Text) => {
+      let match = regex.exec(textNode.data);
+
+      // check for diacritics if necessary
+      if (config.diacritics && !match) {
+        match = regex.exec(diacritics(textNode.data));
+      }
 
       const wrapperNode = doc.createElement('span');
       wrapperNode.className = 'tt-highlight';
@@ -624,13 +629,13 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         patternNode.splitText(match[0].length);
         wrapperNode.appendChild(patternNode.cloneNode(true));
 
-        textNode && textNode.parentNode && textNode.parentNode.replaceChild(wrapperNode, patternNode);
+        textNode?.parentNode?.replaceChild(wrapperNode, patternNode);
       }
 
       return !!match;
     };
 
-    const traverse = function (el: HTMLElement | ChildNode, hightlightTextNode: (textNode: Text) => boolean) {
+    const traverse = (el: HTMLElement | ChildNode, hightlightTextNode: (textNode: Text) => boolean) => {
       const TEXT_NODE_TYPE = 3;
       let childNode;
 
@@ -671,8 +676,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // if raw string is not part of suggestion, hide the hint
     if (
-      selectedItem[identifier] === rawInput || // if input string is exactly the same as selectedItem
-      (selectedItem[identifier] as string).toLowerCase().indexOf(
+      display(selectedItem) === rawInput || // if input string is exactly the same as selectedItem
+      formatQuery(display(selectedItem)).indexOf(
         formatQuery(rawInput)
           .replace(/\s{2,}/g, ' ')
           .trimStart()
@@ -680,8 +685,18 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     ) {
       inputHint.value = '';
     } else {
-      inputHint.value = (formatQuery(rawInput).replace(/\s?$/, '') +
-        display(selectedItem).replace(new RegExp(escapeRegExp(formatQuery(inputValue)), 'i'), '')) as string;
+      const item = display(selectedItem);
+      const regex = new RegExp(escapeRegExp(inputValue), 'i');
+      let match = regex.exec(item);
+
+      // check for diacritics if necessary
+      if (config.diacritics && !match) {
+        match = regex.exec(diacritics(item));
+      }
+
+      if (match) {
+        inputHint.value = (rawInput.replace(/\s?$/, '') + item.substring(match[0].length)) as string;
+      }
     }
   };
 

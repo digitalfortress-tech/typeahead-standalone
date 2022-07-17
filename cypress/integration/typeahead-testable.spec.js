@@ -340,17 +340,18 @@ context('Typeahead', () => {
   });
 
   it('Displays correct suggestions with diacritics enabled', () => {
-    cy.get('#input-thirteen').as('input13').type('cr', { delay: 100 });
-    cy.get('.typeahead-test-thirteen .tt-list').as('list').children().should('have.length', 2);
+    cy.get('#input-thirteen').as('input13').type('e', { delay: 100 });
+    cy.get('.typeahead-test-thirteen .tt-list').as('list').children().should('have.length', 4);
 
-    cy.get('@input13').clear().type('crè', { delay: 100 });
-    cy.get('@list').children('.tt-suggestion').should('contain.text', 'creme brulee');
-    cy.get('.typeahead-test-thirteen .tt-list .tt-suggestion .tt-highlight').should('contain.text', 'cre'); // diacritics must be applied to the highlight element too
-    cy.get('.typeahead-test-thirteen .tt-hint').as('hint13').should('have.value', 'creme brulee'); // diacritics must be applied to the hint too
+    cy.get('@input13').clear().type('rhô', { delay: 100 });
+    cy.get('@list').children('.tt-suggestion').should('contain.text', 'Rhône');
+    cy.get('.typeahead-test-thirteen .tt-list .tt-suggestion .tt-highlight').should('contain.text', 'Rhô');
+    cy.get('.typeahead-test-thirteen .tt-hint').as('hint13').should('have.value', 'rhône');
 
-    cy.get('@input13').clear().type('ąśćńżółźćę');
-    cy.get('@list').children('.tt-suggestion').should('contain.text', 'ascnzołzce');
-    cy.get('.typeahead-test-thirteen .tt-list .tt-suggestion .tt-highlight').should('contain.text', 'ascnzołzce');
+    cy.get('@input13').clear().type('rho'); // query without accents
+    cy.get('@list').children('.tt-suggestion').should('contain.text', 'Rhône');
+    cy.get('.typeahead-test-thirteen .tt-list .tt-suggestion .tt-highlight').should('contain.text', 'Rhô'); // diacritics must be applied to the highlight element too
+    cy.get('.typeahead-test-thirteen .tt-hint').as('hint13').should('have.value', 'rhone'); // diacritics must be applied to the hint too
   });
 
   // https://on.cypress.io/interacting-with-elements
