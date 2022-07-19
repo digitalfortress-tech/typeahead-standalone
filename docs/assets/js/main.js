@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             : i > this.previousTop &&
               (o('#mainNav').removeClass('is-visible'),
               s < i && !o('#mainNav').hasClass('is-fixed') && o('#mainNav').addClass('is-fixed')),
-            (this.previousTop = i);
+          (this.previousTop = i);
         }
       );
     }
@@ -42,12 +42,13 @@ document.addEventListener('DOMContentLoaded', function () {
 /*****************************************************************************************/
 /************************************** CUSTOM *******************************************/
 /*****************************************************************************************/
-// Keep reference of stickyEvt handler
+
+const mainSectionEl = document.getElementById('mainSection');
 let stickyEvtHandler;
 let previousFragment;
 
-// handle loading fragments
 $(document).ready(function () {
+  // handle loading fragments
   if (window.location.hash) {
     loadFragment(window.location.hash);
   }
@@ -56,6 +57,29 @@ $(document).ready(function () {
   };
 
   init();
+
+  $('#back-to-top').click(function (e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  $(window).scroll(function () {
+    // handle scroll-to-top btn
+    if ($(this).scrollTop() > window.innerHeight) {
+      $('#back-to-top').css('opacity', 1);
+    } else {
+      $('#back-to-top').css('opacity', 0);
+    }
+
+    // For mobile, adjust main div so that sticky subnav does not overlap heading of mainSection on navigation/fragment load
+    if (window.screen.availWidth <= 992) {
+      if ($(this).scrollTop() > mainSectionEl.offsetTop - 50) {
+        mainSectionEl.style.paddingTop = '65px';
+      } else {
+        mainSectionEl.style.paddingTop = 0;
+      }
+    }
+  });
 });
 
 window.addEventListener('load', () => {
@@ -107,7 +131,7 @@ function loadFragment(fragment, firstLoad = true) {
 
     /* scroll to top of fragment */
     if (!subSection) {
-      document.getElementById('mainSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      mainSectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else if (!firstLoad) {
       /* subSection exists, scroll to subSection */
       document.getElementById(subSection)?.scrollIntoView({ behavior: 'smooth', block: 'start' });

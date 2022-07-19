@@ -429,6 +429,7 @@ header.masthead .post-heading .meta a {
   border-left: 1px solid #e9e4e4;
   border-right: 1px solid #e9e4e4;
   margin: 25px 0;
+  transition: padding 500ms ease;
 }
 
 .post-preview > a {
@@ -749,6 +750,28 @@ adapted from a snippet
   color: green;
   font-weight: 600;
   border-bottom: 3px solid green;
+}
+
+#back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 10px 15px;
+  color: #fff;
+  opacity: 0.5;
+  opacity: 0;
+  background-color: rgba(0,0,0,0.4);
+  z-index: 10;
+  transition: opacity 300ms ease-in-out;
+}
+
+#back-to-top:hover {
+  opacity: 1;
+  background-color: rgba(0,0,0,0.8);
+}
+
+#back-to-top:visited, #back-to-top:focus {
+  color: #fff;
 }
 
 [type=search] {
