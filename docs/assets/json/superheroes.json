@@ -1,5 +1,7 @@
 {
   "page": 1,
+  "total_pages": 30,
+  "total_results": 648,
   "results": [
     {
       "adult": false,
@@ -489,22 +491,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": null,
-      "genre_ids": [],
-      "id": 558077,
-      "original_language": "bn",
-      "original_title": "Superman",
-      "overview": "A child from a dying world is sent to Earth, where his alien physiology renders him superhuman. Bengali remake of the 1978 classic.",
-      "popularity": 3.933,
-      "poster_path": null,
-      "release_date": "",
-      "title": "Superman",
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
-    },
-    {
-      "adult": false,
       "backdrop_path": "/2IbaHMUwb81cr7PwcvaXl0JtikP.jpg",
       "genre_ids": [
         28,
@@ -697,25 +683,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": null,
-      "genre_ids": [
-        28,
-        878
-      ],
-      "id": 463562,
-      "original_language": "en",
-      "original_title": "Superman",
-      "overview": "Feature version of the 1948 Columbia serial film, never exhibited or otherwise made available to the public itself in the USA.",
-      "popularity": 2.086,
-      "poster_path": null,
-      "release_date": "1953-05-16",
-      "title": "Superman",
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
-    },
-    {
-      "adult": false,
       "backdrop_path": "/jF6nKDlQCLgKSaxl0CKxf04tw6O.jpg",
       "genre_ids": [
         16,
@@ -734,24 +701,6 @@
       "video": false,
       "vote_average": 6.9,
       "vote_count": 46
-    },
-    {
-      "adult": false,
-      "backdrop_path": null,
-      "genre_ids": [
-        16
-      ],
-      "id": 836710,
-      "original_language": "ru",
-      "original_title": "Superman",
-      "overview": "The second of a series of videos using famous characters to urge people to be careful during a pandemic. Superman.",
-      "popularity": 2.061,
-      "poster_path": null,
-      "release_date": "2020-06-10",
-      "title": "Superman",
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
     },
     {
       "adult": false,
@@ -1425,24 +1374,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/kbLo8Hku9XKrcZtc885si3gd9M4.jpg",
-      "genre_ids": [
-        12
-      ],
-      "id": 1000053,
-      "original_language": "en",
-      "original_title": "Spider-Man: Cake Day",
-      "overview": "On his girlfriend's birthday, Peter Parker's day gets more and more hectic as he deals with bank robbers and getting Mary Jane's cake.",
-      "popularity": 1.4,
-      "poster_path": null,
-      "release_date": "2018-12-08",
-      "title": "Spider-Man: Cake Day",
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
-    },
-    {
-      "adult": false,
       "backdrop_path": null,
       "genre_ids": [
         99
@@ -1479,22 +1410,6 @@
       "video": true,
       "vote_average": 6.8,
       "vote_count": 12
-    },
-    {
-      "adult": false,
-      "backdrop_path": null,
-      "genre_ids": [],
-      "id": 969681,
-      "original_language": "en",
-      "original_title": "Untitled Spider-Man 4 Movie",
-      "overview": "",
-      "popularity": 3.954,
-      "poster_path": null,
-      "release_date": "",
-      "title": "Untitled Spider-Man 4 Movie",
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
     },
     {
       "adult": false,
@@ -1627,22 +1542,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": null,
-      "genre_ids": [],
-      "id": 822764,
-      "original_language": "es",
-      "original_title": "Marvel Knights - Wolverine Arma X",
-      "overview": "",
-      "popularity": 0.6,
-      "poster_path": null,
-      "release_date": "",
-      "title": "Marvel Knights - Wolverine Arma X",
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
-    },
-    {
-      "adult": false,
       "backdrop_path": "/4oYBCR2CWtKpfkOKCzpmlE5EdxY.jpg",
       "genre_ids": [
         28,
@@ -1660,24 +1559,6 @@
       "video": false,
       "vote_average": 6.6,
       "vote_count": 13253
-    },
-    {
-      "adult": false,
-      "backdrop_path": null,
-      "genre_ids": [
-        18
-      ],
-      "id": 334166,
-      "original_language": "en",
-      "original_title": "Man of Steel",
-      "overview": "Jeff Forbes, president of Alliance Steel, takes his wife and son Kevin on a trip to the Yukon for a hunting trip with \"utterly godless\" drunkard Klondike Joe. But - surprise! - Klondike Joe is no longer a drunk. Instead, he’s been \"converted by this BARRY MOORE fellow,\" a real-life evangelist who \"transformed\" Joe and now starts on Jeff and Kevin. Sure enough, not only does Jeff start reading the Bible, but loses interest in the company because he’s \"had a transforming experience with Jesus Christ!\" Kevin, on the other hand, becomes a teenage drunk after his white-trash girlfriend Dana tries to lure him away from religion with parties and ­ gasp! - bottles of beer. But when one of Kevin’s drunken buddies puts on a dress and falls off the roof of a house, Kevin wants to take Dana to Barry’s Big Crusade.",
-      "popularity": 0.823,
-      "poster_path": null,
-      "release_date": "1967-03-25",
-      "title": "Man of Steel",
-      "video": false,
-      "vote_average": 1,
-      "vote_count": 1
     },
     {
       "adult": false,
@@ -3251,22 +3132,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": null,
-      "genre_ids": [],
-      "id": 860670,
-      "original_language": "en",
-      "original_title": "Teenage Mutant Ninja Turtles:The Four Musketurtles",
-      "overview": "A bump on the head leaves Leonardo thinking that he is in 17th century France, and that he and his comrades are Musketeers.",
-      "popularity": 0.6,
-      "poster_path": null,
-      "release_date": "",
-      "title": "Teenage Mutant Ninja Turtles:The Four Musketurtles",
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
-    },
-    {
-      "adult": false,
       "backdrop_path": "/keIxh0wPr2Ymj0Btjh4gW7JJ89e.jpg",
       "genre_ids": [
         28,
@@ -4000,7 +3865,5 @@
       "vote_average": 7.8,
       "vote_count": 16956
     }
-  ],
-  "total_pages": 9,
-  "total_results": 168
+  ]
 }
