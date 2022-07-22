@@ -317,6 +317,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     // update hint if its enabled
     hint && updateHint(selected || items[0]);
 
+    // scroll when not in view
+    listContainer.querySelector('.tt-selected')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
     show();
   };
 
