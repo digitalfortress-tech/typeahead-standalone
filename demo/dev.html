@@ -28,7 +28,7 @@
 
 
 <style>
-  /* style input element */
+/* style input element */
 input {
   border-radius: 4px;
   padding: 8px 10px;
@@ -57,7 +57,7 @@ input {
 
 /* style highlight */
 .typeahead-standalone .tt-list .tt-suggestion .tt-highlight {
-  color: green;
+  color: #ff56c2;
 }
 
 /* style single suggestion template */
@@ -99,15 +99,14 @@ input {
 }
 
 .single-item .date {
-  font-size: 12px;
   margin-top: 5px;
-  color: #767676;
+  color: #fff;
 }
 
 /* Do not highlight the date within the suggestion */
 .typeahead-standalone .tt-list .tt-suggestion .date .tt-highlight {
   font-weight: 100;
-  color: #767676;
+  color: #fff;
 }
 
 /* style header template and notFound template */
@@ -115,6 +114,12 @@ input {
   text-align: center;
   font-size: 12px;
   text-transform: uppercase;
+  font-weight: bold;
+  border-bottom: 1px solid #d8d8d8;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #cf5667;
 }
 
 
@@ -129,15 +134,17 @@ body {
 </style>
 
 <script>
-  /* Initialise typeahead-standalone.js */
+/* Initialise typeahead-standalone.js */
 typeahead({
   input: document.querySelector('.search'),
   source: {
     prefetch: {
       url: "https://raw.githubusercontent.com/digitalfortress-tech/typeahead-standalone/develop/docs/assets/json/superheroes.json",
+      // when: 'onFocus', // default -> 'onInit'
     },
     identifier: 'title',
     identity: (suggestion) => `${suggestion.id}`,
+    // dataTokens: ['overview'],
     transform: (data) => {
       return data.results;
     }
@@ -151,7 +158,7 @@ typeahead({
     suggestion: (item) => {
 
       const date = item.release_date ? `
-        <div class="date">
+        <div class="date badge">
           Released - ${new Date(item.release_date).toDateString()}
         </div>
       ` : '';
