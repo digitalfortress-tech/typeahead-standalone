@@ -103,6 +103,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   injectHintEl(inputHint);
 
   listContainer.classList.add('tt-list');
+  listContainer.setAttribute('aria-label', 'menu-options');
+  listContainer.setAttribute('role', 'listbox');
 
   // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
   listContainerStyle.position = 'absolute';
@@ -246,6 +248,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     const render = (item: T): HTMLDivElement => {
       const itemElement = doc.createElement('div');
       itemElement.classList.add('tt-suggestion');
+      itemElement.setAttribute('role', 'option');
+      itemElement.setAttribute('aria-selected', 'false');
+      itemElement.setAttribute('aria-label', display(item));
       if (templates?.suggestion) {
         templatify(itemElement, templates.suggestion(item));
       } else {
@@ -258,6 +263,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     const renderGroup = (groupName: string): HTMLDivElement => {
       const groupDiv = doc.createElement('div');
       groupDiv.classList.add('tt-group');
+      groupDiv.setAttribute('role', 'group');
+      groupDiv.setAttribute('aria-label', groupName);
       if (templates?.group) {
         templatify(groupDiv, templates.group(groupName));
       } else {
@@ -273,6 +280,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (templates?.header) {
       const headerDiv = doc.createElement('div');
       headerDiv.classList.add('tt-header');
+      headerDiv.setAttribute('role', 'heading');
+      headerDiv.setAttribute('aria-level', '1');
       templatify(headerDiv, templates.header());
       fragment.appendChild(headerDiv);
     }
@@ -297,6 +306,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       });
       if (item === selected) {
         div.classList.add('tt-selected');
+        div.setAttribute('aria-selected', 'true');
       }
       fragment.appendChild(div);
 
@@ -308,6 +318,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (templates?.footer) {
       const footerDiv = doc.createElement('div');
       footerDiv.classList.add('tt-footer');
+      footerDiv.setAttribute('role', 'heading');
+      footerDiv.setAttribute('aria-level', '2');
       templatify(footerDiv, templates.footer());
       fragment.appendChild(footerDiv);
     }
@@ -318,7 +330,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     hint && updateHint(selected || items[0]);
 
     // scroll when not in view
-    listContainer.querySelector('.tt-selected')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    listContainer.querySelector('.tt-selected')?.scrollIntoView({ block: 'nearest' });
 
     show();
   };
