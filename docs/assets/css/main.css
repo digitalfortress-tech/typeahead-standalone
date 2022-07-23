@@ -23,6 +23,10 @@ h6 {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+h2 {
+  margin: 0.5rem 0;
+}
+
 a {
   color: #1393e0;
   transition: all 0.5s;
@@ -844,6 +848,10 @@ adapted from a snippet
 .typeahead-standalone .tt-footer a:hover {
   text-decoration: none;
   opacity: 0.7;
+}
+
+.sidebar {
+  padding-top: 24px;
 }
 
 /* style sidebar gadverts */

@@ -23,6 +23,8 @@
 <h4><a href="#playground?id=movies-example" id="movies-example" title="Typeahead-standalone.js Colors example" class="submenu-link section-link">2. Movies Example</a></h4>
 <p>
   This example shows the usage of a <b><a href="#config?id=source">prefetch data source</a></b>.
+  Here is the raw <a href="https://raw.githubusercontent.com/digitalfortress-tech/typeahead-standalone/master/docs/assets/json/superheroes.json">dataset</a> at your disposal.
+  It has been retrieved via the <a href="https://www.themoviedb.org/">TMBD API</a>.
 </p>
 
 <p class="codepen" data-height="600" style="height:600px; overflow: auto;" data-theme-id="dark" data-default-tab="js,result" data-slug-hash="gOembOg" data-preview="true" data-editable="true" data-user="niketpathak" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
@@ -31,8 +33,9 @@
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 <p>
-  Find here the raw <a href="https://raw.githubusercontent.com/digitalfortress-tech/typeahead-standalone/master/docs/assets/json/superheroes.json">dataset</a> at your disposal.
-  The dataset has been retrieved via the <a href="https://www.themoviedb.org/">TMBD API</a>.
+  If you notice, movies are searchable by their <code>title</code>. To be able to also search by their description,
+  uncomment the <code>dataTokens</code> config option above. On doing so, when you search for <i>Barry Allen</i> or
+  <i>Bruce Wayne</i>, you should see the expected suggestions.
 </p>
 
 <hr>
