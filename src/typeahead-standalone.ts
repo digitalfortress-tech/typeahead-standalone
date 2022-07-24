@@ -103,6 +103,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   injectHintEl(inputHint);
 
   listContainer.classList.add('tt-list');
+  listContainer.tabIndex = 0;
   listContainer.setAttribute('aria-label', 'menu-options');
   listContainer.setAttribute('role', 'listbox');
 
@@ -676,6 +677,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   function injectHintEl(inputHint: HTMLInputElement) {
     ['id', 'name', 'placeholder'].forEach((attr) => inputHint.removeAttribute(attr));
     inputHint.setAttribute('readonly', 'true');
+    inputHint.setAttribute('aria-hidden', 'true');
     inputHint.tabIndex = -1;
     inputHint.className = 'tt-hint';
 
