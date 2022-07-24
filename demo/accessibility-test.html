@@ -1,0 +1,184 @@
+<html lang="en">
+  <head>
+    <title>Templates test - Typeahead-Standalone.js</title>
+    <!-- LOCAL TESTING -->
+    <link rel="stylesheet" href="./../dist/basic.css" />
+    <script src="./../dist/typeahead-standalone.js"></script>
+    <style>
+      /* style input element */
+      input {
+        border-radius: 4px;
+        padding: 8px 10px;
+        min-width: 350px;
+      }
+
+      /* override style for list of suggestions */
+      .typeahead-standalone.typeahead-example .tt-list {
+        border: 1px solid #d8d8d8;
+        border-radius: 4px;
+        box-shadow: 0 7px 20px #00000038;
+        /* adds scrollbar when necessary */
+        max-height: 550px;
+        overflow: auto;
+      }
+
+      /* override style for all templates */
+      .typeahead-standalone.typeahead-example .tt-list div[class^="tt-"] {
+        padding: 5px 8px;
+      }
+
+      /* single suggestion */
+      .typeahead-standalone.typeahead-example .tt-list .tt-suggestion {
+        border-bottom: 1px solid #d8d8d8;
+      }
+
+      /* style highlight */
+      .typeahead-standalone .tt-list .tt-suggestion .tt-highlight {
+        color: #a03077;
+      }
+
+      /* style single suggestion template */
+      .single-item {
+        height: 140px;
+        display: flex;
+        align-items: center;
+      }
+
+      .single-item img {
+        height: 130px;
+        width: 100px;
+        border-radius: 5px;
+        margin: 0 15px 0 10px;
+      }
+
+      .single-item .title {
+        font-size: 18px;
+        font-weight: bold;
+        display: -webkit-inline-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+      }
+
+      .single-item .description {
+        font-size: 14px;
+        display: -webkit-inline-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+        max-width: 250px;
+        margin-top: 5px;
+        color: #3a3a3a;
+      }
+
+      .single-item .date {
+        margin-top: 5px;
+        color: #fff;
+      }
+
+      /* Do not highlight the date within the suggestion */
+      .typeahead-standalone .tt-list .tt-suggestion .date .tt-highlight {
+        font-weight: 100;
+        color: #fff;
+      }
+
+      /* style header template and notFound template */
+      .typeahead-standalone .tt-header, .typeahead-standalone .tt-notFound {
+        text-align: center;
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: bold;
+        border-bottom: 1px solid #d8d8d8;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: #cf5667;
+      }
+
+
+      /* styling to ignore */
+      .input-container {
+        padding: 15px 0;
+        min-height: 300px;
+      }
+      body {
+        font-size: 16px;
+      }
+      </style>
+  </head>
+  <body>
+    <main class="container text-center">
+      <h3>
+        <a href="https://www.npmjs.com/package/typeahead-standalone">Typeahead-standalone.js Prefetch Source Example</a>
+      </h3>
+      <h4>Try searching for marvel/DC movies...</h4>
+
+      <div class="container input-container">
+        <input type="search" class="search" autocomplete="off" placeholder="Search movies...">
+      </div>
+    </main>
+
+    <script>
+      /* Initialise typeahead-standalone.js */
+      typeahead({
+        input: document.querySelector('.search'),
+        source: {
+          prefetch: {
+            url: "https://raw.githubusercontent.com/digitalfortress-tech/typeahead-standalone/master/docs/assets/json/superheroes.json",
+            // when: 'onFocus', // default -> 'onInit'
+          },
+          identifier: 'title',
+          identity: (suggestion) => `${suggestion.id}`,
+          // dataTokens: ['overview'],
+          transform: (data) => {
+            return data.results;
+          }
+        },
+        debounceRemote: 200, // default -> 100ms
+        highlight: true,
+        className: 'typeahead-example-1',
+        minLength: 1,
+        limit: 10,
+        templates: {
+          suggestion: (item) => {
+
+            const date = item.release_date ? `
+              <div class="date badge">
+                Released - ${new Date(item.release_date).toDateString()}
+              </div>
+            ` : '';
+
+            return `
+            <div class="single-item">
+              <img src="https://image.tmdb.org/t/p/w200/${item.poster_path}" alt=${item.title} />
+              <div class="details">
+                <div class="title">
+                  ${item.title}
+                </div>
+                <div class="description" title="${item.overview}">
+                  ${item.overview}
+                </div>
+                ${date}
+              </div>
+            </div>
+          `;
+          },
+          header: () => 'Superheroes',
+          notFound: () => 'Oops...Nothing Found 😪',
+        },
+      });
+    </script>
+
+    <!-- some base styling styling -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+
+  </body>
+</html>
+
+
+
+
