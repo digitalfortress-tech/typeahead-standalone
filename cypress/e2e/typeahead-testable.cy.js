@@ -354,5 +354,17 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-thirteen .tt-hint').as('hint13').should('have.value', 'rhone'); // diacritics must be applied to the hint too
   });
 
+  it('Retains events that are added before or/and after initialising typeahead', () => {
+    cy.get('.section-fourteen button').click();
+    //  check required attr
+    cy.get('#input-fourteen').as('input14').should('have.attr', 'required');
+    cy.get('.section-fourteen input:invalid').should('have.length', 1);
+
+    // verify that the attached event listeners are called
+    cy.get('#input-fourteen').as('input14').type('z', { delay: 100 });
+    cy.get('.pre_typeahead_handler').should('contain.text', 'z');
+    cy.get('.post_typeahead_handler').should('contain.text', 'z');
+  });
+
   // https://on.cypress.io/interacting-with-elements
 });

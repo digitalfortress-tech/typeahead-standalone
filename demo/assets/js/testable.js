@@ -609,3 +609,21 @@ const test13 = typeahead({
   highlight: true,
   diacritics: true,
 });
+
+const El14 = document.getElementById('input-fourteen');
+El14.addEventListener('keyup', (evt) => {
+  document.querySelector('.pre_typeahead_handler').innerHTML = evt.key;
+});
+// eslint-disable-next-line no-undef
+const test14 = typeahead({
+  input: El14,
+  source: {
+    local: colors,
+    identifier: 'name',
+  },
+  className: 'typeahead-test-fourteen',
+  highlight: true,
+});
+document.getElementById('input-fourteen').addEventListener('keyup', (evt) => {
+  document.querySelector('.post_typeahead_handler').innerHTML = evt.key;
+});
