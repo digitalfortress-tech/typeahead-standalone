@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/niketpathak/typeahead-standalone.svg?branch=master)](https://travis-ci.org/niketpathak/typeahead-standalone)
 [![code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![CDN Hits](https://data.jsdelivr.com/v1/package/npm/typeahead-standalone/badge?style=rounded)](https://www.jsdelivr.com/package/npm/typeahead-standalone)
-![Downloads](https://img.shields.io/npm/dt/typeahead-standalone)
+[![Downloads](https://img.shields.io/npm/dt/typeahead-standalone)](https://www.npmjs.com/package/typeahead-standalone)
 ![maintained](https://img.shields.io/badge/maintained-yes-blueviolet)
 [![License](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![speed blazing](https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-9cf.svg)](https://twitter.com/acdlite/status/974390255393505280)

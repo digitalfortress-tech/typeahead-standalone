@@ -3,7 +3,7 @@
   "title": "typeahead-standalone",
   "description": "A fast fully-featured standalone autocomplete library",
   "version": "4.7.0",
-  "homepage": "https://github.com/digitalfortress-tech/typeahead-standalone",
+  "homepage": "https://typeahead.digitalfortress.tech",
   "license": "MIT",
   "scripts": {
     "dev": "npm run server -- --mode development --progress",

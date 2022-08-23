@@ -84,19 +84,20 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     updateSearchIndex(normalizer(local, identifier) as T[]);
   }
 
-  let input: HTMLInputElement = config.input;
+  const input: HTMLInputElement = config.input;
+  input.classList.add('tt-input');
 
-  // main wrapper
+  // Wrapper element
   const wrapper: HTMLSpanElement = doc.createElement('span');
   wrapper.className = `typeahead-standalone${config.className ? ` ${config.className}` : ''}`;
 
-  const inputClone: HTMLElement = input.cloneNode(true) as HTMLElement;
-  inputClone.classList.add('tt-input');
+  // move input element into the wrapper element
+  const parentEl = input.parentElement as HTMLElement;
+  parentEl.removeChild(input);
+  wrapper.appendChild(input);
 
-  wrapper.appendChild(inputClone);
-
-  input.replaceWith(wrapper);
-  input = wrapper.firstChild as HTMLInputElement;
+  // append Wrapper element to the original parent
+  parentEl.appendChild(wrapper);
 
   // generate markup for hints
   const inputHint: HTMLInputElement = input.cloneNode() as HTMLInputElement;
@@ -681,7 +682,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * @param inputHint the input hint element
    */
   function injectHintEl(inputHint: HTMLInputElement) {
-    ['id', 'name', 'placeholder'].forEach((attr) => inputHint.removeAttribute(attr));
+    ['id', 'name', 'placeholder', 'required'].forEach((attr) => inputHint.removeAttribute(attr));
     inputHint.setAttribute('readonly', 'true');
     inputHint.setAttribute('aria-hidden', 'true');
     inputHint.tabIndex = -1;
