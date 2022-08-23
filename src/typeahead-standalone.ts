@@ -156,6 +156,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   };
 
   /**
+   * Flag to indicate if the list of suggestions is open or not
+   * @returns Boolean
+   */
+  const isListOpen = (): boolean => !listContainer.classList.contains('tt-hide');
+
+  /**
    * Clear remote debounce timer if assigned
    */
   const clearRemoteDebounceTimer = (): void => {
@@ -444,7 +450,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       return;
     }
 
-    if (keyCode === Keys.Tab) {
+    if (keyCode === Keys.Tab && isListOpen()) {
       ev.preventDefault();
       useSelectedValue(true);
     }
