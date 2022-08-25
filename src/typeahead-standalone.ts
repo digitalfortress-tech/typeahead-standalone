@@ -92,12 +92,13 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   wrapper.className = `typeahead-standalone${config.className ? ` ${config.className}` : ''}`;
 
   // move input element into the wrapper element
-  const parentEl = input.parentElement as HTMLElement;
+  const parentEl = input.parentNode as HTMLElement;
+  const inputIndex = [...parentEl.children].indexOf(input);
   parentEl.removeChild(input);
   wrapper.appendChild(input);
 
   // append Wrapper element to the original parent
-  parentEl.appendChild(wrapper);
+  parentEl.insertBefore(wrapper, parentEl.children[inputIndex]);
 
   // generate markup for hints
   const inputHint: HTMLInputElement = input.cloneNode() as HTMLInputElement;

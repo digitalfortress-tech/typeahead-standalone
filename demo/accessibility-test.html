@@ -118,7 +118,9 @@
       <h4>Try searching for marvel/DC movies...</h4>
 
       <div class="container input-container">
+        <div class="beforeSearch"></div>
         <input type="search" class="search" autocomplete="off" placeholder="Search movies...">
+        <div class="afterSearch"></div>
       </div>
     </main>
 
@@ -140,7 +142,7 @@
         },
         debounceRemote: 200, // default -> 100ms
         highlight: true,
-        className: 'typeahead-example-1',
+        className: 'typeahead-accessibility-ex',
         minLength: 1,
         limit: 10,
         templates: {
