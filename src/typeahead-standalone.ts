@@ -526,6 +526,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     // update items with available suggestions
     items = suggestions;
 
+    selected = undefined; // unselect previously calculated/cached suggestion
     if (autoSelect && items.length) {
       selected = items[0];
     }
