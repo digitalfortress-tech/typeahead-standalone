@@ -332,9 +332,18 @@ context('Typeahead', () => {
   it('Executes onSubmit hook', () => {
     cy.get('#input-eleven').as('input11').type('dar', { delay: 100 });
     cy.get('.typeahead-test-eleven .tt-list').as('list').children().should('have.length', 4);
+
+    // select value via kbd
     cy.get('@input11').type('{downarrow}{enter}');
     cy.get('.onsubmit_test').should('contain.text', '#DBLD');
 
+    // select value via mouse
+    cy.get('@input11').clear().type('p');
+    cy.get('@list').children().first().click();
+    cy.get('@input11').type('{enter}');
+    cy.get('.onsubmit_test').should('contain.text', '#PR');
+
+    // submit without selecting a value
     cy.get('@input11').clear().type('dar{enter}');
     cy.get('.onsubmit_test').should('contain.text', 'Passed');
   });
