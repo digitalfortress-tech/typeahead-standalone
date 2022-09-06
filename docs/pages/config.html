@@ -590,12 +590,13 @@ typeahead({
 <h4><a href="#config?id=display" id="display" title="display config param - typeahead-standalone.js" class="submenu-link section-link">8. <i class="fas fa-tv-alt"></i> display</h4></a>
 
 <p>
-  The <code>display</code> config option is a callback that is executed when the user selects an item from the suggestions.
-  The selected suggestion is passed as a parameter and it <b>must return a string</b> which is then set as the input's value.
-  The display function also affects the input's placeholder.
+  The <code>display</code> config option is a callback that <b>must return a string</b>. It receives a parameter - <i>item</i>
+  i.e. the suggestion which should be used to generate the string to return. It also receives an optional 2nd parameter - <i>event</i>
+  which is a Mouse/Keyboard event that can be used to track user interaction or for analytics.
 </p>
 <p>
-  The 2nd optional parameter <b>event</b> is a Mouse/Keyboard event which can be used to track user interaction or for analytics.
+  The returned string is used to set the input placeholder's value (i.e. the hint). Upon selecting an item, the returned string will be set as the input's value too.
+  Lastly, the returned string is also used to set appropriate aria-labels for each suggestion.
 </p>
 <div class="codepen" data-height="400" style="height:400px; overflow: auto;" data-theme-id="dark" data-default-tab="js,result" data-preview="true" data-editable="true"  data-prefill='{"title":"Typeahead-standalone display() config option Demo","tags":[],"scripts":[],"stylesheets":[]}'>
   <pre data-lang="html">
@@ -621,13 +622,13 @@ typeahead({
     local: places,
     identifier: 'name'
   },
-  display: (selectedItem, event) => {
+  display: (item, event) => {
     if (event) {
       // do something
       // alert("event type is - " + event.type);
     }
 
-    return `${selectedItem.name}, ${selectedItem.country}`;
+    return `${item.name}, ${item.country}`;
   }
 });
 </pre>
