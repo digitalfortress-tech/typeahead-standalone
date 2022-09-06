@@ -2,7 +2,7 @@
   "name": "typeahead-standalone",
   "title": "typeahead-standalone",
   "description": "A fast fully-featured standalone autocomplete library",
-  "version": "4.10.0",
+  "version": "4.11.0",
   "homepage": "https://typeahead.digitalfortress.tech",
   "license": "MIT",
   "scripts": {
