@@ -120,13 +120,22 @@ function loadFragment(fragment, firstLoad = true) {
 
     // manage active class
     $('.submenu-link').removeClass('active');
+    $('.nav-submenu-mobile li, .nav-submenu li').removeClass('active');
     fragment === 'intro' ? (fragment = './') : '';
     $('.submenu-link[href="' + fragment + '"]').addClass('active');
+    $('.submenu-link[href="' + fragment + '"]')
+      .parent()
+      .addClass('active');
 
     // recalculate stickyness
     if (previousFragment && previousFragment !== fragment) {
       removeStickyHandler();
       setTimeout(makeSticky, 2e3);
+    }
+
+    // For mobile, hide the navbar
+    if (window.screen.availWidth <= 992) {
+      document.querySelector('#navbarToggleSubmenuMobile').classList.remove('show');
     }
 
     /* scroll to top of fragment */

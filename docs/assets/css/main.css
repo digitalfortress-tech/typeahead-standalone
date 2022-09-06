@@ -60,6 +60,28 @@ a.tab-link {
   color: green;
 }
 
+.orderedSubList {
+  font-size: 14px;
+  padding: 10px 0 10px 50px;
+  display: none;
+}
+
+.orderedSubList a.section-link {
+  color: #000;
+}
+.orderedSubList a.section-link:hover {
+  color: green;
+}
+
+.nav-submenu li.active .orderedSubList,
+.nav-submenu-mobile li.active .orderedSubList {
+  display: block;
+}
+
+.nav-submenu .orderedSubList li {
+  padding: 6px 0 6px 8px;
+}
+
 a.section-link:hover,
 .section-link.active {
   color: #1393e0;
