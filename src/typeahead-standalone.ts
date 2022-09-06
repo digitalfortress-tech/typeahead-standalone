@@ -310,6 +310,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       const div = render(item);
       div.addEventListener('click', function (ev: MouseEvent): void {
         clear();
+        selected = item;
         input.value = display(item, ev);
         ev.preventDefault();
       });
@@ -445,9 +446,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     };
 
     if (keyCode === Keys.Enter) {
-      const selectedItem = useSelectedValue();
       preventSubmit && ev.preventDefault();
-      onSubmit(ev, selectedItem);
+      onSubmit(ev, useSelectedValue());
 
       return;
     }
