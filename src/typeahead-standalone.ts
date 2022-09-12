@@ -44,8 +44,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const display: (item: T, e?: MouseEvent | KeyboardEvent | null) => string = config.display || displayCb;
   const identity = config.source.identity || displayCb;
   const onSubmit: (e: Event, item?: T) => void = config.onSubmit || NOOP;
-  const dataTokens =
-    config.source.dataTokens && config.source.dataTokens.constructor === Array ? config.source.dataTokens : undefined;
+  const dataTokens = config.source.dataTokens?.constructor === Array ? config.source.dataTokens : undefined;
   const remoteQueryCache: Dictionary = {};
   const remoteResponseCache: Dictionary = {};
   const transform = config.source.transform || ((data) => data);
@@ -104,15 +103,19 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const inputHint: HTMLInputElement = input.cloneNode() as HTMLInputElement;
   injectHintEl(inputHint);
 
-  listContainer.classList.add('tt-list');
+  listContainer.classList.add('tt-list', 'tt-hide');
   listContainer.tabIndex = 0;
   listContainer.setAttribute('aria-label', 'menu-options');
   listContainer.setAttribute('role', 'listbox');
 
-  // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
-  listContainerStyle.position = 'absolute';
+  // set listContainer positioning
+  listContainerStyle.position = 'absolute'; // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
+  listContainerStyle.width = '100%'; // fix position of listContainer
+  listContainerStyle.left = '0';
+  // listContainerStyle.top = `${input.clientHeight}px`; // or top: '100%' // not required apparently
 
-  attachListContainer();
+  // Attach list container
+  wrapper.appendChild(listContainer);
 
   if (prefetch && prefetch.when === 'onInit') {
     prefetchData();
@@ -178,25 +181,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const clear = (): void => {
     items = [];
     inputHint.value = '';
-    selected = undefined;
     storedInput = '';
     hide();
   };
-
-  /**
-   * Attaches list container to the DOM and styles it
-   */
-  function attachListContainer(): void {
-    wrapper.appendChild(listContainer);
-
-    // hide search results initially
-    listContainer.classList.add('tt-hide');
-
-    // fix position of listContainer
-    listContainerStyle.width = '100%';
-    listContainerStyle.left = '0';
-    // listContainerStyle.top = `${input.clientHeight}px`; // or top: '100%' // not required apparently
-  }
 
   /**
    * Displays the NotFound template if it exists, otherwise, does nothing (i.e. returns true)
@@ -438,10 +425,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         selected = items[0];
       }
       if (selected) {
-        const item = selected;
         clear();
-        input.value = display(item, ev);
-        return item;
+        input.value = display(selected, ev);
+        return selected;
       }
     };
 
