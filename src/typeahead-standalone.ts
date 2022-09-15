@@ -14,7 +14,7 @@ import type {
   PrefetchDataSource,
 } from './types';
 import { Keys } from './constants';
-import { deduplicateArr, diacritics, escapeRegExp, isObject, NOOP, normalizer } from './helpers';
+import { diacritics, escapeRegExp, isObject, NOOP, normalizer } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
 import './style.less';
@@ -490,15 +490,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     let suggestions: T[] = trie.search(inputValue, limitSuggestions) as T[];
 
     if (newItems?.length) {
-      let newSuggestions: T[] | Dictionary[] = [...suggestions, ...newItems];
-      newSuggestions = newSuggestions.map((value) => {
-        return {
-          key: identity(value as T),
-          value,
-        };
+      newItems.push(...suggestions); // merge suggestions
+
+      const uniqueItems = {} as Dictionary<T>;
+      newItems.forEach((item) => {
+        uniqueItems[identity(item)] = item;
       });
 
-      suggestions = (deduplicateArr(newSuggestions, 'key') as T[]).map((item) => item.value) as T[];
+      suggestions = Object.values(uniqueItems);
     }
 
     // sort by starting letter of the query

@@ -8,6 +8,7 @@ export const isObject = (item: any): boolean => {
   return item !== null && item.constructor.name === 'Object';
 };
 
+/** @deprecated */
 export const deduplicateArr = (iterable: Dictionary[], prop: string): Dictionary[] => [
   ...new Map(iterable.map((item) => [item[prop], item])).values(),
 ];

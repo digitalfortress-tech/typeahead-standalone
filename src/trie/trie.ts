@@ -1,6 +1,6 @@
 import { Dictionary } from '../types';
 import type { TrieType } from './types';
-import { deduplicateArr, spaceTokenizer, diacritics } from '../helpers';
+import { spaceTokenizer, diacritics } from '../helpers';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
 export const Trie: TrieType<any> = (config = {}) => {
@@ -47,16 +47,15 @@ export const Trie: TrieType<any> = (config = {}) => {
             node = (node[token] || (node[token] = {})) as Record<string, unknown>;
           }
 
-          const storable = {
-            key: typeof value === 'string' ? value : (identity && identity(value)) || JSON.stringify(value), // key is expected to be unique
-            value,
-          };
+          const uniqueId = typeof value === 'string' ? value : (identity && identity(value)) || JSON.stringify(value);
 
           // store data within an array instead of an object to avoid being overwritten
           if (!node[SENTINEL]) {
-            node[SENTINEL] = [storable];
+            node[SENTINEL] = {
+              [uniqueId]: value,
+            };
           } else {
-            node[SENTINEL] = deduplicateArr([...(node[SENTINEL] as Dictionary[]), storable], 'key');
+            (node[SENTINEL] as Dictionary)[uniqueId] = value;
           }
         });
     });
@@ -65,16 +64,16 @@ export const Trie: TrieType<any> = (config = {}) => {
   /**
    * Internal Method used to retrieve items in the trie beginning with the given prefix.
    */
-  function find(prefix: string, limit?: number): string[] | Dictionary[] {
+  function find(prefix: string, limit?: number): Dictionary {
     let node = root;
-    let matches: string[] | Dictionary[] = [];
+    let matches: Dictionary = {};
     let token;
 
     // traverse the root until you reach the end of prefix
     for (let i = 0, l = prefix.length; i < l; i++) {
       token = prefix[i]; // each letter of search string
       node = node[token] as Record<string, unknown>;
-      if (typeof node === 'undefined') return matches as string[];
+      if (typeof node === 'undefined') return {};
     }
 
     // Performing DFS (Depth-First Search) from prefix to traverse the tree
@@ -88,10 +87,10 @@ export const Trie: TrieType<any> = (config = {}) => {
 
       for (k in node) {
         if (k === SENTINEL) {
-          matches = (matches as Dictionary[]).concat(node[SENTINEL] as Dictionary[]);
+          matches = Object.assign(matches, node[SENTINEL]);
 
           // limit found matches / truncate array
-          if (limit && matches.length >= limit) {
+          if (limit && Object.keys(matches).length >= limit) {
             matches.length = limit;
             break;
           }
@@ -104,8 +103,7 @@ export const Trie: TrieType<any> = (config = {}) => {
       }
     }
 
-    // deduplicate matches before returning them
-    return deduplicateArr(matches as Dictionary[], 'key');
+    return matches as Dictionary;
   }
 
   /**
@@ -115,26 +113,38 @@ export const Trie: TrieType<any> = (config = {}) => {
     const queryTokens = tokenize(query);
 
     // Search for multiple tokens/queries
-    const objArrs: Dictionary[][] = [];
-    let suggestions: string[] | Dictionary[] = [];
+    const objArrs: Dictionary[] = [];
+    let suggestions: Dictionary | Dictionary[] = {};
     queryTokens.forEach((token) => {
       // note that limit is not passed to "find()"
-      objArrs.push(find(token) as Dictionary[]);
+      objArrs.push(find(token) as Dictionary);
     });
 
     // get intersection of found suggestions
-    suggestions = objArrs.reduce((acc: Dictionary[], currentArr: Dictionary[]) =>
-      acc.filter((accItem: Dictionary) =>
-        currentArr.some((currentArrItem: Dictionary) => accItem['key'] === currentArrItem['key'])
-      )
-    );
+    suggestions = objArrs.reduce((acc: Dictionary, currentArr: Dictionary) => {
+      const result: Dictionary = {};
+
+      Object.keys(acc)
+        .filter((key: string) => {
+          if (currentArr[key]) {
+            return currentArr[key];
+          }
+        }) // retrives common keys
+        .forEach((key) => {
+          result[key] = acc[key];
+        });
+
+      return result;
+    });
+
+    suggestions = Object.values(suggestions) as Dictionary[];
 
     // truncate suggestions to limit
     if (limit && suggestions.length > limit) {
       suggestions.length = limit;
     }
 
-    return suggestions.map((item) => item.value) as Dictionary[];
+    return suggestions;
   }
 
   function clear() {
