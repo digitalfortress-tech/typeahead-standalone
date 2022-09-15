@@ -505,6 +505,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   };
 
   const startFetch = (): void => {
+    let startTime, endTime;
     clearRemoteDebounceTimer();
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
 
@@ -529,6 +530,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     if (val.length >= minLen) {
+      startTime = performance.now();
       resultSet.query = val;
       calcSuggestions();
 
@@ -537,6 +539,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       if (remote && resultSet.items.length < resultSet.limit && (remoteResponseCache[thumbprint] as [])?.length) {
         calcSuggestions(remoteResponseCache[thumbprint] as []);
       }
+      endTime = performance.now();
 
       update(); // update view
 
@@ -549,6 +552,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       resultSet.query = '';
       clear();
     }
+
+    console.log(`Call to fetch suggestions took ${Math.ceil((endTime || 0) - (startTime || 0))} milliseconds`);
   };
 
   const formatQuery = (ip = '') => {

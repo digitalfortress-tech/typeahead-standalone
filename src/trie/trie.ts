@@ -28,6 +28,7 @@ export const Trie: TrieType<any> = (config = {}) => {
    * Identifier is optional when data is a string|string[], but mandatory for Dictionary[]
    */
   function add(data: string | string[] | Dictionary[], identifier = '', identity?: (item?: unknown) => void) {
+    const start = performance.now();
     if (!data) return;
 
     let node: Record<string, unknown>;
@@ -51,12 +52,14 @@ export const Trie: TrieType<any> = (config = {}) => {
         (sentinelNode as Dictionary)[uniqueId as string] = value;
       }
     }
+    console.log(`Trie add(); Execution time: ${performance.now() - start} ms`);
   }
 
   /**
    * Internal Method used to retrieve items in the trie beginning with the given prefix.
    */
   function find(prefix: string): Dictionary {
+    //const start = performance.now();
     let node = root;
     let matches: Dictionary = {};
 
@@ -87,6 +90,7 @@ export const Trie: TrieType<any> = (config = {}) => {
       }
     }
 
+    //console.log(`Trie find(); Execution time: ${performance.now() - start} ms`);
     return matches as Dictionary;
   }
 
