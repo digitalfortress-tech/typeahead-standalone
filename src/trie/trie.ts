@@ -14,6 +14,8 @@ export const Trie: TrieType<any> = (config = {}) => {
    * Returns data/query tokens
    */
   function tokenize(value = '') {
+    value = `${value}`; // coerce to string
+
     if (hasDiacritics) {
       value = diacritics(value);
     }
