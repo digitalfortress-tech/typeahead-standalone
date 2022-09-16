@@ -246,6 +246,11 @@ context('Typeahead', () => {
 
     cy.get('.typeahead-test-six .tt-list').as('list').children().should('have.length', 5);
     cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'France, Paris');
+
+    // verify that suggestions retrieved from remote endpoint are deduplicated.
+    cy.get('@input6').clear().type('er');
+    cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'Eritrea, Asmara');
+    cy.get('.typeahead-test-six .tt-list .tt-suggestion:nth-child(2)').should('have.text', 'Afghanistan, Kabul');
   });
 
   it('Displays suggestions from Prefetch, executes process() hook', () => {
