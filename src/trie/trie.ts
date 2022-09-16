@@ -64,7 +64,7 @@ export const Trie: TrieType<any> = (config = {}) => {
   /**
    * Internal Method used to retrieve items in the trie beginning with the given prefix.
    */
-  function find(prefix: string, limit?: number): Dictionary {
+  function find(prefix: string): Dictionary {
     let node = root;
     let matches: Dictionary = {};
     let token;
@@ -88,13 +88,6 @@ export const Trie: TrieType<any> = (config = {}) => {
       for (k in node) {
         if (k === SENTINEL) {
           matches = Object.assign(matches, node[SENTINEL]);
-
-          // limit found matches / truncate array
-          if (limit && Object.keys(matches).length >= limit) {
-            matches.length = limit;
-            break;
-          }
-
           continue;
         }
 
