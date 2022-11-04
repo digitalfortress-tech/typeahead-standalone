@@ -239,9 +239,9 @@ context('Typeahead', () => {
     cy.get('@highlight').should('not.exist');
   });
 
-  it('Displays suggestions from a Remote Source', () => {
+  it('Displays suggestions from a Remote Source (url: string)', () => {
     cy.intercept('GET', 'https://restcountries.com/v2/name/*', { fixture: 'countries.json' }).as('getCountries');
-    cy.get('#input-six').as('input6').type('par', { delay: 100 });
+    cy.get('#input-six').as('input6').type('par', { delay: 150 });
     cy.wait('@getCountries');
 
     cy.get('.typeahead-test-six .tt-list').as('list').children().should('have.length', 5);
@@ -251,6 +251,21 @@ context('Typeahead', () => {
     cy.get('@input6').clear().type('er');
     cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'Eritrea, Asmara');
     cy.get('.typeahead-test-six .tt-list .tt-suggestion:nth-child(2)').should('have.text', 'Afghanistan, Kabul');
+  });
+
+  it('Displays suggestions from a Remote Source (url: callback)', () => {
+    cy.intercept('GET', 'https://restcountries.com/v2/name/*', (req) => {
+      expect(req.query).to.include({
+        test1: 'data1',
+        test2: 'data2',
+      });
+      req.reply({
+        fixture: 'countries.json',
+      });
+    }).as('getCountries');
+
+    cy.get('#input-six-and-half').as('input6half').type('p');
+    cy.wait('@getCountries');
   });
 
   it('Displays suggestions from Prefetch, executes process() hook', () => {

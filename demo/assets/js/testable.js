@@ -437,6 +437,26 @@ const test6 = typeahead({
 });
 
 // eslint-disable-next-line no-undef
+const test6andhalf = typeahead({
+  input: document.getElementById('input-six-and-half'),
+  source: {
+    remote: {
+      url: () => 'https://restcountries.com/v2/name/%QUERY?test1=data1&test2=data2',
+      wildcard: '%QUERY',
+    },
+    identifier: 'name',
+    dataTokens: ['capital'],
+  },
+  className: 'typeahead-test-six-half',
+  highlight: true,
+  templates: {
+    suggestion: (item) => {
+      return item.name + ', ' + item.capital;
+    },
+  },
+});
+
+// eslint-disable-next-line no-undef
 const test7 = typeahead({
   input: document.getElementById('input-seven'),
   source: {
