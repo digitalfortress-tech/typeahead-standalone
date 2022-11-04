@@ -128,7 +128,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     let transformed: T[] = [];
 
     fetchWrapper
-      .get(prefetch.url, prefetch?.requestOptions)
+      .get(typeof prefetch.url === 'string' ? prefetch.url : prefetch.url(), prefetch?.requestOptions)
       .then(
         (data) => {
           transformed = transform(data) as T[];
@@ -534,7 +534,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     let transformed: T[] = [];
 
     fetchWrapper
-      .get(remote.url.replace(remote.wildcard, frozenInput), remote?.requestOptions)
+      .get(
+        (typeof remote.url === 'string' ? remote.url : remote.url()).replace(remote.wildcard, frozenInput),
+        remote?.requestOptions
+      )
       .then(
         (data) => {
           transformed = transform(data) as T[];

@@ -16,7 +16,7 @@ export interface LocalDataSource<T> extends typeaheadDataSource<T> {
 
 export interface PrefetchDataSource<T> extends typeaheadDataSource<T> {
   prefetch: {
-    url: string;
+    url: string | (() => string);
     done: boolean;
     when?: 'onInit' | 'onFocus';
     process?: (items: T[]) => void;
@@ -26,7 +26,7 @@ export interface PrefetchDataSource<T> extends typeaheadDataSource<T> {
 
 export interface RemoteDataSource<T> extends typeaheadDataSource<T> {
   remote: {
-    url: string;
+    url: string | (() => string);
     wildcard: string;
     requestOptions?: Dictionary;
   };
