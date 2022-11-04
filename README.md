@@ -136,12 +136,12 @@ This is the source of data from which suggestions will be provided. This is the 
 source: {
   local: [],
   remote: {
-    url: 'https://remoteapi.com/%QUERY',
+    url: 'https://remoteapi.com/%QUERY', // OR `url: () => 'https://remoteapi.com/%QUERY',`
     wildcard: '%QUERY',
     requestOptions: {}        // optional, default => undefined
   },
   prefetch: {
-    url: 'https://remoteapi.com/load-suggestions',
+    url: 'https://remoteapi.com/load-suggestions', // OR `url: () => string`
     when: 'onFocus',          // optional, default => 'onInit'
     done: false,              // optional, default => false
     process: (items) => void, // optional, default => undefined

@@ -87,7 +87,7 @@ typeahead({
   input: document.querySelector('.myInput'),
   source: {
     remote: {
-      url: 'https://remoteapi.com/%QUERY',
+      url: 'https://remoteapi.com/%QUERY', // OR `url: () => 'https://remoteapi.com/%QUERY',`
       wildcard: '%QUERY',
       requestOptions: {}  // optional, default => undefined
     },
@@ -99,7 +99,8 @@ typeahead({
       </p>
       <h5 class="underline">Properties</h5>
       <ol>
-        <li><code>url</code> <b>(<code>*</code>Required)</b> - contains the URL to which http requests are made to retrieve the suggestions.</li>
+        <li><code>url</code> <b>(<code>*</code>Required)</b> - contains the URL to which http requests are made to retrieve the
+          suggestions. The url can be a <b>string</b> or a <b>callback</b> that returns a string.</li>
         <li><code>wildcard</code> <b>(<code>*</code>Required)</b> - The string that is replaced with the user's input while executing the http request.</li>
         <li><code>requestOptions</code> - By default, the <b>GET</b> method is used to make http requests. To use <b>POST</b> method, you can provide a
         <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options" title="Fetch API request options">requestOptions</a> property.</li>
@@ -135,7 +136,8 @@ typeahead({
       </p>
       <h5 class="underline">Properties</h5>
       <ol>
-        <li><code>url</code> <b>(<code>*</code>Required)</b> - contains the URL to which the prefetch request is made to preload suggestions. </li>
+        <li><code>url</code> <b>(<code>*</code>Required)</b> - contains the URL to which the prefetch request is made to preload
+          suggestions. The url can be a <b>string</b> or a <b>callback</b> that returns a string.</li>
         <li><code>when</code> - defines when the prefetch request should occur. Defaults to <b>onInit</b> i.e suggestions are preloaded when typeahead is initialized.
       You can set it to <b>onFocus</b> i.e. preload suggestions only when the user focuses the input element.</li>
         <li><code>done</code> - A boolean used to enable/disable the prefetch request programmatically.</li>
