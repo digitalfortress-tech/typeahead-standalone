@@ -101,7 +101,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   // generate markup for hints
   const inputHint: HTMLInputElement = input.cloneNode() as HTMLInputElement;
-  injectHintEl(inputHint);
+  hint && injectHintEl(inputHint);
 
   listContainer.classList.add('tt-list', 'tt-hide');
   listContainer.tabIndex = 0;
