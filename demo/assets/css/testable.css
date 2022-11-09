@@ -127,3 +127,8 @@ label {
 .hidden {
   display: none;
 }
+
+/* with hint disabled, you must override the background color of your input element */
+#input-two-A {
+  background: #fff;
+}

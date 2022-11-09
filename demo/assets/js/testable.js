@@ -320,6 +320,18 @@ const test2 = typeahead({
 });
 
 // eslint-disable-next-line no-undef
+const test2A = typeahead({
+  input: document.getElementById('input-two-A'),
+  source: {
+    local: colors,
+    identifier: 'name',
+  },
+  className: 'typeahead-test-two-A',
+  hint: false,
+  preventSubmit: true,
+});
+
+// eslint-disable-next-line no-undef
 const test3 = typeahead({
   input: document.getElementById('input-three'),
   source: {

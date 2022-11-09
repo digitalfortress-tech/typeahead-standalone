@@ -25,6 +25,11 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-two .tt-hint').should('have.value', 'light grey [grL] - GRL');
   });
 
+  it('Should not render hint element when disabled', () => {
+    cy.get('#input-two-A').clear().type('li', { delay: 100 });
+    cy.get('.typeahead-test-A .tt-hint').should('not.exist');
+  });
+
   it('Highlights matched text', () => {
     cy.get('#input-two').as('input2').type('gr', { delay: 100 });
     cy.get('.typeahead-test-two .tt-list .tt-highlight').first().should('have.text', 'Gr');
