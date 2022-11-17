@@ -49,7 +49,6 @@ export const Trie: TrieType<any> = (config = {}) => {
 
           const uniqueId = typeof value === 'string' ? value : (identity && identity(value)) || JSON.stringify(value);
 
-          // store data within an array instead of an object to avoid being overwritten
           if (!node[SENTINEL]) {
             node[SENTINEL] = {
               [uniqueId]: value,
@@ -114,15 +113,11 @@ export const Trie: TrieType<any> = (config = {}) => {
     });
 
     // get intersection of found suggestions
-    suggestions = objArrs.reduce((acc: Dictionary, currentArr: Dictionary) => {
+    suggestions = objArrs.reduce((acc: Dictionary, currentObj: Dictionary) => {
       const result: Dictionary = {};
 
       Object.keys(acc)
-        .filter((key: string) => {
-          if (currentArr[key]) {
-            return currentArr[key];
-          }
-        }) // retrives common keys
+        .filter((key: string) => currentObj[key]) // keep suggestions with common keys
         .forEach((key) => {
           result[key] = acc[key];
         });
