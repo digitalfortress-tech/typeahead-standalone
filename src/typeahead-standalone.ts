@@ -10,6 +10,7 @@ import type {
   typeaheadHtmlTemplates,
   Dictionary,
   LocalDataSource,
+  FunctionDataSource,
   RemoteDataSource,
   PrefetchDataSource,
 } from './types';
@@ -49,6 +50,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const remoteResponseCache: Dictionary = {};
   const transform = config.source.transform || ((data) => data);
   const local = (config.source as LocalDataSource<T>).local || null;
+  const fnSource = (config.source as FunctionDataSource<T>).fnSource || null;
   const remote =
     (config.source as RemoteDataSource<T>).remote &&
     (config.source as RemoteDataSource<T>).remote.url &&
@@ -61,7 +63,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       : null;
 
   // validate presence of atleast one data-source
-  if (!local && !prefetch && !remote) throw new Error('e02');
+  if (!local && !prefetch && !remote && !fnSource) throw new Error('e02');
 
   let items: T[] = []; // suggestions
   let inputValue = '';
@@ -333,7 +335,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   };
 
   const inputEventHandler = (ev: KeyboardEvent): void => {
-    const keyCode = ev.which || ev.keyCode || 0;
+    const keyCode = ev.code || '';
 
     if (keyCode === Keys.Down) {
       return;
@@ -404,7 +406,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       return;
     }
 
-    const keyCode = ev.which || ev.keyCode || 0;
+    const keyCode = ev.code || '';
 
     if (keyCode === Keys.Up || keyCode === Keys.Down || keyCode === Keys.Esc) {
       if (keyCode === Keys.Esc) {
@@ -448,6 +450,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (prefetch && prefetch.when === 'onFocus') {
       prefetchData();
     }
+    if (fnSource !== null) {
+      // if the source is a function then run on focus
+      trie.clear()
+      fetchDataFromFn()
+    }
+
     startFetch();
   };
 
@@ -565,6 +573,19 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         noSuggestionsHandler(true);
       });
   };
+
+  const fetchDataFromFn = () => {
+    if (!fnSource) return;
+    const data = fnSource()
+    let transformed: T[] = [];
+    transformed = transform(data) as T[];
+    // transformed = normalizer(transformed, identifier) as T[];
+    updateSearchIndex(transformed);
+    if (transformed.length && inputValue.length) {
+      calcSuggestions(transformed);
+      update();
+    }
+  }
 
   /**
    * Update the search Index with the identifier + dataTokens

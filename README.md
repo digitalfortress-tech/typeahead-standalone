@@ -135,6 +135,7 @@ This is the source of data from which suggestions will be provided. This is the 
 ```
 source: {
   local: [],
+  fnSource: () => [],
   remote: {
     url: 'https://remoteapi.com/%QUERY', // OR `url: () => 'https://remoteapi.com/%QUERY',`
     wildcard: '%QUERY',
@@ -157,7 +158,8 @@ source: {
   }
 }
 ```
-- **Local**: The `local` data source is used when you want to provide suggestions from a local source like a variable.
+- **Local**: The `local` data source is used when you want to provide suggestions from a local source, like a variable, that are available at the moment the typeahead is initialized.
+- **fnSource**: The `fnSource` data source provides a dynamic list that is loading each time the typeahead gains focus. It is a function that can provide suggestions from the current context of the application.
 - **Prefetch**: The `prefetch` data source is used when you want to preload suggestions from a remote endpoint in advance. You must provide the `url` parameter that points to the endpoint that will return suggestions. You can provide an optional `when` parameter which defines when the prefetch request should occur. It defaults to `onInit` meaning that suggestions will be preloaded as soon as typeahead gets initialized. You can set it to `onFocus` which will cause suggestions to be preloaded only when the user focuses the search input box. The `done` flag is optional & can be used to disable the prefetch request programmatically. Its default value is `false`. It gets set to `true` automatically when data is prefetched for the first time (to prevent multiple network requests). By setting `done: true`, the prefetch request will not occur. An example use-case to do this is when you are using *localStorage* to store suggestions but the *localStorage* already had stored suggestions previously thereby eliminating the need to prefetch data again. The `process(suggestions)` callback is optional. It gets executed after the prefetch request occurs. It receives the transformed suggestions as a parameter & as an example can be used to store the received suggestions in *localStorage* to be used later.
 - **Remote**: The `remote` data source is used when you want to interrogate a remote endpoint to fetch data.
 - **Wildcard**: While using the `remote` data source, you must set the `url` and the `wildcard` options. `wildcard` will be replaced with the search string while executing the request.
@@ -173,7 +175,7 @@ source: {
   ...
 ]
  ```
- Now if we wish to use the the text defined in the `color` property to appear as the suggestions, then the **identifier** must be set to **color**. (i.e. `identifier: "color"`)
+Now if we wish to use the the text defined in the `color` property to appear as the suggestions, then the **identifier** must be set to **color**. (i.e. `identifier: "color"`)
 - **dataTokens**: `dataTokens: string[]` is an _optional_ property. It accepts an array of strings which represent the properties of the source object that should be added to the search index. This can be best understood with an example. Lets take the same example data source as shown above. What if you wanted to search colors by another property(_colorCode_) and not just by its identifier(_color_) ? That's exactly where **dataTokens** comes in. Set `dataTokens: ["colorCode"]`. If you now search for "**YW**", the suggestion "Yellow" pops up as expected.
 - **groupIdentifier**: If you wish to group your suggestions, set the groupIdentifier property. This is an optional property. Again, going with the same example data source as above, when you set `groupIdentifier: "shade"`, suggestions will be grouped by the property "**shade**". In this example, the colors _Green_ and _Olive_ will appear under the group "**Greenish**" (`shade`) whereas the color _Yellow_ will have no group.
 - **identity**: The `identity()` function is used to determine uniqueness of each suggestion. It receives the suggestion as a parameter and must return a string unique to the given suggestion. This is an optional property and it defaults to returning the `identifier`. However, the default value might not work everytime. For example, consider the following code -
@@ -187,7 +189,7 @@ source: {
   ...
 ]
  ```
- Lets assume the identifier is set to `title`. By default the `identity()` function uses the **identifier** property (i.e. the **title**) to determine uniqueness. So if you search for `God`, you will find only 1 suggestion displayed since there are 3 songs with the **exact same `title`** property. In order to show all 3 suggestions with different artists, you need to set the `identity` property such that it returns a unique string -
+Lets assume the identifier is set to `title`. By default the `identity()` function uses the **identifier** property (i.e. the **title**) to determine uniqueness. So if you search for `God`, you will find only 1 suggestion displayed since there are 3 songs with the **exact same `title`** property. In order to show all 3 suggestions with different artists, you need to set the `identity` property such that it returns a unique string -
  ```js
  identity(item) => `${item.title}${item.artist}`;
  ```
@@ -237,7 +239,7 @@ To **override** default styling, set the config option `className` and use it as
   <b>Styling for version 4.x.x and above</b>
   </summary>
 
-  Starting with `v4.0`, the JS and CSS has been separated allowing greater control over the style. The entire css can be retrieved either from the [CDN](https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css)  or from below and be copied directly into your project allowing you to discard/override any styles as necessary.
+Starting with `v4.0`, the JS and CSS has been separated allowing greater control over the style. The entire css can be retrieved either from the [CDN](https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css)  or from below and be copied directly into your project allowing you to discard/override any styles as necessary.
 
   ```css
 /***** basic styles *****/

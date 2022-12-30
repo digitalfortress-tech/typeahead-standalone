@@ -7,9 +7,9 @@ export const enum EventTrigger {
 }
 
 export const enum Keys {
-  Enter = 13,
-  Esc = 27,
-  Up = 38,
-  Down = 40,
-  Tab = 9,
+  Enter = 'Enter',
+  Esc = 'Escape',
+  Up = 'ArrowUp',
+  Down = 'ArrowDown',
+  Tab = 'Tab',
 }
