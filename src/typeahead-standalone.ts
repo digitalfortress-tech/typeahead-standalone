@@ -48,6 +48,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const dataTokens = config.source.dataTokens?.constructor === Array ? config.source.dataTokens : undefined;
   const remoteQueryCache: Dictionary = {};
   const remoteResponseCache: Dictionary = {};
+  const showOnFocus = config.showOnFocus || false;
   const transform = config.source.transform || ((data) => data);
   const local = (config.source as LocalDataSource<T>).local || null;
   const fnSource = (config.source as FunctionDataSource<T>).fnSource || null;
@@ -309,8 +310,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       }
       fragment.appendChild(div);
 
-      // highlight matched text
-      config.highlight && hightlight(div, inputValue);
+      // with the showOnFocus setting the inputValue may not contain content
+      // if we have input text then highlight matched text
+      config.highlight && inputValue.length > 0 && hightlight(div, inputValue);
     }
 
     // Add footer template
@@ -401,7 +403,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
     // if raw input is empty, clear out everything
-    if (!input.value.length) {
+    if (!showOnFocus && !input.value.length) {
       clear();
       return;
     }
@@ -457,12 +459,16 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     startFetch();
+
+    if (showOnFocus) {
+      show()
+    }
   };
 
   const startFetch = (): void => {
     clearRemoteDebounceTimer();
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
-    if (val.length >= minLen) {
+    if (showOnFocus || val.length >= minLen) {
       inputValue = val;
       calcSuggestions();
 
@@ -581,7 +587,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     transformed = transform(data) as T[];
     // transformed = normalizer(transformed, identifier) as T[];
     updateSearchIndex(transformed);
-    if (transformed.length && inputValue.length) {
+    // with the showOnFocus setting the inputValue may not contain content
+    if (transformed.length) {
       calcSuggestions(transformed);
       update();
     }

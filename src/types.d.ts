@@ -58,6 +58,7 @@ export interface typeaheadConfig<T extends Dictionary> {
   onSubmit?: (e: Event, selectedItem?: T) => void;
   debounceRemote?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
+  showOnFocus: boolean;
   source: LocalDataSource<T> | PrefetchDataSource<T> | RemoteDataSource<T> | FunctionDataSource<T>;
   templates?: typeaheadHtmlTemplates<T>;
 }
