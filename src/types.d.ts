@@ -14,6 +14,10 @@ export interface LocalDataSource<T> extends typeaheadDataSource<T> {
   local: string[] | T[];
 }
 
+export interface CustomDataSource<T> extends typeaheadDataSource<T> {
+  customSource: () => string[] | T[];
+}
+
 export interface PrefetchDataSource<T> extends typeaheadDataSource<T> {
   prefetch: {
     url: string | (() => string);
@@ -54,7 +58,8 @@ export interface typeaheadConfig<T extends Dictionary> {
   onSubmit?: (e: Event, selectedItem?: T) => void;
   debounceRemote?: number;
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
-  source: LocalDataSource<T> | PrefetchDataSource<T> | RemoteDataSource<T>;
+  showOnFocus: boolean;
+  source: LocalDataSource<T> | PrefetchDataSource<T> | RemoteDataSource<T> | CustomDataSource<T>;
   templates?: typeaheadHtmlTemplates<T>;
 }
 

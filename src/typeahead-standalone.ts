@@ -10,6 +10,7 @@ import type {
   typeaheadHtmlTemplates,
   Dictionary,
   LocalDataSource,
+  CustomDataSource,
   RemoteDataSource,
   PrefetchDataSource,
 } from './types';
@@ -47,8 +48,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const dataTokens = config.source.dataTokens?.constructor === Array ? config.source.dataTokens : undefined;
   const remoteQueryCache: Dictionary = {};
   const remoteResponseCache: Dictionary = {};
+  const showOnFocus = config.showOnFocus || false;
   const transform = config.source.transform || ((data) => data);
   const local = (config.source as LocalDataSource<T>).local || null;
+  const customSource = (config.source as CustomDataSource<T>).customSource || null;
   const remote =
     (config.source as RemoteDataSource<T>).remote &&
     (config.source as RemoteDataSource<T>).remote.url &&
@@ -61,7 +64,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       : null;
 
   // validate presence of atleast one data-source
-  if (!local && !prefetch && !remote) throw new Error('e02');
+  if (!local && !prefetch && !remote && !customSource) throw new Error('e02');
+  if (!!customSource && (!!local || !!prefetch || !!remote ) ) throw new Error('e02');
 
   let items: T[] = []; // suggestions
   let inputValue = '';
@@ -307,8 +311,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       }
       fragment.appendChild(div);
 
-      // highlight matched text
-      config.highlight && hightlight(div, inputValue);
+      // with the showOnFocus setting the inputValue may not contain content
+      // if we have input text then highlight matched text
+      config.highlight && inputValue.length > 0 && hightlight(div, inputValue);
     }
 
     // Add footer template
@@ -333,7 +338,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   };
 
   const inputEventHandler = (ev: KeyboardEvent): void => {
-    const keyCode = ev.which || ev.keyCode || 0;
+    const keyCode = ev.code || '';
 
     if (keyCode === Keys.Down) {
       return;
@@ -399,12 +404,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
     // if raw input is empty, clear out everything
-    if (!input.value.length) {
+    if (!showOnFocus && !input.value.length) {
       clear();
       return;
     }
 
-    const keyCode = ev.which || ev.keyCode || 0;
+    const keyCode = ev.code || '';
 
     if (keyCode === Keys.Up || keyCode === Keys.Down || keyCode === Keys.Esc) {
       if (keyCode === Keys.Esc) {
@@ -448,13 +453,23 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (prefetch && prefetch.when === 'onFocus') {
       prefetchData();
     }
+    if (customSource !== null) {
+      // if the source is a function then run on focus
+      trie.clear()
+      fetchDataFromFn()
+    }
+
     startFetch();
+
+    if (showOnFocus) {
+      show()
+    }
   };
 
   const startFetch = (): void => {
     clearRemoteDebounceTimer();
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
-    if (val.length >= minLen) {
+    if (showOnFocus || val.length >= minLen) {
       inputValue = val;
       calcSuggestions();
 
@@ -500,10 +515,19 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       suggestions = Object.values(uniqueItems);
     }
 
-    // sort by starting letter of the query
-    sortByStartingLetter(suggestions);
+    if (customSource !== null) {
+      // custom source uses a plain sort by text
+      suggestions.sort((a: Dictionary, b: Dictionary) => {
+        const one = (a[identifier as string] as string).toLowerCase()
+        const two = (b[identifier as string] as string).toLowerCase()
+        return one.localeCompare(two)
+      })
+    } else {
+      // sort by starting letter of the query
+      sortByStartingLetter(suggestions);
+    }
 
-    // if suggestions need to be grouped, sort them by group
+      // if suggestions need to be grouped, sort them by group
     if (groupIdentifier) {
       sortByGroup(suggestions);
     }
@@ -565,6 +589,20 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         noSuggestionsHandler(true);
       });
   };
+
+  const fetchDataFromFn = () => {
+    if (!customSource) return;
+    const data = customSource()
+    let transformed: T[] = [];
+    transformed = transform(data) as T[];
+    transformed = normalizer(transformed, identifier) as T[];
+    updateSearchIndex(transformed);
+    // with the showOnFocus setting the inputValue may not contain content
+    if (transformed.length) {
+      calcSuggestions(transformed);
+      update();
+    }
+  }
 
   /**
    * Update the search Index with the identifier + dataTokens
