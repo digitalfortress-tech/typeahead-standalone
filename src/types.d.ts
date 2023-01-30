@@ -38,7 +38,7 @@ export interface typeaheadHtmlTemplates<T extends Dictionary> {
   suggestion?: (item: T) => string;
   group?: (groupName?: string) => string;
   notFound?: () => string;
-  // pending?: string;
+  loader?: () => string;
 }
 
 export interface typeaheadConfig<T extends Dictionary> {

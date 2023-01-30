@@ -465,6 +465,8 @@ const test6andhalf = typeahead({
     suggestion: (item) => {
       return item.name + ', ' + item.capital;
     },
+    loader: () => 'LOADING',
+    // footer: () => '😋Footer...!😋',
   },
 });
 

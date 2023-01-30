@@ -77,6 +77,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     templates.notFound = typeof templates.notFound === 'function' ? templates.notFound : undefined;
     templates.group = typeof templates.group === 'function' ? templates.group : undefined;
     templates.suggestion = typeof templates.suggestion === 'function' ? templates.suggestion : undefined;
+    templates.loader = typeof templates.loader === 'function' ? templates.loader : undefined;
   }
 
   if (local) {
@@ -228,6 +229,28 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const clearListDOM = () => {
     while (listContainer.firstChild) {
       listContainer.firstChild.remove();
+    }
+  };
+
+  const loader = () => {
+    if (!templates?.loader) {
+      return;
+    }
+
+    if (!fetchInProgress) {
+      const loaderEl = listContainer.querySelector('.tt-loader');
+      loaderEl && listContainer.removeChild(loaderEl);
+      return;
+    }
+
+    // display spinner/loader
+    const loaderDiv = doc.createElement('div');
+    loaderDiv.classList.add('tt-loader');
+    templatify(loaderDiv, templates.loader());
+    if (templates?.footer) {
+      listContainer.insertBefore(loaderDiv, listContainer.querySelector('.tt-footer'));
+    } else {
+      listContainer.appendChild(loaderDiv);
     }
   };
 
@@ -531,6 +554,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       return;
     }
 
+    loader();
+
     let transformed: T[] = [];
 
     fetchWrapper
@@ -552,11 +577,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         // cache XHR requests so that same calls aren't made multiple times
         remoteQueryCache[thumbprint] = true;
         remoteResponseCache[thumbprint] = transformed || [];
+        fetchInProgress = false;
+        loader();
         if (transformed.length && inputValue.length) {
           calcSuggestions(transformed);
           update();
         }
-        fetchInProgress = false;
 
         // make another request if inputVal exists but is different than the last remote request
         if (inputValue.length && frozenInput !== inputValue) {
