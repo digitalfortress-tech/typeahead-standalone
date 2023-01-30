@@ -226,6 +226,51 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-group').as('group').should('have.length', 1);
     cy.get('@group').children('.custom-group').should('have.length', 1);
     cy.get('@group').children('.custom-group').should('have.text', 'Shades of Black');
+    cy.get('@input4').clear();
+
+    // Loader Template
+    cy.intercept('GET', 'https://restcountries.com/v2/name/qsdd', (req) => {
+      req.reply({
+        body: [],
+        delay: 1000, // milliseconds
+        throttleKbps: 1000, // to simulate a 3G connection
+        forceNetworkError: false, // default
+      });
+    }).as('getEmptyResult');
+
+    cy.get('#input-fourA').clear({ force: true }).type('qsdd', { delay: 0 });
+    cy.get('.typeahead-test-fourA .tt-loader').should('exist');
+    cy.wait('@getEmptyResult');
+    cy.get('.typeahead-test-fourA .tt-notFound').should('exist');
+
+    cy.intercept('GET', 'https://restcountries.com/v2/name/ar', {
+      fixture: 'countries.json',
+      throttleKbps: 1000,
+      delay: 1000,
+    }).as('getCountries');
+    cy.get('#input-fourA').clear({ force: true }).type('ar', { delay: 0 });
+    cy.get('.typeahead-test-fourA .tt-loader').should('exist');
+    cy.get('.typeahead-test-fourA .tt-list').children().should('have.length', 1);
+    cy.wait('@getCountries');
+    cy.get('.typeahead-test-fourA .tt-list').as('list4A').children().should('have.length', 5);
+    cy.get('#input-fourA').clear();
+
+    cy.get('#input-fourB').as('input4B').clear().type('ar', { delay: 0 });
+    cy.get('.typeahead-test-fourB .tt-loader').should('exist');
+    cy.get('.typeahead-test-fourB .tt-footer').should('exist');
+    cy.wait('@getCountries');
+    cy.get('.typeahead-test-fourB .tt-list').as('list4B').children().should('have.length', 7);
+
+    cy.intercept('GET', 'https://restcountries.com/v2/name/fran', {
+      fixture: 'countries_remote.json',
+      delay: 1000,
+      throttleKbps: 1000,
+    }).as('getCountriesRemote');
+    cy.get('@input4B').clear().type('fran', { delay: 0 });
+    cy.get('.typeahead-test-fourB .tt-loader').should('exist');
+    cy.get('.typeahead-test-fourB .tt-list').children().should('have.length', 4);
+    cy.wait('@getCountriesRemote');
+    cy.get('.typeahead-test-fourB .tt-list').children().should('have.length', 5);
   });
 
   it('Displays expected suggestions with Data-Tokens', () => {

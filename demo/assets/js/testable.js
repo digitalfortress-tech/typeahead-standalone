@@ -416,6 +416,52 @@ const test4 = typeahead({
 });
 
 // eslint-disable-next-line no-undef
+const test4A = typeahead({
+  input: document.getElementById('input-fourA'),
+  source: {
+    remote: {
+      url: () => 'https://restcountries.com/v2/name/%QUERY',
+      wildcard: '%QUERY',
+    },
+    identifier: 'name',
+    dataTokens: ['capital'],
+  },
+  className: 'typeahead-test-fourA',
+  highlight: true,
+  templates: {
+    suggestion: (item) => {
+      return item.name + ', ' + item.capital;
+    },
+    loader: () => 'LOADING...',
+    notFound: () => 'Oops...Nothing Found 😪 <br>Try another country...',
+  },
+});
+
+// eslint-disable-next-line no-undef
+const test4B = typeahead({
+  input: document.getElementById('input-fourB'),
+  source: {
+    remote: {
+      url: () => 'https://restcountries.com/v2/name/%QUERY',
+      wildcard: '%QUERY',
+    },
+    identifier: 'name',
+    dataTokens: ['capital'],
+  },
+  className: 'typeahead-test-fourB',
+  highlight: true,
+  templates: {
+    suggestion: (item) => {
+      return item.name + ', ' + item.capital;
+    },
+    header: () => 'Countries Found',
+    loader: () => '<div style="text-align:center"><img src="./assets/img/spinner.svg" /></div>',
+    footer: () => '<a href="#" style="color:blue">See more...</a>',
+    notFound: () => 'Oops...Nothing Found 😪 <br>Try another country...',
+  },
+});
+
+// eslint-disable-next-line no-undef
 const test5 = typeahead({
   input: document.getElementById('input-five'),
   source: {
@@ -465,8 +511,6 @@ const test6andhalf = typeahead({
     suggestion: (item) => {
       return item.name + ', ' + item.capital;
     },
-    loader: () => 'LOADING',
-    // footer: () => '😋Footer...!😋',
   },
 });
 

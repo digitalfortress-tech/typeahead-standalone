@@ -1,0 +1,246 @@
+[
+  {
+    "name": "France",
+    "topLevelDomain": [
+      ".fr"
+    ],
+    "alpha2Code": "FR",
+    "alpha3Code": "FRA",
+    "callingCodes": [
+      "33"
+    ],
+    "capital": "Paris",
+    "altSpellings": [
+      "FR",
+      "French Republic",
+      "République française"
+    ],
+    "region": "Europe",
+    "subregion": "Western Europe",
+    "population": 66710000,
+    "latlng": [
+      46.0,
+      2.0
+    ],
+    "demonym": "French",
+    "area": 640679.0,
+    "gini": 32.7,
+    "timezones": [
+      "UTC-10:00",
+      "UTC-09:30",
+      "UTC-09:00",
+      "UTC-08:00",
+      "UTC-04:00",
+      "UTC-03:00",
+      "UTC+01:00",
+      "UTC+03:00",
+      "UTC+04:00",
+      "UTC+05:00",
+      "UTC+11:00",
+      "UTC+12:00"
+    ],
+    "borders": [
+      "AND",
+      "BEL",
+      "DEU",
+      "ITA",
+      "LUX",
+      "MCO",
+      "ESP",
+      "CHE"
+    ],
+    "nativeName": "France",
+    "numericCode": "250",
+    "currencies": [
+      {
+        "code": "EUR",
+        "name": "Euro",
+        "symbol": "€"
+      }
+    ],
+    "languages": [
+      {
+        "iso639_1": "fr",
+        "iso639_2": "fra",
+        "name": "French",
+        "nativeName": "français"
+      }
+    ],
+    "translations": {
+      "de": "Frankreich",
+      "es": "Francia",
+      "fr": "France",
+      "ja": "フランス",
+      "it": "Francia",
+      "br": "França",
+      "pt": "França",
+      "nl": "Frankrijk",
+      "hr": "Francuska",
+      "fa": "فرانسه"
+    },
+    "flag": "https://restcountries.eu/data/fra.svg",
+    "regionalBlocs": [
+      {
+        "acronym": "EU",
+        "name": "European Union",
+        "otherAcronyms": [],
+        "otherNames": []
+      }
+    ],
+    "cioc": "FRA"
+  },
+  {
+    "name": "French Polynesia",
+    "topLevelDomain": [
+      ".pf"
+    ],
+    "alpha2Code": "PF",
+    "alpha3Code": "PYF",
+    "callingCodes": [
+      "689"
+    ],
+    "capital": "Papeetē",
+    "altSpellings": [
+      "PF",
+      "Polynésie française",
+      "French Polynesia",
+      "Pōrīnetia Farāni"
+    ],
+    "region": "Oceania",
+    "subregion": "Polynesia",
+    "population": 271800,
+    "latlng": [
+      -15.0,
+      -140.0
+    ],
+    "demonym": "French Polynesian",
+    "area": 4167.0,
+    "gini": null,
+    "timezones": [
+      "UTC-10:00",
+      "UTC-09:30",
+      "UTC-09:00"
+    ],
+    "borders": [],
+    "nativeName": "Polynésie française",
+    "numericCode": "258",
+    "currencies": [
+      {
+        "code": "XPF",
+        "name": "CFP franc",
+        "symbol": "Fr"
+      }
+    ],
+    "languages": [
+      {
+        "iso639_1": "fr",
+        "iso639_2": "fra",
+        "name": "French",
+        "nativeName": "français"
+      }
+    ],
+    "translations": {
+      "de": "Französisch-Polynesien",
+      "es": "Polinesia Francesa",
+      "fr": "Polynésie française",
+      "ja": "フランス領ポリネシア",
+      "it": "Polinesia Francese",
+      "br": "Polinésia Francesa",
+      "pt": "Polinésia Francesa",
+      "nl": "Frans-Polynesië",
+      "hr": "Francuska Polinezija",
+      "fa": "پلی‌نزی فرانسه"
+    },
+    "flag": "https://restcountries.eu/data/pyf.svg",
+    "regionalBlocs": [],
+    "cioc": ""
+  },
+  {
+    "name": "French Guiana",
+    "topLevelDomain": [
+      ".gf"
+    ],
+    "alpha2Code": "GF",
+    "alpha3Code": "GUF",
+    "callingCodes": [
+      "594"
+    ],
+    "capital": "Cayenne",
+    "altSpellings": [
+      "GF",
+      "Guiana",
+      "Guyane"
+    ],
+    "region": "Americas",
+    "subregion": "South America",
+    "population": 254541,
+    "latlng": [
+      4.0,
+      -53.0
+    ],
+    "demonym": "",
+    "area": null,
+    "gini": null,
+    "timezones": [
+      "UTC-03:00"
+    ],
+    "borders": [
+      "BRA",
+      "SUR"
+    ],
+    "nativeName": "Guyane française",
+    "numericCode": "254",
+    "currencies": [
+      {
+        "code": "EUR",
+        "name": "Euro",
+        "symbol": "€"
+      }
+    ],
+    "languages": [
+      {
+        "iso639_1": "fr",
+        "iso639_2": "fra",
+        "name": "French",
+        "nativeName": "français"
+      }
+    ],
+    "translations": {
+      "de": "Französisch Guyana",
+      "es": "Guayana Francesa",
+      "fr": "Guayane",
+      "ja": "フランス領ギアナ",
+      "it": "Guyana francese",
+      "br": "Guiana Francesa",
+      "pt": "Guiana Francesa",
+      "nl": "Frans-Guyana",
+      "hr": "Francuska Gvajana",
+      "fa": "گویان فرانسه"
+    },
+    "flag": "https://restcountries.eu/data/guf.svg",
+    "regionalBlocs": [
+      {
+        "acronym": "USAN",
+        "name": "Union of South American Nations",
+        "otherAcronyms": [
+          "UNASUR",
+          "UNASUL",
+          "UZAN"
+        ],
+        "otherNames": [
+          "Unión de Naciones Suramericanas",
+          "União de Nações Sul-Americanas",
+          "Unie van Zuid-Amerikaanse Naties",
+          "South American Union"
+        ]
+      },
+      {
+        "acronym": "EU",
+        "name": "European Union",
+        "otherAcronyms": [],
+        "otherNames": []
+      }
+    ],
+    "cioc": ""
+  }
+]
