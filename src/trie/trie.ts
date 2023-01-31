@@ -1,5 +1,5 @@
 import { Dictionary } from '../types';
-import type { TrieType } from './types';
+import type { SearchResults, TrieType } from './types';
 import { spaceTokenizer, diacritics } from '../helpers';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
@@ -101,7 +101,7 @@ export const Trie: TrieType<any> = (config = {}) => {
   /**
    * Search for query strings within the trie
    */
-  function search(query: string, limit?: number) {
+  function search(query: string, limit?: number): SearchResults<Dictionary | string> {
     const queryTokens = tokenize(query);
 
     // Search for multiple tokens/queries
@@ -127,12 +127,17 @@ export const Trie: TrieType<any> = (config = {}) => {
 
     suggestions = Object.values(suggestions) as Dictionary[];
 
+    const count = suggestions.length;
+
     // truncate suggestions to limit
-    if (limit && suggestions.length > limit) {
+    if (limit && count > limit) {
       suggestions.length = limit;
     }
 
-    return suggestions;
+    return {
+      suggestions,
+      count,
+    };
   }
 
   function clear() {

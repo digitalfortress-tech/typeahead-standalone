@@ -28,10 +28,11 @@ describe('Trie algorithm', () => {
       { name: 'Blue', value: 'BL', hash: 'blue' },
       { name: 'Brown', value: 'BR', hash: 'brown' },
     ]);
-    let suggestions = trie.search('b');
+    let { suggestions, count } = trie.search('b');
     expect(suggestions).toStrictEqual([]);
-    suggestions = trie.search('b', 'name');
+    ({ suggestions, count } = trie.search('b', 1));
     expect(suggestions).toStrictEqual([]);
+    expect(count).toEqual(0);
   });
 
   it('add(): passing falsy values to add must not throw', () => {
@@ -49,36 +50,41 @@ describe('Trie algorithm', () => {
     const trie = Trie();
     trie.add('John');
     trie.add('James');
-    let suggestions = trie.search('j');
+    let { suggestions, count } = trie.search('j');
     expect(suggestions).toStrictEqual(['James', 'John']);
+    expect(count).toEqual(2);
   });
 
   it('search(): Passing empty string returns all items in tree', () => {
     const trie = Trie();
     trie.add(['roman', 'romanesque']);
-    expect(trie.search('')).toStrictEqual(['roman', 'romanesque']);
+    let { suggestions, count } = trie.search('');
+    expect(suggestions).toStrictEqual(['roman', 'romanesque']);
+    expect(count).toEqual(2);
   });
 
   it('search(): Lists expected suggestions from String array', () => {
     const words = ['roman', 'romanesque', 'romanesco', 'cat', 'category', 'romanei', 'another romaneid'];
     const trie = Trie();
     trie.add(words);
-    const suggestions = trie.search('romane');
+    const { suggestions, count } = trie.search('romane');
     expect(suggestions).toStrictEqual(['romanei', 'another romaneid', 'romanesco', 'romanesque']);
+    expect(count).toEqual(4);
   });
 
   it('search(): Lists expected suggestions from space separated String array', () => {
     const words = ['Superman', 'Batman', 'Flash', 'Aquaman', 'Wonder woman'];
     const trie = Trie();
     trie.add(words);
-    const suggestions = trie.search('wo');
+    const { suggestions, count } = trie.search('wo');
     expect(suggestions).toStrictEqual(['Wonder woman']);
+    expect(count).toEqual(1);
   });
 
   it('search(): Lists expected suggestions from Object array', () => {
     const trie = Trie();
     trie.add(colors, 'label', (param) => `${param.label}`);
-    const suggestions = trie.search('b');
+    const { suggestions, count } = trie.search('b');
     expect(suggestions).toStrictEqual([
       {
         hash: 'brown',
@@ -104,16 +110,18 @@ describe('Trie algorithm', () => {
         value: 'BL',
       },
     ]);
+    expect(count).toEqual(4);
   });
 
   it('search(): Lists expected suggestions with diacritics enabled', () => {
     const words = ['Kraków', 'Łódź', 'Wrocław', 'Gdańsk', 'Częstochowa', 'Bielsko-Biała', 'Rzeszów', 'Ruda Śląska'];
     const trie = Trie({ hasDiacritics: true });
     trie.add(words);
-    let suggestions = trie.search('Krako');
+    let { suggestions, count } = trie.search('Krako');
     expect(suggestions).toStrictEqual(['Kraków']);
+    expect(count).toEqual(1);
 
-    suggestions = trie.search('Gdań');
+    ({ suggestions } = trie.search('Gdań'));
     expect(suggestions).toStrictEqual(['Gdańsk']);
   });
 
@@ -121,13 +129,13 @@ describe('Trie algorithm', () => {
     const words = ['Kraków', 'Łódź', 'Wrocław', 'Gdańsk', 'Częstochowa', 'Bielsko-Biała', 'Rzeszów', 'Ruda Śląska'];
     const trie = Trie();
     trie.add(words);
-    let suggestions = trie.search('Krako');
+    let { suggestions } = trie.search('Krako');
     expect(suggestions).toStrictEqual([]);
 
-    suggestions = trie.search('Gdan');
+    ({ suggestions } = trie.search('Gdan'));
     expect(suggestions).toStrictEqual([]);
 
-    suggestions = trie.search('Łó');
+    ({ suggestions } = trie.search('Łó'));
     expect(suggestions).toStrictEqual(['Łódź']);
   });
 
@@ -135,16 +143,18 @@ describe('Trie algorithm', () => {
     const words = ['romAn', 'romAneSquE', 'ROmanesCo', 'cat', 'category', 'romanei', 'another romaneid'];
     const trie = Trie();
     trie.add(words);
-    const suggestions = trie.search('romane');
+    const { suggestions, count } = trie.search('romane');
     expect(suggestions).toStrictEqual(['romanei', 'another romaneid', 'ROmanesCo', 'romAneSquE']);
+    expect(count).toEqual(4);
   });
 
   it('limits suggestions to 2', () => {
     const words = ['romAn', 'romAneSquE', 'ROmanesCo', 'romanex', 'romaney', 'romanez', 'romanei', 'romanif'];
     const trie = Trie();
     trie.add(words);
-    const suggestions = trie.search('romane', 2);
+    const { suggestions, count } = trie.search('romane', 2);
     expect(suggestions).toStrictEqual(['romanei', 'romanez']);
+    expect(count).toEqual(6);
   });
 
   it('gets suggestions for same identifiers / collision test', () => {
@@ -157,10 +167,10 @@ describe('Trie algorithm', () => {
     ];
 
     // search must return both matching values
-    let suggestions = trie.search('pp');
+    let { suggestions } = trie.search('pp');
     expect(suggestions).toStrictEqual(expectedResult);
 
-    suggestions = trie.search('pur');
+    ({ suggestions } = trie.search('pur'));
     expect(suggestions).toStrictEqual([{ label: 'Purple', value: 'PP', hash: 'purple' }]);
 
     // songs with same title and different authors and a custom identity fn
@@ -168,10 +178,10 @@ describe('Trie algorithm', () => {
     trie.add(songs, 'title', (param) => `${param.title}##${param.artist}`);
     trie.add(songs, 'artist', (param) => `${param.title}##${param.artist}`);
 
-    suggestions = trie.search('He is');
+    ({ suggestions } = trie.search('He is'));
     expect(suggestions).toHaveLength(2);
 
-    suggestions = trie.search('Wil');
+    ({ suggestions } = trie.search('Wil'));
     expect(suggestions).toHaveLength(1);
   });
 });

@@ -515,7 +515,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const calcSuggestions = (newItems?: T[]): void => {
     // get suggestions
-    let suggestions: T[] = trie.search(resultSet.query, limitSuggestions) as T[];
+    let { suggestions }: { suggestions: T[] } = trie.search(resultSet.query, limitSuggestions);
 
     if (newItems?.length) {
       newItems.push(...suggestions); // merge suggestions
