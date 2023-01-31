@@ -61,7 +61,7 @@ export interface typeaheadConfig<T extends Dictionary> {
 export interface ResultSet<T extends Dictionary> {
   query: string;
   items: T[];
-  count?: number; // @todo: make this mandatory
+  count: number;
   [key: string]: unknown;
 }
 

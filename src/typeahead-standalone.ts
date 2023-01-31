@@ -67,7 +67,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const resultSet: ResultSet<T> = {
     query: '',
     items: [], // suggestions
-    // count: 0, @todo: implement count functionality
+    count: 0,
   };
 
   let selected: T | undefined;
@@ -515,7 +515,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const calcSuggestions = (newItems?: T[]): void => {
     // get suggestions
-    let { suggestions }: { suggestions: T[] } = trie.search(resultSet.query, limitSuggestions);
+    let { suggestions, count }: { suggestions: T[]; count: number } = trie.search(resultSet.query, limitSuggestions);
 
     if (newItems?.length) {
       newItems.push(...suggestions); // merge suggestions
@@ -526,6 +526,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       });
 
       suggestions = Object.values(uniqueItems);
+      count = suggestions.length;
     }
 
     // sort by starting letter of the query
@@ -538,6 +539,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // update items with available suggestions
     resultSet.items = suggestions;
+    resultSet.count = count;
 
     selected = undefined; // unselect previously calculated/cached suggestion
     if (autoSelect && resultSet.items.length) {
