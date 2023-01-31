@@ -58,6 +58,13 @@ export interface typeaheadConfig<T extends Dictionary> {
   templates?: typeaheadHtmlTemplates<T>;
 }
 
+export interface ResultSet<T extends Dictionary> {
+  query: string;
+  items: T[];
+  count?: number; // @todo: make this mandatory
+  [key: string]: unknown;
+}
+
 export interface typeaheadResult<T extends Dictionary> {
   destroy: () => void;
   trie?: TrieType<T>;

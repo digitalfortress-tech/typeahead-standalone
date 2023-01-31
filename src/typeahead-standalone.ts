@@ -12,6 +12,7 @@ import type {
   LocalDataSource,
   RemoteDataSource,
   PrefetchDataSource,
+  ResultSet,
 } from './types';
 import { Keys } from './constants';
 import { diacritics, escapeRegExp, isObject, NOOP, normalizer } from './helpers';
@@ -63,8 +64,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   // validate presence of atleast one data-source
   if (!local && !prefetch && !remote) throw new Error('e02');
 
-  let items: T[] = []; // suggestions
-  let inputValue = '';
+  const resultSet: ResultSet<T> = {
+    query: '',
+    items: [], // suggestions
+    // count: 0, @todo: implement count functionality
+  };
+
   let selected: T | undefined;
   let remoteDebounceTimer: number | undefined;
   let fetchInProgress = false;
@@ -180,7 +185,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * Clear typeahead state and hide listContainer
    */
   const clear = (): void => {
-    items = [];
+    resultSet.items = [];
     inputHint.value = '';
     storedInput = '';
     hide();
@@ -192,7 +197,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * @returns true if no suggestions are found, else returns undefined
    */
   const noSuggestionsHandler = (asyncRender = false) => {
-    if (!items.length) {
+    if (!resultSet.items.length) {
       // clear the list and the DOM
       clear();
       clearListDOM();
@@ -211,8 +216,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       if (!remote) {
         renderNotFoundTemplate();
       } else if (
-        (inputValue && asyncRender && !fetchInProgress) ||
-        (inputValue && remoteQueryCache[JSON.stringify(inputValue)])
+        (resultSet.query && asyncRender && !fetchInProgress) ||
+        (resultSet.query && remoteQueryCache[JSON.stringify(resultSet.query)])
       ) {
         // wait for remote results before rendering notFoundTemplate / render immediately if request was cached
         renderNotFoundTemplate();
@@ -306,7 +311,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     // loop over suggestions
-    for (const [index, item] of items.entries()) {
+    for (const [index, item] of resultSet.items.entries()) {
       if (index === limitSuggestions) break;
 
       // attach group if available
@@ -331,7 +336,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       fragment.appendChild(div);
 
       // highlight matched text
-      config.highlight && hightlight(div, inputValue);
+      config.highlight && hightlight(div, resultSet.query);
     }
 
     // Add footer template
@@ -347,7 +352,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     listContainer.appendChild(fragment);
 
     // update hint if its enabled
-    hint && updateHint(selected || items[0]);
+    hint && updateHint(selected || resultSet.items[0]);
 
     // scroll when not in view
     listContainer.querySelector('.tt-selected')?.scrollIntoView({ block: 'nearest' });
@@ -370,20 +375,20 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * Select the previous item in suggestions
    */
   const selectPrev = (ev: KeyboardEvent): void => {
-    const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
+    const maxLength = resultSet.items.length >= limitSuggestions ? limitSuggestions : resultSet.items.length;
     // if first item is selected and UP Key is pressed, focus input and restore original input
-    if (selected === items[0]) {
+    if (selected === resultSet.items[0]) {
       selected = undefined;
       input.value = storedInput;
       return;
     }
     // if focus is on input, and UP Key is pressed, select last item
     if (!selected) {
-      selected = items[maxLength - 1];
+      selected = resultSet.items[maxLength - 1];
     } else {
       for (let i = maxLength - 1; i > 0; i--) {
-        if (selected === items[i] || i === 1) {
-          selected = items[i - 1];
+        if (selected === resultSet.items[i] || i === 1) {
+          selected = resultSet.items[i - 1];
           break;
         }
       }
@@ -396,23 +401,23 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * Select the next item in suggestions
    */
   const selectNext = (ev: KeyboardEvent): void => {
-    const maxLength = items.length >= limitSuggestions ? limitSuggestions : items.length;
+    const maxLength = resultSet.items.length >= limitSuggestions ? limitSuggestions : resultSet.items.length;
     // if nothing selected, select the first suggestion
     if (!selected) {
-      selected = items[0];
+      selected = resultSet.items[0];
       input.value = display(selected, ev);
       return;
     }
     // if we're at the end of the list, go to input box and restore original input
-    if (selected === items[maxLength - 1]) {
+    if (selected === resultSet.items[maxLength - 1]) {
       selected = undefined;
       input.value = storedInput;
       return;
     }
 
     for (let i = 0; i < maxLength - 1; i++) {
-      if (selected === items[i]) {
-        selected = items[i + 1];
+      if (selected === resultSet.items[i]) {
+        selected = resultSet.items[i + 1];
         break;
       }
     }
@@ -432,7 +437,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (keyCode === Keys.Up || keyCode === Keys.Down || keyCode === Keys.Esc) {
       if (keyCode === Keys.Esc) {
         clear();
-      } else if (items.length) {
+      } else if (resultSet.items.length) {
         keyCode === Keys.Up ? selectPrev(ev) : selectNext(ev);
         update();
       }
@@ -444,8 +449,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     const useSelectedValue = function (fallback = false) {
-      if (!selected && fallback && items.length) {
-        selected = items[0];
+      if (!selected && fallback && resultSet.items.length) {
+        selected = resultSet.items[0];
       }
       if (selected) {
         clear();
@@ -478,24 +483,24 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     clearRemoteDebounceTimer();
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
     if (val.length >= minLen) {
-      inputValue = val;
+      resultSet.query = val;
       calcSuggestions();
 
       // if remote source exists, first check remote cache before making any query
-      const thumbprint = JSON.stringify(inputValue);
-      if (remote && items.length < limitSuggestions && (remoteResponseCache[thumbprint] as [])?.length) {
+      const thumbprint = JSON.stringify(resultSet.query);
+      if (remote && resultSet.items.length < limitSuggestions && (remoteResponseCache[thumbprint] as [])?.length) {
         calcSuggestions(remoteResponseCache[thumbprint] as []);
       }
 
       update(); // update view
 
       remoteDebounceTimer = window.setTimeout(function (): void {
-        if (items.length < limitSuggestions && !fetchInProgress) {
+        if (resultSet.items.length < limitSuggestions && !fetchInProgress) {
           fetchDataFromRemote();
         }
       }, debounceXHR);
     } else {
-      inputValue = '';
+      resultSet.query = '';
       clear();
     }
   };
@@ -510,7 +515,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const calcSuggestions = (newItems?: T[]): void => {
     // get suggestions
-    let suggestions: T[] = trie.search(inputValue, limitSuggestions) as T[];
+    let suggestions: T[] = trie.search(resultSet.query, limitSuggestions) as T[];
 
     if (newItems?.length) {
       newItems.push(...suggestions); // merge suggestions
@@ -532,11 +537,11 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     // update items with available suggestions
-    items = suggestions;
+    resultSet.items = suggestions;
 
     selected = undefined; // unselect previously calculated/cached suggestion
-    if (autoSelect && items.length) {
-      selected = items[0];
+    if (autoSelect && resultSet.items.length) {
+      selected = resultSet.items[0];
     }
   };
 
@@ -544,11 +549,11 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (!remote) return;
 
     fetchInProgress = true;
-    const frozenInput = inputValue;
+    const frozenInput = resultSet.query;
     const thumbprint = JSON.stringify(frozenInput);
 
     // check cache, verify input length
-    if (remoteQueryCache[thumbprint] || !inputValue.length) {
+    if (remoteQueryCache[thumbprint] || !resultSet.query.length) {
       fetchInProgress = false;
       noSuggestionsHandler(true);
       return;
@@ -579,13 +584,13 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         remoteResponseCache[thumbprint] = transformed || [];
         fetchInProgress = false;
         loader();
-        if (transformed.length && inputValue.length) {
+        if (transformed.length && resultSet.query.length) {
           calcSuggestions(transformed);
           update();
         }
 
         // make another request if inputVal exists but is different than the last remote request
-        if (inputValue.length && frozenInput !== inputValue) {
+        if (resultSet.query.length && frozenInput !== resultSet.query) {
           fetchDataFromRemote();
         }
         noSuggestionsHandler(true);
@@ -612,8 +617,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    */
   const sortByStartingLetter = (suggestions: T[]): void => {
     suggestions.sort((a: Dictionary, b: Dictionary) => {
-      const one = (a[identifier as string] as string).toLowerCase().startsWith(inputValue.toLowerCase());
-      const two = (b[identifier as string] as string).toLowerCase().startsWith(inputValue.toLowerCase());
+      const one = (a[identifier as string] as string).toLowerCase().startsWith(resultSet.query.toLowerCase());
+      const two = (b[identifier as string] as string).toLowerCase().startsWith(resultSet.query.toLowerCase());
 
       if (one && !two) return -1;
 
@@ -726,7 +731,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       inputHint.value = '';
     } else {
       const item = display(selectedItem);
-      const regex = new RegExp(escapeRegExp(inputValue), 'i');
+      const regex = new RegExp(escapeRegExp(resultSet.query), 'i');
       let match = regex.exec(item);
 
       // check for diacritics if necessary
