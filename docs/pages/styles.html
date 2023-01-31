@@ -24,6 +24,7 @@
     <li><code>footer</code> - Rendered at the bottom of the list.</li>
     <li><code>suggestion</code> - Renders a single suggestion.</li>
     <li><code>group</code> - Renders the group title.</li>
+    <li><code>loader</code> - Rendered while awaiting suggestions from a Remote API.</li>
     <li><code>notFound</code> - Rendered when no suggestions are found.</li>
   </ol>
 <p>
@@ -47,6 +48,7 @@ typeahead({
     group: (groupName) => {                   /* Renders the group title */
       return `&#60;span class="group-label"&#62;${groupName}&#60;/span&#62;`;
     },
+    loader: () => 'Loading...',               /* Rendered while awaiting suggestions from a remote source */
     notFound: () => '&#60;b&#62;Nothing Found&#60;/b&#62;',   /* Rendered if no suggestions are found */
   }
 });</pre>
@@ -62,6 +64,7 @@ typeahead({
     <li>footer => class <code>tt-footer</code></li>
     <li>suggestion => class <code>tt-suggestion</code></li>
     <li>group => class <code>tt-group</code></li>
+    <li>loader => class <code>tt-loader</code></li>
     <li>notFound => class <code>tt-notFound</code></li>
   </ul>
 </p>
@@ -70,7 +73,10 @@ typeahead({
 </p>
 <script async src="//jsfiddle.net/niketpathak/2bfnq7k5/embed/result,js,html,css/dark/"></script>
 
-
+<p><b>Note:</b> The <code>loader</code> template is not demonstrated in the above example as it requires a remote
+  source to be used. See the <a href="#playground?id=github-users-example" title="Playground - typeahead-standalone.js"
+    class="submenu-link section-link internal-section-link">playground page</a> to see the <b>loader template</b> in
+  action.</p>
 <hr>
 <h4><a href="#styles?id=override-rewrite" id="override-rewrite" title="Rewriting or overriding typeahead-standalone.js styles" class="submenu-link section-link">2. 💄 Overriding/Rewriting the default Styles</a></h4>
 

@@ -66,8 +66,8 @@ require('typeahead-standalone/dist/basic.css');
 <script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"></script>
 
 <!-- or use unpkg.com to get a specific version -->
-<link rel="stylesheet" href="https://unpkg.com/typeahead-standalone@4.14.1/dist/basic.css" />
-<script src="https://unpkg.com/typeahead-standalone@4.14.1/dist/typeahead-standalone.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/typeahead-standalone@4.15.0/dist/basic.css" />
+<script src="https://unpkg.com/typeahead-standalone@4.15.0/dist/typeahead-standalone.js"></script>
 ```
 The library will be available as a global object at **`window.typeahead`**
 
@@ -304,6 +304,7 @@ templates: {
   group: (groupName) => {   /* Used to render a group */
     return `<div class="custom-group">${groupName}</div>`;
   },
+  loader: () => 'Loading...', /* Rendered while awaiting data from a remote source */
   notFound: () => '<span>Nothing Found</span>', /* Rendered if no suggestions are available */
 }
 ```
@@ -314,6 +315,7 @@ Each template is wrapped in a `div` element with a corresponding class. i.e.
 - `footer` => class `tt-footer`
 - `suggestion` => class `tt-suggestion`
 - `group` => class `tt-group`
+- `loader` => class `tt-loader`
 - `notFound` => class `tt-notFound`
 ---
 
