@@ -292,25 +292,34 @@ You can also use templates to add a header, footer and further style each sugges
 
 ### 💫 Templates
 
-Templates can be used to customize the rendering of the List. Their usage is completely optional. Currently, there are 5 templates available -
+Templates can be used to customize the rendering of the List. Their usage is completely optional. Currently, there are 6 templates available -
 
 ```javascript
 templates: {
-  header: () => '<h1>List of Countries</h1>', /* Rendered at the top of the dataset */
-  footer: () => '<div>See more</div>', /* Rendered at the bottom of the dataset */
-  suggestion: (item) => {   /* Used to render a single suggestion */
+  header: (resultSet) => '<h1>List of Countries</h1>', /* Rendered at the top of the dataset */
+  footer: (resultSet) => '<div>See more</div>', /* Rendered at the bottom of the dataset */
+  suggestion: (item, resultSet) => {   /* Used to render a single suggestion */
     return `<div class="custom-suggestion">${item.label}</div>`;
   },
-  group: (groupName) => {   /* Used to render a group */
+  group: (groupName, resultSet) => {   /* Used to render a group */
     return `<div class="custom-group">${groupName}</div>`;
   },
   loader: () => 'Loading...', /* Rendered while awaiting data from a remote source */
-  notFound: () => '<span>Nothing Found</span>', /* Rendered if no suggestions are available */
+  notFound: (resultSet) => '<span>Nothing Found</span>', /* Rendered if no suggestions are available */
 }
 ```
-As seen above, each template takes a callback that must return a `string` which is later interpreted as HTML.
+As seen above, each template takes a callback that **must return a `string`** which is later interpreted as HTML. The templates also receive a parameter `resultSet` that has a structure as shown below.
 
-Each template is wrapped in a `div` element with a corresponding class. i.e.
+```js
+resultSet = {
+  query: '...', // the input query
+  items: [...], // found suggestions
+  count: 0,     // the total suggestions found in the search index
+  limit: 5,     // the number of suggestions to show
+}
+```
+
+To facilitate styling, each template is wrapped in a `div` element with a corresponding class. i.e.
 - `header` => class `tt-header`
 - `footer` => class `tt-footer`
 - `suggestion` => class `tt-suggestion`

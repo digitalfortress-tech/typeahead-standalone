@@ -15,7 +15,7 @@
 <p>
   <code>templates</code> (<i>type: Object</i>) are used to customize the rendering of the list of suggestions. In other words,
   templates allow you to <b>add html</b> that is injected into the list of suggestions.
-  There are 5 types of templates available. All of them  <i>optional</i>.
+  There are 6 types of templates available. All of them <i>optional</i>.
 </p>
 
 <h5 class="underline">Types of templates</h5>
@@ -40,22 +40,36 @@ typeahead({
     local: ['Superman', 'Batman', 'Flash', 'Aquaman'],
   },
   templates: {
-    header: () => '&#60;h1&#62;Superheroes&#60;/h1&#62;',     /* Rendered at the top of the list */
-    footer: () => '&#60;a href="#"&#62;See more&#60;/a&#62;', /* Rendered at the bottom of the list */
-    suggestion: (item) => {                   /* Renders a single suggestion */
+    header: (resultSet) => '&#60;h1&#62;Superheroes&#60;/h1&#62;',      /* Rendered at the top of the list */
+    footer: (resultSet) => '&#60;a href="#"&#62;See more&#60;/a&#62;',  /* Rendered at the bottom of the list */
+    suggestion: (item, resultSet) => {                  /* Renders a single suggestion */
       return `&#60;div class="suggestion-label"&#62;${item.label}&#60;/div&#62;`;
     },
-    group: (groupName) => {                   /* Renders the group title */
+    group: (groupName, resultSet) => {                  /* Renders the group title */
       return `&#60;span class="group-label"&#62;${groupName}&#60;/span&#62;`;
     },
-    loader: () => 'Loading...',               /* Rendered while awaiting suggestions from a remote source */
-    notFound: () => '&#60;b&#62;Nothing Found&#60;/b&#62;',   /* Rendered if no suggestions are found */
+    loader: () => 'Loading...',                         /* Rendered while awaiting suggestions from a remote source */
+    notFound: (resultSet) => '&#60;b&#62;Nothing Found&#60;/b&#62;',    /* Rendered if no suggestions are found */
   }
 });</pre>
 </div>
 
 <p>
-  As seen, each template is <b>a function that returns a string</b> which is <b>interpreted as HTML</b>.
+  As seen, each template is <b>a function that must return a string</b> which is then <b>interpreted as HTML</b>.
+  The parameter <code>resultSet</code> contains data about the search results. It gets passed to almost every template.
+  An example of what data this parameter contains is shown below:
+  <div class="codeContainer">
+    <span class="lang">JS</span>
+    <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+    <pre class="hljs language-js">
+  resultSet = {
+    query: '...', // the input query
+    items: [...], // found suggestions
+    count: 0,     // the total suggestions found in the search index
+    limit: 5,     // the number of suggestions to show
+  };</pre>
+  </div>
+
   To facilitate styling, each template is wrapped in a <code>div</code> element with a corresponding class. i.e.
 </p>
 <p>
