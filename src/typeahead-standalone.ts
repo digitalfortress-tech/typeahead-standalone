@@ -32,7 +32,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const debounceXHR = config.debounceRemote || 100;
   const preventSubmit = config.preventSubmit || false;
   const minLen = config.minLength || 1;
-  const limitSuggestions = config.limit || 5;
   const hint = config.hint === false ? false : true;
   const autoSelect = config.autoSelect || false;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
@@ -68,6 +67,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     query: '',
     items: [], // suggestions
     count: 0,
+    limit: config.limit || 5,
   };
 
   let selected: T | undefined;
@@ -312,7 +312,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // loop over suggestions
     for (const [index, item] of resultSet.items.entries()) {
-      if (index === limitSuggestions) break;
+      if (index === resultSet.limit) break;
 
       // attach group if available
       if (item[groupIdentifier] && !prevGroups.includes(item[groupIdentifier] as string)) {
@@ -375,7 +375,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * Select the previous item in suggestions
    */
   const selectPrev = (ev: KeyboardEvent): void => {
-    const maxLength = resultSet.items.length >= limitSuggestions ? limitSuggestions : resultSet.items.length;
+    const maxLength = resultSet.items.length >= resultSet.limit ? resultSet.limit : resultSet.items.length;
     // if first item is selected and UP Key is pressed, focus input and restore original input
     if (selected === resultSet.items[0]) {
       selected = undefined;
@@ -401,7 +401,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * Select the next item in suggestions
    */
   const selectNext = (ev: KeyboardEvent): void => {
-    const maxLength = resultSet.items.length >= limitSuggestions ? limitSuggestions : resultSet.items.length;
+    const maxLength = resultSet.items.length >= resultSet.limit ? resultSet.limit : resultSet.items.length;
     // if nothing selected, select the first suggestion
     if (!selected) {
       selected = resultSet.items[0];
@@ -488,14 +488,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
       // if remote source exists, first check remote cache before making any query
       const thumbprint = JSON.stringify(resultSet.query);
-      if (remote && resultSet.items.length < limitSuggestions && (remoteResponseCache[thumbprint] as [])?.length) {
+      if (remote && resultSet.items.length < resultSet.limit && (remoteResponseCache[thumbprint] as [])?.length) {
         calcSuggestions(remoteResponseCache[thumbprint] as []);
       }
 
       update(); // update view
 
       remoteDebounceTimer = window.setTimeout(function (): void {
-        if (resultSet.items.length < limitSuggestions && !fetchInProgress) {
+        if (resultSet.items.length < resultSet.limit && !fetchInProgress) {
           fetchDataFromRemote();
         }
       }, debounceXHR);
@@ -515,7 +515,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const calcSuggestions = (newItems?: T[]): void => {
     // get suggestions
-    let { suggestions, count }: { suggestions: T[]; count: number } = trie.search(resultSet.query, limitSuggestions);
+    let { suggestions, count }: { suggestions: T[]; count: number } = trie.search(resultSet.query, resultSet.limit);
 
     if (newItems?.length) {
       newItems.push(...suggestions); // merge suggestions

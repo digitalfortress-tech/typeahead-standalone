@@ -406,7 +406,8 @@ const test4 = typeahead({
       return `<div class="custom-group">${name} (count: ${count})</div>`;
     },
     header: (resultSet) => `Colors Found (Total: ${resultSet.count})`,
-    footer: (resultSet) => `<a href="#">See more...(${resultSet.count})</a>`,
+    footer: (resultSet) =>
+      `<a href="#">See${resultSet.count > resultSet.limit ? ` ${resultSet.count - resultSet.limit}` : ''} more...</a>`,
     notFound: (resultSet) => `Oops...Nothing Found for query - ${resultSet.query} 😪 <br>Try another color...`,
   },
 });

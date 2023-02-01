@@ -62,6 +62,7 @@ export interface ResultSet<T extends Dictionary> {
   query: string;
   items: T[];
   count: number;
+  limit: number;
   [key: string]: unknown;
 }
 
