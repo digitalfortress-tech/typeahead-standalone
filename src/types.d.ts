@@ -33,11 +33,11 @@ export interface RemoteDataSource<T> extends typeaheadDataSource<T> {
 }
 
 export interface typeaheadHtmlTemplates<T extends Dictionary> {
-  header?: () => string;
-  footer?: () => string;
-  suggestion?: (item: T) => string;
-  group?: (groupName?: string) => string;
-  notFound?: () => string;
+  header?: (resultSet: ResultSet<T>) => string;
+  footer?: (resultSet: ResultSet<T>) => string;
+  suggestion?: (item: T, resultSet: ResultSet<T>) => string;
+  group?: (groupName: string, resultSet: ResultSet<T>) => string;
+  notFound?: (resultSet: ResultSet<T>) => string;
   loader?: () => string;
 }
 

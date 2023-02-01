@@ -397,21 +397,17 @@ const test4 = typeahead({
   className: 'typeahead-test-four',
   highlight: true,
   templates: {
-    suggestion: (item) => {
-      return (
-        '<span class="preview" style="background-color:' +
-        item.hash +
-        '"></span><div class="text">' +
-        item.name +
-        '</div>'
-      );
+    suggestion: (item, resultSet) => {
+      return `<span class="preview" data-resultset="${resultSet.items[0].hash}" style="background-color:${item.hash}"></span>
+        <div class="text">${item.name}</div>`;
     },
-    group: (name) => {
-      return '<div class="custom-group">' + name + '</div>';
+    group: (name, resultSet) => {
+      const count = resultSet.items.filter((i) => i.group === name).length;
+      return `<div class="custom-group">${name} (count: ${count})</div>`;
     },
-    header: () => 'Colors Found',
-    footer: () => '<a href="#">See more...</a>',
-    notFound: () => 'Oops...Nothing Found 😪 <br>Try another color...',
+    header: (resultSet) => `Colors Found (Total: ${resultSet.count})`,
+    footer: (resultSet) => `<a href="#">See more...(${resultSet.count})</a>`,
+    notFound: (resultSet) => `Oops...Nothing Found for query - ${resultSet.query} 😪 <br>Try another color...`,
   },
 });
 

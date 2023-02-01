@@ -209,7 +209,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       const renderNotFoundTemplate = () => {
         const empty = doc.createElement('div');
         empty.classList.add('tt-notFound');
-        templatify(empty, templates.notFound ? templates.notFound() : '');
+        templatify(empty, templates.notFound ? templates.notFound(resultSet) : '');
         listContainer.appendChild(empty);
       };
 
@@ -276,7 +276,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       itemElement.setAttribute('aria-selected', 'false');
       itemElement.setAttribute('aria-label', display(item));
       if (templates?.suggestion) {
-        templatify(itemElement, templates.suggestion(item));
+        templatify(itemElement, templates.suggestion(item, resultSet));
       } else {
         itemElement.textContent = (item[identifier] as string) || '';
       }
@@ -290,7 +290,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       groupDiv.setAttribute('role', 'group');
       groupDiv.setAttribute('aria-label', groupName);
       if (templates?.group) {
-        templatify(groupDiv, templates.group(groupName));
+        templatify(groupDiv, templates.group(groupName, resultSet));
       } else {
         groupDiv.textContent = groupName || '';
       }
@@ -306,7 +306,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       headerDiv.classList.add('tt-header');
       headerDiv.setAttribute('role', 'heading');
       headerDiv.setAttribute('aria-level', '1');
-      templatify(headerDiv, templates.header());
+      templatify(headerDiv, templates.header(resultSet));
       fragment.appendChild(headerDiv);
     }
 
@@ -345,7 +345,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       footerDiv.classList.add('tt-footer');
       footerDiv.setAttribute('role', 'heading');
       footerDiv.setAttribute('aria-level', '2');
-      templatify(footerDiv, templates.footer());
+      templatify(footerDiv, templates.footer(resultSet));
       fragment.appendChild(footerDiv);
     }
 
