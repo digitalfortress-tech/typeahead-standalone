@@ -206,21 +206,23 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         return true;
       }
 
-      const renderNotFoundTemplate = () => {
+      const notFoundtemplateHtml = templates.notFound(resultSet);
+
+      const renderNotFoundTemplate = (html: string) => {
         const empty = doc.createElement('div');
         empty.classList.add('tt-notFound');
-        templatify(empty, templates.notFound ? templates.notFound(resultSet) : '');
-        listContainer.appendChild(empty);
+        templatify(empty, html);
+        html && listContainer.appendChild(empty);
       };
 
       if (!remote) {
-        renderNotFoundTemplate();
+        renderNotFoundTemplate(notFoundtemplateHtml);
       } else if (
-        (resultSet.query && asyncRender && !fetchInProgress) ||
-        (resultSet.query && remoteQueryCache[JSON.stringify(resultSet.query)])
+        resultSet.query &&
+        ((asyncRender && !fetchInProgress) || remoteQueryCache[JSON.stringify(resultSet.query)])
       ) {
         // wait for remote results before rendering notFoundTemplate / render immediately if request was cached
-        renderNotFoundTemplate();
+        renderNotFoundTemplate(notFoundtemplateHtml);
       }
 
       show();
@@ -306,8 +308,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       headerDiv.classList.add('tt-header');
       headerDiv.setAttribute('role', 'heading');
       headerDiv.setAttribute('aria-level', '1');
-      templatify(headerDiv, templates.header(resultSet));
-      fragment.appendChild(headerDiv);
+      const templateHtml = templatify(headerDiv, templates.header(resultSet));
+      templateHtml && fragment.appendChild(headerDiv);
     }
 
     // loop over suggestions
@@ -345,8 +347,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       footerDiv.classList.add('tt-footer');
       footerDiv.setAttribute('role', 'heading');
       footerDiv.setAttribute('aria-level', '2');
-      templatify(footerDiv, templates.footer(resultSet));
-      fragment.appendChild(footerDiv);
+      const templateHtml = templatify(footerDiv, templates.footer(resultSet));
+      templateHtml && fragment.appendChild(footerDiv);
     }
 
     listContainer.appendChild(fragment);
@@ -750,12 +752,13 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   /**
    * Creates and appends a template to an HTMLElement
    * @param El The html element that the template should attach to
-   * @param data The raw string representation of the html template
+   * @param templateHtml The raw string representation of the html template
    */
-  const templatify = (El: HTMLElement | DocumentFragment, data: string) => {
+  const templatify = (El: HTMLElement | DocumentFragment, templateHtml: string) => {
     const template = doc.createElement('template');
-    template.innerHTML = data;
+    template.innerHTML = templateHtml;
     El.appendChild(template.content);
+    return templateHtml;
   };
 
   const blurEventHandler = (): void => {
