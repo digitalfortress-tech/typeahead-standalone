@@ -207,7 +207,7 @@ context('Typeahead', () => {
 
     // header, footer, suggestion template
     cy.get('@list').children('.tt-header').should('have.length', 1);
-    cy.get('.typeahead-test-four .tt-header').should('have.text', 'Colors Found');
+    cy.get('.typeahead-test-four .tt-header').should('have.text', 'Colors Found (Total: 2)');
     cy.get('@list').children('.tt-footer').should('have.length', 1);
     cy.get('.typeahead-test-four .tt-footer a').should('contain.text', 'See more');
     cy.get('@list').children('.tt-suggestion').should('have.length', 2);
@@ -219,13 +219,18 @@ context('Typeahead', () => {
     // notFound template
     cy.get('@input4').type('p', { delay: 100 });
     cy.get('@list').children().should('have.length', 1);
-    cy.get('.typeahead-test-four .tt-notFound').should('contain.text', 'Nothing Found');
+    cy.get('.typeahead-test-four .tt-notFound').should('contain.text', 'Nothing Found for query - Pinkp');
 
-    // group template
-    cy.get('@input4').clear().type('bla', { delay: 100 });
-    cy.get('@list').children('.tt-group').as('group').should('have.length', 1);
-    cy.get('@group').children('.custom-group').should('have.length', 1);
-    cy.get('@group').children('.custom-group').should('have.text', 'Shades of Black');
+    // group template + header/footer/group count
+    cy.get('@input4').clear().type('bl', { delay: 100 });
+    cy.get('@list').children('.tt-group').as('group').should('have.length', 2);
+    cy.get('@group').children('.custom-group').should('have.length', 2);
+    // verify count
+    cy.get('@group')
+      .children('.custom-group')
+      .should('have.text', 'Shades of Black (count: 2)Shades of Blue (count: 3)');
+    cy.get('.tt-header').should('contain.text', 'Total: 8');
+    cy.get('.tt-footer').should('contain.text', 'See 3 more');
     cy.get('@input4').clear();
 
     // Loader Template
