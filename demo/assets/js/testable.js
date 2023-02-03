@@ -430,6 +430,8 @@ const test4A = typeahead({
       return item.name + ', ' + item.capital;
     },
     loader: () => 'LOADING...',
+    header: () => '',
+    footer: () => '',
     notFound: () => 'Oops...Nothing Found 😪 <br>Try another country...',
   },
 });
@@ -454,7 +456,7 @@ const test4B = typeahead({
     header: () => 'Countries Found',
     loader: () => '<div style="text-align:center"><img src="./assets/img/spinner.svg" /></div>',
     footer: () => '<a href="#" style="color:blue">See more...</a>',
-    notFound: () => 'Oops...Nothing Found 😪 <br>Try another country...',
+    notFound: () => '',
   },
 });
 

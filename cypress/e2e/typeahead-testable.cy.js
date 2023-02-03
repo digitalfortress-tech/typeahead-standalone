@@ -258,6 +258,8 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-fourA .tt-list').children().should('have.length', 1);
     cy.wait('@getCountries');
     cy.get('.typeahead-test-fourA .tt-list').as('list4A').children().should('have.length', 5);
+    cy.get('.typeahead-test-fourA .tt-header').should('not.exist');
+    cy.get('.typeahead-test-fourA .tt-footer').should('not.exist');
     cy.get('#input-fourA').clear();
 
     cy.get('#input-fourB').as('input4B').clear().type('ar', { delay: 0 });
@@ -265,6 +267,8 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-fourB .tt-footer').should('exist');
     cy.wait('@getCountries');
     cy.get('.typeahead-test-fourB .tt-list').as('list4B').children().should('have.length', 7);
+    cy.get('@input4B').type('!', { delay: 0 });
+    cy.get('.typeahead-test-fourB .tt-notFound').should('not.exist');
 
     cy.intercept('GET', 'https://restcountries.com/v2/name/fran', {
       fixture: 'countries_remote.json',
