@@ -197,32 +197,26 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * @returns true if no suggestions are found, else returns undefined
    */
   const noSuggestionsHandler = (asyncRender = false) => {
-    if (!resultSet.items.length) {
+    if (!resultSet.items.length && resultSet.query) {
       // clear the list and the DOM
       clear();
       clearListDOM();
 
-      if (!templates?.notFound) {
-        return true;
-      }
-
-      const notFoundtemplateHtml = templates.notFound(resultSet);
+      const notFoundTemplateHtml = templates?.notFound && templates.notFound(resultSet);
+      if (!notFoundTemplateHtml) return true;
 
       const renderNotFoundTemplate = (html: string) => {
-        const empty = doc.createElement('div');
-        empty.classList.add('tt-notFound');
-        templatify(empty, html);
-        html && listContainer.appendChild(empty);
+        const notFoundEl = doc.createElement('div');
+        notFoundEl.classList.add('tt-notFound');
+        templatify(notFoundEl, html);
+        listContainer.appendChild(notFoundEl);
       };
 
       if (!remote) {
-        renderNotFoundTemplate(notFoundtemplateHtml);
-      } else if (
-        resultSet.query &&
-        ((asyncRender && !fetchInProgress) || remoteQueryCache[JSON.stringify(resultSet.query)])
-      ) {
+        renderNotFoundTemplate(notFoundTemplateHtml);
+      } else if (remoteQueryCache[JSON.stringify(resultSet.query)] || (asyncRender && !fetchInProgress)) {
         // wait for remote results before rendering notFoundTemplate / render immediately if request was cached
-        renderNotFoundTemplate(notFoundtemplateHtml);
+        renderNotFoundTemplate(notFoundTemplateHtml);
       }
 
       show();
