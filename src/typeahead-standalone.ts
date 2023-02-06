@@ -96,7 +96,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   // Wrapper element
   const wrapper: HTMLSpanElement = doc.createElement('span');
   wrapper.className = `typeahead-standalone${config.className ? ` ${config.className}` : ''}`;
-  // resultSet.container = wrapper;
+  resultSet.container = wrapper;
 
   // move input element into the wrapper element
   const parentEl = input.parentNode as HTMLElement;

@@ -64,7 +64,7 @@ export interface ResultSet<T extends Dictionary> {
   items: T[];
   count: number;
   limit: number;
-  // container?: HTMLSpanElement;
+  container?: HTMLSpanElement;
   [key: string]: unknown;
 }
 
