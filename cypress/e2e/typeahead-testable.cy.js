@@ -202,10 +202,17 @@ context('Typeahead', () => {
   });
 
   it('Displays Templates', () => {
-    cy.get('#input-four').as('input4').type('p', { delay: 100 });
-    cy.get('.typeahead-test-four .tt-list').as('list').children().should('have.length', 4);
+    // empty template
+    cy.get('#input-four').as('input4').focus();
+    cy.get('.typeahead-test-four .tt-list').as('list').children().should('have.length', 5);
+    cy.get('@list').children('.tt-empty').should('not.exist');
+    cy.get('@list').children('.tt-suggestion').should('have.length', 3);
+    cy.get('@list').children('.tt-header').should('have.text', 'Top Colors');
+    cy.get('@list').children('.tt-footer').should('have.length', 0);
 
     // header, footer, suggestion template
+    cy.get('@input4').type('p', { delay: 100 });
+    cy.get('@list').children().should('have.length', 4);
     cy.get('@list').children('.tt-header').should('have.length', 1);
     cy.get('.typeahead-test-four .tt-header').should('have.text', 'Colors Found (Total: 2)');
     cy.get('@list').children('.tt-footer').should('have.length', 1);
@@ -233,7 +240,6 @@ context('Typeahead', () => {
     cy.get('.tt-footer').should('contain.text', 'See 3 more');
     cy.get('@input4').clear();
 
-    // Loader Template
     cy.intercept('GET', 'https://restcountries.com/v2/name/qsdd', (req) => {
       req.reply({
         body: [],
@@ -243,7 +249,14 @@ context('Typeahead', () => {
       });
     }).as('getEmptyResult');
 
-    cy.get('#input-fourA').clear({ force: true }).type('qsdd', { delay: 0 });
+    // Input4A empty template
+    cy.get('#input-fourA').as('input4A').focus();
+    cy.get('.typeahead-test-fourA .tt-list').as('list4A').children().should('have.length', 1);
+    cy.get('@list4A').children('.tt-empty').should('exist');
+    cy.get('@list4A').children('.tt-empty').should('have.text', 'EMPTY template Html');
+
+    // Input4A Loader Template
+    cy.get('@input4A').clear({ force: true }).type('qsdd', { delay: 0 });
     cy.get('.typeahead-test-fourA .tt-loader').should('exist');
     cy.wait('@getEmptyResult');
     cy.get('.typeahead-test-fourA .tt-notFound').should('exist');
@@ -253,20 +266,31 @@ context('Typeahead', () => {
       throttleKbps: 1000,
       delay: 1000,
     }).as('getCountries');
-    cy.get('#input-fourA').clear({ force: true }).type('ar', { delay: 0 });
+    cy.get('@input4A').clear({ force: true }).type('ar', { delay: 0 });
     cy.get('.typeahead-test-fourA .tt-loader').should('exist');
-    cy.get('.typeahead-test-fourA .tt-list').children().should('have.length', 1);
+    cy.get('@list4A').children().should('have.length', 1);
     cy.wait('@getCountries');
-    cy.get('.typeahead-test-fourA .tt-list').as('list4A').children().should('have.length', 5);
+    cy.get('@list4A').children().should('have.length', 5);
     cy.get('.typeahead-test-fourA .tt-header').should('not.exist');
     cy.get('.typeahead-test-fourA .tt-footer').should('not.exist');
-    cy.get('#input-fourA').clear();
+    cy.get('@input4A').clear();
 
-    cy.get('#input-fourB').as('input4B').clear().type('ar', { delay: 0 });
+    // Input4B empty template
+    cy.get('#input-fourB').as('input4B').focus();
+    cy.get('.typeahead-test-fourB .tt-list').as('list4B').children().should('have.length', 0);
+    cy.get('@list4B').children('.tt-empty').should('not.exist');
+
+    // Input4B Loader Template
+    cy.get('@input4B').clear().type('ar', { delay: 0 });
     cy.get('.typeahead-test-fourB .tt-loader').should('exist');
     cy.get('.typeahead-test-fourB .tt-footer').should('exist');
     cy.wait('@getCountries');
-    cy.get('.typeahead-test-fourB .tt-list').as('list4B').children().should('have.length', 7);
+    cy.get('@list4B').children().should('have.length', 7);
+    cy.intercept('GET', 'https://restcountries.com/v2/name/ar!', (req) => {
+      req.reply({
+        body: [],
+      });
+    }).as('getEmptyResult');
     cy.get('@input4B').type('!', { delay: 0 });
     cy.get('.typeahead-test-fourB .tt-notFound').should('not.exist');
 
@@ -277,9 +301,9 @@ context('Typeahead', () => {
     }).as('getCountriesRemote');
     cy.get('@input4B').clear().type('fran', { delay: 0 });
     cy.get('.typeahead-test-fourB .tt-loader').should('exist');
-    cy.get('.typeahead-test-fourB .tt-list').children().should('have.length', 4);
+    cy.get('@list4B').children().should('have.length', 4);
     cy.wait('@getCountriesRemote');
-    cy.get('.typeahead-test-fourB .tt-list').children().should('have.length', 5);
+    cy.get('@list4B').children().should('have.length', 5);
   });
 
   it('Displays expected suggestions with Data-Tokens', () => {

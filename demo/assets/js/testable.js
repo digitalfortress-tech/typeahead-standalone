@@ -475,6 +475,7 @@ const test4B = typeahead({
     loader: () => '<div style="text-align:center"><img src="./assets/img/spinner.svg" /></div>',
     footer: () => '<a href="#" style="color:blue">See more...</a>',
     notFound: () => '',
+    empty: () => '',
   },
 });
 
