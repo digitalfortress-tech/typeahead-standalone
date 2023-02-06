@@ -83,6 +83,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     templates.group = typeof templates.group === 'function' ? templates.group : undefined;
     templates.suggestion = typeof templates.suggestion === 'function' ? templates.suggestion : undefined;
     templates.loader = typeof templates.loader === 'function' ? templates.loader : undefined;
+    templates.empty = typeof templates.empty === 'function' ? templates.empty : undefined;
   }
 
   if (local) {
@@ -95,6 +96,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   // Wrapper element
   const wrapper: HTMLSpanElement = doc.createElement('span');
   wrapper.className = `typeahead-standalone${config.className ? ` ${config.className}` : ''}`;
+  // resultSet.container = wrapper;
 
   // move input element into the wrapper element
   const parentEl = input.parentNode as HTMLElement;
@@ -423,7 +425,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
     // if raw input is empty, clear out everything
-    if (!input.value.length) {
+    if (!input.value.length && !templates?.empty) {
       clear();
       return;
     }
@@ -478,6 +480,19 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const startFetch = (): void => {
     clearRemoteDebounceTimer();
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
+
+    // empty/default template
+    if (templates?.empty && !val.length) {
+      templates.empty(resultSet);
+      resultSet.query = '';
+      if (resultSet.items.length) {
+        resultSet.items = normalizer(transform(resultSet.items) as T[], identifier) as T[];
+        return update();
+      }
+      // @todo: allow custom empty html template
+      return;
+    }
+
     if (val.length >= minLen) {
       resultSet.query = val;
       calcSuggestions();
@@ -693,7 +708,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     };
 
     const regex = getRegex(pattern, false);
-    traverse(Elm, hightlightTextNode);
+    pattern && traverse(Elm, hightlightTextNode);
   };
 
   /**
@@ -719,6 +734,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // if raw string is not part of suggestion, hide the hint
     if (
+      !rawInput ||
       display(selectedItem) === rawInput || // if input string is exactly the same as selectedItem
       formatQuery(display(selectedItem)).indexOf(
         formatQuery(rawInput)

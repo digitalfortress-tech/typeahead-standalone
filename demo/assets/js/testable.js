@@ -405,10 +405,26 @@ const test4 = typeahead({
       const count = resultSet.items.filter((i) => i.group === name).length;
       return `<div class="custom-group">${name} (count: ${count})</div>`;
     },
-    header: (resultSet) => `Colors Found (Total: ${resultSet.count})`,
-    footer: (resultSet) =>
-      `<a href="#">See${resultSet.count > resultSet.limit ? ` ${resultSet.count - resultSet.limit}` : ''} more...</a>`,
+    header: (resultSet) => {
+      if (!resultSet.query) return 'Top Colors';
+      return `Colors Found (Total: ${resultSet.count})`;
+    },
+    footer: (resultSet) => {
+      if (!resultSet.query) return '';
+      return `<a href="#">See${
+        resultSet.count > resultSet.limit ? ` ${resultSet.count - resultSet.limit}` : ''
+      } more...</a>`;
+    },
     notFound: (resultSet) => `Oops...Nothing Found for query - ${resultSet.query} 😪 <br>Try another color...`,
+    empty: (resultSet) => {
+      // console.log('empty template input val', resultSet.container.querySelector('.tt-input').value);
+      resultSet.items = [
+        { name: 'Red', value: 'RD', hash: 'red' },
+        { name: 'Green', value: 'GR', hash: 'green' },
+        { name: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
+      ];
+      return '';
+    },
   },
 });
 

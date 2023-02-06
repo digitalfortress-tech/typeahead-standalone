@@ -37,6 +37,7 @@ export interface typeaheadHtmlTemplates<T extends Dictionary> {
   footer?: (resultSet: ResultSet<T>) => string;
   suggestion?: (item: T, resultSet: ResultSet<T>) => string;
   group?: (groupName: string, resultSet: ResultSet<T>) => string;
+  empty?: (resultSet: ResultSet<T>) => string;
   notFound?: (resultSet: ResultSet<T>) => string;
   loader?: () => string;
 }
@@ -63,6 +64,7 @@ export interface ResultSet<T extends Dictionary> {
   items: T[];
   count: number;
   limit: number;
+  // container?: HTMLSpanElement;
   [key: string]: unknown;
 }
 
