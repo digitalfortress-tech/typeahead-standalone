@@ -425,7 +425,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
     // if raw input is empty, clear out everything
-    if (!input.value.length && !templates?.empty) {
+    if (!input.value.length) {
       clear();
       return;
     }
@@ -483,14 +483,22 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // empty/default template
     if (templates?.empty && !val.length) {
-      templates.empty(resultSet);
+      const emptyHtml = templates.empty(resultSet);
       resultSet.query = '';
-      if (resultSet.items.length) {
-        resultSet.items = normalizer(transform(resultSet.items) as T[], identifier) as T[];
+      if (resultSet.defaultItems?.length) {
+        // inject default suggestions
+        resultSet.items = normalizer(transform(resultSet.defaultItems) as T[], identifier) as T[];
         return update();
       }
-      // @todo: allow custom empty html template
-      return;
+
+      // inject empty html template only if default suggestions aren't provided
+      clear();
+      clearListDOM();
+      const emptyEl = doc.createElement('div');
+      emptyEl.classList.add('tt-empty');
+      templatify(emptyEl, emptyHtml);
+      emptyHtml && listContainer.appendChild(emptyEl);
+      return show();
     }
 
     if (val.length >= minLen) {

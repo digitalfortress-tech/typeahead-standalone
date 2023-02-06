@@ -417,13 +417,12 @@ const test4 = typeahead({
     },
     notFound: (resultSet) => `Oops...Nothing Found for query - ${resultSet.query} 😪 <br>Try another color...`,
     empty: (resultSet) => {
-      // console.log('empty template input val', resultSet.container.querySelector('.tt-input').value);
-      resultSet.items = [
+      resultSet.defaultItems = [
         { name: 'Red', value: 'RD', hash: 'red' },
         { name: 'Green', value: 'GR', hash: 'green' },
         { name: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
       ];
-      return '';
+      return 'unimportant'; // this should not be taken into consideration
     },
   },
 });
@@ -449,6 +448,9 @@ const test4A = typeahead({
     header: () => '',
     footer: () => '',
     notFound: () => 'Oops...Nothing Found 😪 <br>Try another country...',
+    empty: () => {
+      return 'EMPTY template Html';
+    },
   },
 });
 
