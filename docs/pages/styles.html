@@ -15,7 +15,7 @@
 <p>
   <code>templates</code> (<i>type: Object</i>) are used to customize the rendering of the list of suggestions. In other words,
   templates allow you to <b>add html</b> that is injected into the list of suggestions.
-  There are 6 types of templates available. All of them <i>optional</i>.
+  There are 7 types of templates available. All of them <i>optional</i>.
 </p>
 
 <h5 class="underline">Types of templates</h5>
@@ -26,6 +26,7 @@
     <li><code>group</code> - Renders the group title.</li>
     <li><code>loader</code> - Rendered while awaiting suggestions from a Remote API.</li>
     <li><code>notFound</code> - Rendered when no suggestions are found.</li>
+    <li><code>empty</code> - Rendered when the input query is empty.</li>
   </ol>
 <p>
   A typical example can be seen below -
@@ -50,6 +51,13 @@ typeahead({
     },
     loader: () => 'Loading...',                         /* Rendered while awaiting suggestions from a remote source */
     notFound: (resultSet) => '&#60;b&#62;Nothing Found&#60;/b&#62;',    /* Rendered if no suggestions are found */
+    empty: (resultSet) => {                             /* Rendered when the input query is empty */
+    /* show default suggestions */
+    resultSet.defaultItems = [...]
+    return '';
+    /* OR show custom html */
+    return `&#60;div&#62;Search for Colors...&#60;/div&#62`;
+    },
   }
 });</pre>
 </div>
@@ -63,10 +71,12 @@ typeahead({
     <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
     <pre class="hljs language-js">
   resultSet = {
-    query: '...', // the input query
-    items: [...], // found suggestions
-    count: 0,     // the total suggestions found in the search index
-    limit: 5,     // the number of suggestions to show
+    query: '...',           // the input query
+    items: [...],           // found suggestions
+    count: 0,               // the total suggestions found in the search index
+    limit: 5,               // the number of suggestions to show
+    container: DOMElement,  // the container DOM element
+    defaultItems: [...],    // the default suggestions while using the "empty" template
   };</pre>
   </div>
 
@@ -80,6 +90,7 @@ typeahead({
     <li>group => class <code>tt-group</code></li>
     <li>loader => class <code>tt-loader</code></li>
     <li>notFound => class <code>tt-notFound</code></li>
+    <li>empty => class <code>tt-empty</code></li>
   </ul>
 </p>
 <p>
@@ -91,6 +102,11 @@ typeahead({
   source to be used. See the <a href="#playground?id=github-users-example" title="Playground - typeahead-standalone.js"
     class="submenu-link section-link internal-section-link">playground page</a> to see the <b>loader template</b> in
   action.</p>
+<p>
+  The <code>tt-empty</code> template can be used to either show some default suggestions or to show some custom html.
+  To show suggestions by default, you can use the <b>resultSet</b> parameter like this
+  (<code>resultSet.defaultItems = [...]</code>) whereas to display custom html, return the desired html as a string.
+</p>
 <hr>
 <h4><a href="#styles?id=override-rewrite" id="override-rewrite" title="Rewriting or overriding typeahead-standalone.js styles" class="submenu-link section-link">2. 💄 Overriding/Rewriting the default Styles</a></h4>
 

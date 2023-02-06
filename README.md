@@ -292,7 +292,7 @@ You can also use templates to add a header, footer and further style each sugges
 
 ### 💫 Templates
 
-Templates can be used to customize the rendering of the List. Their usage is completely optional. Currently, there are 6 templates available -
+Templates can be used to customize the rendering of the List. Their usage is completely optional. Currently, there are 7 templates available -
 
 ```javascript
 templates: {
@@ -304,6 +304,9 @@ templates: {
   group: (groupName, resultSet) => {   /* Used to render a group */
     return `<div class="custom-group">${groupName}</div>`;
   },
+  empty: (resultSet) => {   /* Rendered when the input query is empty */
+    return `<div>Search for Colors...</div>`;
+  }
   loader: () => 'Loading...', /* Rendered while awaiting data from a remote source */
   notFound: (resultSet) => '<span>Nothing Found</span>', /* Rendered if no suggestions are available */
 }
@@ -316,6 +319,8 @@ resultSet = {
   items: [...], // found suggestions
   count: 0,     // the total suggestions found in the search index
   limit: 5,     // the number of suggestions to show
+  container: DOMElement,  // the container DOM element
+  defaultItems: [...],    // the default suggestions while using the "empty" template
 }
 ```
 
@@ -325,6 +330,7 @@ To facilitate styling, each template is wrapped in a `div` element with a corres
 - `suggestion` => class `tt-suggestion`
 - `group` => class `tt-group`
 - `loader` => class `tt-loader`
+- `empty` => class `tt-empty`
 - `notFound` => class `tt-notFound`
 ---
 
