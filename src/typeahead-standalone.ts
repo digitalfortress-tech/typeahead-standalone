@@ -424,21 +424,16 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   };
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
-    // if raw input is empty, clear out everything
-    if (!input.value.length) {
-      clear();
-      return;
-    }
-
     const keyCode = ev.which || ev.keyCode || 0;
 
-    if (keyCode === Keys.Up || keyCode === Keys.Down || keyCode === Keys.Esc) {
-      if (keyCode === Keys.Esc) {
-        clear();
-      } else if (resultSet.items.length) {
-        keyCode === Keys.Up ? selectPrev(ev) : selectNext(ev);
-        update();
-      }
+    // if raw input is empty if Esc is hit, clear out everything
+    if (!input.value.length || keyCode === Keys.Esc) {
+      return clear();
+    }
+
+    if (resultSet.items.length && (keyCode === Keys.Up || keyCode === Keys.Down)) {
+      keyCode === Keys.Up ? selectPrev(ev) : selectNext(ev);
+      update();
 
       ev.preventDefault();
       ev.stopPropagation();
