@@ -14,7 +14,6 @@ import type {
   PrefetchDataSource,
   ResultSet,
 } from './types';
-import { Keys } from './constants';
 import { diacritics, escapeRegExp, isObject, NOOP, normalizer } from './helpers';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper';
 import { Trie } from './trie/trie';
@@ -359,9 +358,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   };
 
   const inputEventHandler = (ev: KeyboardEvent): void => {
-    const keyCode = ev.which || ev.keyCode || 0;
-
-    if (keyCode === Keys.Down) {
+    if (ev.key === 'ArrowDown') {
       return;
     }
 
@@ -424,15 +421,13 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   };
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
-    const keyCode = ev.which || ev.keyCode || 0;
-
     // if raw input is empty if Esc is hit, clear out everything
-    if (!input.value.length || keyCode === Keys.Esc) {
+    if (!input.value.length || ev.key === 'Esc') {
       return clear();
     }
 
-    if (resultSet.items.length && (keyCode === Keys.Up || keyCode === Keys.Down)) {
-      keyCode === Keys.Up ? selectPrev(ev) : selectNext(ev);
+    if (resultSet.items.length && (ev.key === 'ArrowUp' || ev.key === 'ArrowDown')) {
+      ev.key === 'ArrowDown' ? selectNext(ev) : selectPrev(ev);
       update();
 
       ev.preventDefault();
@@ -452,14 +447,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       }
     };
 
-    if (keyCode === Keys.Enter) {
+    if (ev.key === 'Enter') {
       preventSubmit && ev.preventDefault();
       onSubmit(ev, useSelectedValue());
 
       return;
     }
 
-    if (keyCode === Keys.Tab && isListOpen()) {
+    if (ev.key === 'Tab' && isListOpen()) {
       ev.preventDefault();
       useSelectedValue(true);
     }
