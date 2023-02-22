@@ -22,7 +22,7 @@ import './style.less';
 export default function typeahead<T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult<T> {
   // check required params
   if (!config.input) throw new Error('e01');
-  if (!config.source || !isObject(config.source)) throw new Error('e02');
+  if (!isObject(config.source)) throw new Error('e02');
 
   const doc = document;
 

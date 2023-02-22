@@ -4,16 +4,14 @@ export const NOOP = (...args: unknown[]): void => undefined;
 
 export const escapeRegExp = (text: string): string => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 
-export const isObject = (item: any): boolean => {
-  return item !== null && item.constructor.name === 'Object';
+export const isObject = (item: unknown): boolean => {
+  return item !== null && (item as Dictionary)?.constructor.name === 'Object';
 };
 
 /** @deprecated */
 export const deduplicateArr = (iterable: Dictionary[], prop: string): Dictionary[] => [
   ...new Map(iterable.map((item) => [item[prop], item])).values(),
 ];
-
-export const spaceTokenizer = (tokenString: string): string[] => tokenString.trim().split(/\s+/);
 
 export const diacritics = (txt = '') => txt.normalize('NFD').replace(/\p{Diacritic}/gu, '');
 
@@ -23,7 +21,8 @@ export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionar
   const length = listItems.length;
   if (!length) return [];
 
-  if (isObject(listItems[0] as Dictionary)) {
+  // validate array of objects
+  if (isObject(listItems[0])) {
     // verify if identifier exists (i.e. normalized already)
     for (let x = 0; x < length; x++) {
       if (!(identifier in (listItems[x] as Dictionary))) {
@@ -33,7 +32,7 @@ export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionar
     return listItems as T[];
   }
 
-  // The default identifier (label) is used for string arrays
+  // normalize array of strings
   const normalizedData = (listItems as []).reduce(function (acc: Record<string, unknown>[], currentItem) {
     acc.push({
       [identifier]: currentItem && typeof currentItem === 'string' ? currentItem : JSON.stringify(currentItem),
@@ -43,3 +42,7 @@ export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionar
 
   return normalizedData as T[];
 };
+
+/****** helpers specific to Trie  *****/
+
+export const spaceTokenizer = (tokenString: string): string[] => tokenString.trim().split(/\s+/);
