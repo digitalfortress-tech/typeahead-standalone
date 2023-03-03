@@ -45,6 +45,7 @@ export interface typeaheadHtmlTemplates<T extends Dictionary> {
 export interface typeaheadConfig<T extends Dictionary> {
   input: HTMLInputElement;
   className?: string;
+  classNames?: Record<string, string>;
   minLength?: number;
   limit?: number;
   hint?: boolean;
