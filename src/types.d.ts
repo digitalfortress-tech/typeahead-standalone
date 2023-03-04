@@ -57,6 +57,7 @@ export interface typeaheadStyleClasses {
   group: string;
   empty: string;
   notFound: string;
+  wrapper: string;
 }
 
 export interface typeaheadConfig<T extends Dictionary> {

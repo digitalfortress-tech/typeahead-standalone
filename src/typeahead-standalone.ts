@@ -60,6 +60,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       ? { ...{ when: 'onInit', done: false }, ...(config.source as PrefetchDataSource<T>).prefetch }
       : null;
   const classNames: typeaheadStyleClasses = {
+    wrapper: '',
     input: 'tt-input',
     hint: 'tt-hint',
     highlight: 'tt-highlight',
@@ -112,7 +113,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   // Wrapper element
   const wrapper: HTMLSpanElement = doc.createElement('span');
-  wrapper.className = `typeahead-standalone${config.className ? ` ${config.className}` : ''}`;
+  // @deprecated config.className @todo: remove in v5
+  wrapper.className = `typeahead-standalone${config.className ? ` ${config.className}` : ''}${
+    classNames.wrapper ? ` ${classNames.wrapper}` : ''
+  }`;
   resultSet.container = wrapper;
 
   // move input element into the wrapper element
