@@ -42,10 +42,27 @@ export interface typeaheadHtmlTemplates<T extends Dictionary> {
   loader?: () => string;
 }
 
+export interface typeaheadStyleClasses {
+  input: string;
+  hint: string;
+  highlight: string;
+  hide: string;
+  show: string;
+  list: string;
+  selected: string;
+  header: string;
+  footer: string;
+  loader: string;
+  suggestion: string;
+  group: string;
+  empty: string;
+  notFound: string;
+}
+
 export interface typeaheadConfig<T extends Dictionary> {
   input: HTMLInputElement;
   className?: string;
-  classNames?: Record<string, string>;
+  classNames?: typeaheadStyleClasses;
   minLength?: number;
   limit?: number;
   hint?: boolean;
