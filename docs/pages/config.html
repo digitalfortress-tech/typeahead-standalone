@@ -807,6 +807,9 @@ typeahead({
 <h4><a href="#config?id=classname" id="classname" title="className config param - typeahead-standalone.js" class="submenu-link section-link">13. <i class="fas fa-code"></i> className</h4></a>
 
 <p>
+  <strong>@deprecated since 4.18.0. Will be removed in v5.0. Use the <a href="#config?id=classnames"
+      class="submenu-link section-link internal-section-link"><code>classNames</code> config option</a>
+    instead</strong><br>
   The <code>className</code> <i>(Type: String)</i> config option is used add an additional class to the
   container of typeahead-standalone. This is useful to add/override CSS.
 </p>
@@ -824,6 +827,59 @@ typeahead({
 </div>
 <p>
   The container has a class <code>typeahead-standalone</code> by default.
+</p>
+
+<hr>
+<h4><a href="#config?id=classnames" id="classnames" title="templates config param - typeahead-standalone.js"
+    class="submenu-link section-link">13A. <i class="fas fa-code"></i> classNames</h4>
+</h4></a>
+<p>
+  The <code>classNames</code> <i>(Type: Object)</i> config option simply allows you to replace the default class names
+  as per your choice.
+
+  The default class names used within typeahead are as follows:
+</p>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+const classNames = {
+  wrapper: '', /* main container element */
+  input: 'tt-input',
+  hint: 'tt-hint',
+  highlight: 'tt-highlight',
+  list: 'tt-list', /* container element for suggestions */
+  hide: 'tt-hide',
+  show: 'tt-show',
+  selected: 'tt-selected',
+  /* classes used within templates */
+  header: 'tt-header',
+  footer: 'tt-footer',
+  loader: 'tt-loader',
+  suggestion: 'tt-suggestion',
+  group: 'tt-group',
+  empty: 'tt-empty',
+  notFound: 'tt-notFound',
+}
+
+/*
+As an example, if you want to use a different class name for
+the input element, you can initialize typeahead like this -
+*/
+
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    // ...
+  },
+  classNames: {
+    input: 'my-custom-input-class' // this class is used instead of tt-input
+  }
+});</pre>
+</div>
+<p>
+  <b>Note:</b> When you use a custom class name, it <b>replaces</b> the default class name and hence all default styles
+  associated with that class will disappear.
 </p>
 
 <hr>

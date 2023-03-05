@@ -92,6 +92,9 @@ typeahead({
     <li>notFound => class <code>tt-notFound</code></li>
     <li>empty => class <code>tt-empty</code></li>
   </ul>
+  The above class names can customized by using the
+  <a href="#config?id=classnames" title="classNames config param - typeahead-standalone.js"
+    class="submenu-link section-link internal-section-link"><code>classNames</code> config option</a>.
 </p>
 <p>
   Here's a demo showing the usage of templates in action...
@@ -130,7 +133,7 @@ typeahead({
 <h5 class="underline">Overriding Styles</h5>
 
 <p>
-  You can also choose to override the basic styles. In this case, the <a href="#config?id=classname" title="className config param - typeahead-standalone.js" class="submenu-link section-link internal-section-link"><code>className</code> config option</a>
+  You can also choose to override the basic styles. In this case, the <a href="#config?id=classnames" title="classNames config param - typeahead-standalone.js" class="submenu-link section-link internal-section-link"><code>classNames</code> config option</a>
   can be used to override styles using
   <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity">CSS Specificity</a>.
 </p>
@@ -153,7 +156,9 @@ typeahead({
   source: {
     local: ['Superman', 'Batman', 'Flash', 'Aquaman'],
   },
-  className: 'typeahead-example'
+  classNames: {
+  wrapper: 'typeahead-example'
+  }
 });</pre>
       </div>
     </div>
@@ -175,7 +180,7 @@ typeahead({
 </div>
 
 <p>
-  As seen in the above snippet, using the <code>className</code> config option, we were able to
+  As seen in the above snippet, using the <code>classNames</code> config option, we were able to
   override the style for the list of suggestions using higher css specificity.
 </p>
 
@@ -198,8 +203,11 @@ typeahead({
 </ol>
 
 <p>
-  The CSS tab in the JS fiddle <i>(found in the templates section above)</i> has several examples of using
-  the wrapper classes to add/override styles.
+  The above class names used by default are completely customizable using the
+  <a href="#config?id=classnames" title="classNames config param - typeahead-standalone.js"
+    class="submenu-link section-link internal-section-link"><code>classNames</code> config option</a>.
+  A few examples showcasing the usage of wrapper classes to add/override styles can be seen in the
+  CSS tab of the JS fiddle <i>(which is found in the templates section above)</i>
 </p>
 
 <hr>

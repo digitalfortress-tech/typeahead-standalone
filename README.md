@@ -120,7 +120,8 @@ You can pass the following config options to `typeahead-standalone`:
 |`autoSelect`| If set to true, pre-selects the first displayed suggestion |`false`|
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
 |`diacritics`| Flag to enable/disable language diacritics supported search (i.e. search by converting accented characters into their non-accented counterparts)|`undefined`|
-|`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`)|`undefined`|
+|`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`) *@deprecated. Will be removed in v5.0. Use classNames config option*|`undefined`|
+|`classNames: Object`|The classNames object can be used to set custom classes for every html element that is injected in the DOM. [Details](#classNamesLink) |`undefined`|
 |`templates`|An object containing templates for header, footer, suggestion, group and notFound state. See [templates section](#templates) for clarification |`undefined`|
 |`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|
 |`preventSubmit`|If your input element is used inside a form element, this flag allows to prevent the default submit action when the ENTER key is pressed.|`false`|
@@ -129,7 +130,7 @@ You can pass the following config options to `typeahead-standalone`:
 
 ---
 
-### 🔌 Source
+### <a id="sourceLink">🔌 Source</a>
 
 This is the source of data from which suggestions will be provided. This is the expected format of the source object.
 ```
@@ -332,6 +333,44 @@ To facilitate styling, each template is wrapped in a `div` element with a corres
 - `loader` => class `tt-loader`
 - `empty` => class `tt-empty`
 - `notFound` => class `tt-notFound`
+
+### <a id="classNamesLink">🖌 ClassNames</a>
+
+The `classNames` configuration option simply allows you to replace the default class names as per your choice.
+
+The default class names used within typeahead are as follows:
+
+```js
+const classNames = {
+  wrapper: '',  /* main container element */
+  input: 'tt-input',
+  hint: 'tt-hint',
+  highlight: 'tt-highlight',
+  list: 'tt-list',  /* container element for suggestions */
+  hide: 'tt-hide',
+  show: 'tt-show',
+  selected: 'tt-selected',
+  /* classes used within templates */
+  header: 'tt-header',
+  footer: 'tt-footer',
+  loader: 'tt-loader',
+  suggestion: 'tt-suggestion',
+  group: 'tt-group',
+  empty: 'tt-empty',
+  notFound: 'tt-notFound',
+};
+```
+As an example, if you want to use a different class name for the **input** element, you can initialize typeahead like this -
+
+```js
+typeahead({
+  input: '...',
+  source: '...',
+  classNames: {
+    input: 'my-custom-input-class'  // this class is used instead of tt-input
+  }
+});
+```
 ---
 
 ### ✨ API
