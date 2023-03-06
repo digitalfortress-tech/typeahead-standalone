@@ -28,7 +28,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const doc = document;
 
   const listContainer: HTMLDivElement = doc.createElement('div');
-  const listContainerStyle = listContainer.style;
   const debounceXHR = config.debounceRemote || 100;
   const preventSubmit = config.preventSubmit || false;
   const minLen = config.minLength || 1;
@@ -138,10 +137,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   listContainer.setAttribute('role', 'listbox');
 
   // set listContainer positioning
-  listContainerStyle.position = 'absolute'; // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
-  listContainerStyle.width = `${input.offsetWidth}px`;
-  listContainerStyle.left = '0';
-  // listContainerStyle.top = `${input.clientHeight}px`; // or top: '100%' // not required apparently
+  listContainer.style.position = 'absolute'; // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
+  listContainer.style.width = `${input.offsetWidth}px`;
+  listContainer.style.marginTop = `${input.offsetHeight}px`;
 
   // Attach list container
   wrapper.appendChild(listContainer);
@@ -739,6 +737,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     ['id', 'name', 'placeholder', 'required', 'aria-label'].forEach((attr) => inputHint.removeAttribute(attr));
     inputHint.setAttribute('readonly', 'true');
     inputHint.setAttribute('aria-hidden', 'true');
+    inputHint.style.marginTop = `-${input.offsetHeight}px`; // super-impose hint on input
     inputHint.tabIndex = -1;
     inputHint.className = classNames.hint;
 

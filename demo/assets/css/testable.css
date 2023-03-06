@@ -7,6 +7,15 @@ label {
   padding-right: 10px;
 }
 
+form > div {
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  height: 21px;
+}
+
 .container {
   width: 100%;
   display: flex;
