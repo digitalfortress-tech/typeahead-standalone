@@ -139,7 +139,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   // set listContainer positioning
   listContainerStyle.position = 'absolute'; // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
-  listContainerStyle.width = '100%'; // fix position of listContainer
+  listContainerStyle.width = `${input.offsetWidth}px`;
   listContainerStyle.left = '0';
   // listContainerStyle.top = `${input.clientHeight}px`; // or top: '100%' // not required apparently
 
