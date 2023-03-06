@@ -1,20 +1,18 @@
 .typeahead-standalone {
-    position: relative;
     text-align: left;
     color: #000;
+    display: flex;
+    flex-direction: column;
 
     .tt-input {
         z-index: 1;
         background: transparent;
-        position: relative;
     }
     .tt-hint {
-        position: absolute;
-        left: 0;
         cursor: default;
         user-select: none;
         background: #fff;
-        color: silver;
+        color: #767676;
         z-index: 0;
     }
     .tt-list {
@@ -23,6 +21,7 @@
         box-sizing: border-box;
         overflow: auto;
         border: 1px solid rgba(50, 50, 50, 0.6);
+        position: absolute;
 
         &.tt-hide {
             display: none;
