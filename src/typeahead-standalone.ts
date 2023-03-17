@@ -109,6 +109,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const input: HTMLInputElement = config.input;
   input.classList.add(classNames.input);
+  const computedInputStyle = window.getComputedStyle(input);
 
   // Wrapper element
   const wrapper: HTMLDivElement = doc.createElement('div');
@@ -139,7 +140,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   // set listContainer positioning
   listContainer.style.position = 'absolute'; // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
   listContainer.style.width = `${input.offsetWidth}px`;
-  listContainer.style.marginTop = `${input.offsetHeight}px`;
+  listContainer.style.marginTop = `${input.offsetHeight + parseInt(computedInputStyle.marginTop)}px`;
 
   // Attach list container
   wrapper.appendChild(listContainer);
@@ -737,7 +738,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     ['id', 'name', 'placeholder', 'required', 'aria-label'].forEach((attr) => inputHint.removeAttribute(attr));
     inputHint.setAttribute('readonly', 'true');
     inputHint.setAttribute('aria-hidden', 'true');
-    inputHint.style.marginTop = `-${input.offsetHeight}px`; // super-impose hint on input
+    inputHint.style.marginTop = `-${input.offsetHeight + parseInt(computedInputStyle.marginBottom)}px`; // super-impose hint on input
     inputHint.tabIndex = -1;
     inputHint.className = classNames.hint;
 
