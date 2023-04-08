@@ -737,8 +737,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    */
   function injectHintEl(inputHint: HTMLInputElement) {
     ['id', 'name', 'placeholder', 'required', 'aria-label'].forEach((attr) => inputHint.removeAttribute(attr));
-    inputHint.setAttribute('readonly', '');
-    inputHint.setAttribute('aria-hidden', '');
+    inputHint.setAttribute('readonly', 'true');
+    inputHint.setAttribute('aria-hidden', 'true');
     inputHint.tabIndex = -1;
     inputHint.className = classNames.hint;
 
