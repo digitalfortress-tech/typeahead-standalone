@@ -112,7 +112,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   input.classList.add(classNames.input);
 
   // Wrapper element
-  const wrapper: HTMLSpanElement = doc.createElement('span');
+  const wrapper: HTMLDivElement = doc.createElement('div');
   // @deprecated config.className @todo: remove in v5
   wrapper.className = `typeahead-standalone${config.className ? ` ${config.className}` : ''}${
     classNames.wrapper ? ` ${classNames.wrapper}` : ''
