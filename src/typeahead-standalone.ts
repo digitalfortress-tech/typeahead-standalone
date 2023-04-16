@@ -384,14 +384,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       return;
     }
 
-    // Fix for FF mobile executs i/p handler #54
-    // which in turn results in InputType: "insertCompositionText"
-    // in the suggestion onclick handler
-    const inputData = (ev as InputEvent).data?.length;
-    if (inputData && inputData > 1) {
-      return;
-    }
-
     storedInput = input.value;
     startFetch();
   };
