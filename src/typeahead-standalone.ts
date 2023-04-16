@@ -345,6 +345,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         clear();
         selected = item;
         input.value = display(item, ev);
+        // input.dispatchEvent(new Event('input', { bubbles: true }));
         ev.preventDefault();
       });
       if (item === selected) {
@@ -378,8 +379,16 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     show();
   };
 
-  const inputEventHandler = (ev: KeyboardEvent): void => {
-    if (ev.key === 'ArrowDown') {
+  const inputEventHandler = (ev: KeyboardEvent | InputEvent): void => {
+    if ((ev as KeyboardEvent).key === 'ArrowDown') {
+      return;
+    }
+
+    // Fix for FF mobile executs i/p handler #54
+    // which in turn results in InputType: "insertCompositionText"
+    // in the suggestion onclick handler
+    const inputData = (ev as InputEvent).data?.length;
+    if (inputData && inputData > 1) {
       return;
     }
 
