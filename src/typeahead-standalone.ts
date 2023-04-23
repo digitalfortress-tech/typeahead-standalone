@@ -49,15 +49,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const transform = config.source.transform || ((data) => data);
   const local = (config.source as LocalDataSource<T>).local || null;
   const remote =
-    (config.source as RemoteDataSource<T>).remote &&
-    (config.source as RemoteDataSource<T>).remote.url &&
-    (config.source as RemoteDataSource<T>).remote.wildcard
+    (config.source as RemoteDataSource<T>).remote?.url && (config.source as RemoteDataSource<T>).remote.wildcard
       ? (config.source as RemoteDataSource<T>).remote
       : null;
-  const prefetch =
-    (config.source as PrefetchDataSource<T>).prefetch && (config.source as PrefetchDataSource<T>).prefetch.url
-      ? { ...{ when: 'onInit', done: false }, ...(config.source as PrefetchDataSource<T>).prefetch }
-      : null;
+  const prefetch = (config.source as PrefetchDataSource<T>).prefetch?.url
+    ? { ...{ when: 'onInit', done: false }, ...(config.source as PrefetchDataSource<T>).prefetch }
+    : null;
   const classNames: typeaheadStyleClasses = {
     wrapper: '',
     input: 'tt-input',
@@ -90,7 +87,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   let selected: T | undefined;
   let remoteDebounceTimer: number | undefined;
   let fetchInProgress = false;
-  let storedInput = ''; // used only for keyboard navigation
+  let storedInput = ''; // used for keyboard navigation
+  let prevInput = ''; // used to ignore modifier keys like ctrl,etc.
 
   // init templates if they exist
   if (templates) {
@@ -378,12 +376,19 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     show();
   };
 
-  const inputEventHandler = (ev: KeyboardEvent): void => {
-    if (ev.key === 'ArrowDown') {
+  const keyUpEventHandler = (ev: KeyboardEvent): void => {
+    if (['ArrowUp', 'ArrowDown', 'Tab', 'Enter'].includes(ev.key)) {
       return;
     }
 
     storedInput = input.value;
+
+    if (prevInput === storedInput) {
+      // some modifier key (ctrl, shift, alt, etc) or Function key was pressed
+      return;
+    }
+    prevInput = storedInput;
+
     startFetch();
   };
 
@@ -443,7 +448,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
     // if raw input is empty if Esc is hit, clear out everything
-    if (!input.value.length || ev.key === 'Esc') {
+    if (!input.value.length || ev.key === 'Escape') {
       return clear();
     }
 
@@ -818,7 +823,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   // setup event handlers
   input.addEventListener('keydown', keydownEventHandler);
-  input.addEventListener('input', inputEventHandler as EventListenerOrEventListenerObject);
+  input.addEventListener('keyup', keyUpEventHandler);
   input.addEventListener('blur', blurEventHandler);
   input.addEventListener('focus', focusEventHandler);
 
