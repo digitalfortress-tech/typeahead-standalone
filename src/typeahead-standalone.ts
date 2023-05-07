@@ -49,15 +49,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const transform = config.source.transform || ((data) => data);
   const local = (config.source as LocalDataSource<T>).local || null;
   const remote =
-    (config.source as RemoteDataSource<T>).remote &&
-    (config.source as RemoteDataSource<T>).remote.url &&
-    (config.source as RemoteDataSource<T>).remote.wildcard
+    (config.source as RemoteDataSource<T>).remote?.url && (config.source as RemoteDataSource<T>).remote.wildcard
       ? (config.source as RemoteDataSource<T>).remote
       : null;
-  const prefetch =
-    (config.source as PrefetchDataSource<T>).prefetch && (config.source as PrefetchDataSource<T>).prefetch.url
-      ? { ...{ when: 'onInit', done: false }, ...(config.source as PrefetchDataSource<T>).prefetch }
-      : null;
+  const prefetch = (config.source as PrefetchDataSource<T>).prefetch?.url
+    ? { ...{ when: 'onInit', done: false }, ...(config.source as PrefetchDataSource<T>).prefetch }
+    : null;
   const classNames: typeaheadStyleClasses = {
     wrapper: '',
     input: 'tt-input',
@@ -379,8 +376,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     show();
   };
 
-  const inputEventHandler = (ev: KeyboardEvent | InputEvent): void => {
-    if ((ev as KeyboardEvent).key === 'ArrowDown') {
+  const inputEventHandler = (ev: InputEvent): void => {
+    // Fix: Firefox Android uses insertCompositionText instead of insertText.
+    if (ev.inputType === 'insertCompositionText' && !ev.isComposing) {
       return;
     }
 
@@ -444,7 +442,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
     // if raw input is empty if Esc is hit, clear out everything
-    if (!input.value.length || ev.key === 'Esc') {
+    if (!input.value.length || ev.key === 'Escape') {
       return clear();
     }
 
