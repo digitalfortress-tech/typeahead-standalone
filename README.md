@@ -66,8 +66,8 @@ require('typeahead-standalone/dist/basic.css');
 <script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"></script>
 
 <!-- or use unpkg.com to get a specific version -->
-<link rel="stylesheet" href="https://unpkg.com/typeahead-standalone@4.19.0/dist/basic.css" />
-<script src="https://unpkg.com/typeahead-standalone@4.19.0/dist/typeahead-standalone.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/typeahead-standalone@4.20.0/dist/basic.css" />
+<script src="https://unpkg.com/typeahead-standalone@4.20.0/dist/typeahead-standalone.js"></script>
 ```
 The library will be available as a global object at **`window.typeahead`**
 
