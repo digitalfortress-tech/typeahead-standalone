@@ -187,7 +187,7 @@ context('Typeahead', () => {
 
   it('Transforms data from prefetch', () => {
     cy.intercept('GET', 'https://example.com/*', { fixture: 'toTransform-colors.json' }).as('getColors');
-    cy.get('#input-three-A').as('input3A').type('bl', { delay: 100 });
+    cy.get('#input-three-A').as('input3A').type('bl', { delay: 200 });
     cy.wait('@getColors');
     cy.get('.typeahead-test-three-A .tt-list').as('list').children().should('have.length', 5);
   });
