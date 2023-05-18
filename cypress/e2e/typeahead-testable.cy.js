@@ -478,5 +478,18 @@ context('Typeahead', () => {
     cy.get('.post_typeahead_handler').should('contain.text', 'z');
   });
 
+  it('Emits a custom event when a suggestion is selected', () => {
+    // via mouse click
+    cy.get('#input-fifteen').as('input15').type('d', { delay: 100 });
+    cy.get('.customInputEvent_handler').as('textField').should('contain.text', 'd');
+    cy.get('.typeahead-test-fifteen .tt-list').as('list').children().should('have.length', 3);
+    cy.get('@list').children('.tt-suggestion').eq(2).click();
+    cy.get('@textField').should('contain.text', 'Blue Darker');
+
+    // via keyboard
+    cy.get('@input15').clear().type('g{uparrow}{enter}', { delay: 100 });
+    cy.get('@textField').should('contain.text', 'Light Grey [GRL]');
+  });
+
   // https://on.cypress.io/interacting-with-elements
 });

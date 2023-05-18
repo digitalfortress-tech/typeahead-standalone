@@ -737,4 +737,5 @@ const test15 = typeahead({
   },
   className: 'typeahead-test-fifteen',
   highlight: true,
+  preventSubmit: true,
 });
