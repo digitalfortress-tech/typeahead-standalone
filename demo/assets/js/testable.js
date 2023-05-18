@@ -723,3 +723,18 @@ const test14 = typeahead({
 document.getElementById('input-fourteen').addEventListener('keyup', (evt) => {
   document.querySelector('.post_typeahead_handler').innerHTML = evt.key;
 });
+
+const El15 = document.getElementById('input-fifteen');
+El15.addEventListener('input', (evt) => {
+  document.querySelector('.customInputEvent_handler').innerHTML = evt.data;
+});
+// eslint-disable-next-line no-undef
+const test15 = typeahead({
+  input: El15,
+  source: {
+    local: colors,
+    identifier: 'name',
+  },
+  className: 'typeahead-test-fifteen',
+  highlight: true,
+});

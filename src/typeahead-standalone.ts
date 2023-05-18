@@ -210,6 +210,20 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     hide();
   };
 
+  /*
+   * Triggers a user input event
+   */
+  const emitInputEvent = (): void => {
+    input.dispatchEvent(
+      new InputEvent('input', {
+        bubbles: true,
+        isComposing: false,
+        inputType: 'insertCompositionText',
+        data: input.value,
+      })
+    );
+  };
+
   /**
    * Displays the NotFound template if it exists, otherwise, does nothing (i.e. returns true)
    * @param asyncRender set to true for asyncRenders
@@ -338,11 +352,11 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
       // attach suggestion
       const div = render(item);
-      div.addEventListener('click', function (ev: MouseEvent): void {
+      div.addEventListener('click', (ev: MouseEvent): void => {
         clear();
         selected = item;
         input.value = display(item, ev);
-        // input.dispatchEvent(new Event('input', { bubbles: true }));
+        emitInputEvent();
         ev.preventDefault();
       });
       if (item === selected) {
@@ -463,6 +477,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       if (selected) {
         clear();
         input.value = display(selected, ev);
+        emitInputEvent();
         return selected;
       }
     };
