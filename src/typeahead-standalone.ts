@@ -217,7 +217,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     input.dispatchEvent(
       new InputEvent('input', {
         bubbles: true,
-        isComposing: false,
         inputType: 'insertCompositionText',
         data: input.value,
       })

@@ -68,7 +68,54 @@ instance.destroy();
 </table>
 
 <hr>
-<h4><a href="#references?id=support" id="support" title="typeahead-standalone.js Support" class="submenu-link section-link">3. 💪🏼 Support</a></h4>
+<h4><a href="#references?id=faq" id="faq" title="typeahead-standalone.js FAQ" class="submenu-link section-link">3. ❔ FAQ</a></h4>
+
+<p>
+  Many of the frequently asked questions are answered in the
+  <a href="https://github.com/digitalfortress-tech/typeahead-standalone/discussions"
+    title="Github Discussions typeahead-standalone.js">discussions on Github</a>.
+  Nonetheless, here's a curated list of questions that has been discussed several times -
+</p>
+<p>
+  <h5>i. How to execute something on clicking a suggestion ?</h5>
+  There are 2 ways to accomplish this -
+  <div class="codeContainer">
+    <span class="lang">JS</span>
+    <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+    <pre class="hljs language-js">
+  /**** 1. By adding an input event listener ****/
+
+  // get the input element on which you have or will initialise typeahead
+  const input = document.querySelector(".searchInput");
+  input.addEventListener("input", (event) => {
+    if (!event.isTrusted) { // check if event was triggered manually
+      // execute something
+      // alert("event type is - " + event.data);
+    }
+  });
+
+
+
+  /**** 2. By using the display callback ****/
+  typeahead({
+    input: document.querySelector(".searchInput"),
+    source: {
+      // ...
+    },
+    display: (item, event) => {
+      if (event) {
+        // execute something
+        // alert("event type is - " + event.type);
+      }
+
+      return `${item.name}, ${item.country}`;
+    }
+  });</pre>
+  </div>
+</p>
+
+<hr>
+<h4><a href="#references?id=support" id="support" title="typeahead-standalone.js Support" class="submenu-link section-link">4. 💪🏼 Support</a></h4>
 
 <p>
   For general questions or new ideas for typeahead-standalone.js, please start a
@@ -81,7 +128,7 @@ instance.destroy();
 </p>
 
 <hr>
-<h4><a href="#references?id=contributions" id="contributions" title="typeahead-standalone.js Contributions" class="submenu-link section-link">4. 🧑‍💻 Contributions</a></h4>
+<h4><a href="#references?id=contributions" id="contributions" title="typeahead-standalone.js Contributions" class="submenu-link section-link">5. 🧑‍💻 Contributions</a></h4>
 
 <p>
   Contributions and suggestions are always welcome! Here are the steps to start contributing -
@@ -103,7 +150,7 @@ instance.destroy();
 
 
 <hr>
-<h4><a href="#references?id=release-notes" id="release-notes" title="typeahead-standalone.js Release Notes" class="submenu-link section-link">5. 🔖 Release Notes</a></h4>
+<h4><a href="#references?id=release-notes" id="release-notes" title="typeahead-standalone.js Release Notes" class="submenu-link section-link">6. 🔖 Release Notes</a></h4>
 
 <p>
   Typeahead-standalone.js release notes can be found on the <a href="https://github.com/digitalfortress-tech/typeahead-standalone/wiki/Changelog">official Wiki</a>.
