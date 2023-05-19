@@ -332,8 +332,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (templates?.header) {
       const headerDiv = doc.createElement('div');
       headerDiv.classList.add(classNames.header);
-      headerDiv.setAttribute('role', 'heading');
-      headerDiv.setAttribute('aria-level', '1');
+      headerDiv.setAttribute('role', 'presentation');
       const templateHtml = templatify(headerDiv, templates.header(resultSet));
       templateHtml && fragment.appendChild(headerDiv);
     }
@@ -372,8 +371,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (templates?.footer) {
       const footerDiv = doc.createElement('div');
       footerDiv.classList.add(classNames.footer);
-      footerDiv.setAttribute('role', 'heading');
-      footerDiv.setAttribute('aria-level', '2');
+      footerDiv.setAttribute('role', 'presentation');
       const templateHtml = templatify(footerDiv, templates.footer(resultSet));
       templateHtml && fragment.appendChild(footerDiv);
     }
