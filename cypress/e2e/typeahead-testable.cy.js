@@ -81,43 +81,58 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').should('have.length', 0);
 
     cy.get('@input1').type('{uparrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Golden Brown');
+    cy.get('@list').children('.tt-selected').should('have.text', 'Golden Brown');
 
     cy.get('@input1').type('{downarrow}{downarrow}{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Gold');
+    cy.get('@list').children('.tt-selected').should('have.text', 'Gold');
 
     cy.get('@input1').type('{downarrow}{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Golden Brown');
+    cy.get('@list').children('.tt-selected').should('have.text', 'Golden Brown');
 
     cy.get('@input1').type('{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.length', 0);
+    cy.get('@list').children('.tt-selected').should('not.exist');
 
     cy.get('@input1').type('{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Grey');
+    cy.get('@list').children('.tt-selected').should('have.text', 'Grey');
 
     cy.get('@input1').type('{uparrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.length', 0);
+    cy.get('@list').children('.tt-selected').should('not.exist');
 
     cy.get('@input1').type('{uparrow}{uparrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Green');
+    cy.get('@list').children('.tt-selected').should('have.text', 'Green');
   });
 
   it('Navigates between suggestions via Keyboard with autoSelect enabled', () => {
     cy.get('#input-two').as('input2').type('bl', { delay: 100 });
     cy.get('.typeahead-test-two .tt-list').as('list').children().should('have.length', 5);
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue'); // auto selects first suggestion
+    cy.get('@list').children('.tt-selected').should('have.text', 'Blue'); // auto selects first suggestion
 
     cy.get('@input2').type('{downarrow}{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Blue Dark');
+    cy.get('@list').children('.tt-selected').should('have.text', 'Blue Dark');
 
     cy.get('@input2').type('{downarrow}{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Dark Blue');
+    cy.get('@list').children('.tt-selected').should('have.text', 'Dark Blue');
 
     cy.get('@input2').type('{downarrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.length', 0);
+    cy.get('@list').children('.tt-selected').should('not.exist');
 
     cy.get('@input2').type('{downarrow}{uparrow}{uparrow}{uparrow}');
-    cy.get('@list').children('.tt-selected').as('selectedSuggestion').should('have.text', 'Black Light');
+    cy.get('@list').children('.tt-selected').should('have.text', 'Black Light');
+  });
+
+  it('Handles "Esc" key correctly', () => {
+    // when input type="search", hitting Esc clears contents of input. (Browser behaviour)
+    // Currently a bug in cypress doesn't replicate this browser behaviour. (https://github.com/cypress-io/cypress/issues/21313)
+    // cy.get('#input-two-A').as('input2A').type('bl', { delay: 100 });
+    // cy.get('.typeahead-test-two-A .tt-list').as('listA').children().should('have.length', 5);
+    // cy.get('@input2A').type('{esc}');
+    // cy.get('@input2A').should('have.value', '');
+
+    // when input type="text"
+    cy.get('#input-two-B').as('input2B').type('bl', { delay: 100 });
+    cy.get('.typeahead-test-two-B .tt-list').as('listB').children().should('have.length', 5);
+    cy.get('@input2B').type('{esc}');
+    cy.get('@input2B').should('have.value', 'bl');
   });
 
   it('Uses custom display() function with optional arg', () => {
@@ -187,9 +202,10 @@ context('Typeahead', () => {
 
   it('Transforms data from prefetch', () => {
     cy.intercept('GET', 'https://example.com/*', { fixture: 'toTransform-colors.json' }).as('getColors3A');
-    cy.get('#input-three-A').as('input3A').type('bl', { delay: 200 });
+    // incremented delay to fix CI (CircleCI takes time to load fixtures from disk)
+    cy.get('#input-three-A').as('input3A').type('bl', { delay: 300 });
     cy.wait('@getColors3A');
-    cy.get('.typeahead-test-three-A .tt-list').as('list').children().should('have.length', 5);
+    cy.get('.typeahead-test-three-A .tt-list').children().should('have.length', 5);
   });
 
   it('Transforms data from remote', () => {
@@ -311,7 +327,7 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-five .tt-list').as('list').children().should('have.length', 1);
     cy.get('@list').children('.tt-suggestion').should('have.text', 'Yellow');
     cy.get('.typeahead-test-five .tt-hint').as('hint').should('have.value', '');
-    cy.get('.typeahead-test-five .tt-highlight').as('highlight').should('not.exist');
+    cy.get('.typeahead-test-five .tt-highlight').should('not.exist');
 
     cy.get('@input5').clear().type('lbl', { delay: 100 });
     cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 2);
@@ -319,7 +335,7 @@ context('Typeahead', () => {
     cy.get('@suggestions').first().should('have.text', 'Blue Light');
     cy.get('@suggestions').eq(1).should('have.text', 'Blue Extra Light');
     cy.get('@hint').should('have.value', '');
-    cy.get('@highlight').should('not.exist');
+    cy.get('.typeahead-test-five .tt-highlight').should('not.exist');
   });
 
   it('Displays suggestions from a Remote Source (url: string)', () => {
