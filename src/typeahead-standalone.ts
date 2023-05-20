@@ -355,7 +355,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         selected = item;
         input.value = display(item, ev);
         emitInputEvent();
-        ev.preventDefault();
       });
       if (item === selected) {
         div.classList.add(classNames.selected);
