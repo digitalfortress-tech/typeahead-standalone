@@ -643,6 +643,13 @@ const test11 = typeahead({
       document.querySelector('.onsubmit_test').innerHTML = 'OnSubmit Test Passed';
     }
   },
+  templates: {
+    suggestion: (item) => {
+      return `
+        <a href="${encodeURI(item.name)}">${item.name}</a>
+      `;
+    },
+  },
 });
 
 // eslint-disable-next-line no-undef

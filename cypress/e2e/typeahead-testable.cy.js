@@ -322,6 +322,14 @@ context('Typeahead', () => {
     cy.get('@list4B').children().should('have.length', 5);
   });
 
+  it('Displays suggestions as links and navigates via click', () => {
+    cy.get('#input-eleven').as('input11').type('dar', { delay: 100 });
+    cy.get('.typeahead-test-eleven .tt-list').as('list').children().should('have.length', 4);
+    cy.get('@list').children('.tt-suggestion').eq(1).should('contain.text', 'Blue Dark');
+    cy.get('@list').children('.tt-suggestion').get('a').eq(1).click();
+    cy.url().should('include', 'Blue%20Dark');
+  });
+
   it('Displays expected suggestions with Data-Tokens', () => {
     cy.get('#input-five').as('input5').type('yw', { delay: 100 });
     cy.get('.typeahead-test-five .tt-list').as('list').children().should('have.length', 1);
