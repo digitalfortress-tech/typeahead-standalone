@@ -16,17 +16,20 @@ context('Typeahead', () => {
     cy.get('#input-two').as('input2').type('gr', { delay: 100 });
     cy.get('.typeahead-test-two .tt-hint').as('hint2').should('have.value', 'grey - GR');
 
-    cy.get('@input2').clear().type('black l', { delay: 100 });
+    cy.get('@input2').clear();
+    cy.get('@input2').type('black l', { delay: 100 });
     cy.get('@hint2').should('have.value', 'black light - LBK');
   });
 
   it('Should escape Regex special chars within the hint', () => {
-    cy.get('#input-two').clear().type('light grey [gr', { delay: 100 });
+    cy.get('#input-two').clear();
+    cy.get('#input-two').type('light grey [gr', { delay: 100 });
     cy.get('.typeahead-test-two .tt-hint').should('have.value', 'light grey [grL] - GRL');
   });
 
   it('Should not render hint element when disabled', () => {
-    cy.get('#input-two-A').clear().type('li', { delay: 100 });
+    cy.get('#input-two-A').clear();
+    cy.get('#input-two-A').type('li', { delay: 100 });
     cy.get('.typeahead-test-A .tt-hint').should('not.exist');
   });
 
@@ -39,7 +42,8 @@ context('Typeahead', () => {
     cy.get('#input-one').as('input1').type('g', { delay: 100 });
     cy.get('.typeahead-test-one .tt-list').as('list').should('exist');
     cy.get('@list').children().should('have.length', 4);
-    cy.get('@input1').focus().blur();
+    cy.get('@input1').focus();
+    cy.get('@input1').blur();
     cy.get('.typeahead-test-one .tt-list.tt-hide').should('exist');
     cy.get('@input1').focus();
     cy.get('@list').should('exist');
@@ -56,19 +60,22 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-suggestion').eq(3).should('have.text', 'Black Light');
     cy.get('@list').children('.tt-suggestion').eq(4).should('have.text', 'Dark Blue');
 
-    cy.get('@input2').clear().type('blue d');
+    cy.get('@input2').clear();
+    cy.get('@input2').type('blue d');
     cy.get('@list').children().should('have.length', 3);
     cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'Blue Dark');
     cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'Blue Darker');
     cy.get('@list').children('.tt-suggestion').eq(2).should('have.text', 'Dark Blue');
 
-    cy.get('@input2').clear().type('dar');
+    cy.get('@input2').clear();
+    cy.get('@input2').type('dar');
     cy.get('@list').children().should('have.length', 3);
     cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'Dark Blue');
     cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'Blue Dark');
     cy.get('@list').children('.tt-suggestion').eq(2).should('have.text', 'Blue Darker');
 
-    cy.get('@input2').clear().type('dark b');
+    cy.get('@input2').clear();
+    cy.get('@input2').type('dark b');
     cy.get('@list').children().should('have.length', 3);
     cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'Dark Blue');
     cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'Blue Dark');
@@ -144,7 +151,8 @@ context('Typeahead', () => {
     cy.get('#input2-hidden-field').as('hiddenField').should('have.text', 'Evnt-click');
 
     // typing {tab} key is not supported yet
-    cy.get('@input2').clear().type('ye{enter}', { delay: 100 });
+    cy.get('@input2').clear();
+    cy.get('@input2').type('ye{enter}', { delay: 100 });
     cy.get('@input2').should('have.value', 'Yellow - YW');
     // verify that 2nd optional arg was used to set hidden field
     cy.get('@hiddenField').should('have.text', 'Evnt-keydown');
@@ -174,7 +182,8 @@ context('Typeahead', () => {
     cy.get('@list').children().eq(5).should('have.text', 'Shades of Blue');
     cy.get('@list').children().eq(6).should('have.text', 'Blue');
 
-    cy.get('@input3').clear().type('bl');
+    cy.get('@input3').clear();
+    cy.get('@input3').type('bl');
     cy.get('@list').children().should('have.length', 7);
     cy.get('@list').children('.tt-suggestion').should('have.length', 5);
     cy.get('@list').children().eq(1).should('have.text', 'Black');
@@ -182,7 +191,8 @@ context('Typeahead', () => {
     cy.get('@list').children().eq(5).should('have.text', 'Blue Dark');
     cy.get('@list').children().eq(6).should('have.text', 'Dark Blue');
 
-    cy.get('@input3').clear().type('dar');
+    cy.get('@input3').clear();
+    cy.get('@input3').type('dar');
     cy.get('@list').children().should('have.length', 4);
     cy.get('@list').children().eq(1).should('have.text', 'Dark Blue');
     cy.get('@list').children().eq(2).should('have.text', 'Blue Dark');
@@ -196,7 +206,8 @@ context('Typeahead', () => {
     cy.get('@input3').type('{downarrow}{enter}');
     cy.get('@input3').should('have.value', 'Blue');
 
-    cy.get('@input3').clear().type('blue{uparrow}{backspace}{esc}');
+    cy.get('@input3').clear();
+    cy.get('@input3').type('blue{uparrow}{backspace}{esc}');
     cy.get('@input3').should('have.value', 'Dark Blu');
   });
 
@@ -245,7 +256,8 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-four .tt-notFound').should('contain.text', 'Nothing Found for query - Pinkp');
 
     // group template + header/footer/group count
-    cy.get('@input4').clear().type('bl', { delay: 100 });
+    cy.get('@input4').clear();
+    cy.get('@input4').type('bl', { delay: 100 });
     cy.get('@list').children('.tt-group').as('group').should('have.length', 2);
     cy.get('@group').children('.custom-group').should('have.length', 2);
     // verify count
@@ -272,7 +284,8 @@ context('Typeahead', () => {
     cy.get('@list4A').children('.tt-empty').should('have.text', 'EMPTY template Html');
 
     // Input4A Loader Template
-    cy.get('@input4A').clear({ force: true }).type('qsdd', { delay: 0 });
+    cy.get('@input4A').clear({ force: true });
+    cy.get('@input4A').type('qsdd', { delay: 0 });
     cy.get('.typeahead-test-fourA .tt-loader').should('exist');
     cy.wait('@getEmptyResult');
     cy.get('.typeahead-test-fourA .tt-notFound').should('exist');
@@ -282,7 +295,8 @@ context('Typeahead', () => {
       throttleKbps: 1000,
       delay: 1000,
     }).as('getCountries');
-    cy.get('@input4A').clear({ force: true }).type('ar', { delay: 0 });
+    cy.get('@input4A').clear({ force: true });
+    cy.get('@input4A').type('ar', { delay: 0 });
     cy.get('.typeahead-test-fourA .tt-loader').should('exist');
     cy.get('@list4A').children().should('have.length', 1);
     cy.wait('@getCountries');
@@ -297,7 +311,8 @@ context('Typeahead', () => {
     cy.get('@list4B').children('.tt-empty').should('not.exist');
 
     // Input4B Loader Template
-    cy.get('@input4B').clear().type('ar', { delay: 0 });
+    cy.get('@input4B').clear();
+    cy.get('@input4B').type('ar', { delay: 0 });
     cy.get('.typeahead-test-fourB .tt-loader').should('exist');
     cy.get('.typeahead-test-fourB .tt-footer').should('exist');
     cy.wait('@getCountries');
@@ -315,7 +330,8 @@ context('Typeahead', () => {
       delay: 1000,
       throttleKbps: 1000,
     }).as('getCountriesRemote');
-    cy.get('@input4B').clear().type('fran', { delay: 0 });
+    cy.get('@input4B').clear();
+    cy.get('@input4B').type('fran', { delay: 0 });
     cy.get('.typeahead-test-fourB .tt-loader').should('exist');
     cy.get('@list4B').children().should('have.length', 4);
     cy.wait('@getCountriesRemote');
@@ -337,7 +353,8 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-five .tt-hint').as('hint').should('have.value', '');
     cy.get('.typeahead-test-five .tt-highlight').should('not.exist');
 
-    cy.get('@input5').clear().type('lbl', { delay: 100 });
+    cy.get('@input5').clear();
+    cy.get('@input5').type('lbl', { delay: 100 });
     cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 2);
     cy.get('@list').children('.tt-group').as('groups').should('have.length', 1);
     cy.get('@suggestions').first().should('have.text', 'Blue Light');
@@ -355,7 +372,8 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-suggestion').eq(1).should('have.text', 'France, Paris');
 
     // verify that suggestions retrieved from remote endpoint are deduplicated.
-    cy.get('@input6').clear().type('er');
+    cy.get('@input6').clear();
+    cy.get('@input6').type('er');
     cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'Eritrea, Asmara');
     cy.get('.typeahead-test-six .tt-list .tt-suggestion:nth-child(2)').should('have.text', 'Afghanistan, Kabul');
   });
@@ -396,13 +414,15 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').find('.track-artist').should('have.text', 'Fernando Ortega');
     cy.get('.typeahead-test-eight .tt-hint').as('hint').should('have.value', '');
 
-    cy.get('@input8').clear().type('ortega fernando', { delay: 100 });
+    cy.get('@input8').clear();
+    cy.get('@input8').type('ortega fernando', { delay: 100 });
     cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 3);
     cy.get('@input8').type('{downarrow}');
     cy.get('@list').children('.tt-selected').find('.track-artist').should('have.text', 'Fernando Ortega');
     cy.get('.typeahead-test-eight .tt-hint').as('hint').should('have.value', '');
 
-    cy.get('@input8').clear().type('sh', { delay: 100 });
+    cy.get('@input8').clear();
+    cy.get('@input8').type('sh', { delay: 100 });
     cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 5);
     cy.get('@suggestions').first().find('.track-title').should('have.text', 'Shalom Jerusalem');
     cy.get('@suggestions').eq(1).find('.track-album').should('have.text', 'Shalom Jerusalem');
@@ -413,13 +433,16 @@ context('Typeahead', () => {
     cy.get('#input-eight').as('input8').type('    it', { delay: 100 });
     cy.get('.typeahead-test-eight .tt-hint').as('hint').should('have.value', '    it is good');
 
-    cy.get('@input8').clear().type('   it   i', { delay: 100 });
+    cy.get('@input8').clear();
+    cy.get('@input8').type('   it   i', { delay: 100 });
     cy.get('@hint').should('have.value', '   it   is good');
 
-    cy.get('@input8').clear().type('it    ', { delay: 100 });
+    cy.get('@input8').clear();
+    cy.get('@input8').type('it    ', { delay: 100 });
     cy.get('@hint').should('have.value', 'it    is good');
 
-    cy.get('@input8').clear().type('   it   i s', { delay: 100 });
+    cy.get('@input8').clear();
+    cy.get('@input8').type('   it   i s', { delay: 100 });
     cy.get('@hint').should('have.value', '');
   });
 
@@ -430,7 +453,8 @@ context('Typeahead', () => {
       .children('.tt-suggestion')
       .should('contain.text', 'Black Sheeep');
 
-    cy.get('@input9').clear().type('dbl', { delay: 100 });
+    cy.get('@input9').clear();
+    cy.get('@input9').type('dbl', { delay: 100 });
     cy.get('@list').children('.tt-suggestion').as('suggestions').should('have.length', 6);
     cy.get('@suggestions').each(($item) => {
       cy.wrap($item).should('not.contain.text', 'Sheeep');
@@ -465,13 +489,15 @@ context('Typeahead', () => {
     cy.get('.onsubmit_test').should('contain.text', '#DBLD');
 
     // select value via mouse
-    cy.get('@input11').clear().type('p');
+    cy.get('@input11').clear();
+    cy.get('@input11').type('p');
     cy.get('@list').children().first().click();
     cy.get('@input11').type('{enter}');
     cy.get('.onsubmit_test').should('contain.text', '#PR');
 
     // submit without selecting a value
-    cy.get('@input11').clear().type('dar{enter}');
+    cy.get('@input11').clear();
+    cy.get('@input11').type('dar{enter}');
     cy.get('.onsubmit_test').should('contain.text', 'Passed');
   });
 
@@ -479,12 +505,14 @@ context('Typeahead', () => {
     cy.get('#input-thirteen').as('input13').type('e', { delay: 100 });
     cy.get('.typeahead-test-thirteen .tt-list').as('list').children().should('have.length', 4);
 
-    cy.get('@input13').clear().type('rhô', { delay: 100 });
+    cy.get('@input13').clear();
+    cy.get('@input13').type('rhô', { delay: 100 });
     cy.get('@list').children('.tt-suggestion').should('contain.text', 'Rhône');
     cy.get('.typeahead-test-thirteen .tt-list .tt-suggestion .tt-highlight').should('contain.text', 'Rhô');
     cy.get('.typeahead-test-thirteen .tt-hint').as('hint13').should('have.value', 'rhône');
 
-    cy.get('@input13').clear().type('rho'); // query without accents
+    cy.get('@input13').clear();
+    cy.get('@input13').type('rho'); // query without accents
     cy.get('@list').children('.tt-suggestion').should('contain.text', 'Rhône');
     cy.get('.typeahead-test-thirteen .tt-list .tt-suggestion .tt-highlight').should('contain.text', 'Rhô'); // diacritics must be applied to the highlight element too
     cy.get('.typeahead-test-thirteen .tt-hint').as('hint13').should('have.value', 'rhone'); // diacritics must be applied to the hint too
@@ -502,7 +530,7 @@ context('Typeahead', () => {
     cy.get('.post_typeahead_handler').should('contain.text', 'z');
   });
 
-  it('Emits a custom event when a suggestion is selected', () => {
+  it('Emits a user input event when a suggestion is selected', () => {
     // via mouse click
     cy.get('#input-fifteen').as('input15').type('d', { delay: 100 });
     cy.get('.customInputEvent_handler').as('textField').should('contain.text', 'd');
@@ -511,7 +539,8 @@ context('Typeahead', () => {
     cy.get('@textField').should('contain.text', 'Blue Darker');
 
     // via keyboard
-    cy.get('@input15').clear().type('g{uparrow}{enter}', { delay: 100 });
+    cy.get('@input15').clear();
+    cy.get('@input15').type('g{uparrow}{enter}', { delay: 100 });
     cy.get('@textField').should('contain.text', 'Light Grey [GRL]');
   });
 
