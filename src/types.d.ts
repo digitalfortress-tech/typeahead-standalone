@@ -89,6 +89,8 @@ export interface ResultSet<T extends Dictionary> {
 }
 
 export interface typeaheadResult<T extends Dictionary> {
+  addToIndex: (suggestions: string[] | Dictionary[] | T[]) => void;
+  reset: (clearLocalSrc?: boolean) => void;
   destroy: () => void;
   trie?: TrieType<T>;
 }

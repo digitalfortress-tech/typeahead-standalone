@@ -44,8 +44,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const identity = config.source.identity || displayCb;
   const onSubmit: (e: Event, item?: T) => void = config.onSubmit || NOOP;
   const dataTokens = config.source.dataTokens?.constructor === Array ? config.source.dataTokens : undefined;
-  const remoteQueryCache: Dictionary = {};
-  const remoteResponseCache: Dictionary = {};
   const transform = config.source.transform || ((data) => data);
   const local = (config.source as LocalDataSource<T>).local || null;
   const remote =
@@ -84,6 +82,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     limit: config.limit || 5,
   };
 
+  let remoteQueryCache: Dictionary = {};
+  let remoteResponseCache: Dictionary = {};
+
   let selected: T | undefined;
   let remoteDebounceTimer: number | undefined;
   let fetchInProgress = false;
@@ -100,9 +101,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     templates.empty = typeof templates.empty === 'function' ? templates.empty : undefined;
   }
 
-  if (local) {
-    updateSearchIndex(normalizer(local, identifier) as T[]);
-  }
+  const addToIndex = (suggestions: string[] | Dictionary[] | T[] = []) => {
+    updateSearchIndex(normalizer(suggestions, identifier) as T[]);
+  };
+
+  // if local source exists, add the suggestions to the index
+  local && addToIndex(local);
 
   const input: HTMLInputElement = config.input;
   input.classList.add(classNames.input);
@@ -819,10 +823,27 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   });
 
   /**
-   * This function will remove DOM elements and clear event handlers
+   * Resets the typeahead instance and clears everything
+   * Clears the search index as well as the entire cache
+   * clearLocalSrc?: boolean, if true, clears even the suggestions added via the Local Source
+   * */
+  const reset = (clearLocalSrc?: boolean) => {
+    clear();
+    trie.clear();
+    local && !clearLocalSrc && addToIndex(local);
+    remoteQueryCache = {};
+    remoteResponseCache = {};
+    if (prefetch) {
+      prefetch.done = false;
+    }
+  };
+
+  /**
+   * This function will remove DOM elements, clears cache and removes all event handlers
    */
   const destroy = (): void => {
     clearRemoteDebounceTimer();
+    reset();
     wrapper.replaceWith(input.cloneNode());
   };
 
@@ -833,7 +854,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   input.addEventListener('focus', focusEventHandler);
 
   return {
+    addToIndex,
+    reset,
     destroy,
-    // trie: Trie, // we expose trie only for local tests
+    // trie, // trie exposed only for local tests
   };
 }
