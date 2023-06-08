@@ -9,23 +9,76 @@
 <hr>
 <h4><a href="#references?id=api" id="api" title="typeahead-standalone.js API" class="submenu-link section-link">1. ✨ API</a></h4>
 
-<p>There is a single method <code>destroy()</code> exposed by typeahead-standalone</p>
+<p>There are 3 methods exposed by typeahead-standalone</p>
+<ol type="i">
+  <li>
+    <code>reset(clearLocalSource?: boolean);</code>
+    <p>
+      Resets the typeahead instance to the state it was in before any user interaction. It removes all items from the search
+      index except those that were added via a local source.
+      To remove absolutely all items, the function accepts an optional parameter which should be set to <code>true</code>.
+      <i>Reset()</i> also clears cached remote requests.
+    </p>
+    <div class="codeContainer">
+      <span class="lang">JS</span>
+      <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+      <pre class="hljs language-js">
+    /* Setup typeahead */
+    const instance = typeahead({ /* config options */ });
 
-<div class="codeContainer">
-  <span class="lang">JS</span>
-  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
-  <pre class="hljs language-js">
-/* Setup typeahead */
-const instance = typeahead({ /* config options */ });
+    /* clear search index except items added via a local source */
+    instance.reset();
 
-/* Destroy typeahead */
-instance.destroy();
-</pre>
-</div>
-<p>
-  The <code>destroy()</code> method destroys the typeahead instance, removes all event handlers and cleans up the DOM.
-  It can be used when you want to deactivate autocompletion completely.
-</p>
+    /* clears entire search index */
+    instance.reset(true);
+    </pre>
+    </div>
+    <p>
+      This API is useful in situations where you need to invalidate data after a certain time has elasped.
+    </p>
+  </li>
+  <li>
+    <code>addToIndex();</code>
+    <p>
+      Adds items to the search index. Intended to use after calling the <code>reset()</code> method. Similar to adding items via a
+      Local source.
+    </p>
+    <div class="codeContainer">
+      <span class="lang">JS</span>
+      <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+      <pre class="hljs language-js">
+        /* Setup typeahead */
+        const instance = typeahead({ /* config options */ });
+
+        instance.reset(true); /* or instance.reset(); */
+        instance.addToIndex(['Blue, Baige , Black']);
+        </pre>
+    </div>
+    <p>
+      Can also be used to update the search index at a predestined time or after an interval.
+    </p>
+  </li>
+  <li>
+    <code>destroy();</code>
+    <p>
+      Destroys the typeahead instance, clears the search index, removes all event handlers and cleans up the DOM.
+    </p>
+    <div class="codeContainer">
+      <span class="lang">JS</span>
+      <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+      <pre class="hljs language-js">
+    /* Setup typeahead */
+    const instance = typeahead({ /* config options */ });
+
+    /* Destroy typeahead */
+    instance.destroy();
+    </pre>
+    </div>
+    <p>
+      Useful if you wish to deactivate typeahead completely.
+    </p>
+  </li>
+</ol>
 
 <hr>
 <h4><a href="#references?id=error-codes" id="error-codes" title="typeahead-standalone.js Error Codes" class="submenu-link section-link">2. ⛔️ Error Codes</a></h4>

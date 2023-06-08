@@ -1,10 +1,10 @@
 # Typeahead-standalone.js
 
 [![npm version](https://img.shields.io/npm/v/typeahead-standalone.svg)](https://www.npmjs.com/package/typeahead-standalone)
-[![Build Status](https://img.shields.io/circleci/build/github/digitalfortress-tech/typeahead-standalone/master)](https://app.circleci.com/pipelines/github/digitalfortress-tech/typeahead-standalone)
+[![Build Status](https://img.shields.io/circleci/build/github/digitalfortress-tech/typeahead-standalone/master)](https://app.circleci.com/pipelines/github/digitalfortress-tech/typeahead-standalone?branch=master)
 [![code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![CDN Hits](https://data.jsdelivr.com/v1/package/npm/typeahead-standalone/badge?style=rounded)](https://www.jsdelivr.com/package/npm/typeahead-standalone)
-[![Downloads](https://img.shields.io/npm/dt/typeahead-standalone)](https://www.npmjs.com/package/typeahead-standalone)
+[![Downloads](https://img.shields.io/npm/dt/typeahead-standalone)](https://npm-stat.com/charts.html?package=typeahead-standalone)
 ![maintained](https://img.shields.io/badge/maintained-yes-blueviolet)
 [![License](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![speed blazing](https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-9cf.svg)](https://twitter.com/acdlite/status/974390255393505280)
@@ -18,7 +18,7 @@ A fast fully-featured standalone autocomplete library
 - 🚀 Blazing fast suggestions and autocompletion
 - 📦 Has **0 DEPENDENCIES**! Written in pure JS (typescript)
 - 🎀 Framework agnostic! Usable with **any** framework (React, Vue, Svelte, etc)
-- 💡 Highly customizable and light-weight [![~4kb minzipped](https://badgen.net/bundlephobia/minzip/typeahead-standalone)](https://bundlephobia.com/package/typeahead-standalone)
+- 💡 Highly customizable and light-weight [![<5kb minzipped](https://badgen.net/bundlephobia/minzip/typeahead-standalone)](https://bundlephobia.com/package/typeahead-standalone)
 - ⚜️ In-built support for multiple data sources - Local, Prefetch and Remote (requests rate-limited by default)
 - ⚡️ Suggestions calculated via a very efficient algorithm based on trie data structure
 - ♿️ WAI-ARIA compliant design pattern with support for language diacritics
@@ -375,11 +375,40 @@ typeahead({
 
 ### ✨ API
 
+* [`typeahead.reset()`](#typeaheadreset)
+* [`typeahead.addToIndex()`](#typeaheadaddtoindex)
 * [`typeahead.destroy()`](#typeaheaddestroy)
+
+#### <a id="typeaheadreset">typeahead.`reset(clearLocalSrc?: boolean)`</a>
+
+Resets the typeahead instance to the state it was in before any user interaction. It removes all items from the search index except those that were added via a local source.
+To remove absolutely all items, the function accepts an optional parameter which should be set to `true`.
+Reset() also clears cached remote requests.
+
+```javascript
+const instance = typeahead({ /* options */ });
+// clear search index except items added via Local source
+instance.reset();
+
+// clears entire search index
+instance.reset(true);
+
+```
+This API is useful in situations where you need to invalidate data after a certain time has elasped.
+
+#### <a id="typeaheadaddtoindex">typeahead.`addToIndex()`</a>
+
+Adds items to the search index. Intended to use after calling the `reset()` method. Similar to adding items via the Local source.
+
+```javascript
+const instance = typeahead({ /* options */ });
+instance.reset(true); // or instance.reset();
+instance.addToIndex(['Blue, Baige , Black']);
+```
 
 #### <a id="typeaheaddestroy">typeahead.`destroy()`</a>
 
-Destroys the typeahead instance, removes all event handlers and cleans up the DOM. Can be used once when you no more want to have suggestions.
+Destroys the typeahead instance, clears search index, removes all event handlers and cleans up the DOM. Can be used if you wish to deactivate typeahead.
 
 ```javascript
 const instance = typeahead({ /* options */ });
