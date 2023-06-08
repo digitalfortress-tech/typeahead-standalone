@@ -43,6 +43,7 @@ body:
         - v4.19.0
         - v4.20.0
         - v4.21.0
+        - v4.22.0
         - Latest
     validations:
       required: true
