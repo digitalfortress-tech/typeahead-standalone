@@ -544,5 +544,50 @@ context('Typeahead', () => {
     cy.get('@textField').should('contain.text', 'Light Grey [GRL]');
   });
 
+  it('API reset(): resets a given typeahead instance correctly', () => {
+    cy.intercept('GET', 'https://restcountries.com/v2/name/*', { fixture: 'countries.json' }).as('getCountries');
+    cy.get('#input-sixteen').as('input16').focus();
+    cy.wait('@getCountries'); // prefetch  called
+    cy.get('@input16').type('fr{uparrow}{enter}', { delay: 100 });
+    cy.wait('@getCountries'); // remote  called
+    cy.get('@input16').clear();
+
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1000); // wait for setTimeout (reset() is called)
+    cy.get('@input16').focus();
+    cy.wait('@getCountries'); // prefetch  called again
+    cy.get('@input16').type('fr{uparrow}{enter}', { delay: 100 });
+    cy.wait('@getCountries'); // remote  called again
+    cy.get('@input16').clear();
+
+    /* test API with optional arg => reset(true); */
+    cy.get('@input16').type('gre', { delay: 100 });
+    cy.get('.typeahead-test-sixteen .tt-hint').as('hint16').should('have.value', 'grey');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1500); // wait for setTimeout (reset(true); is called)
+    cy.get('@input16').clear();
+    cy.get('@input16').type('gre', { delay: 100 });
+    cy.wait('@getCountries'); // remote  called again
+    cy.get('@hint16').should('have.value', 'greece');
+  });
+
+  it('API addToIndex(): adds items to search index', () => {
+    cy.get('#input-one').as('input1').type('p', { delay: 100 });
+    cy.get('.typeahead-test-one .tt-list').as('list').should('exist');
+    cy.get('@list').children().should('have.length', 2);
+  });
+
+  it('API destroy(): deactivate typeahead', () => {
+    cy.intercept('GET', 'https://restcountries.com/v2/name/*', { fixture: 'countries.json' }).as('getCountries');
+    cy.get('#input-seventeen').as('input17').type('da', { delay: 100 });
+    cy.wait('@getCountries'); // prefetch  called
+    cy.get('.typeahead-test-seventeen .tt-list').as('list').should('exist');
+
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(800); // wait for setTimeout (destroy() is called)
+    cy.get('@input17').type('rk', { delay: 100 });
+    cy.get('@list').should('not.exist');
+  });
+
   // https://on.cypress.io/interacting-with-elements
 });

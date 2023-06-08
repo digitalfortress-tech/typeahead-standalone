@@ -298,6 +298,7 @@ const test1 = typeahead({
   },
   className: 'typeahead-test-one',
 });
+test1.addToIndex(['Purple', 'Pink']);
 
 // eslint-disable-next-line no-undef
 const test2 = typeahead({
@@ -728,6 +729,7 @@ const El14 = document.getElementById('input-fourteen');
 El14.addEventListener('keyup', (evt) => {
   document.querySelector('.pre_typeahead_handler').innerHTML = evt.key;
 });
+
 // eslint-disable-next-line no-undef
 const test14 = typeahead({
   input: El14,
@@ -746,6 +748,7 @@ const El15 = document.getElementById('input-fifteen');
 El15.addEventListener('input', (evt) => {
   document.querySelector('.customInputEvent_handler').innerHTML = evt.data;
 });
+
 // eslint-disable-next-line no-undef
 const test15 = typeahead({
   input: El15,
@@ -756,4 +759,59 @@ const test15 = typeahead({
   className: 'typeahead-test-fifteen',
   highlight: true,
   preventSubmit: true,
+});
+
+let test16_reset1Called = false;
+let test16_reset2Called = false;
+// eslint-disable-next-line no-undef
+const test16 = typeahead({
+  input: document.getElementById('input-sixteen'),
+  source: {
+    local: colors,
+    prefetch: {
+      url: 'https://restcountries.com/v2/name/p',
+      when: 'onFocus',
+      process: (suggestions) => {
+        setTimeout(() => {
+          if (test16_reset1Called) return;
+          test16.reset();
+          test16_reset1Called = true;
+        }, 1000);
+        setTimeout(() => {
+          if (test16_reset2Called) return;
+          test16.reset(true);
+          test16_reset2Called = true;
+        }, 3000);
+      },
+    },
+    remote: {
+      url: 'https://restcountries.com/v2/name/%QUERY',
+      wildcard: '%QUERY',
+    },
+    identifier: 'name',
+  },
+  className: 'typeahead-test-sixteen',
+  highlight: true,
+  preventSubmit: true,
+});
+
+// eslint-disable-next-line no-undef
+const test17 = typeahead({
+  input: document.getElementById('input-seventeen'),
+  source: {
+    local: colors,
+    prefetch: {
+      url: 'https://restcountries.com/v2/name/p',
+      when: 'onFocus',
+      process: (suggestions) => {
+        setTimeout(() => {
+          if (test16_reset1Called) return;
+          test17.destroy();
+        }, 1000);
+      },
+    },
+    identifier: 'name',
+  },
+  className: 'typeahead-test-seventeen',
+  highlight: true,
 });
