@@ -137,7 +137,7 @@ This is the source of data from which suggestions will be provided. This is the 
 source: {
   local: [],
   remote: {
-    url: 'https://remoteapi.com/%QUERY', // OR `url: () => 'https://remoteapi.com/%QUERY',`
+    url: 'https://remoteapi.com/%QUERY', // OR "url: (inputQuery: string) => `https://remoteapi.com/${inputQuery}`"
     wildcard: '%QUERY',
     requestOptions: {}        // optional, default => undefined
   },

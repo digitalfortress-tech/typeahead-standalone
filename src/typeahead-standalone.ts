@@ -46,8 +46,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const dataTokens = config.source.dataTokens?.constructor === Array ? config.source.dataTokens : undefined;
   const transform = config.source.transform || ((data) => data);
   const local = (config.source as LocalDataSource<T>).local || null;
+  const remoteUrlType = typeof (config.source as RemoteDataSource<T>).remote?.url;
   const remote =
-    (config.source as RemoteDataSource<T>).remote?.url && (config.source as RemoteDataSource<T>).remote.wildcard
+    remoteUrlType === 'function' ||
+    (remoteUrlType === 'string' && (config.source as RemoteDataSource<T>).remote.wildcard)
       ? (config.source as RemoteDataSource<T>).remote
       : null;
   const prefetch = (config.source as PrefetchDataSource<T>).prefetch?.url
@@ -611,7 +613,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     fetchWrapper
       .get(
-        (typeof remote.url === 'function' ? remote.url() : remote.url).replace(remote.wildcard, frozenInput),
+        (typeof remote.url === 'function' ? remote.url(frozenInput) : remote.url).replace(
+          remote.wildcard || '',
+          frozenInput
+        ),
         remote?.requestOptions
       )
       .then(

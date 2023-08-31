@@ -26,8 +26,8 @@ export interface PrefetchDataSource<T> extends typeaheadDataSource<T> {
 
 export interface RemoteDataSource<T> extends typeaheadDataSource<T> {
   remote: {
-    url: string | (() => string);
-    wildcard: string;
+    url: string | ((query: string) => string);
+    wildcard?: string;
     requestOptions?: Dictionary;
   };
 }

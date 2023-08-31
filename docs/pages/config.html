@@ -87,7 +87,7 @@ typeahead({
   input: document.querySelector('.myInput'),
   source: {
     remote: {
-      url: 'https://remoteapi.com/%QUERY', // OR `url: () => 'https://remoteapi.com/%QUERY',`
+      url: 'https://remoteapi.com/%QUERY', // OR "url: (inputQuery: string) => `https://remoteapi.com/${inputQuery}`"
       wildcard: '%QUERY',
       requestOptions: {}  // optional, default => undefined
     },
@@ -100,8 +100,9 @@ typeahead({
       <h5 class="underline">Properties</h5>
       <ol>
         <li><code>url</code> <b>(<code>*</code>Required)</b> - contains the URL to which http requests are made to retrieve the
-          suggestions. The url can be a <b>string</b> or a <b>callback</b> that returns a string.</li>
-        <li><code>wildcard</code> <b>(<code>*</code>Required)</b> - The string that is replaced with the user's input while executing the http request.</li>
+          suggestions. The url can be a <b>string</b> or a <b>callback</b>. When it is used as a callback, it receives the input query as a parameter and should return a string.</li>
+        <li><code>wildcard</code> <b>(<code>*</code>Required when url is a string)</b> - The string that is replaced with the
+          user's input while executing the http request.</li>
         <li><code>requestOptions</code> - By default, the <b>GET</b> method is used to make http requests. To use <b>POST</b> method, you can provide a
         <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options" title="Fetch API request options">requestOptions</a> property.</li>
       </ol>
