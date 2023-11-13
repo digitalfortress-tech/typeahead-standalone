@@ -20,7 +20,8 @@
     "types": [
       "cypress",
       "cypress-axe",
-      "node"
+      "node",
+      "vitest/globals"
     ]
   }
 }
