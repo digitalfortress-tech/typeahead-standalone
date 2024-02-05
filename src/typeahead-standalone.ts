@@ -394,7 +394,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const inputEventHandler = (ev: InputEvent): void => {
     // Fix: Firefox Android uses insertCompositionText instead of insertText.
-    if (ev.inputType === 'insertCompositionText' && !ev.isComposing) {
+    if (!ev.inputType || (ev.inputType === 'insertCompositionText' && !ev.isComposing)) {
       return;
     }
 
@@ -458,7 +458,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
     // if raw input is empty if Esc is hit, clear out everything
-    if (!input.value.length || ev.key === 'Escape') {
+    if (ev.key === 'Escape' || (!input.value.length && !resultSet.items.length)) {
       return clear();
     }
 
@@ -514,7 +514,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       resultSet.query = '';
       if (resultSet.defaultItems?.length) {
         // inject default suggestions
-        resultSet.items = normalizer(transform(resultSet.defaultItems) as T[], identifier) as T[];
+        resultSet.items = normalizer(resultSet.defaultItems, identifier) as T[];
         return update();
       }
 
