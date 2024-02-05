@@ -307,6 +307,8 @@ templates: {
   },
   empty: (resultSet) => {   /* Rendered when the input query is empty */
     return `<div>Search for Colors...</div>`;
+    // OR (to display some suggestions by default)
+    return resultSet.defaultItems = [{title: "France"}, {title: "Spain"}];
   }
   loader: () => 'Loading...', /* Rendered while awaiting data from a remote source */
   notFound: (resultSet) => '<span>Nothing Found</span>', /* Rendered if no suggestions are available */
