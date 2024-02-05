@@ -394,7 +394,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const inputEventHandler = (ev: InputEvent): void => {
     // Fix: Firefox Android uses insertCompositionText instead of insertText.
-    if (!ev.inputType || (ev.inputType === 'insertCompositionText' && !ev.isComposing)) {
+    if (typeof ev.inputType === "undefined" || (ev.inputType === 'insertCompositionText' && !ev.isComposing)) {
       return;
     }
 
