@@ -1,7 +1,7 @@
 # Typeahead-standalone.js
 
 [![npm version](https://img.shields.io/npm/v/typeahead-standalone.svg)](https://www.npmjs.com/package/typeahead-standalone)
-[![Build Status](https://img.shields.io/circleci/build/github/digitalfortress-tech/typeahead-standalone/master)](https://app.circleci.com/pipelines/github/digitalfortress-tech/typeahead-standalone?branch=master)
+[![Build Status](https://github.com/digitalfortress-tech/typeahead-standalone/actions/workflows/build-test.yml/badge.svg?branch=master)](https://app.circleci.com/pipelines/github/digitalfortress-tech/typeahead-standalone?branch=master)
 [![code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![CDN Hits](https://data.jsdelivr.com/v1/package/npm/typeahead-standalone/badge?style=rounded)](https://www.jsdelivr.com/package/npm/typeahead-standalone)
 [![Downloads](https://img.shields.io/npm/dt/typeahead-standalone)](https://npm-stat.com/charts.html?package=typeahead-standalone)
