@@ -394,7 +394,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   const inputEventHandler = (ev: InputEvent): void => {
     // Fix: Firefox Android uses insertCompositionText instead of insertText.
-    if (typeof ev.inputType === "undefined" || (ev.inputType === 'insertCompositionText' && !ev.isComposing)) {
+    if (typeof ev.inputType === 'undefined' || (ev.inputType === 'insertCompositionText' && !ev.isComposing)) {
       return;
     }
 
@@ -667,16 +667,28 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * Sorts array in place giving preference to the starting letter of the query
    */
   const sortByStartingLetter = (suggestions: T[]): void => {
-    suggestions.sort((a: Dictionary, b: Dictionary) => {
-      const one = (a[identifier as string] as string).toLowerCase().startsWith(resultSet.query.toLowerCase());
-      const two = (b[identifier as string] as string).toLowerCase().startsWith(resultSet.query.toLowerCase());
+    const query = resultSet.query.toLowerCase();
+    suggestions.sort((one: Dictionary, two: Dictionary) => {
+      const a = (one[identifier] as string).toLowerCase();
+      const b = (two[identifier] as string).toLowerCase();
 
-      if (one && !two) return -1;
+      const startsWithA = a.startsWith(query);
+      const startsWithB = b.startsWith(query);
 
-      if (one && (a[identifier as string] as string).length < (b[identifier as string] as string).length) {
+      if (startsWithA && startsWithB) {
+        // If both start with the given string, sort by shortest length first
+        return a.length - b.length;
+      }
+      if (startsWithA) {
+        // If only A starts with the given string, it should come first
         return -1;
       }
+      if (startsWithB) {
+        // If only B starts with the given string, it should come first
+        return 1;
+      }
 
+      // If neither start with the given string, maintain original order
       return 0;
     });
   };
@@ -686,12 +698,22 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    */
   const sortByGroup = (suggestions: T[]) => {
     suggestions.sort((a: Dictionary, b: Dictionary) => {
-      if (!a[groupIdentifier] || (a[groupIdentifier] as string) < (b[groupIdentifier] as string)) {
+      // if no group identifier was found, do not sort
+      if (!a[groupIdentifier] && !b[groupIdentifier]) return 0;
+      if (!a[groupIdentifier]) {
+        return -1;
+      }
+      if (!b[groupIdentifier]) {
+        return 1;
+      }
+      // sort in ascending order of group name
+      if ((a[groupIdentifier] as string) < (b[groupIdentifier] as string)) {
         return -1;
       }
       if ((a[groupIdentifier] as string) > (b[groupIdentifier] as string)) {
         return 1;
       }
+
       return 0;
     });
   };

@@ -127,6 +127,11 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').should('have.text', 'Black Light');
   });
 
+  // it.only('Navigates default suggestions via the empty template correctly', () => {
+  //   cy.get('#input-four').as('input4').focus();
+  //   cy.get('.typeahead-test-four .tt-list').as('list').children().should('have.length', 5);
+  // });
+
   it('Handles "Esc" key correctly', () => {
     // when input type="search", hitting Esc clears contents of input. (Browser behaviour)
     // Currently a bug in cypress doesn't replicate this browser behaviour. (https://github.com/cypress-io/cypress/issues/21313)
@@ -253,7 +258,7 @@ context('Typeahead', () => {
     // notFound template
     cy.get('@input4').type('p', { delay: 100 });
     cy.get('@list').children().should('have.length', 1);
-    cy.get('.typeahead-test-four .tt-notFound').should('contain.text', 'Nothing Found for query - Pinkp');
+    cy.get('.typeahead-test-four .tt-notFound').should('contain.text', 'Nothing Found for query - Purplep');
 
     // group template + header/footer/group count
     cy.get('@input4').clear();
@@ -493,7 +498,7 @@ context('Typeahead', () => {
     cy.get('@input11').type('p');
     cy.get('@list').children().first().click();
     cy.get('@input11').type('{enter}');
-    cy.get('.onsubmit_test').should('contain.text', '#PR');
+    cy.get('.onsubmit_test').should('contain.text', '#PI');
 
     // submit without selecting a value
     cy.get('@input11').clear();
