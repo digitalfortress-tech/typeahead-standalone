@@ -127,10 +127,14 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-selected').should('have.text', 'Black Light');
   });
 
-  // it.only('Navigates default suggestions via the empty template correctly', () => {
-  //   cy.get('#input-four').as('input4').focus();
-  //   cy.get('.typeahead-test-four .tt-list').as('list').children().should('have.length', 5);
-  // });
+  it('Navigates default suggestions via the empty template', () => {
+    cy.get('#input-four').as('input4').focus();
+    cy.get('.typeahead-test-four .tt-list').as('list').children().should('have.length', 5);
+    cy.get('@input4').type('{downarrow}{downarrow}');
+    cy.get('@list').children('.tt-selected').should('contain.text', 'Green');
+    cy.get('@input4').type('{uparrow}{uparrow}{uparrow}');
+    cy.get('@list').children('.tt-selected').should('contain.text', 'Blue');
+  });
 
   it('Handles "Esc" key correctly', () => {
     // when input type="search", hitting Esc clears contents of input. (Browser behaviour)
@@ -144,7 +148,16 @@ context('Typeahead', () => {
     cy.get('#input-two-B').as('input2B').type('bl', { delay: 100 });
     cy.get('.typeahead-test-two-B .tt-list').as('listB').children().should('have.length', 5);
     cy.get('@input2B').type('{esc}');
+    cy.get('@listB').should('be.hidden');
     cy.get('@input2B').should('have.value', 'bl');
+
+    // with default suggestions displayed
+    cy.get('#input-four').as('input4').focus();
+    cy.get('.typeahead-test-four .tt-list').as('listT4').children().should('have.length', 5);
+    cy.get('@input4').type('p');
+    cy.get('@listT4').children().should('have.length', 4);
+    cy.get('@input4').type('{esc}');
+    cy.get('@listT4').should('be.hidden');
   });
 
   it('Uses custom display() function with optional arg', () => {
