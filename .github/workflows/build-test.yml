@@ -62,6 +62,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
+        # will use pnpm's cache to install
         run: make install
       - name: Unit Tests
         run: make test-unit
