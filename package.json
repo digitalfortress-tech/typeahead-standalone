@@ -70,20 +70,20 @@
     "typeahead-standalone.js"
   ],
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.11.0",
-    "@typescript-eslint/parser": "^6.11.0",
-    "axe-core": "^4.8.2",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "axe-core": "^4.8.4",
     "copyfiles": "^2.4.1",
-    "cypress": "^13.5.0",
+    "cypress": "^13.6.4",
     "cypress-axe": "^1.5.0",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-cypress": "^2.15.1",
-    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-prettier": "^5.1.3",
     "less": "^4.2.0",
-    "prettier": "^3.1.0",
-    "typescript": "^5.2.2",
-    "vite": "^4.5.0",
-    "vite-plugin-dts": "^3.6.3",
-    "vitest": "^0.34.6"
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.1",
+    "vite-plugin-dts": "^3.7.2",
+    "vitest": "^1.2.2"
   }
 }
