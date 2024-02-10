@@ -1,4 +1,4 @@
-import { Dictionary } from '../types';
+import type { Dictionary } from '../types.d.ts';
 
 export interface SearchResults<T> {
   suggestions: T[];

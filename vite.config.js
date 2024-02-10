@@ -12,7 +12,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/typeahead-standalone.ts'),
       name: 'typeahead',
-      fileName: (format) => `typeahead-standalone.${format}.js`,
+      fileName: (format) => `typeahead-standalone.${format}${format === 'umd' ? '.cjs' : '.mjs'}`,
     },
     rollupOptions: {
       output: {
