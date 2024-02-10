@@ -29,5 +29,6 @@ prod:	## Build for Production environment
 publish:	## Publish to NPM
 	@make prod
 	@pnpm copy-dts-declarations
+	@pnpm duplicate-dts
 	@make tests
 	@pnpm publish

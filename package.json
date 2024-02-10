@@ -20,7 +20,8 @@
     "cy:run": "npx cypress run --headless --browser chrome",
     "cy:open": "npx cypress open --browser chrome",
     "lint": "eslint ./src --ext .ts --fix",
-    "copy-dts-declarations": "copyfiles -u 1 \"src/**/*.d.ts\" dist"
+    "copy-dts-declarations": "copyfiles -u 1 \"src/**/*.d.ts\" dist",
+    "duplicate-dts": "cp dist/types.d.ts dist/types.d.mts"
   },
   "author": {
     "name": "Niket Pathak",
@@ -30,7 +31,7 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/types.d.ts",
+        "types": "./dist/types.d.mts",
         "default": "./dist/typeahead-standalone.es.mjs"
       },
       "require": {

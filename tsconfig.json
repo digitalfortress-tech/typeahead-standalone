@@ -6,7 +6,6 @@
     "module": "NodeNext",
     "target": "es2020",
     "moduleResolution": "NodeNext",
-    "rootDir": "src",
     "esModuleInterop": true,
     "noFallthroughCasesInSwitch": true,
     "strict": true,
