@@ -1,6 +1,6 @@
 import type { Dictionary } from '../types.d.ts';
 import type { SearchResults, TrieType } from './types.d.ts';
-import { spaceTokenizer, diacritics } from '../helpers.ts';
+import { spaceTokenizer, diacritics } from '../helpers.js';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
 export const Trie: TrieType<any> = (config = {}) => {
