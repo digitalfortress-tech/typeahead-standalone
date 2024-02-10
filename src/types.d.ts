@@ -1,4 +1,4 @@
-import { TrieType } from './trie/types';
+import type { TrieType } from './trie/types.d.ts';
 
 export type Dictionary<T = unknown> = Record<string, T>;
 
@@ -93,4 +93,11 @@ export interface typeaheadResult<T extends Dictionary> {
   reset: (clearLocalSrc?: boolean) => void;
   destroy: () => void;
   trie?: TrieType<T>;
+}
+
+// Declare the module
+declare module 'typeahead-standalone' {
+  // generated via plugin-dts
+  function typeahead<T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult<T>;
+  export = typeahead;
 }

@@ -3,25 +3,18 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "outDir": "./dist/",
-    "module": "es2020",
-    "target": "es2019",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "target": "es2020",
+    "moduleResolution": "NodeNext",
+    "rootDir": "src",
     "esModuleInterop": true,
     "noFallthroughCasesInSwitch": true,
     "strict": true,
     "declaration": true,
     "sourceMap": true,
-    "lib": [
-      "es2020",
-      "esnext",
-      "dom",
-      "dom.iterable"
-    ],
-    "types": [
-      "cypress",
-      "cypress-axe",
-      "node",
-      "vitest/globals"
-    ]
+    "declarationMap": true,
+    "verbatimModuleSyntax": true,
+    "lib": ["es2020", "esnext", "dom", "dom.iterable"],
+    "types": ["cypress", "cypress-axe", "node", "vitest/globals"]
   }
 }

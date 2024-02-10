@@ -14,10 +14,10 @@ import type {
   PrefetchDataSource,
   ResultSet,
   typeaheadStyleClasses,
-} from './types';
-import { diacritics, escapeRegExp, isObject, NOOP, normalizer } from './helpers';
-import { fetchWrapper } from './fetchWrapper/fetchWrapper';
-import { Trie } from './trie/trie';
+} from './types.d.ts';
+import { diacritics, escapeRegExp, isObject, NOOP, normalizer } from './helpers.js';
+import { fetchWrapper } from './fetchWrapper/fetchWrapper.js';
+import { Trie } from './trie/trie.js';
 import './style.less';
 
 export default function typeahead<T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult<T> {
