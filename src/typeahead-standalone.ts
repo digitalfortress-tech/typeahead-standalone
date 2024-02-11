@@ -14,7 +14,7 @@ import type {
   PrefetchDataSource,
   ResultSet,
   typeaheadStyleClasses,
-} from './types.d.ts';
+} from './common.d.ts';
 import { diacritics, escapeRegExp, isObject, NOOP, normalizer } from './helpers.js';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper.js';
 import { Trie } from './trie/trie.js';

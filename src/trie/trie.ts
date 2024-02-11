@@ -1,4 +1,4 @@
-import type { Dictionary } from '../types.d.ts';
+import type { Dictionary } from '../common.d.ts';
 import type { SearchResults, TrieType } from './types.d.ts';
 import { spaceTokenizer, diacritics } from '../helpers.js';
 

@@ -1,4 +1,4 @@
-import type { Dictionary } from './types.d.ts';
+import type { Dictionary } from './index.cjs';
 
 export const NOOP = (...args: unknown[]): void => undefined;
 

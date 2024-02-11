@@ -20,8 +20,7 @@
     "cy:run": "npx cypress run --headless --browser chrome",
     "cy:open": "npx cypress open --browser chrome",
     "lint": "eslint ./src --ext .ts --fix",
-    "copy-dts-declarations": "copyfiles -u 1 \"src/**/*.d.ts\" dist",
-    "duplicate-dts": "cp dist/types.d.ts dist/types.d.mts"
+    "copy-dts-declarations": "copyfiles -u 1 \"src/**/*.d.*ts\" dist"
   },
   "author": {
     "name": "Niket Pathak",
@@ -31,18 +30,18 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/types.d.mts",
+        "types": "./dist/index.d.mts",
         "default": "./dist/typeahead-standalone.es.mjs"
       },
       "require": {
-        "types": "./dist/types.d.ts",
+        "types": "./dist/index.d.cts",
         "default": "./dist/typeahead-standalone.umd.cjs"
       }
     }
   },
   "main": "./dist/typeahead-standalone.umd.cjs",
   "module": "./dist/typeahead-standalone.es.mjs",
-  "types": "./dist/types.d.ts",
+  "types": "./dist/index.d.cts",
   "repository": {
     "type": "git",
     "url": "https://github.com/digitalfortress-tech/typeahead-standalone.git"
