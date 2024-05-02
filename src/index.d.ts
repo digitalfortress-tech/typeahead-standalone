@@ -1,5 +1,5 @@
-// import type { Dictionary, typeaheadConfig, typeaheadResult } from './common.d.ts';
-import 'common.d.ts';
+import type { Dictionary, typeaheadConfig, typeaheadResult } from './common.d.ts';
+// import 'common.d.ts';
 
 // Declare the module
 declare module 'typeahead-standalone' {

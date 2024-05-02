@@ -1,4 +1,4 @@
-import type { Dictionary } from '../index.d.cts';
+import type { Dictionary } from '../index.js';
 
 export interface SearchResults<T> {
   suggestions: T[];
