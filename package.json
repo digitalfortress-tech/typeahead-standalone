@@ -3,7 +3,7 @@
   "type": "module",
   "title": "typeahead-standalone",
   "description": "A fast fully-featured standalone autocomplete library",
-  "version": "4.25.3",
+  "version": "4.25.4",
   "homepage": "https://typeahead.digitalfortress.tech",
   "license": "MIT",
   "scripts": {
@@ -31,11 +31,13 @@
     ".": {
       "import": {
         "types": "./dist/index.d.mts",
-        "default": "./dist/typeahead-standalone.es.mjs"
+        "default": "./dist/typeahead-standalone.es.mjs",
+        "/dist/basic.css": "./dist/basic.css"
       },
       "require": {
         "types": "./dist/index.d.ts",
-        "default": "./dist/typeahead-standalone.umd.js"
+        "default": "./dist/typeahead-standalone.umd.js",
+        "/dist/basic.css": "./dist/basic.css"
       }
     }
   },
