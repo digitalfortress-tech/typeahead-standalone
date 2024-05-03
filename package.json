@@ -34,14 +34,14 @@
         "default": "./dist/typeahead-standalone.es.mjs"
       },
       "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/typeahead-standalone.umd.cjs"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/typeahead-standalone.umd.js"
       }
     }
   },
-  "main": "./dist/typeahead-standalone.umd.cjs",
+  "main": "./dist/typeahead-standalone.umd.js",
   "module": "./dist/typeahead-standalone.es.mjs",
-  "types": "./dist/index.d.cts",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/digitalfortress-tech/typeahead-standalone.git"
