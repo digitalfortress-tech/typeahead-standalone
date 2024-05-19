@@ -59,12 +59,10 @@ export const Trie: TrieType<any> = (config = {}) => {
   function find(prefix: string): Dictionary {
     let node = root;
     let matches: Dictionary = {};
-    let token;
 
     // traverse the root until you reach the end of prefix
-    for (let i = 0, l = prefix.length; i < l; i++) {
-      token = prefix[i]; // each letter of search string
-      node = node[token] as Record<string, unknown>;
+    for (const char of prefix) {
+      node = node?.[char] as Record<string, unknown>;
       if (typeof node === 'undefined') return {};
     }
 
@@ -74,12 +72,15 @@ export const Trie: TrieType<any> = (config = {}) => {
 
     while (stack.length) {
       current = stack.pop() as { node: Record<string, unknown>; prefix: string };
-      node = current.node;
-      prefix = current.prefix;
+      const { node, prefix } = current;
 
       for (const k in node) {
         if (k === SENTINEL) {
-          Object.assign(matches, node[SENTINEL]);
+          // Object.assign(matches, node[SENTINEL]);
+          const results = node[SENTINEL] as Dictionary;
+          for (const resultKey in results) {
+            matches[resultKey] = results[resultKey];
+          }
         } else {
           stack.push({ node: node[k] as Record<string, unknown>, prefix: prefix + k });
         }
@@ -89,32 +90,31 @@ export const Trie: TrieType<any> = (config = {}) => {
     return matches as Dictionary;
   }
 
+  // Returns the intersection of two dictionaries
+  const intersectDictionaries = (dict1: Dictionary, dict2: Dictionary): Dictionary => {
+    const result: Dictionary = {};
+    for (const key in dict1) {
+      if (key in dict2) {
+        result[key] = dict1[key];
+      }
+    }
+
+    return result;
+  };
+
   /**
    * Search for query strings within the trie
    */
   function search(query: string, limit?: number): SearchResults<Dictionary | string> {
     const queryTokens = tokenize(query);
 
-    // Search for multiple tokens/queries
-    const objArrs: Dictionary[] = [];
-    let suggestions: Dictionary | Dictionary[] = {};
-    queryTokens.forEach((token) => {
-      // note that limit is not passed to "find()"
-      objArrs.push(find(token) as Dictionary);
-    });
+    // Search for multiple tokens/queries and get initial matches
+    let suggestions: Dictionary | Dictionary[] = find(queryTokens[0]);
 
-    // get intersection of found suggestions
-    suggestions = objArrs.reduce((acc: Dictionary, currentObj: Dictionary) => {
-      const result: Dictionary = {};
-
-      Object.keys(acc)
-        .filter((key: string) => currentObj[key]) // keep suggestions with common keys
-        .forEach((key) => {
-          result[key] = acc[key];
-        });
-
-      return result;
-    });
+    for (let i = 1; i < queryTokens.length; i++) {
+      suggestions = intersectDictionaries(suggestions, find(queryTokens[i])); // get intersection of found suggestions
+      if (!Object.keys(suggestions).length) break; // exit if no matches are found
+    }
 
     suggestions = Object.values(suggestions) as Dictionary[];
 
