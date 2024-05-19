@@ -30,34 +30,27 @@ export const Trie: TrieType<any> = (config = {}) => {
   function add(data: string | string[] | Dictionary[], identifier = '', identity?: (item?: unknown) => void) {
     if (!data) return;
 
-    let node = root;
-    let token;
-    data = (data.constructor === Array ? data : [data]) as [];
+    let node: Record<string, unknown>;
+    data = Array.isArray(data) ? data : [data];
+    const isStringArr = typeof data[0] === 'string';
 
-    data.forEach((value: string | Dictionary) => {
-      // we tokenize the incoming data to make search possible by fragments
-      const dataTokens = tokenize(typeof value === 'string' ? value : (value[identifier] as string));
-      dataTokens
-        .filter((item) => item) // filter out falsy values
-        .forEach((prefix) => {
-          node = root;
+    for (const value of data) {
+      // we tokenize the incoming data to make search possible by fragments and also filter out falsy values
+      const dataTokens = tokenize(
+        isStringArr ? (value as string) : ((value as Dictionary)[identifier] as string)
+      ).filter(Boolean);
+      for (const prefix of dataTokens) {
+        node = root;
 
-          for (let i = 0, l = prefix.length; i < l; i++) {
-            token = prefix[i];
-            node = (node[token] || (node[token] = {})) as Record<string, unknown>;
-          }
+        for (const char of prefix) {
+          node = (node[char] ||= {}) as Record<string, unknown>;
+        }
 
-          const uniqueId = typeof value === 'string' ? value : (identity && identity(value)) || JSON.stringify(value);
-
-          if (!node[SENTINEL]) {
-            node[SENTINEL] = {
-              [uniqueId]: value,
-            };
-          } else {
-            (node[SENTINEL] as Dictionary)[uniqueId] = value;
-          }
-        });
-    });
+        const uniqueId = isStringArr ? value : (identity && identity(value)) || JSON.stringify(value);
+        const sentinelNode = (node[SENTINEL] ??= {});
+        (sentinelNode as Dictionary)[uniqueId as string] = value;
+      }
+    }
   }
 
   /**
