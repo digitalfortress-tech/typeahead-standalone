@@ -35,11 +35,11 @@ export const Trie: TrieType<any> = (config = {}) => {
     const isStringArr = typeof data[0] === 'string';
 
     for (const value of data) {
-      // we tokenize the incoming data to make search possible by fragments and also filter out falsy values
-      const dataTokens = tokenize(
-        isStringArr ? (value as string) : ((value as Dictionary)[identifier] as string)
-      ).filter(Boolean);
+      // we tokenize the incoming data to make search possible by fragments
+      const dataTokens = tokenize(isStringArr ? (value as string) : ((value as Dictionary)[identifier] as string));
       for (const prefix of dataTokens) {
+        if (!prefix) continue; // filter out falsy values
+
         node = root;
 
         for (const char of prefix) {
@@ -69,22 +69,20 @@ export const Trie: TrieType<any> = (config = {}) => {
     }
 
     // Performing DFS (Depth-First Search) from prefix to traverse the tree
-    const nodeStack = [node];
-    const prefixStack = [prefix];
-    let k;
+    const stack = [{ node, prefix }];
+    let current;
 
-    while (nodeStack.length) {
-      prefix = prefixStack.pop() as string;
-      node = nodeStack.pop() as Record<string, unknown>;
+    while (stack.length) {
+      current = stack.pop() as { node: Record<string, unknown>; prefix: string };
+      node = current.node;
+      prefix = current.prefix;
 
-      for (k in node) {
+      for (const k in node) {
         if (k === SENTINEL) {
-          matches = Object.assign(matches, node[SENTINEL]);
-          continue;
+          Object.assign(matches, node[SENTINEL]);
+        } else {
+          stack.push({ node: node[k] as Record<string, unknown>, prefix: prefix + k });
         }
-
-        nodeStack.push(node[k] as Record<string, unknown>);
-        prefixStack.push(prefix + k);
       }
     }
 
