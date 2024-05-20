@@ -25,9 +25,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   if (!config.input) throw new Error('e01');
   if (!isObject(config.source)) throw new Error('e02');
 
-  const doc = document;
-
-  const listContainer: HTMLDivElement = doc.createElement('div');
+  const listContainer: HTMLDivElement = document.createElement('div');
   const debounceXHR = config.debounceRemote || 100;
   const preventSubmit = config.preventSubmit || false;
   const minLen = config.minLength || 1;
@@ -37,13 +35,11 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const trie = Trie({ hasDiacritics: config.diacritics });
   const identifier = config.source.identifier || 'label'; // label is the default identifier
   const groupIdentifier = config.source.groupIdentifier || '';
-  const displayCb = <T extends Dictionary>(item: T): string => {
-    return `${item[identifier]}`;
-  };
+  const displayCb = <T extends Dictionary>(item: T): string => `${item[identifier]}`;
   const display: (item: T, e?: MouseEvent | KeyboardEvent | null) => string = config.display || displayCb;
   const identity = config.source.identity || displayCb;
   const onSubmit: (e: Event, item?: T) => void = config.onSubmit || NOOP;
-  const dataTokens = config.source.dataTokens?.constructor === Array ? config.source.dataTokens : undefined;
+  const dataTokens = Array.isArray(config.source.dataTokens) ? config.source.dataTokens : undefined;
   const transform = config.source.transform || ((data) => data);
   const local = (config.source as LocalDataSource<T>).local || null;
   const remoteUrlType = typeof (config.source as RemoteDataSource<T>).remote?.url;
@@ -115,7 +111,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const computedInputStyle = window.getComputedStyle(input);
 
   // Wrapper element
-  const wrapper: HTMLDivElement = doc.createElement('div');
+  const wrapper: HTMLDivElement = document.createElement('div');
   // @deprecated config.className @todo: remove in v5
   wrapper.className = `typeahead-standalone${config.className ? ` ${config.className}` : ''}${
     classNames.wrapper ? ` ${classNames.wrapper}` : ''
@@ -240,11 +236,11 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       clear();
       clearListDOM();
 
-      const notFoundTemplateHtml = templates?.notFound && templates.notFound(resultSet);
+      const notFoundTemplateHtml = templates?.notFound?.(resultSet);
       if (!notFoundTemplateHtml) return true;
 
       const renderNotFoundTemplate = (html: string) => {
-        const notFoundEl = doc.createElement('div');
+        const notFoundEl = document.createElement('div');
         notFoundEl.classList.add(classNames.notFound);
         templatify(notFoundEl, html);
         listContainer.appendChild(notFoundEl);
@@ -283,7 +279,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     }
 
     // display spinner/loader
-    const loaderDiv = doc.createElement('div');
+    const loaderDiv = document.createElement('div');
     loaderDiv.classList.add(classNames.loader);
     templatify(loaderDiv, templates.loader());
     if (templates?.footer) {
@@ -304,7 +300,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // function for rendering typeahead suggestions
     const render = (item: T): HTMLDivElement => {
-      const itemElement = doc.createElement('div');
+      const itemElement = document.createElement('div');
       itemElement.classList.add(classNames.suggestion);
       itemElement.setAttribute('role', 'option');
       itemElement.setAttribute('aria-selected', 'false');
@@ -319,7 +315,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // function to render typeahead groups
     const renderGroup = (groupName: string): HTMLDivElement => {
-      const groupDiv = doc.createElement('div');
+      const groupDiv = document.createElement('div');
       groupDiv.classList.add(classNames.group);
       groupDiv.setAttribute('role', 'group');
       groupDiv.setAttribute('aria-label', groupName);
@@ -331,12 +327,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       return groupDiv;
     };
 
-    const fragment = doc.createDocumentFragment();
+    const fragment = document.createDocumentFragment();
     const prevGroups: string[] = [];
 
     // Add header template
     if (templates?.header) {
-      const headerDiv = doc.createElement('div');
+      const headerDiv = document.createElement('div');
       headerDiv.classList.add(classNames.header);
       headerDiv.setAttribute('role', 'presentation');
       const templateHtml = templatify(headerDiv, templates.header(resultSet));
@@ -369,12 +365,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       fragment.appendChild(div);
 
       // highlight matched text
-      config.highlight && hightlight(div, resultSet.query);
+      config.highlight && highlight(div, resultSet.query);
     }
 
     // Add footer template
     if (templates?.footer) {
-      const footerDiv = doc.createElement('div');
+      const footerDiv = document.createElement('div');
       footerDiv.classList.add(classNames.footer);
       footerDiv.setAttribute('role', 'presentation');
       const templateHtml = templatify(footerDiv, templates.footer(resultSet));
@@ -498,7 +494,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   };
 
   const focusEventHandler = (): void => {
-    if (prefetch && prefetch.when === 'onFocus') {
+    if (prefetch?.when === 'onFocus') {
       prefetchData();
     }
     startFetch();
@@ -512,8 +508,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (templates?.empty && !val.length) {
       const emptyHtml = templates.empty(resultSet);
       resultSet.query = '';
+
+      // inject default suggestions if they were updated in the empty() template
       if (resultSet.defaultItems?.length) {
-        // inject default suggestions
         resultSet.items = normalizer(resultSet.defaultItems, identifier) as T[];
         return update();
       }
@@ -521,10 +518,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       // inject empty html template only if default suggestions aren't provided
       clear();
       clearListDOM();
-      const emptyEl = doc.createElement('div');
-      emptyEl.classList.add(classNames.empty);
-      templatify(emptyEl, emptyHtml);
-      emptyHtml && listContainer.appendChild(emptyEl);
+
+      if (emptyHtml) {
+        const emptyEl = document.createElement('div');
+        emptyEl.classList.add(classNames.empty);
+        templatify(emptyEl, emptyHtml);
+        listContainer.appendChild(emptyEl);
+      }
+
       return show();
     }
 
@@ -567,9 +568,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       newItems.push(...suggestions); // merge suggestions
 
       const uniqueItems = {} as Dictionary<T>;
-      newItems.forEach((item) => {
+      for (const item of newItems) {
         uniqueItems[identity(item)] = item;
-      });
+      }
 
       suggestions = Object.values(uniqueItems);
       count = suggestions.length;
@@ -617,7 +618,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
           remote.wildcard || '',
           frozenInput
         ),
-        remote?.requestOptions
+        remote.requestOptions
       )
       .then(
         (data) => {
@@ -657,9 +658,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     // add new items to the search index
     trie.add(iterable, identifier, identity);
     if (dataTokens) {
-      dataTokens.forEach((token) => {
+      for (const token of dataTokens) {
         trie.add(iterable, token, identity);
-      });
+      }
     }
   }
 
@@ -723,36 +724,38 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * @param Elm The listContainer element
    * @param pattern the string to highlight
    */
-  const hightlight = (Elm: HTMLElement, pattern: string): void => {
+  const highlight = (Elm: HTMLElement, pattern: string): void => {
+    if (!pattern) return;
+
     const getRegex = (query: string, wordsOnly: boolean) => {
       const escapedQuery = escapeRegExp(query);
       const regexStr = wordsOnly ? '\\b(' + escapedQuery + ')\\b' : '(' + escapedQuery + ')';
       return new RegExp(regexStr, 'i');
     };
 
-    const hightlightTextNode = (textNode: Text) => {
+    const highlightTextNode = (textNode: Text) => {
       let match = regex.exec(textNode.data);
 
-      // check for diacritics if necessary
+      // Check for diacritics if necessary
       if (config.diacritics && !match) {
         match = regex.exec(diacritics(textNode.data));
       }
 
-      const wrapperNode = doc.createElement('span');
-      wrapperNode.className = classNames.highlight;
-
       if (match) {
+        const wrapperNode = document.createElement('span');
+        wrapperNode.className = classNames.highlight;
+
         const patternNode = textNode.splitText(match.index);
         patternNode.splitText(match[0].length);
         wrapperNode.appendChild(patternNode.cloneNode(true));
 
-        textNode?.parentNode?.replaceChild(wrapperNode, patternNode);
+        textNode.parentNode?.replaceChild(wrapperNode, patternNode);
+        return true;
       }
-
-      return !!match;
+      return false;
     };
 
-    const traverse = (el: HTMLElement | ChildNode, hightlightTextNode: (textNode: Text) => boolean) => {
+    const traverse = (el: HTMLElement | ChildNode, highlightTextNode: (textNode: Text) => boolean) => {
       const TEXT_NODE_TYPE = 3;
       let childNode;
 
@@ -760,15 +763,15 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
         childNode = el.childNodes[i];
 
         if (childNode.nodeType === TEXT_NODE_TYPE) {
-          i += hightlightTextNode(childNode as Text) ? 1 : 0;
+          i += highlightTextNode(childNode as Text) ? 1 : 0;
         } else {
-          traverse(childNode, hightlightTextNode);
+          traverse(childNode, highlightTextNode);
         }
       }
     };
 
     const regex = getRegex(pattern, false);
-    pattern && traverse(Elm, hightlightTextNode);
+    traverse(Elm, highlightTextNode);
   };
 
   /**
@@ -826,7 +829,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    * @param templateHtml The raw string representation of the html template
    */
   const templatify = (El: HTMLElement | DocumentFragment, templateHtml: string) => {
-    const template = doc.createElement('template');
+    const template = document.createElement('template');
     template.innerHTML = templateHtml;
     El.appendChild(template.content);
     return templateHtml;
@@ -835,7 +838,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const blurEventHandler = (): void => {
     // we need to delay clear, because when we click on an item, blur will be called before click and remove items from DOM
     setTimeout(() => {
-      if (doc.activeElement !== input) {
+      if (document.activeElement !== input) {
         clear();
       }
     }, 50);

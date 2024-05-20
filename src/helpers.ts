@@ -4,7 +4,7 @@ export const NOOP = (...args: unknown[]): void => undefined;
 
 export const escapeRegExp = (text: string): string => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 
-export const isObject = (item: unknown): boolean => {
+export const isObject = (item: unknown): item is Dictionary => {
   return item !== null && (item as Dictionary)?.constructor.name === 'Object';
 };
 
@@ -18,14 +18,13 @@ export const diacritics = (txt = '') => txt.normalize('NFD').replace(/\p{Diacrit
 /****** helpers specific to typeahead  *****/
 
 export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionary[] | T[], identifier: string): T[] => {
-  const length = listItems.length;
-  if (!length) return [];
+  if (!listItems.length) return [];
 
   // validate array of objects
   if (isObject(listItems[0])) {
     // verify if identifier exists (i.e. normalized already)
-    for (let x = 0; x < length; x++) {
-      if (!(identifier in (listItems[x] as Dictionary))) {
+    for (const item of listItems) {
+      if (!(identifier in (item as Dictionary))) {
         throw new Error('e03');
       }
     }
@@ -33,14 +32,9 @@ export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionar
   }
 
   // normalize array of strings
-  const normalizedData = (listItems as []).reduce(function (acc: Record<string, unknown>[], currentItem) {
-    acc.push({
-      [identifier]: currentItem && typeof currentItem === 'string' ? currentItem : JSON.stringify(currentItem),
-    });
-    return acc;
-  }, []);
-
-  return normalizedData as T[];
+  return (listItems as string[]).map((item) => ({
+    [identifier]: typeof item === 'string' ? item : JSON.stringify(item),
+  })) as T[];
 };
 
 /****** helpers specific to Trie  *****/
