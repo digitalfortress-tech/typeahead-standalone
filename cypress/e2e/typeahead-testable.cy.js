@@ -464,6 +464,11 @@ context('Typeahead', () => {
     cy.get('@hint').should('have.value', '');
   });
 
+  it('Highlights all words of multiple space-separated queries', () => {
+    cy.get('#input-eight').as('input8').clear().type('come th', { delay: 100 });
+    cy.get('.typeahead-test-eight .tt-highlight').should('have.length', 5);
+  });
+
   it('Displays suggestions for data-collisions with default identity function (identifier)', () => {
     cy.get('#input-nine').as('input9').type('sh', { delay: 100 });
     cy.get('.typeahead-test-nine .tt-list')

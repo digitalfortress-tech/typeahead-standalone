@@ -15,7 +15,7 @@ import type {
   ResultSet,
   typeaheadStyleClasses,
 } from './common.d.ts';
-import { diacritics, escapeRegExp, isObject, NOOP, normalizer } from './helpers.js';
+import { diacritics, escapeRegExp, isObject, NOOP, normalizer, spaceTokenizer } from './helpers.js';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper.js';
 import { Trie } from './trie/trie.js';
 import './style.less';
@@ -727,11 +727,14 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const highlight = (Elm: HTMLElement, pattern: string): void => {
     if (!pattern) return;
 
-    const getRegex = (query: string, wordsOnly: boolean) => {
-      const escapedQuery = escapeRegExp(query);
-      const regexStr = wordsOnly ? '\\b(' + escapedQuery + ')\\b' : '(' + escapedQuery + ')';
-      return new RegExp(regexStr, 'i');
+    const getRegex = (query: string) => {
+      const escapedQueries = spaceTokenizer(query).map((item) => escapeRegExp(item));
+      // @deprecated [selection by words]
+      // const regexStr = wordsOnly ? '\\b(' + escapedQueries.join('|') + ')\\b' : '(' + escapedQueries.join('|') + ')';
+      return new RegExp(`(${escapedQueries.join('|')})`, 'i');
     };
+
+    const regex = getRegex(pattern);
 
     const highlightTextNode = (textNode: Text) => {
       let match = regex.exec(textNode.data);
@@ -770,7 +773,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       }
     };
 
-    const regex = getRegex(pattern, false);
     traverse(Elm, highlightTextNode);
   };
 
