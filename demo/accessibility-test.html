@@ -140,13 +140,12 @@
           identifier: 'title',
           identity: (suggestion) => `${suggestion.id}`,
           // dataTokens: ['overview'],
-          transform: (data) => {
-            return data.results;
-          }
+          transform: (data) => data.results,
         },
-        debounceRemote: 200, // default -> 100ms
         highlight: true,
-        className: 'typeahead-accessibility-ex',
+        classNames: {
+          wrapper: 'typeahead-standalone typeahead-accessibility-ex',
+        },
         minLength: 1,
         limit: 10,
         templates: {

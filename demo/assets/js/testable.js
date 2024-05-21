@@ -296,7 +296,9 @@ const test1 = typeahead({
   source: {
     local: ['Gold', 'Green', 'Grey', 'Golden Brown'],
   },
-  className: 'typeahead-test-one',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-one',
+  }
 });
 test1.addToIndex(['Purple', 'Pink']);
 
@@ -307,7 +309,9 @@ const test2 = typeahead({
     local: colors,
     identifier: 'name',
   },
-  className: 'typeahead-test-two',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-two',
+  },
   minLength: 2,
   highlight: true,
   display: (selectedItem, e) => {
@@ -327,7 +331,9 @@ const test2A = typeahead({
     local: colors,
     identifier: 'name',
   },
-  className: 'typeahead-test-two-A',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-two-A',
+  },
   hint: false,
   preventSubmit: true,
 });
@@ -339,7 +345,9 @@ const test2B = typeahead({
     local: colors,
     identifier: 'name',
   },
-  className: 'typeahead-test-two-B',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-two-B',
+  },
   preventSubmit: true,
 });
 
@@ -351,7 +359,9 @@ const test3 = typeahead({
     identifier: 'name',
     groupIdentifier: 'group',
   },
-  className: 'typeahead-test-three',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-three',
+  },
   highlight: true,
   preventSubmit: true,
 });
@@ -373,7 +383,9 @@ const test3A = typeahead({
       return newData;
     },
   },
-  className: 'typeahead-test-three-A',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-three-A',
+  },
   highlight: true,
 });
 
@@ -394,7 +406,9 @@ const test3B = typeahead({
       return newData;
     },
   },
-  className: 'typeahead-test-three-B',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-three-B',
+  },
   highlight: true,
 });
 
@@ -406,7 +420,9 @@ const test4 = typeahead({
     identifier: 'name',
     groupIdentifier: 'group',
   },
-  className: 'typeahead-test-four',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-four',
+  },
   highlight: true,
   templates: {
     suggestion: (item, resultSet) => {
@@ -450,7 +466,9 @@ const test4A = typeahead({
     identifier: 'name',
     dataTokens: ['capital'],
   },
-  className: 'typeahead-test-fourA',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-fourA',
+  },
   highlight: true,
   templates: {
     suggestion: (item) => {
@@ -477,7 +495,9 @@ const test4B = typeahead({
     identifier: 'name',
     dataTokens: ['capital'],
   },
-  className: 'typeahead-test-fourB',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-fourB',
+  },
   highlight: true,
   templates: {
     suggestion: (item) => {
@@ -500,7 +520,9 @@ const test5 = typeahead({
     groupIdentifier: 'group',
     dataTokens: ['value'],
   },
-  className: 'typeahead-test-five',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-five',
+  },
   highlight: true,
 });
 
@@ -515,7 +537,9 @@ const test6 = typeahead({
     identifier: 'name',
     dataTokens: ['capital'],
   },
-  className: 'typeahead-test-six',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-six',
+  },
   highlight: true,
   templates: {
     suggestion: (item) => {
@@ -535,7 +559,9 @@ const test6andhalf = typeahead({
     identifier: 'name',
     dataTokens: ['capital'],
   },
-  className: 'typeahead-test-six-half',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-six-half',
+  },
   highlight: true,
   templates: {
     suggestion: (item) => {
@@ -558,7 +584,9 @@ const test7 = typeahead({
     identifier: 'name',
     dataTokens: ['capital'],
   },
-  className: 'typeahead-test-seven',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-seven',
+  },
   highlight: true,
   templates: {
     suggestion: (item) => {
@@ -575,7 +603,9 @@ const test8 = typeahead({
     identifier: 'title',
     dataTokens: ['artist', 'album'],
   },
-  className: 'typeahead-test-eight',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-eight',
+  },
   highlight: true,
   templates: {
     suggestion: (item) => {
@@ -601,7 +631,9 @@ const test9 = typeahead({
     groupIdentifier: 'group',
     dataTokens: ['value'],
   },
-  className: 'typeahead-test-nine',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-nine',
+  },
   highlight: true,
   limit: 10,
 });
@@ -622,7 +654,9 @@ const test10 = typeahead({
       },
     },
   },
-  className: 'typeahead-test-ten',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-ten',
+  },
   highlight: true,
   limit: 10,
 });
@@ -635,7 +669,9 @@ const test11 = typeahead({
     identifier: 'name',
     groupIdentifier: 'group',
   },
-  className: 'typeahead-test-eleven',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-eleven',
+  },
   highlight: true,
   onSubmit: (e, item) => {
     if (item && item.value) {
@@ -680,7 +716,9 @@ const test12 = typeahead({
       return `${item.title}##${item.artist}`;
     },
   },
-  className: 'typeahead-test-twelve',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-twelve',
+  },
   highlight: true,
   templates: {
     suggestion: (item) => {
@@ -720,7 +758,9 @@ const test13 = typeahead({
       'Le Kremlin-Bicêtre',
     ],
   },
-  className: 'typeahead-test-thirteen',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-thirteen',
+  },
   highlight: true,
   diacritics: true,
 });
@@ -737,7 +777,9 @@ const test14 = typeahead({
     local: colors,
     identifier: 'name',
   },
-  className: 'typeahead-test-fourteen',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-fourteen',
+  },
   highlight: true,
 });
 document.getElementById('input-fourteen').addEventListener('keyup', (evt) => {
@@ -756,7 +798,9 @@ const test15 = typeahead({
     local: colors,
     identifier: 'name',
   },
-  className: 'typeahead-test-fifteen',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-fifteen',
+  },
   highlight: true,
   preventSubmit: true,
 });
@@ -790,7 +834,9 @@ const test16 = typeahead({
     },
     identifier: 'name',
   },
-  className: 'typeahead-test-sixteen',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-sixteen',
+  },
   highlight: true,
   preventSubmit: true,
 });
@@ -812,6 +858,8 @@ const test17 = typeahead({
     },
     identifier: 'name',
   },
-  className: 'typeahead-test-seventeen',
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-seventeen',
+  },
   highlight: true,
 });
