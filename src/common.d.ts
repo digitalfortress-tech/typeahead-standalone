@@ -101,6 +101,8 @@ export interface RemoteDataSource<T> extends typeaheadDataSource<T> {
     url: string | ((query: string) => string);
     /** A string that gets replaced by the query string. Used only if the URL is a string */
     wildcard?: string;
+    /** The number of milliseconds to wait before sending a request to the server. Defaults to 200ms */
+    debounce?: number;
     /**
      * The Fetch API is used to query remote endpoints. You may provide an object of requestOptions to customize the outgoing request. By default the query type is GET
      * @example

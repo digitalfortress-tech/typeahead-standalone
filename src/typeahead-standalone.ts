@@ -26,7 +26,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   if (!isObject(config.source)) throw new Error('e02');
 
   const listContainer: HTMLDivElement = document.createElement('div');
-  const debounceXHR = config.debounceRemote || 100;
   const preventSubmit = config.preventSubmit || false;
   const minLen = config.minLength || 1;
   const hint = config.hint === false ? false : true;
@@ -84,7 +83,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   let remoteResponseCache: Dictionary = {};
 
   let selected: T | undefined;
-  let remoteDebounceTimer: number | undefined;
+  let remoteDebounceTimer: NodeJS.Timeout;
   let fetchInProgress = false;
   let storedInput = ''; // used only for keyboard navigation
 
@@ -193,11 +192,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   /**
    * Clear remote debounce timer if assigned
    */
-  const clearRemoteDebounceTimer = (): void => {
-    if (remoteDebounceTimer) {
-      window.clearTimeout(remoteDebounceTimer);
-    }
-  };
+  const clearRemoteDebounceTimer = (): void => remoteDebounceTimer && clearTimeout(remoteDebounceTimer);
 
   /**
    * Clear typeahead state and hide listContainer
@@ -538,11 +533,11 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
       update(); // update view
 
-      remoteDebounceTimer = window.setTimeout(function (): void {
+      remoteDebounceTimer = setTimeout(function (): void {
         if (resultSet.items.length < resultSet.limit && !fetchInProgress) {
           fetchDataFromRemote();
         }
-      }, debounceXHR);
+      }, remote?.debounce || 200);
     } else {
       resultSet.query = '';
       clear();
