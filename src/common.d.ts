@@ -269,7 +269,7 @@ export interface ResultSet<T extends Dictionary> {
   /** The default suggestions to be shown when the input search query is empty */
   defaultItems?: T[];
   /** A reference to the HTML Root that displays suggestions */
-  container?: HTMLSpanElement;
+  container?: HTMLDivElement;
   [key: string]: unknown;
 }
 
