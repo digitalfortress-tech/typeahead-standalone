@@ -127,13 +127,15 @@
   .typeahead-standalone .tt-notFound {
     text-align: center;
     font-size: 12px;
-    text-transform: uppercase;
     font-weight: bold;
     border-bottom: 1px solid #d8d8d8;
     position: sticky;
     top: 0;
     z-index: 10;
     background-color: #cf5667;
+  }
+  .typeahead-standalone .tt-notFound {
+    border-bottom: 0;
   }
 
   /* styling to ignore */
@@ -162,7 +164,6 @@
         return data.results;
       },
     },
-    debounceRemote: 200, // default -> 100ms
     highlight: true,
     className: 'typeahead-example',
     minLength: 1,
@@ -192,8 +193,10 @@
       </div>
     `;
       },
-      header: () => 'Superheroes',
-      notFound: () => 'Oops...Nothing Found 😪',
+      header: (data) => {
+        return `SUPERHEROES ${data.query ? `(Displaying ${data.items.length} of ${data.count})` : ""}`;
+      },
+      notFound: (data) => `Found <b>0</b> matching results for <b>"${data.query}"</b>`,
       empty: (resultSet) => {
         resultSet.defaultItems = [
           {

@@ -89,6 +89,7 @@ typeahead({
     remote: {
       url: 'https://remoteapi.com/%QUERY', // OR "url: (inputQuery: string) => `https://remoteapi.com/${inputQuery}`"
       wildcard: '%QUERY',
+      debounce: 300,      // optional, default => 200ms
       requestOptions: {}  // optional, default => undefined
     },
   }
@@ -103,11 +104,13 @@ typeahead({
           suggestions. The url can be a <b>string</b> or a <b>callback</b>. When it is used as a callback, it receives the input query as a parameter and should return a string.</li>
         <li><code>wildcard</code> <b>(<code>*</code>Required when url is a string)</b> - The string that is replaced with the
           user's input while executing the http request.</li>
+        <li><code>debounce</code> - A number representing the number of milliseconds to wait before executing a request to the remote endpoint. Defaults to 200ms.</li>
         <li><code>requestOptions</code> - By default, the <b>GET</b> method is used to make http requests. To use <b>POST</b> method, you can provide a
         <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options" title="Fetch API request options">requestOptions</a> property.</li>
       </ol>
       <p>
-        The response of the http requests is cached ensuring that no multiple/unnecessary requests are made for the same input/search query.
+        The response of the http requests is cached ensuring that <b>no multiple/unnecessary requests are made for the same input/search query</b>.
+        If needed, this cache can be cleared using the <a href="#references?id=api">reset API</a>.
       </p>
     </div>
     <div class="tab-pane fade" id="nav-prefetch" role="tabpanel" aria-labelledby="nav-prefetch-tab">
@@ -746,32 +749,7 @@ typeahead({
 </p>
 
 <hr>
-<h4><a href="#config?id=debounce-remote" id="debounce-remote" title="debounceRemote config param - typeahead-standalone.js" class="submenu-link section-link">11. ⏳ debounceRemote</h4></a>
-
-<p>
-  The <code>debounceRemote</code> <i>(Type: Integer)</i> config option is used to delay execution of
-  http requests (in milliseconds).
-</p>
-<div class="codeContainer">
-  <span class="lang">JS</span>
-  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
-  <pre class="hljs language-js">
-typeahead({
-  input: document.querySelector(".myInput"),
-  source: {
-    remote: {
-      // ...
-    }
-  },
-  debounceRemote: 300 // optional (in milliseconds)
-});</pre>
-</div>
-<p>
-  The default value of <code>debounceRemote</code> is set to <code>100</code>ms.
-</p>
-
-<hr>
-<h4><a href="#config?id=diacritics" id="diacritics" title="diacritis config param - typeahead-standalone.js" class="submenu-link section-link"> 12. <i class="fas fa-language"></i> diacritics</a></h4>
+<h4><a href="#config?id=diacritics" id="diacritics" title="diacritis config param - typeahead-standalone.js" class="submenu-link section-link"> 11. <i class="fas fa-language"></i> diacritics</a></h4>
 
 <p>
   The <code>diacritics</code> <i>(Type: Boolean)</i> config option is used to enable/disable
@@ -805,34 +783,8 @@ typeahead({
 </p>
 
 <hr>
-<h4><a href="#config?id=classname" id="classname" title="className config param - typeahead-standalone.js" class="submenu-link section-link">13. <i class="fas fa-code"></i> className</h4></a>
-
-<p>
-  <strong>@deprecated since 4.18.0. Will be removed in v5.0. Use the <a href="#config?id=classnames"
-      class="submenu-link section-link internal-section-link"><code>classNames</code> config option</a>
-    instead</strong><br>
-  The <code>className</code> <i>(Type: String)</i> config option is used add an additional class to the
-  container of typeahead-standalone. This is useful to add/override CSS.
-</p>
-<div class="codeContainer">
-  <span class="lang">JS</span>
-  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
-  <pre class="hljs language-js">
-typeahead({
-  input: document.querySelector(".myInput"),
-  source: {
-    // ...
-  },
-  className: "my-search-box" // optional
-});</pre>
-</div>
-<p>
-  The container has a class <code>typeahead-standalone</code> by default.
-</p>
-
-<hr>
 <h4><a href="#config?id=classnames" id="classnames" title="templates config param - typeahead-standalone.js"
-    class="submenu-link section-link">13A. <i class="fas fa-code"></i> classNames</h4>
+    class="submenu-link section-link">12. <i class="fas fa-code"></i> classNames</h4>
 </h4></a>
 <p>
   The <code>classNames</code> <i>(Type: Object)</i> config option simply allows you to replace the default class names
@@ -845,7 +797,7 @@ typeahead({
   <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
   <pre class="hljs language-js">
 const classNames = {
-  wrapper: '', /* main container element */
+  wrapper: 'typeahead-standalone', /* main container element */
   input: 'tt-input',
   hint: 'tt-hint',
   highlight: 'tt-highlight',
@@ -874,6 +826,7 @@ typeahead({
     // ...
   },
   classNames: {
+    wrapper: 'typeahead-standalone my-custom-container-class',
     input: 'my-custom-input-class' // this class is used instead of tt-input
   }
 });</pre>
@@ -881,10 +834,17 @@ typeahead({
 <p>
   <b>Note:</b> When you use a custom class name, it <b>replaces</b> the default class name and hence all default styles
   associated with that class will disappear.
+
+  <p>
+    An exception to this is the <code>wrapper</code> class which can accept space-separated classnames.
+    If you are using the default styles provided with this library and wish to override the wrapper class, you must also
+    include <b>typeahead-standalone</b> as one of the classnames (as seen in the code snippet above).
+    This is because the default styles are applied using this root classname.
+  </p>
 </p>
 
 <hr>
-<h4><a href="#config?id=templates" id="templates" title="templates config param - typeahead-standalone.js" class="submenu-link section-link">14. 🎨 templates</h4></a>
+<h4><a href="#config?id=templates" id="templates" title="templates config param - typeahead-standalone.js" class="submenu-link section-link">13. 🎨 templates</h4></a>
 
 <p>
   The <code>templates</code> config option is used to customize the

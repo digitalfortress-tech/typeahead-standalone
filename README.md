@@ -123,7 +123,6 @@ You can pass the following config options to `typeahead-standalone`:
 |`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`) *@deprecated. Will be removed in v5.0. Use classNames config option*|`undefined`|
 |`classNames: Object`|The classNames object can be used to set custom classes for every html element that is injected in the DOM. [Details](#classNamesLink) |`undefined`|
 |`templates`|An object containing templates for header, footer, suggestion, group and notFound state. See [templates section](#templates) for clarification |`undefined`|
-|`debounceRemote`|Delays execution of making Ajax requests (in milliseconds) |`100`|
 |`preventSubmit`|If your input element is used inside a form element, this flag allows to prevent the default submit action when the ENTER key is pressed.|`false`|
 |`onSubmit(event, selectedItem?)`|When you want to use typeahead outside a form element, this handler can be used to process/submit the input value. Gets triggered on hitting the ENTER key. First parameter is the keyboard Event and the 2nd parameter is the selected item or undefined if no item was selected|`undefined`|
 |`display(selectedItem, event?) => string`|This callback is executed when the user selects an item from the suggestions. The current suggestion/item is passed as a parameter and it **must return a string** which is set as the input's value. The 2nd *optional* parameter `event` is a Mouse/Keyboard event which can be used to track user interaction or for analytics. It defaults to `null`. |Returns the string representation of the selected item|
@@ -139,6 +138,7 @@ source: {
   remote: {
     url: 'https://remoteapi.com/%QUERY', // OR "url: (inputQuery: string) => `https://remoteapi.com/${inputQuery}`"
     wildcard: '%QUERY',
+    debounce: 300             // optional, default => 300ms
     requestOptions: {}        // optional, default => undefined
   },
   prefetch: {
@@ -162,6 +162,7 @@ source: {
 - **Prefetch**: The `prefetch` data source is used when you want to preload suggestions from a remote endpoint in advance. You must provide the `url` parameter that points to the endpoint that will return suggestions. You can provide an optional `when` parameter which defines when the prefetch request should occur. It defaults to `onInit` meaning that suggestions will be preloaded as soon as typeahead gets initialized. You can set it to `onFocus` which will cause suggestions to be preloaded only when the user focuses the search input box. The `done` flag is optional & can be used to disable the prefetch request programmatically. Its default value is `false`. It gets set to `true` automatically when data is prefetched for the first time (to prevent multiple network requests). By setting `done: true`, the prefetch request will not occur. An example use-case to do this is when you are using *localStorage* to store suggestions but the *localStorage* already had stored suggestions previously thereby eliminating the need to prefetch data again. The `process(suggestions)` callback is optional. It gets executed after the prefetch request occurs. It receives the transformed suggestions as a parameter & as an example can be used to store the received suggestions in *localStorage* to be used later.
 - **Remote**: The `remote` data source is used when you want to interrogate a remote endpoint to fetch data.
 - **Wildcard**: While using the `remote` data source, you must set the `url` and the `wildcard` options. `wildcard` will be replaced with the search string while executing the request.
+- **Debounce**: The `debounce` option is used to delay execution of http requests (in milliseconds). It is optional & it defaults to 200ms.
 - **RequestOptions**: The [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) API is used to query remote endpoints.  You may provide an object of [requestOptions](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options) to customize the outgoing request. By default the query type is `GET`.
 - **Transform**: You can provide an optional `transform()` function which gets called immediately after the prefetch/remote endpoint returns a response. You can modify the response before it gets processed by typeahead.
 - **Identifier**: An `identifier` is required when the data source is an array of objects. An `identifier` is used to identify which property of the object should be used as the text for displaying the suggestions. For example, lets say the data source is something like this:

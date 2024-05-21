@@ -533,7 +533,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
       update(); // update view
 
-      remoteDebounceTimer = setTimeout(function (): void {
+      remoteDebounceTimer = setTimeout(() => {
         if (resultSet.items.length < resultSet.limit && !fetchInProgress) {
           fetchDataFromRemote();
         }

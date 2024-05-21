@@ -249,8 +249,6 @@ export interface typeaheadConfig<T extends Dictionary> {
    * @param selectedItem  The selected item/suggestion or undefined if no item was selected
    */
   onSubmit?: (e: Event, selectedItem?: T) => void;
-  /** Delays execution of making Ajax requests (in milliseconds). Default: 100 ms */
-  debounceRemote?: number;
   /** If your input element is used inside a form element, this flag allows to prevent the default submit action when the ENTER key is pressed. Defaults to false */
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
   /** The source of suggestions. You are required to use at least 1 source - local, remote or prefetch. You are free to use multiple/all sources together */
