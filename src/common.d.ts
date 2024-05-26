@@ -23,8 +23,8 @@ export interface typeaheadDataSource<T> {
    * @returns A string that is unique to be able to distinguish between available suggestions
    */
   identity?: (selectedItem: T) => string;
-  /** groupIdentifier is used to group suggestions by a given property in an array of source data */
-  groupIdentifier?: string;
+  /** groupKey is used to group suggestions by a given property in an array of source data */
+  groupKey?: string;
 }
 
 export interface LocalDataSource<T> extends typeaheadDataSource<T> {

@@ -299,7 +299,8 @@ typeahead({
 <div class="tabContainer padding-v15">
   <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      <a class="nav-link active simple-link tab-link" id="nav-gidentifier-tab" data-toggle="tab" href="#nav-gidentifier" role="tab" aria-controls="nav-gidentifier" aria-selected="true">groupIdentifier</a>
+      <a class="nav-link active simple-link tab-link" id="nav-gidentifier-tab" data-toggle="tab" href="#nav-gidentifier"
+        role="tab" aria-controls="nav-gidentifier" aria-selected="true">groupKey</a>
       <a class="nav-link simple-link tab-link" id="nav-dtokens-tab" data-toggle="tab" href="#nav-dtokens" role="tab" aria-controls="nav-dtokens" aria-selected="false">dataTokens</a>
       <a class="nav-link simple-link tab-link" id="nav-identity-tab" data-toggle="tab" href="#nav-identity" role="tab" aria-controls="nav-identity" aria-selected="false">identity</a>
       <a class="nav-link simple-link tab-link" id="nav-transform-tab" data-toggle="tab" href="#nav-transform" role="tab" aria-controls="nav-transform" aria-selected="false">transform</a>
@@ -308,7 +309,7 @@ typeahead({
   <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-gidentifier" role="tabpanel" aria-labelledby="nav-gidentifier-tab">
       <p>
-        The <code>groupIdentifier</code> source config option is used when you wish to group suggestions together
+        The <code>groupKey</code> source config option is used when you wish to group suggestions together
       </p>
       <div class="codeContainer">
         <span class="lang">JS</span>
@@ -327,13 +328,13 @@ typeahead({
   source: {
     local: colors,
     identifier: "color",
-    groupIdentifier: "shade"  // optional
+    groupKey: "shade" // optional
   }
 });</pre>
       </div>
       <p>
         In the above example, the colors <i>Green</i> and <i>Olive</i> will grouped together & will appear under the label <i>"Greenish"</i>
-        (i.e. value of the property defined by <code> groupIdentifier</code> option)
+        (i.e. value of the property defined by <code> groupKey</code> option)
         whereas the color Yellow will have no group.
       </p>
     </div>

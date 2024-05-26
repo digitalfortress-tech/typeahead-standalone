@@ -33,7 +33,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
   const trie = Trie({ hasDiacritics: config.diacritics });
   const keys = Array.isArray(config.source.keys) ? config.source.keys : ['label']; // "label" is the default key
-  const groupIdentifier = config.source.groupIdentifier || '';
+  const groupKey = config.source.groupKey || '';
   const displayCb = <T extends Dictionary>(item: T): string => `${item[keys[0]]}`;
   const display: (item: T, e?: MouseEvent | KeyboardEvent | null) => string = config.display || displayCb;
   const identity = config.source.identity || displayCb;
@@ -335,9 +335,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       if (index === resultSet.limit) break;
 
       // attach group if available
-      if (item[groupIdentifier] && !prevGroups.includes(item[groupIdentifier] as string)) {
-        prevGroups.push(item[groupIdentifier] as string);
-        const groupDiv = renderGroup(item[groupIdentifier] as string);
+      if (item[groupKey] && !prevGroups.includes(item[groupKey] as string)) {
+        prevGroups.push(item[groupKey] as string);
+        const groupDiv = renderGroup(item[groupKey] as string);
         fragment.appendChild(groupDiv);
       }
 
@@ -571,7 +571,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     sortByStartingLetter(suggestions);
 
     // if suggestions need to be grouped, sort them by group
-    if (groupIdentifier) {
+    if (groupKey) {
       sortByGroup(suggestions);
     }
 
@@ -688,18 +688,18 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const sortByGroup = (suggestions: T[]) => {
     suggestions.sort((a: Dictionary, b: Dictionary) => {
       // if no group identifier was found, do not sort
-      if (!a[groupIdentifier] && !b[groupIdentifier]) return 0;
-      if (!a[groupIdentifier]) {
+      if (!a[groupKey] && !b[groupKey]) return 0;
+      if (!a[groupKey]) {
         return -1;
       }
-      if (!b[groupIdentifier]) {
+      if (!b[groupKey]) {
         return 1;
       }
       // sort in ascending order of group name
-      if ((a[groupIdentifier] as string) < (b[groupIdentifier] as string)) {
+      if ((a[groupKey] as string) < (b[groupKey] as string)) {
         return -1;
       }
-      if ((a[groupIdentifier] as string) > (b[groupIdentifier] as string)) {
+      if ((a[groupKey] as string) > (b[groupKey] as string)) {
         return 1;
       }
 

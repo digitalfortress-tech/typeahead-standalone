@@ -143,7 +143,7 @@ if (dev) {
     source: {
       local: dataset,
       identifier: 'name',
-      groupIdentifier: 'group',
+      groupKey: 'group',
       dataTokens: ['value'],
       // remote: {
       //   url: 'https://restcountries.com/v2/name/%QUERY',

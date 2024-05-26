@@ -161,8 +161,8 @@
               <b class="underline">USING GROUPS</b>:
               Lets say you wish to group colors by their shade. We will use the source as <code>source: colors2</code>. Since
               <code>colors2</code> is an array of objects, we will set the <code>identifier: 'name'</code> as explained above. Now
-              to group colors by their shade, we need to set the <b>groupIdentifier</b> property which represents the name of the
-              group to be used. So, we set <code>groupIdentifier: 'shade'</code>. Once again, when you try searching for
+              to group colors by their shade, we need to set the <b>groupKey</b> property which represents the name of the
+              group to be used. So, we set <code>groupKey: 'shade'</code>. Once again, when you try searching for
               <b>"B"</b>, you should see some colors grouped by their shade. Also, if you notice, the color "<i>Brown</i>" has no
               group since it has no "<i>shade</i>" property.
             </li>
@@ -186,7 +186,7 @@
               source: {
               local: colors1, // try using "colors2"
               // identifier: 'name',
-              // groupIdentifier: 'shade',
+              // groupKey: 'shade',
               }
             });
           </div>
@@ -321,7 +321,7 @@
                 <b class="underline">Group</b>:
                 The <code>group</code> template is a function that receives the name of the group as a parameter. In the
                 result tab below, when you start typing "<b>Bl</b>", you should see several suggestions which are arranged by their
-                group (<code>groupIdentifier</code>). This template allows you to modify the styling of the group's element.
+                group (<code>groupKey</code>). This template allows you to modify the styling of the group's element.
               </li>
               <li>
                 <b class="underline">Not Found</b>:

@@ -357,7 +357,7 @@ const test3 = typeahead({
   source: {
     local: colors,
     keys: ['name'],
-    groupIdentifier: 'group',
+    groupKey: 'group',
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-three',
@@ -418,7 +418,7 @@ const test4 = typeahead({
   source: {
     local: colors,
     keys: ['name'],
-    groupIdentifier: 'group',
+    groupKey: 'group',
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-four',
@@ -514,7 +514,7 @@ const test5 = typeahead({
   input: document.getElementById('input-five'),
   source: {
     local: colors,
-    groupIdentifier: 'group',
+    groupKey: 'group',
     keys: ['name', 'value'],
   },
   classNames: {
@@ -621,7 +621,7 @@ const test9 = typeahead({
   source: {
     local: colorsCollision,
     keys: ['name', 'value'],
-    groupIdentifier: 'group',
+    groupKey: 'group',
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-nine',
@@ -658,7 +658,7 @@ const test11 = typeahead({
   source: {
     local: colors,
     keys: ['name'],
-    groupIdentifier: 'group',
+    groupKey: 'group',
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-eleven',
