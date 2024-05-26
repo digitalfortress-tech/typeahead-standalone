@@ -39,4 +39,4 @@ export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionar
 
 /****** helpers specific to Trie  *****/
 
-export const spaceTokenizer = (tokenString: string): string[] => tokenString.trim().split(/\s+/);
+export const spaceTokenizer = (tokenString: string): string[] => tokenString.split(/\s+/);

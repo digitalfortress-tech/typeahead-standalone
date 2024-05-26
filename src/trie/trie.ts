@@ -4,7 +4,7 @@ import { spaceTokenizer, diacritics } from '../helpers.js';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
 export const Trie: TrieType<any> = (config = {}) => {
-  const { hasDiacritics } = config;
+  const { hasDiacritics, tokenizer } = config;
   let root: Record<string, unknown> = {};
 
   // marks the end of a string
@@ -14,13 +14,13 @@ export const Trie: TrieType<any> = (config = {}) => {
    * Returns data/query tokens
    */
   function tokenize(value = '') {
-    value = `${value}`; // coerce to string
+    value = `${value}`.trim(); // coerce to string and trim
 
     if (hasDiacritics) {
       value = diacritics(value);
     }
     // make search case insensitive
-    return spaceTokenizer(value.toLowerCase());
+    return (tokenizer || spaceTokenizer)(value.toLowerCase());
   }
 
   /**

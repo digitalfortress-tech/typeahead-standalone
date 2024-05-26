@@ -25,6 +25,8 @@ export interface typeaheadDataSource<T> {
   identity?: (selectedItem: T) => string;
   /** groupKey is used to group suggestions by a given property in an array of source data */
   groupKey?: string;
+
+  tokenizer?: (item: string) => string[];
 }
 
 export interface LocalDataSource<T> extends typeaheadDataSource<T> {
@@ -240,6 +242,14 @@ export interface typeaheadConfig<T extends Dictionary> {
   /** Activate language diacritics i.e. search by converting accented characters into their non-accented counterpart. Defaults to false */
   diacritics?: boolean;
   /**
+   * A function that creates tokens from the provided string.
+   * The default implementation splits the given strings by space characters (tabs, new lines or plain spaces).
+   * The tokenizer is used both on the query and also on the way the data is stored.
+   * @param str The input/data string
+   * @returns An array of string tokens
+   */
+  tokenizer?: (str: string) => string[];
+  /**
    * This callback is executed when the user selects an item from the suggestions. The current suggestion/item is passed as a parameter and it must return a string which is set as the input's value.
    * It is an optional property. When the suggestions are a list of strings, it uses the matched string as the default value whereas when the suggestions are a list of objects, it uses the text value of the first key "keys[0]" ({@link typeaheadDataSource.keys}) property as a default value.
    * @param selectedItem The current/selected item
@@ -257,7 +267,7 @@ export interface typeaheadConfig<T extends Dictionary> {
   preventSubmit?: boolean; // Prevents automatic form submit when ENTER is pressed
   /** The source of suggestions. You are required to use at least 1 source - local, remote or prefetch. You are free to use multiple/all sources together */
   source: LocalDataSource<T> | PrefetchDataSource<T> | RemoteDataSource<T>;
-  /** Templates that allow you to customise styling */
+  /** Templates that allow you to return custom HTML and also to customise styling */
   templates?: typeaheadHtmlTemplates<T>;
 }
 

@@ -185,3 +185,28 @@ describe('Trie algorithm', () => {
     expect(suggestions).toHaveLength(1);
   });
 });
+
+it('handles custom tokenizer correctly', () => {
+  // custom hypen tokenizer
+  const trie_custom1 = Trie({
+    tokenizer: (data) => data.split(/-/),
+  });
+  const items = ['May-June', 'Dec May', 'August-Sept', 'Sept-May'];
+  trie_custom1.add(items);
+  let { suggestions } = trie_custom1.search('May');
+  expect(suggestions).toStrictEqual(['May-June', 'Sept-May']);
+
+  // custom hypen+space tokenizer
+  const trie_custom2 = Trie({
+    tokenizer: (data) => data.split(/\s+|-/),
+  });
+  trie_custom2.add(items);
+  ({ suggestions } = trie_custom2.search('May'));
+  expect(suggestions).toStrictEqual(['May-June', 'Dec May', 'Sept-May']);
+
+  // default tokenizer
+  const trie = Trie();
+  trie.add(items);
+  ({ suggestions } = trie.search('May'));
+  expect(suggestions).toStrictEqual(['Dec May', 'May-June']);
+});

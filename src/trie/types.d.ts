@@ -13,6 +13,7 @@ export interface TrieAPI<T extends Dictionary> {
 
 export interface TrieConfig {
   hasDiacritics?: boolean;
+  tokenizer?: (query: string) => string[];
 }
 
 export type TrieType<T extends Dictionary> = (config?: TrieConfig) => TrieAPI<T>;

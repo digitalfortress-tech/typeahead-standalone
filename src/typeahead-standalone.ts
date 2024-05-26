@@ -30,8 +30,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const minLen = config.minLength || 1;
   const hint = config.hint === false ? false : true;
   const autoSelect = config.autoSelect || false;
+  const tokenizer = config.tokenizer || spaceTokenizer;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
-  const trie = Trie({ hasDiacritics: config.diacritics });
   const keys = Array.isArray(config.source.keys) ? config.source.keys : ['label']; // "label" is the default key
   const groupKey = config.source.groupKey || '';
   const displayCb = <T extends Dictionary>(item: T): string => `${item[keys[0]]}`;
@@ -70,6 +70,9 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
   // validate presence of atleast one data-source
   if (!local && !prefetch && !remote) throw new Error('e02');
+
+  // initialise trie if atleast 1 source exists
+  const trie = Trie({ hasDiacritics: config.diacritics, tokenizer });
 
   const resultSet: ResultSet<T> = {
     query: '',
@@ -716,7 +719,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (!pattern) return;
 
     const getRegex = (query: string) => {
-      const escapedQueries = spaceTokenizer(query).map((item) => escapeRegExp(item));
+      const escapedQueries = tokenizer(query.trim()).map((item) => escapeRegExp(item));
       // @deprecated [selection by words]
       // const regexStr = wordsOnly ? '\\b(' + escapedQueries.join('|') + ')\\b' : '(' + escapedQueries.join('|') + ')';
       return new RegExp(`(${escapedQueries.join('|')})`, 'i');
