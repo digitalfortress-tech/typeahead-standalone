@@ -307,7 +307,7 @@ const test2 = typeahead({
   input: document.getElementById('input-two'),
   source: {
     local: colors,
-    identifier: 'name',
+    keys: ['name'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-two',
@@ -329,7 +329,7 @@ const test2A = typeahead({
   input: document.getElementById('input-two-A'),
   source: {
     local: colors,
-    identifier: 'name',
+    keys: ['name'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-two-A',
@@ -343,7 +343,7 @@ const test2B = typeahead({
   input: document.getElementById('input-two-B'),
   source: {
     local: colors,
-    identifier: 'name',
+    keys: ['name'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-two-B',
@@ -356,7 +356,7 @@ const test3 = typeahead({
   input: document.getElementById('input-three'),
   source: {
     local: colors,
-    identifier: 'name',
+    keys: ['name'],
     groupIdentifier: 'group',
   },
   classNames: {
@@ -374,7 +374,7 @@ const test3A = typeahead({
       url: 'https://example.com/get-suggestions',
       when: 'onFocus',
     },
-    identifier: 'id',
+    keys: ['id'],
     transform: (data) => {
       const newData = [];
       data.forEach((element) => {
@@ -397,7 +397,7 @@ const test3B = typeahead({
       url: 'https://example.com/get-suggestions/%QUERY',
       wildcard: '%QUERY',
     },
-    identifier: 'id',
+    keys: ['id'],
     transform: (data) => {
       const newData = [];
       data.forEach((element) => {
@@ -417,7 +417,7 @@ const test4 = typeahead({
   input: document.getElementById('input-four'),
   source: {
     local: colors,
-    identifier: 'name',
+    keys: ['name'],
     groupIdentifier: 'group',
   },
   classNames: {
@@ -463,8 +463,7 @@ const test4A = typeahead({
       url: () => 'https://restcountries.com/v2/name/%QUERY',
       wildcard: '%QUERY',
     },
-    identifier: 'name',
-    dataTokens: ['capital'],
+    keys: ['name', 'capital'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-fourA',
@@ -492,8 +491,7 @@ const test4B = typeahead({
       url: () => 'https://restcountries.com/v2/name/%QUERY',
       wildcard: '%QUERY',
     },
-    identifier: 'name',
-    dataTokens: ['capital'],
+    keys: ['name', 'capital'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-fourB',
@@ -516,9 +514,8 @@ const test5 = typeahead({
   input: document.getElementById('input-five'),
   source: {
     local: colors,
-    identifier: 'name',
     groupIdentifier: 'group',
-    dataTokens: ['value'],
+    keys: ['name', 'value'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-five',
@@ -534,8 +531,7 @@ const test6 = typeahead({
       url: 'https://restcountries.com/v2/name/%QUERY',
       wildcard: '%QUERY',
     },
-    identifier: 'name',
-    dataTokens: ['capital'],
+    keys: ['name', 'capital'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-six',
@@ -556,8 +552,7 @@ const test6andhalf = typeahead({
       url: () => 'https://restcountries.com/v2/name/%QUERY?test1=data1&test2=data2',
       wildcard: '%QUERY',
     },
-    identifier: 'name',
-    dataTokens: ['capital'],
+    keys: ['name', 'capital'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-six-half',
@@ -581,8 +576,7 @@ const test7 = typeahead({
         document.querySelector('.prefetch_process_cb').innerHTML = suggestions[0].alpha3Code;
       },
     },
-    identifier: 'name',
-    dataTokens: ['capital'],
+    keys: ['name', 'capital'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-seven',
@@ -600,8 +594,7 @@ const test8 = typeahead({
   input: document.getElementById('input-eight'),
   source: {
     local: songs,
-    identifier: 'title',
-    dataTokens: ['artist', 'album'],
+    keys: ['title', 'artist', 'album'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-eight',
@@ -627,9 +620,8 @@ const test9 = typeahead({
   input: document.getElementById('input-nine'),
   source: {
     local: colorsCollision,
-    identifier: 'name',
+    keys: ['name', 'value'],
     groupIdentifier: 'group',
-    dataTokens: ['value'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-nine',
@@ -642,8 +634,7 @@ const test9 = typeahead({
 const test10 = typeahead({
   input: document.getElementById('input-ten'),
   source: {
-    identifier: 'name',
-    dataTokens: ['value'],
+    keys: ['name', 'value'],
     remote: {
       url: 'https://restcountries.com/v2/name/%QUERY',
       wildcard: '%QUERY',
@@ -666,7 +657,7 @@ const test11 = typeahead({
   input: document.getElementById('input-eleven'),
   source: {
     local: colors,
-    identifier: 'name',
+    keys: ['name'],
     groupIdentifier: 'group',
   },
   classNames: {
@@ -710,8 +701,7 @@ const test12 = typeahead({
         album: 'Merry Christmas',
       },
     ],
-    identifier: 'title',
-    dataTokens: ['artist', 'album'],
+    keys: ['title', 'artist', 'album'],
     identity: (item) => {
       return `${item.title}##${item.artist}`;
     },
@@ -775,7 +765,7 @@ const test14 = typeahead({
   input: El14,
   source: {
     local: colors,
-    identifier: 'name',
+    keys: ['name'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-fourteen',
@@ -796,7 +786,7 @@ const test15 = typeahead({
   input: El15,
   source: {
     local: colors,
-    identifier: 'name',
+    keys: ['name'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-fifteen',
@@ -832,7 +822,7 @@ const test16 = typeahead({
       url: 'https://restcountries.com/v2/name/%QUERY',
       wildcard: '%QUERY',
     },
-    identifier: 'name',
+    keys: ['name'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-sixteen',
@@ -856,7 +846,7 @@ const test17 = typeahead({
         }, 1000);
       },
     },
-    identifier: 'name',
+    keys: ['name'],
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-seventeen',

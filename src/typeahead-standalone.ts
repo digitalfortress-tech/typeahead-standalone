@@ -32,13 +32,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const autoSelect = config.autoSelect || false;
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
   const trie = Trie({ hasDiacritics: config.diacritics });
-  const identifier = config.source.identifier || 'label'; // label is the default identifier
+  const keys = Array.isArray(config.source.keys) ? config.source.keys : ['label']; // "label" is the default key
   const groupIdentifier = config.source.groupIdentifier || '';
-  const displayCb = <T extends Dictionary>(item: T): string => `${item[identifier]}`;
+  const displayCb = <T extends Dictionary>(item: T): string => `${item[keys[0]]}`;
   const display: (item: T, e?: MouseEvent | KeyboardEvent | null) => string = config.display || displayCb;
   const identity = config.source.identity || displayCb;
   const onSubmit: (e: Event, item?: T) => void = config.onSubmit || NOOP;
-  const dataTokens = Array.isArray(config.source.dataTokens) ? config.source.dataTokens : undefined;
   const transform = config.source.transform || ((data) => data);
   const local = (config.source as LocalDataSource<T>).local || null;
   const remoteUrlType = typeof (config.source as RemoteDataSource<T>).remote?.url;
@@ -99,7 +98,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   }
 
   const addToIndex = (suggestions: string[] | Dictionary[] | T[] = []) => {
-    updateSearchIndex(normalizer(suggestions, identifier) as T[]);
+    updateSearchIndex(normalizer(suggestions, keys[0]) as T[]);
   };
 
   // if local source exists, add the suggestions to the index
@@ -155,7 +154,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       .then(
         (data) => {
           transformed = transform(data) as T[];
-          transformed = normalizer(transformed, identifier) as T[];
+          transformed = normalizer(transformed, keys[0]) as T[];
           updateSearchIndex(transformed);
         },
         (reject) => {
@@ -300,7 +299,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       if (templates?.suggestion) {
         templatify(itemElement, templates.suggestion(item, resultSet));
       } else {
-        itemElement.textContent = (item[identifier] as string) || '';
+        itemElement.textContent = (item[keys[0]] as string) || '';
       }
       return itemElement;
     };
@@ -503,7 +502,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
       // inject default suggestions if they were updated in the empty() template
       if (resultSet.defaultItems?.length) {
-        resultSet.items = normalizer(resultSet.defaultItems, identifier) as T[];
+        resultSet.items = normalizer(resultSet.defaultItems, keys[0]) as T[];
         return update();
       }
 
@@ -615,7 +614,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       .then(
         (data) => {
           transformed = transform(data) as T[];
-          transformed = normalizer(transformed, identifier) as T[];
+          transformed = normalizer(transformed, keys[0]) as T[];
           updateSearchIndex(transformed);
         },
         (reject) => {
@@ -648,11 +647,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     if (!iterable.length) return;
 
     // add new items to the search index
-    trie.add(iterable, identifier, identity);
-    if (dataTokens) {
-      for (const token of dataTokens) {
-        trie.add(iterable, token, identity);
-      }
+    for (const token of keys) {
+      trie.add(iterable, token, identity);
     }
   }
 
@@ -662,8 +658,8 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const sortByStartingLetter = (suggestions: T[]): void => {
     const query = resultSet.query.toLowerCase();
     suggestions.sort((one: Dictionary, two: Dictionary) => {
-      const a = (one[identifier] as string).toLowerCase();
-      const b = (two[identifier] as string).toLowerCase();
+      const a = (one[keys[0]] as string).toLowerCase();
+      const b = (two[keys[0]] as string).toLowerCase();
 
       const startsWithA = a.startsWith(query);
       const startsWithB = b.startsWith(query);

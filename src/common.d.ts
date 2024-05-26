@@ -9,16 +9,20 @@ export interface typeaheadDataSource<T> {
    * @returns The transformed data
    */
   transform?: (data: string[] | Dictionary[]) => string[] | Dictionary[];
-  /** An identifier is required when the data source format is an array of objects. An identifier is used to identify which property of the object should be used as the text for displaying the suggestions. Defaults to "label" */
-  identifier?: 'label' | string;
+  /**
+   * Keys are used when the source is an array of objects to identify the properties
+   * whose value should be added to the search index.
+   * When source is an array of objects, atleast one key is required to be provided.
+   * By default, the value associated with the first key is used to display the suggestions
+   * which can be overriden by using templates - {@link typeaheadHtmlTemplates}.
+   */
+  keys?: string[];
   /**
    * A callback to ensure that all available suggestions are unique. Defaults to using the "display" callback defined in typehead's config.
    * @param selectedItem The selected suggestion
    * @returns A string that is unique to be able to distinguish between available suggestions
    */
   identity?: (selectedItem: T) => string;
-  /** dataTokens is used to add additional properties of the source data to the search index */
-  dataTokens?: string[];
   /** groupIdentifier is used to group suggestions by a given property in an array of source data */
   groupIdentifier?: string;
 }

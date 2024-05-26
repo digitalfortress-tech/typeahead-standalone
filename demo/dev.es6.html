@@ -151,12 +151,9 @@
         url: 'https://raw.githubusercontent.com/digitalfortress-tech/typeahead-standalone/master/docs/assets/json/superheroes.json',
         // when: 'onFocus', // default -> 'onInit'
       },
-      identifier: 'title',
+      keys: ['title'], /* ['title', 'overview'] */
       identity: (suggestion) => `${suggestion.id}`,
-      // dataTokens: ['overview'],
-      transform: (data) => {
-        return data.results;
-      },
+      transform: (data) => data.results,
     },
     highlight: true,
     className: 'typeahead-example',
