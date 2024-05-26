@@ -612,5 +612,17 @@ context('Typeahead', () => {
     cy.get('@list').should('not.exist');
   });
 
+  it('tokenizer: should tokenize only hyphenated words', () => {
+    cy.get('#input-eighteen').as('input18').type('ca', { delay: 100 });
+    cy.get('.typeahead-test-eighteen .tt-list').as('list').should('not.be.visible');
+
+    cy.get('@input18').clear().type('ch', { delay: 100 });
+    cy.get('@list').should('exist');
+    cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'editor-in-chief');
+
+    cy.get('@input18').clear().type('fa', { delay: 100 });
+    cy.get('@list').children('.tt-suggestion').should('have.length', 3);
+  });
+
   // https://on.cypress.io/interacting-with-elements
 });

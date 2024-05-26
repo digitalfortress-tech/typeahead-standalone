@@ -853,3 +853,30 @@ const test17 = typeahead({
   },
   highlight: true,
 });
+
+// eslint-disable-next-line no-undef
+const test18 = typeahead({
+  input: document.getElementById('input-eighteen'),
+  source: {
+    local: [
+      { name: 'blue-collar' },
+      { name: 'world-famous' },
+      { name: 'good-looking' },
+      { name: 'old-fashioned' },
+      { name: 'quick-thinking' },
+      { name: 'air-fried' },
+      { name: 'fat-free' },
+      { name: 'sixty-five' },
+      { name: 'fifty-four' },
+      { name: 'fifteenth-century castle' },
+      { name: 'second-place medal' },
+      { name: 'editor-in-chief' },
+    ],
+    keys: ['name'],
+  },
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-eighteen',
+  },
+  highlight: true,
+  tokenizer: (data) => data.split(/-/),
+});
