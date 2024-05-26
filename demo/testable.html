@@ -26,7 +26,7 @@
     <section class="section-two top-section">
       <form method="GET">
         <h3 class="subtitle">2. Custom Config, Source: Local, Object Arr</h3>
-        <p class="details">minLength: 2; highlight: true; display: () => {...}; identifier: 'name'; preventSubmit: true;</p>
+        <p class="details">minLength: 2; highlight: true; display: () => {...}; keys: ['name']; preventSubmit: true;</p>
         <span class="hidden" id="input2-hidden-field"></span>
         <div>
           <label for="input-two">My Fav Color</label>
@@ -67,7 +67,7 @@
     <section class="section-three-A top-section">
       <form method="GET">
         <h3 class="subtitle">3A. Transform Prefetch</h3>
-        <p class="details">{ name: '...' } to { id: '...' }; identifier: 'id'</p>
+        <p class="details">{ name: '...' } to { id: '...' }; keys: ['id']</p>
         <div>
           <label for="input-three-A">My Fav Color</label>
           <input id="input-three-A" name="color-test-3A" type="search" autocomplete="off" placeholder="Search...">
@@ -79,7 +79,7 @@
     <section class="section-three-B top-section">
       <form method="GET">
         <h3 class="subtitle">3B. Transform Remote</h3>
-        <p class="details">{ name: '...' } to { id: '...' }; identifier: 'id'</p>
+        <p class="details">{ name: '...' } to { id: '...' }; keys: ['id']</p>
         <div>
           <label for="input-three-B">My Fav Color</label>
           <input id="input-three-B" name="color-test-3A" type="search" autocomplete="off" placeholder="Search...">
@@ -126,8 +126,8 @@
 
     <section class="section-five top-section">
       <form method="GET">
-        <h3 class="subtitle">5. DataTokens, Source: Local, Object Arr</h3>
-        <p class="details">dataTokens: ['value']</p>
+        <h3 class="subtitle">5. Multiple Keys, Source: Local, Object Arr</h3>
+        <p class="details">keys: ['name', 'value']</p>
         <div>
           <label for="input-five">My Fav Color</label>
           <input id="input-five" name="color-test-5" type="search" autocomplete="off" placeholder="Search...">
@@ -139,7 +139,7 @@
     <section class="section-six top-section">
       <form method="GET">
         <h3 class="subtitle">6. Source: Remote, Object Arr</h3>
-        <p class="details">wildcard: '%QUERY'; identifier: 'name', dataTokens: ['capital']</p>
+        <p class="details">wildcard: '%QUERY'; keys: ['name', 'capital']</p>
         <div>
           <label for="input-six">Countries</label>
           <input id="input-six" name="color-test-6" type="search" autocomplete="off" placeholder="Search...">
@@ -163,7 +163,7 @@
     <section class="section-seven top-section">
       <form method="GET">
         <h3 class="subtitle">7. Source: Prefetch, Object Arr</h3>
-        <p class="details">when: 'onFocus'; identifier: 'name', dataTokens: ['capital']</p>
+        <p class="details">when: 'onFocus'; keys: ['name', 'capital']</p>
         <div>
           <label for="input-seven">Countries</label>
           <input id="input-seven" name="color-test-7" type="search" autocomplete="off" placeholder="Search...">
@@ -176,7 +176,7 @@
     <section class="section-eight top-section">
       <form method="GET">
         <h3 class="subtitle">8. Search spaceTokenized Data, Source: Local, Object Arr</h3>
-        <p class="details">dataTokens: ['artist', 'album']; identifier: 'title';</p>
+        <p class="details">keys: ['title', 'artist', 'album']</p>
         <div>
           <label for="input-eight">Search songs</label>
           <input id="input-eight" name="color-test-8" type="search" autocomplete="off" placeholder="Search...">
@@ -188,7 +188,7 @@
     <section class="section-nine top-section">
       <form method="GET">
         <h3 class="subtitle">9. Colors Collision Test, Source: Local, Object Arr</h3>
-        <p class="details">dataTokens: ['value']; identifier: 'name';</p>
+        <p class="details">keys: ['name', 'value']</p>
         <div>
           <label for="input-nine">My fav Color</label>
           <input id="input-nine" name="color-test-9" type="search" autocomplete="off" placeholder="Search...">
@@ -225,8 +225,8 @@
 
     <section class="section-twelve top-section">
       <form method="GET">
-        <h3 class="subtitle">12. Search Items with the same identifier</h3>
-        <p class="details">dataTokens: ['artist', 'album']; identifier: 'title';</p>
+        <h3 class="subtitle">12. Search Items with the same keys</h3>
+        <p class="details">keys: ['title', 'artist', 'album']</p>
         <div>
           <label for="input-twelve">Search songs</label>
           <input id="input-twelve" name="songs-test-12" type="search" autocomplete="off" placeholder="Search...">

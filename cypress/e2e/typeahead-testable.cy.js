@@ -469,7 +469,7 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-eight .tt-highlight').should('have.length', 5);
   });
 
-  it('Displays suggestions for data-collisions with default identity function (identifier)', () => {
+  it('Displays suggestions for data-collisions with default identity function (keys[0])', () => {
     cy.get('#input-nine').as('input9').type('sh', { delay: 100 });
     cy.get('.typeahead-test-nine .tt-list')
       .as('list')

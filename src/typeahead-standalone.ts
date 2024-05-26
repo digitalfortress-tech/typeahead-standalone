@@ -641,7 +641,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   };
 
   /**
-   * Update the search Index with the identifier + dataTokens
+   * Update the search Index with the keys
    */
   function updateSearchIndex(iterable: T[]) {
     if (!iterable.length) return;
@@ -687,7 +687,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
    */
   const sortByGroup = (suggestions: T[]) => {
     suggestions.sort((a: Dictionary, b: Dictionary) => {
-      // if no group identifier was found, do not sort
+      // if no groupKey was found, do not sort
       if (!a[groupKey] && !b[groupKey]) return 0;
       if (!a[groupKey]) {
         return -1;

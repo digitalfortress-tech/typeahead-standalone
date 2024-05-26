@@ -38,8 +38,8 @@ export interface LocalDataSource<T> extends typeaheadDataSource<T> {
    * // OR an array of objects
    * local: [{color: "Blue"}, {color: "Black"}, {color: "Blonde"}]
    *
-   * // *Note: While using an array of objects, you must also set the identifier property.
-   * // In this case the identifier will be the property "color".
+   * // *Note: While using an array of objects, you must also set the keys property.
+   * // In this case the keys will be set to - keys: ['color']
    */
   local: string[] | T[];
 }
@@ -241,7 +241,7 @@ export interface typeaheadConfig<T extends Dictionary> {
   diacritics?: boolean;
   /**
    * This callback is executed when the user selects an item from the suggestions. The current suggestion/item is passed as a parameter and it must return a string which is set as the input's value.
-   * It is an optional property. When the suggestions are a list of strings, it uses the matched string as the default value whereas when the sugeestions are a list of objects, it uses the text value of the "identifier" property as a default value.
+   * It is an optional property. When the suggestions are a list of strings, it uses the matched string as the default value whereas when the suggestions are a list of objects, it uses the text value of the first key "keys[0]" ({@link typeaheadDataSource.keys}) property as a default value.
    * @param selectedItem The current/selected item
    * @param ev A Mouse/Keyboard event which can be used to track user interaction or for analytics. Defaults to null
    * @returns The string to be displayed in the input element.

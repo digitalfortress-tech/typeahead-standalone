@@ -25,9 +25,9 @@ export const Trie: TrieType<any> = (config = {}) => {
 
   /**
    * Method used to add the given data to the trie.
-   * Identifier is optional when data is a string|string[], but mandatory for Dictionary[]
+   * key is optional when data is a string|string[], but mandatory for Dictionary[]
    */
-  function add(data: string | string[] | Dictionary[], identifier = '', identity?: (item?: unknown) => void) {
+  function add(data: string | string[] | Dictionary[], key = '', identity?: (item?: unknown) => void) {
     if (!data) return;
 
     let node: Record<string, unknown>;
@@ -36,7 +36,7 @@ export const Trie: TrieType<any> = (config = {}) => {
 
     for (const value of data) {
       // we tokenize the incoming data to make search possible by fragments
-      const dataTokens = tokenize(isStringArr ? (value as string) : ((value as Dictionary)[identifier] as string));
+      const dataTokens = tokenize(isStringArr ? (value as string) : ((value as Dictionary)[key] as string));
       for (const prefix of dataTokens) {
         if (!prefix) continue; // filter out falsy values
 

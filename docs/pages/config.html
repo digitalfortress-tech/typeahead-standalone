@@ -249,14 +249,15 @@ typeahead({
 ]</pre>
       </div>
       The string array gets converted into an object array with the format <code>label: "value"</code>.
-      The <b>label</b> acts like a default <code>identifier</code>.
+      The <b>label</b> acts like a default <code>key</code>.
     </div>
     <div class="tab-pane fade" id="nav-obj" role="tabpanel" aria-labelledby="nav-obj-tab">
       <p>
-        When the suggestion data is an array of Objects, the <code>identifier</code> property must be set.
-        An <b>identifier</b> is used to identify which property of the object
-        should be used as the text for displaying the suggestions. This identifier is expected to be unique.
-
+        When the suggestion data is an array of Objects, the <code>keys</code> property must be set.
+        The <b>keys</b> array can contain multiple keys but only <b>the first key</b> is used to display the text within the
+        suggestions.
+        (The text displayed can also be overriden by using <a href="#config?id=templates"
+          title="templates config param - typeahead-standalone.js" class="section-link">templates</a>).
       </p>
       <div class="codeContainer">
         <span class="lang">JS</span>
@@ -273,14 +274,15 @@ typeahead({
   input: document.querySelector(".myInput"),
   source: {
     local: superheroes,
-    identifier: "code",
+    keys: ["code"],
   }
 });
         </pre>
       </div>
       <p>
-        Certain additional parameters are available when the data source is an array of objects.
-        This has been detailed below.
+        The value returned by the first key (<code>keys[0]</code>) is expected to be unique, but if it is not,
+        then it is highly recommended to set the <code>identity</code> property detailed in section below to get correct
+        search results.
       </p>
     </div>
   </div>
@@ -299,15 +301,16 @@ typeahead({
 <div class="tabContainer padding-v15">
   <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      <a class="nav-link active simple-link tab-link" id="nav-gidentifier-tab" data-toggle="tab" href="#nav-gidentifier"
-        role="tab" aria-controls="nav-gidentifier" aria-selected="true">groupKey</a>
-      <a class="nav-link simple-link tab-link" id="nav-dtokens-tab" data-toggle="tab" href="#nav-dtokens" role="tab" aria-controls="nav-dtokens" aria-selected="false">dataTokens</a>
+      <a class="nav-link active simple-link tab-link" id="nav-gkey-tab" data-toggle="tab" href="#nav-gkey" role="tab"
+        aria-controls="nav-gkey" aria-selected="true">groupKey</a>
+      <a class="nav-link simple-link tab-link" id="nav-dtokens-tab" data-toggle="tab" href="#nav-dtokens" role="tab"
+        aria-controls="nav-dtokens" aria-selected="false">keys</a>
       <a class="nav-link simple-link tab-link" id="nav-identity-tab" data-toggle="tab" href="#nav-identity" role="tab" aria-controls="nav-identity" aria-selected="false">identity</a>
       <a class="nav-link simple-link tab-link" id="nav-transform-tab" data-toggle="tab" href="#nav-transform" role="tab" aria-controls="nav-transform" aria-selected="false">transform</a>
     </div>
   </nav>
   <div class="tab-content" id="nav-tabContent">
-    <div class="tab-pane fade show active" id="nav-gidentifier" role="tabpanel" aria-labelledby="nav-gidentifier-tab">
+    <div class="tab-pane fade show active" id="nav-gkey" role="tabpanel" aria-labelledby="nav-gkey-tab">
       <p>
         The <code>groupKey</code> source config option is used when you wish to group suggestions together
       </p>
@@ -327,7 +330,7 @@ typeahead({
   input: document.querySelector(".myInput"),
   source: {
     local: colors,
-    identifier: "color",
+    keys: ["color"],
     groupKey: "shade" // optional
   }
 });</pre>
@@ -340,10 +343,15 @@ typeahead({
     </div>
     <div class="tab-pane fade" id="nav-dtokens" role="tabpanel" aria-labelledby="nav-dtokens-tab">
       <p>
-        The <code>dataTokens</code> config option accepts an array of strings (which are properties of the source object)
+        The <code>keys</code> config option accepts an array of strings (which are properties of the source object)
         that should be added to the search index. In other words, when you want your suggestions to be searchable
-        not just by the property defined by the <code>identifier</code> option, but also by other properties,
-        you list those properties in the <b>dataTokens</b> config option.
+        by using multiple properties, you list those properties in the <b>keys</b> config option.
+        </p>
+        <p>
+          <b>Note:</b> Although, the keys array can contain multiple keys, by default, only <b>the first key</b> is used to
+          display the text within the
+          suggestions. (Nonetheless, this behavior can overriden by using <a href="#config?id=templates"
+            title="templates config param - typeahead-standalone.js" class="section-link">templates</a>)
       </p>
       <div class="codeContainer">
         <span class="lang">JS</span>
@@ -361,15 +369,14 @@ typeahead({
   input: document.querySelector(".myInput"),
   source: {
     local: colors,
-    identifier: "color",
-    dataTokens: ["colorCode"]  // optional
+    keys: ["color", "colorCode"],
   }
 });</pre>
       </div>
       <p>
         Given the data-source as seen in the example above, what if we wanted to search colors by another property(<b>colorCode</b>)
-        and not just by its identifier(<b>color</b>) ? That's exactly where dataTokens comes in. By setting
-        <code>dataTokens: ["colorCode"]</code>, we add the values defined in the colorCode property to the search index.
+        and not just by its first key(i.e. <b>color</b>) ? By simply setting
+        <code>keys: ["color","colorCode"]</code>, we add the values defined in the colorCode property to the search index.
         Thereafter, if we search for "YW" (case-insensitive), the suggestion "Yellow" pops up as expected.
       </p>
 
@@ -378,7 +385,7 @@ typeahead({
       <p>
         The <code>identity()</code> function is used to determine <b>uniqueness</b> of each suggestion.
         It receives the suggestion as a parameter and must return a string unique to the given suggestion.
-        This is an optional property and it defaults to returning the <code>identifier</code>.
+        This is an optional property and it defaults to returning the value associated with the first key from the keys array i.e.<code>keys[0]</code>.
         However, the default value might not work everytime. For example, consider the following code -
       </p>
       <div class="codeContainer">
@@ -398,15 +405,15 @@ typeahead({
   input: document.querySelector(".myInput"),
   source: {
     local: songs,
-    identifier: "title",
+    keys: ["title"],
     // identity: (suggestion) => `${suggestion.title}${suggestion.artist}`
   }
 });</pre>
       </div>
       <p>
-        Given the data-source and the identifier as seen in the example above,
+        Given the data-source and the keys as seen in the example above,
         if you search for "<i>God</i>", you will find only 1 suggestion displayed instead of 3. This is because there are
-        3 songs with the exact same title (identifier) property. The <code>identifier</code> which is expected to be unique,
+        3 songs with the exact same title (<b>keys[0]</b>) property. The <code>keys[0]</code> property which is expected to be unique,
         is not unique! In real world applications, such a scenario is very well possible. To handle such collisions, we use
         the <code>identity()</code> callback which <b>returns a unique string</b>.
       </p>
@@ -449,7 +456,7 @@ typeahead({
       url: 'https://remoteapi.com/%QUERY',
       wildcard: '%QUERY',
     },
-    identifier: "place",
+    keys: ["place"],
     transform: (data) => {  // optional
       // transforms and returns data in the format
       // [{ id: 1, place: "Paris, France" }, ...]
@@ -464,7 +471,7 @@ typeahead({
       <p>
         Here, we have used the <code>transform</code> callback to modify the original remote response and
         return the modified response that contains a new property <code>place</code>.
-        We are now free to use this new property anywhere we like. (we used it as the <code>identifier</code>).
+        We are now free to use this new property anywhere we like. (we used it in the <code>keys</code> array).
       </p>
       <p>
         The <b>transform</b> callback can additionaly be used to - flatten an array/object, add/remove properties to/from the response object,
@@ -632,7 +639,7 @@ typeahead({
   input: document.getElementById('typeahead-display-eg'),
   source: {
     local: places,
-    identifier: 'name'
+    keys: ['name'],
   },
   display: (item, event) => {
     if (event) {
@@ -648,7 +655,7 @@ typeahead({
 
 <p>
   The <code>display()</code> callback is optional and by default,
-  it returns the string representation (usually the <code>identifier</code>) of the selected item.
+  it returns the string representation (usually the value of the first key <code>keys[0]</code>) of the selected item.
 </p>
 <p>
   In the above input box, if you try searching for <i>Paris</i>, you will see the placeholder value to be "<i>Paris, France</i>",
@@ -731,7 +738,7 @@ typeahead({
   input: document.getElementById('typeahead-onsubmit-eg'),
   source: {
     local: ['USA', 'UK', 'UAE', 'France', 'Finland'],
-    identifier: 'name'
+    keys: ['name'],
   },
   onSubmit: (e, selectedSuggestion) => {
     const query = e.target.value;

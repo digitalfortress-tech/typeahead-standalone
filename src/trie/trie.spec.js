@@ -22,7 +22,7 @@ describe('Trie algorithm', () => {
     expect(() => Trie.search('romane')).toThrow();
   });
 
-  it('add(): Passing Object[] without identifier must not be added to trie', () => {
+  it('add(): Passing Object[] without key must not be added to trie', () => {
     const trie = Trie();
     trie.add([
       { name: 'Blue', value: 'BL', hash: 'blue' },
@@ -157,10 +157,10 @@ describe('Trie algorithm', () => {
     expect(count).toEqual(6);
   });
 
-  it('gets suggestions for same identifiers / collision test', () => {
+  it('gets suggestions for same key / collision test', () => {
     const trie = Trie();
-    trie.add(colors, 'label', (param) => `${param.label}`); // identifier (first is always identifier)
-    trie.add(colors, 'value', (param) => `${param.label}`); // token
+    trie.add(colors, 'label', (param) => `${param.label}`); // first key
+    trie.add(colors, 'value', (param) => `${param.label}`); // second key
     const expectedResult = [
       { label: 'Peach', value: 'PP', hash: 'peach' },
       { label: 'Purple', value: 'PP', hash: 'purple' },

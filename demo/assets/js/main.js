@@ -142,9 +142,8 @@ if (dev) {
     input,
     source: {
       local: dataset,
-      identifier: 'name',
+      keys: ['name', 'value'],
       groupKey: 'group',
-      dataTokens: ['value'],
       // remote: {
       //   url: 'https://restcountries.com/v2/name/%QUERY',
       //   wildcard: '%QUERY',

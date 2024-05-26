@@ -16,9 +16,9 @@ describe('Typeahead Standalone', () => {
       expect(result).toEqual([]);
     });
 
-    test('Input as string array with no identifier', () => {
+    test('Input as string array with no keys', () => {
       const result = normalizer(colorsStr);
-      // keys are undefined because identifier is missing
+      // keys are undefined
       expect(result).toEqual([
         { undefined: 'Red' },
         { undefined: 'Blue' },
@@ -27,21 +27,21 @@ describe('Typeahead Standalone', () => {
       ]);
     });
 
-    test('Input as string array with identifier', () => {
+    test('Input as string array with given key', () => {
       const result = normalizer(colorsStr, 'label');
       expect(result).toEqual([{ label: 'Red' }, { label: 'Blue' }, { label: 'Blue Dark' }, { label: 'Blue Darker' }]);
     });
 
-    test('Input as object array with identifier', () => {
+    test('Input as object array with key', () => {
       const result = normalizer(colorsObj, 'id');
       expect(result).toEqual(colorsObj);
     });
 
-    test('Input as object array with missing/non-existent identifier should throw', () => {
+    test('Input as object array with missing/non-existent key should throw', () => {
       expect(() => normalizer(colorsObj, 'cle')).toThrow();
     });
 
-    test('Input as object array with only a few items missing an identifier should throw', () => {
+    test('Input as object array with only a few items missing a key should throw', () => {
       const colors = [
         ...colorsObj,
         ...[
@@ -52,7 +52,7 @@ describe('Typeahead Standalone', () => {
       expect(() => normalizer(colors, 'id')).toThrow();
     });
 
-    it('Should throw when input is an array of objects + no identifier is given', () => {
+    it('Should throw when input is an array of objects + no key is given', () => {
       expect(() => normalizer(colorsObj)).toThrow();
     });
   });

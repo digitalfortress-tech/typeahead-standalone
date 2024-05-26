@@ -1,4 +1,4 @@
-import type { Dictionary } from '../index.js';
+import type { Dictionary } from '../common.d.ts';
 
 export interface SearchResults<T> {
   suggestions: T[];
@@ -6,7 +6,7 @@ export interface SearchResults<T> {
 }
 
 export interface TrieAPI<T extends Dictionary> {
-  add(data: string | string[] | Dictionary[], identifier?: string, identity?: (param: T) => void): void;
+  add(data: string | string[] | Dictionary[], key?: string, identity?: (param: T) => void): void;
   search(prefix: string, limit?: number): SearchResults<T>;
   clear(): void;
 }
