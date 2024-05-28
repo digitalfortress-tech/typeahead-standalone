@@ -61,8 +61,8 @@ a.tab-link {
 }
 
 .orderedSubList {
-  font-size: 14px;
-  padding: 10px 0 10px 50px;
+  font-size: 16px;
+  padding: 5px 0 5px 50px;
   display: none;
 }
 
@@ -79,7 +79,7 @@ a.tab-link {
 }
 
 .nav-submenu .orderedSubList li {
-  padding: 6px 0 6px 8px;
+  padding: 4px 0 4px 8px;
 }
 
 a.section-link:hover,
@@ -387,16 +387,18 @@ header.masthead .post-heading .meta a {
 
 .nav-submenu {
   position: sticky;
-  top: 80px;
+  top: 16px;
   padding-bottom: 80px;
   align-self: flex-start;
   font-size: 18px;
   font-weight: 600;
-  overflow: hidden;
+  overflow-x: hidden;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 .nav-submenu li {
-  padding: 6px 0;
+  padding: 4px 0;
   border-bottom: 1px solid #e9e4e4;
 }
 
@@ -437,6 +439,10 @@ header.masthead .post-heading .meta a {
   border: 1px solid #e3e3e3;
   border-radius: 4px;
   box-shadow: 0 7px 20px #00000038;
+}
+
+.nav-submenu-mobile-list-container li {
+  font-size: 18px;
 }
 
 @media only screen and (max-width: 992px) {
@@ -622,6 +628,7 @@ adapted from a snippet
 .subscribe-area {
   background-image: linear-gradient(to top, #0085a1 0%, #000 100%);
   margin: 20px 0;
+  border-radius: 8px;
 }
 
 .pb-50 {

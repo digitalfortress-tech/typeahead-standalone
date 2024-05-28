@@ -140,14 +140,14 @@ function loadFragment(fragment, firstLoad = true) {
 
     /* scroll to top of fragment */
     if (!subSection) {
-      mainSectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      mainSectionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else if (!firstLoad) {
       /* subSection exists, scroll to subSection */
-      document.getElementById(subSection)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById(subSection)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
       /*  first page load. subSection exists, scroll to subSection */
       window.addEventListener('load', () => {
-        document.getElementById(subSection)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById(subSection)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     }
 

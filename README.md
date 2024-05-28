@@ -120,12 +120,12 @@ You can pass the following config options to `typeahead-standalone`:
 |`autoSelect`| If set to true, pre-selects the first displayed suggestion |`false`|
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
 |`diacritics`| Flag to enable/disable language diacritics supported search (i.e. search by converting accented characters into their non-accented counterparts)|`undefined`|
-|`className`|The typeahead-standalone container will have this class name (in addition to the default class `typeahead-standalone`) *@deprecated. Will be removed in v5.0. Use classNames config option*|`undefined`|
 |`classNames: Object`|The classNames object can be used to set custom classes for every html element that is injected in the DOM. [Details](#classNamesLink) |`undefined`|
 |`templates`|An object containing templates for header, footer, suggestion, group and notFound state. See [templates section](#templates) for clarification |`undefined`|
 |`preventSubmit`|If your input element is used inside a form element, this flag allows to prevent the default submit action when the ENTER key is pressed.|`false`|
 |`onSubmit(event, selectedItem?)`|When you want to use typeahead outside a form element, this handler can be used to process/submit the input value. Gets triggered on hitting the ENTER key. First parameter is the keyboard Event and the 2nd parameter is the selected item or undefined if no item was selected|`undefined`|
 |`display(selectedItem, event?) => string`|This callback is executed when the user selects an item from the suggestions. The current suggestion/item is passed as a parameter and it **must return a string** which is set as the input's value. The 2nd *optional* parameter `event` is a Mouse/Keyboard event which can be used to track user interaction or for analytics. It defaults to `null`. |Returns the string representation of the selected item|
+|`tokenizer?: (words: string) => string[]`|The tokenizer function is used to split the search query and the search data by a given character(s). This function is useful when you wish to search hypenated-words or words with a certain prefix/suffix |words are split by space characters (new line, tab, spaces)|
 
 ---
 

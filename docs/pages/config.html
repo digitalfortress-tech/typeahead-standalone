@@ -852,7 +852,37 @@ typeahead({
 </p>
 
 <hr>
-<h4><a href="#config?id=templates" id="templates" title="templates config param - typeahead-standalone.js" class="submenu-link section-link">13. 🎨 templates</h4></a>
+<h4><a href="#config?id=tokenizer" id="tokenizer" title="tokenizer config param - typeahead-standalone.js" class="submenu-link section-link">13. 🪙 tokenizer</h4></a>
+
+<p>
+  The <code>tokenizer</code> config option is a function is used to split the search query and the search data by a given character(s). This function is useful
+  when you wish to search hypenated-words or words with a certain prefix/suffix. By default, words are split by space characters (new
+  line, tab, spaces)
+</p>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    // ...
+  },
+  tokenizer: (words) => {
+    return words.split(/-/); // splits hypenated words
+    // return words.split(/\s+/); // splits by space characters (default implementation)
+    // return words.split(/\s+|-/); // splits hypenated words (splits by space characters + hyphenated words)
+  }
+});</pre>
+</div>
+<p>
+  Imagine that your search index contains the hyphenated word "world-famous". If the default implementation of tokenizer
+  is used, then searching for "famous" results in no results. However, if the tokenizer is set to split hypenated-words,
+  (as shown in the above code snippet), searching for "famous" will display "world-famous" in the search results as expected.
+</p>
+
+<hr>
+<h4><a href="#config?id=templates" id="templates" title="templates config param - typeahead-standalone.js" class="submenu-link section-link">14. 🎨 templates</h4></a>
 
 <p>
   The <code>templates</code> config option is used to customize the

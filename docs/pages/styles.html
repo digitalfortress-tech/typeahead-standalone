@@ -52,11 +52,12 @@ typeahead({
     loader: () => 'Loading...',                         /* Rendered while awaiting suggestions from a remote source */
     notFound: (resultSet) => '&#60;b&#62;Nothing Found&#60;/b&#62;',    /* Rendered if no suggestions are found */
     empty: (resultSet) => {                             /* Rendered when the input query is empty */
-    /* show default suggestions */
-    resultSet.defaultItems = [...]
-    return '';
-    /* OR show custom html */
-    return `&#60;div&#62;Search for Colors...&#60;/div&#62`;
+      /* show default suggestions */
+      resultSet.defaultItems = [...]
+      return '';
+      
+      /* OR show custom html */
+      return `&#60;div&#62;Search for Colors...&#60;/div&#62`;
     },
   }
 });</pre>
