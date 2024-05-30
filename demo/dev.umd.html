@@ -195,7 +195,7 @@
       },
       notFound: (data) => `Found <b>0</b> matching results for <b>"${data.query}"</b>`,
       empty: (resultSet) => {
-        resultSet.defaultItems = [
+        return [
           {
             title: 'Man of Steel',
             poster_path: '7rIPjn5TUK04O25ZkMyHrGNPgLx.jpg',

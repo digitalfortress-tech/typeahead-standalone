@@ -166,13 +166,13 @@ export interface typeaheadHtmlTemplates<T extends Dictionary> {
    * The empty template is rendered when the input query is empty.
    * This template can be used to display some suggestions by default or to display some html content
    * @param resultSet An object containing data about the matched suggestions.
-   * @returns A string that can contain HTML or nothing/void
+   * @returns A string that can contain HTML or a list of suggestions
    *
    * @example
    *
-   * // To display some default suggestions
-   * empty: (resultSet) => {
-   *  resultSet.defaultItems = ["Silver", "Gold"];
+   * // To display some suggestions by default
+   * empty: () => {
+   *  return ["Silver", "Gold"];
    * }
    *
    * // To display some html content
@@ -180,7 +180,7 @@ export interface typeaheadHtmlTemplates<T extends Dictionary> {
    *  `<h3>Trying searching for colors like Grey...</h3>`;
    *
    */
-  empty?: (resultSet: ResultSet<T>) => string | void;
+  empty?: (resultSet: ResultSet<T>) => string | T[];
   /**
    * The notFound template is rendered when no matching suggestion is found.
    * @param resultSet An object containing data about the matched suggestions.
@@ -280,10 +280,8 @@ export interface ResultSet<T extends Dictionary> {
   count: number;
   /** The max number of suggestions to be displayed */
   limit: number;
-  /** The default suggestions to be shown when the input search query is empty */
-  defaultItems?: T[];
   /** A reference to the HTML Root that displays suggestions */
-  container?: HTMLDivElement;
+  container: HTMLDivElement;
   [key: string]: unknown;
 }
 

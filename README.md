@@ -313,7 +313,7 @@ templates: {
   empty: (resultSet) => {   /* Rendered when the input query is empty */
     return `<div>Search for Colors...</div>`;
     // OR (to display some suggestions by default)
-    return resultSet.defaultItems = [{title: "France"}, {title: "Spain"}];
+    return [{title: "France"}, {title: "Spain"}];
   }
   loader: () => 'Loading...', /* Rendered while awaiting data from a remote source */
   notFound: (resultSet) => '<span>Nothing Found</span>', /* Rendered if no suggestions are available */
@@ -328,7 +328,6 @@ resultSet = {
   count: 0,     // the total suggestions found in the search index
   limit: 5,     // the number of suggestions to show
   container: DOMElement,  // the container DOM element
-  defaultItems: [...],    // the default suggestions while using the "empty" template
 }
 ```
 

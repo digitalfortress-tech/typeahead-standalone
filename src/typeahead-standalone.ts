@@ -74,11 +74,16 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   // initialise trie if atleast 1 source exists
   const trie = Trie({ hasDiacritics: config.diacritics, tokenizer });
 
+  // Main Wrapper element
+  const wrapper: HTMLDivElement = document.createElement('div');
+  wrapper.className = classNames.wrapper;
+
   const resultSet: ResultSet<T> = {
     query: '',
     items: [], // suggestions
     count: 0,
     limit: config.limit || 5,
+    container: wrapper,
   };
 
   let remoteQueryCache: Dictionary = {};
@@ -110,11 +115,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   const input: HTMLInputElement = config.input;
   input.classList.add(classNames.input);
   const computedInputStyle = window.getComputedStyle(input);
-
-  // Wrapper element
-  const wrapper: HTMLDivElement = document.createElement('div');
-  wrapper.className = classNames.wrapper;
-  resultSet.container = wrapper;
 
   // move input element into the wrapper element
   const parentEl = input.parentNode as HTMLElement;
@@ -500,12 +500,12 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
 
     // empty/default template
     if (templates?.empty && !val.length) {
-      const emptyHtml = templates.empty(resultSet);
+      const emptyTemplateResp = templates.empty(resultSet);
       resultSet.query = '';
 
       // inject default suggestions if they were updated in the empty() template
-      if (resultSet.defaultItems?.length) {
-        resultSet.items = normalizer(resultSet.defaultItems, keys[0]) as T[];
+      if (Array.isArray(emptyTemplateResp) && emptyTemplateResp.length) {
+        resultSet.items = normalizer(emptyTemplateResp, keys[0]) as T[];
         return update();
       }
 
@@ -513,10 +513,10 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
       clear();
       clearListDOM();
 
-      if (emptyHtml) {
+      if (emptyTemplateResp) {
         const emptyEl = document.createElement('div');
         emptyEl.classList.add(classNames.empty);
-        templatify(emptyEl, emptyHtml);
+        templatify(emptyEl, `${emptyTemplateResp}`);
         listContainer.appendChild(emptyEl);
       }
 

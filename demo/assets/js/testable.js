@@ -445,12 +445,11 @@ const test4 = typeahead({
     },
     notFound: (resultSet) => `Oops...Nothing Found for query - ${resultSet.query} 😪 <br>Try another color...`,
     empty: (resultSet) => {
-      resultSet.defaultItems = [
+      return [
         { name: 'Red', value: 'RD', hash: 'red' },
         { name: 'Green', value: 'GR', hash: 'green' },
         { name: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
       ];
-      return 'unimportant'; // this should not be taken into consideration
     },
   },
 });

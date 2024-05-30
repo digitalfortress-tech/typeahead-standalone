@@ -53,9 +53,8 @@ typeahead({
     notFound: (resultSet) => '&#60;b&#62;Nothing Found&#60;/b&#62;',    /* Rendered if no suggestions are found */
     empty: (resultSet) => {                             /* Rendered when the input query is empty */
       /* show default suggestions */
-      resultSet.defaultItems = [...]
-      return '';
-      
+      return [...];
+
       /* OR show custom html */
       return `&#60;div&#62;Search for Colors...&#60;/div&#62`;
     },
@@ -77,7 +76,6 @@ typeahead({
     count: 0,               // the total suggestions found in the search index
     limit: 5,               // the number of suggestions to show
     container: DOMElement,  // the container DOM element
-    defaultItems: [...],    // the default suggestions while using the "empty" template
   };</pre>
   </div>
 
@@ -108,8 +106,8 @@ typeahead({
   action.</p>
 <p>
   The <code>tt-empty</code> template can be used to either show some default suggestions or to show some custom html.
-  To show suggestions by default, you can use the <b>resultSet</b> parameter like this
-  (<code>resultSet.defaultItems = [...]</code>) whereas to display custom html, return the desired html as a string.
+  To show suggestions by default, you can return the items to be displayed
+  (<code>return [...];</code>) whereas to display custom html, return the desired html (<code>return `Search...`;</code>) as a string.
 </p>
 <hr>
 <h4><a href="#styles?id=override-rewrite" id="override-rewrite" title="Rewriting or overriding typeahead-standalone.js styles" class="submenu-link section-link">2. 💄 Overriding/Rewriting the default Styles</a></h4>
