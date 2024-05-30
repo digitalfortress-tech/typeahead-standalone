@@ -222,11 +222,6 @@ export interface typeaheadStyleClasses {
 export interface typeaheadConfig<T extends Dictionary> {
   /** The input HTML element */
   input: HTMLInputElement;
-  /**
-   * A className to be added to the container.
-   * @deprecated since v.4.x.x. Will be removed in v5
-   */
-  className?: string;
   /** The Classnames to be to each type of element/item used */
   classNames?: typeaheadStyleClasses;
   /** The minimum number of characters needed to trigger displaying suggestions. Defaults to 1 */
@@ -280,8 +275,8 @@ export interface ResultSet<T extends Dictionary> {
   count: number;
   /** The max number of suggestions to be displayed */
   limit: number;
-  /** A reference to the HTML Root that displays suggestions */
-  container: HTMLDivElement;
+  /** A reference to the HTML Root(wrapper/container) that displays suggestions */
+  wrapper: HTMLDivElement;
   [key: string]: unknown;
 }
 

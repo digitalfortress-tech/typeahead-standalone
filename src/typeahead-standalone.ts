@@ -74,7 +74,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
   // initialise trie if atleast 1 source exists
   const trie = Trie({ hasDiacritics: config.diacritics, tokenizer });
 
-  // Main Wrapper element
+  // Main Wrapper/container element
   const wrapper: HTMLDivElement = document.createElement('div');
   wrapper.className = classNames.wrapper;
 
@@ -83,7 +83,7 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     items: [], // suggestions
     count: 0,
     limit: config.limit || 5,
-    container: wrapper,
+    wrapper,
   };
 
   let remoteQueryCache: Dictionary = {};

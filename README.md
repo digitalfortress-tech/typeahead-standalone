@@ -327,7 +327,7 @@ resultSet = {
   items: [...], // found suggestions
   count: 0,     // the total suggestions found in the search index
   limit: 5,     // the number of suggestions to show
-  container: DOMElement,  // the container DOM element
+  wrapper: DOMElement,  // the container DOM element
 }
 ```
 
