@@ -15,5 +15,6 @@
     "verbatimModuleSyntax": true,
     "lib": ["es2020", "esnext", "dom", "dom.iterable"],
     "types": ["cypress", "cypress-axe", "node", "vitest/globals"]
-  }
+  },
+  "include": ["src"]
 }

@@ -20,7 +20,7 @@ import { fetchWrapper } from './fetchWrapper/fetchWrapper.js';
 import { Trie } from './trie/trie.js';
 import './style.less';
 
-export default function typeahead<T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult<T> {
+const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult<T> => {
   // check required params
   if (!config.input) throw new Error('e01');
   if (!isObject(config.source)) throw new Error('e02');
@@ -882,4 +882,6 @@ export default function typeahead<T extends Dictionary>(config: typeaheadConfig<
     destroy,
     // trie, // trie exposed only for local tests
   };
-}
+};
+
+export default typeahead;
