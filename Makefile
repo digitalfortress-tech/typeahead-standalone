@@ -23,6 +23,12 @@ test-e2e:		## Run e2e tests (Cypress CLI)
 test-e2e-gui:	## Run e2e tests (Cypress GUI)
 	@pnpm test-e2e-gui
 
+types-test:	## Build and generate a version to test for types
+	@rm -f typeahead-standalone-*.tgz
+	@make prod
+	@pnpm copy-dts-declarations
+	@pnpm pack
+
 prod:	## Build for Production environment
 	@pnpm prod
 
