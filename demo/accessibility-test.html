@@ -4,7 +4,6 @@
     <title>Templates test - Typeahead-Standalone.js</title>
     <!-- LOCAL TESTING -->
     <link rel="stylesheet" href="./../dist/basic.css" />
-    <script src="./../dist/typeahead-standalone.umd.js"></script>
     <style>
       /* style input element */
       input {
@@ -128,7 +127,9 @@
       </div>
     </main>
 
-    <script>
+    <script type="module">
+      import typeahead from "../dist/typeahead-standalone.es.mjs";
+
       /* Initialise typeahead-standalone.js */
       typeahead({
         input: document.querySelector('.search'),
