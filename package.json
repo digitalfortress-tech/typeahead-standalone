@@ -46,6 +46,7 @@
   "main": "./dist/typeahead-standalone.umd.js",
   "module": "./dist/typeahead-standalone.es.mjs",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/digitalfortress-tech/typeahead-standalone.git"
