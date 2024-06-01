@@ -23,3 +23,5 @@ declare module 'typeahead-standalone' {
   function typeahead<T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult<T>;
   export default typeahead;
 }
+
+export default function typeahead<T extends Dictionary>(config: typeaheadConfig<T>): typeaheadResult<T>;
