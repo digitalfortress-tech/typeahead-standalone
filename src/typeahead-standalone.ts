@@ -719,7 +719,9 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     if (!pattern) return;
 
     const getRegex = (query: string) => {
-      const escapedQueries = tokenizer(query.trim()).map((item) => escapeRegExp(item));
+      const escapedQueries = tokenizer(query.trim())
+        .map((item) => escapeRegExp(item))
+        .sort((a, b) => b.length - a.length); // sort by string length to correctly highlight words
       // @deprecated [selection by words]
       // const regexStr = wordsOnly ? '\\b(' + escapedQueries.join('|') + ')\\b' : '(' + escapedQueries.join('|') + ')';
       return new RegExp(`(${escapedQueries.join('|')})`, 'i');
