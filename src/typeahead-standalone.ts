@@ -338,9 +338,10 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
       if (index === resultSet.limit) break;
 
       // attach group if available
-      if (item[groupKey] && !prevGroups.includes(item[groupKey] as string)) {
-        prevGroups.push(item[groupKey] as string);
-        const groupDiv = renderGroup(item[groupKey] as string);
+      const groupVal = getNestedValue(item, groupKey);
+      if (groupVal && !prevGroups.includes(groupVal)) {
+        prevGroups.push(groupVal);
+        const groupDiv = renderGroup(groupVal);
         fragment.appendChild(groupDiv);
       }
 
@@ -690,19 +691,22 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    */
   const sortByGroup = (suggestions: T[]) => {
     suggestions.sort((a: Dictionary, b: Dictionary) => {
+      const aVal = getNestedValue(a, groupKey);
+      const bVal = getNestedValue(b, groupKey);
+
       // if no groupKey was found, do not sort
-      if (!a[groupKey] && !b[groupKey]) return 0;
-      if (!a[groupKey]) {
+      if (!aVal && !bVal) return 0;
+      if (!aVal) {
         return -1;
       }
-      if (!b[groupKey]) {
+      if (!bVal) {
         return 1;
       }
       // sort in ascending order of group name
-      if ((a[groupKey] as string) < (b[groupKey] as string)) {
+      if (aVal < bVal) {
         return -1;
       }
-      if ((a[groupKey] as string) > (b[groupKey] as string)) {
+      if (aVal > bVal) {
         return 1;
       }
 

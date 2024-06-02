@@ -336,7 +336,7 @@ const deeplyNestedDataSrcEx = [
     category: {
       name: 'Main Course',
       meta: {
-        title: 'Cultet',
+        title: 'Cutlet',
         description: 'A vegetarian option comprised of flat patties made with a mixture of vegetables',
       },
     },
@@ -351,7 +351,6 @@ const deeplyNestedDataSrcEx = [
       },
     },
   },
-  //,// empty record
   {
     id: 7,
     category: {
@@ -359,6 +358,16 @@ const deeplyNestedDataSrcEx = [
       meta: {
         title: 'Butter Chicken',
         description: 'Thick gravy filled with cream, butter and chicken tenders. Mildly spicy',
+      },
+    },
+  },
+  {
+    id: 8,
+    category: {
+      // name: '', missing groupKey
+      meta: {
+        title: 'Cup Noodles',
+        description: 'Noodles in a cup, from your favorite ready to eat brand',
       },
     },
   },
@@ -960,6 +969,7 @@ const test19 = typeahead({
   source: {
     local: deeplyNestedDataSrcEx,
     keys: ['category.meta.title', 'category.meta.description', 'id'],
+    groupKey: 'category.name',
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-nineteen',
