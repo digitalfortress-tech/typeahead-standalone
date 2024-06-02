@@ -15,7 +15,7 @@ import type {
   ResultSet,
   typeaheadStyleClasses,
 } from './common.d.ts';
-import { diacritics, escapeRegExp, isObject, NOOP, normalizer, spaceTokenizer } from './helpers.js';
+import { diacritics, escapeRegExp, getNestedValue, isObject, NOOP, normalizer, spaceTokenizer } from './helpers.js';
 import { fetchWrapper } from './fetchWrapper/fetchWrapper.js';
 import { Trie } from './trie/trie.js';
 import './style.less';
@@ -34,7 +34,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
   const templates: typeaheadHtmlTemplates<T> | undefined = config.templates;
   const keys = Array.isArray(config.source.keys) ? config.source.keys : ['label']; // "label" is the default key
   const groupKey = config.source.groupKey || '';
-  const displayCb = <T extends Dictionary>(item: T): string => `${item[keys[0]]}`;
+  const displayCb = <T extends Dictionary>(item: T): string => getNestedValue(item, keys[0]);
   const display: (item: T, e?: MouseEvent | KeyboardEvent | null) => string = config.display || displayCb;
   const identity = config.source.identity || displayCb;
   const onSubmit: (e: Event, item?: T) => void = config.onSubmit || NOOP;
@@ -302,7 +302,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
       if (templates?.suggestion) {
         templatify(itemElement, templates.suggestion(item, resultSet));
       } else {
-        itemElement.textContent = (item[keys[0]] as string) || '';
+        itemElement.textContent = getNestedValue(item, keys[0]);
       }
       return itemElement;
     };
@@ -661,8 +661,8 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
   const sortByStartingLetter = (suggestions: T[]): void => {
     const query = resultSet.query.toLowerCase();
     suggestions.sort((one: Dictionary, two: Dictionary) => {
-      const a = (one[keys[0]] as string).toLowerCase();
-      const b = (two[keys[0]] as string).toLowerCase();
+      const a = getNestedValue(one, keys[0]).toLowerCase();
+      const b = getNestedValue(two, keys[0]).toLowerCase();
 
       const startsWithA = a.startsWith(query);
       const startsWithB = b.startsWith(query);

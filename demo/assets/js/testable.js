@@ -290,6 +290,80 @@ const songs = [
   },
 ];
 
+const deeplyNestedDataSrcEx = [
+  {
+    id: 1,
+    category: {
+      name: 'Desserts',
+      meta: {
+        title: 'Custard',
+        description: 'Custard is vanilla flavoured milk mixed with fruits',
+      },
+    },
+  },
+  {
+    id: 2,
+    category: {
+      name: 'Desserts',
+      meta: {
+        title: 'Cassata',
+        description: 'Cassata is a 3 or more flavoured ice-cream',
+      },
+    },
+  },
+  {
+    id: 3,
+    category: {
+      name: 'Desserts',
+      meta: {
+        title: 'Cake',
+        description: 'Well, cake is cake. You get many types like chocolate, butterscotch, etc',
+      },
+    },
+  },
+  {
+    id: 4,
+    category: {
+      name: 'Main Course',
+      meta: {
+        title: 'Chicken gravy',
+        description: 'A spicy blend of chicken filet mixed with cream',
+      },
+    },
+  },
+  {
+    id: 5,
+    category: {
+      name: 'Main Course',
+      meta: {
+        title: 'Cultet',
+        description: 'A vegetarian option comprised of flat patties made with a mixture of vegetables',
+      },
+    },
+  },
+  {
+    id: 6,
+    category: {
+      name: 'Main Course',
+      meta: {
+        title: 'Creamy Mutton Delight',
+        description: 'A gravy made in a base of tomato filled with cheese and cream, mixed with mutton tenders ',
+      },
+    },
+  },
+  //,// empty record
+  {
+    id: 7,
+    category: {
+      name: 'Main Course',
+      meta: {
+        title: 'Butter Chicken',
+        description: 'Thick gravy filled with cream, butter and chicken tenders. Mildly spicy',
+      },
+    },
+  },
+];
+
 // eslint-disable-next-line no-undef
 const test1 = typeahead({
   input: document.getElementById('input-one'),
@@ -298,7 +372,7 @@ const test1 = typeahead({
   },
   classNames: {
     wrapper: 'typeahead-standalone typeahead-test-one',
-  }
+  },
 });
 test1.addToIndex(['Purple', 'Pink']);
 
@@ -879,3 +953,27 @@ const test18 = typeahead({
   highlight: true,
   tokenizer: (data) => data.split(/-/),
 });
+
+// eslint-disable-next-line no-undef
+const test19 = typeahead({
+  input: document.getElementById('input-nineteen'),
+  source: {
+    local: deeplyNestedDataSrcEx,
+    keys: ['category.meta.title', 'category.meta.description', 'id'],
+  },
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-nineteen',
+  },
+  highlight: true,
+  identity: (item) => item.id,
+  templates: {
+    suggestion: (item) => `
+      <div style="display:flex;flex-direction:column;border-bottom: 1px solid #80808070;padding: 2px 0;">
+        <div>${item.category.meta.title}</div>
+        <div style="font-size:13px;color:gray;">${item.category.meta.description}</div>
+      </div>
+    `,
+  },
+});
+
+

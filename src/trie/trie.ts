@@ -1,6 +1,6 @@
 import type { Dictionary } from '../common.d.ts';
 import type { SearchResults, TrieType } from './types.d.ts';
-import { spaceTokenizer, diacritics } from '../helpers.js';
+import { spaceTokenizer, diacritics, getNestedValue, isString } from '../helpers.js';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
 export const Trie: TrieType<any> = (config = {}) => {
@@ -32,11 +32,11 @@ export const Trie: TrieType<any> = (config = {}) => {
 
     let node: Record<string, unknown>;
     data = Array.isArray(data) ? data : [data];
-    const isStringArr = typeof data[0] === 'string';
+    const isStringArr = isString(data[0]);
 
     for (const value of data) {
       // we tokenize the incoming data to make search possible by fragments
-      const dataTokens = tokenize(isStringArr ? (value as string) : ((value as Dictionary)[key] as string));
+      const dataTokens = tokenize(isStringArr ? (value as string) : getNestedValue(value, key));
       for (const prefix of dataTokens) {
         if (!prefix) continue; // filter out falsy values
 
