@@ -624,5 +624,18 @@ context('Typeahead', () => {
     cy.get('@list').children('.tt-suggestion').should('have.length', 3);
   });
 
+  it('Nested Keys: should add nested values to search index correctly', () => {
+    cy.get('#input-nineteen').as('input19').type('c', { delay: 100 });
+    cy.get('.typeahead-test-nineteen .tt-suggestion').as('suggestions').should('have.length', 5);
+    cy.get('.typeahead-test-nineteen .tt-hint').should('have.value', 'cake');
+
+    cy.get('@input19').clear().type('ca', { delay: 100 });
+    cy.get('@suggestions').should('have.length', 2);
+
+    cy.get('@input19').clear().type('mil', { delay: 100 });
+    cy.get('.typeahead-test-nineteen .tt-hint').should('have.value', '');
+    cy.get('@suggestions').should('have.length', 2);
+  });
+
   // https://on.cypress.io/interacting-with-elements
 });

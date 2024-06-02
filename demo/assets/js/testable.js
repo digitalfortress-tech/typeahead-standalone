@@ -968,7 +968,7 @@ const test19 = typeahead({
   identity: (item) => item.id,
   templates: {
     suggestion: (item) => `
-      <div style="display:flex;flex-direction:column;border-bottom: 1px solid #80808070;padding: 2px 0;">
+      <div style="display:flex;flex-direction:column;border-bottom: 1px solid #80808090;padding: 2px 0;">
         <div>${item.category.meta.title}</div>
         <div style="font-size:13px;color:gray;">${item.category.meta.description}</div>
       </div>
