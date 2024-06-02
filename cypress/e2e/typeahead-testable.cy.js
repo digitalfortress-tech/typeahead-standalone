@@ -632,9 +632,22 @@ context('Typeahead', () => {
     cy.get('@input19').clear().type('ca', { delay: 100 });
     cy.get('@suggestions').should('have.length', 2);
 
+    cy.get('@input19').clear().type('1', { delay: 100 });
+    cy.get('@suggestions').should('have.length', 1);
+
     cy.get('@input19').clear().type('mil', { delay: 100 });
     cy.get('.typeahead-test-nineteen .tt-hint').should('have.value', '');
     cy.get('@suggestions').should('have.length', 2);
+  });
+
+  it('Nested groupKey: should show groups correctly & in alphabetical order', () => {
+    cy.get('#input-nineteen').as('input19').type('cu', { delay: 100 });
+    cy.get('.typeahead-test-nineteen .tt-suggestion').as('suggestions').should('have.length', 3);
+    cy.get('.typeahead-test-nineteen .tt-group').as('groups').should('have.length', 2);
+
+    // groups should be ordered alphabetically
+    cy.get('.typeahead-test-nineteen .tt-list').as('list').children().eq(1).should('have.text', 'Desserts');
+    cy.get('@list').children().eq(3).should('have.text', 'Main Course');
   });
 
   // https://on.cypress.io/interacting-with-elements
