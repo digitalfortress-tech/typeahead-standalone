@@ -168,15 +168,15 @@ source: {
 ```javascript
 /* Example Data source */
 [
-  { id: 1, color: "Yellow", colorCode: "YW" },
-  { id: 2, color: "Green", colorCode: "GN", shade: "Greenish" },
-  { id: 3, color: "Olive", colorCode: "OV", shade: "Greenish" },
+  { id: 1, color: "Yellow", meta: { colorCode: "YW" }},
+  { id: 2, color: "Green", meta: { colorCode: "GN"}, shade: "Greenish" },
+  { id: 3, color: "Olive", meta: { colorCode: "OV"}, shade: "Greenish" },
   ...
 ]
  ```
  Now if we wish to use the the text defined in the `color` property to appear as the suggestions, then the **keys** must be include **color** as the first key. (i.e. `keys: ["color"]`).
 
-If you wish to add more properties to the search index, you can specify those properties as well in the `keys` array. This can be best understood with an example. Lets take the same example data source as shown above. What if you wanted to search colors by another property(_colorCode_) and not just by its _color_ ? To do so, simple set `keys: ["color", "colorCode"]`. If you now search for "**YW**", the suggestion "Yellow" pops up as expected.
+If you wish to add more properties to the search index, you can specify those properties as well in the `keys` array. This can be best understood with an example. Lets take the same example data source as shown above. What if you wanted to search colors by another property(_colorCode_) and not just by its _color_ ? To do so, simply set `keys: ["color", "meta.colorCode"]`. If you now search for "**YW**", the suggestion "Yellow" pops up as expected.
 - **groupKey**: If you wish to group your suggestions, set the groupKey property. This is an optional property. Again, going with the same example data source as above, when you set `groupKey: "shade"`, suggestions will be grouped by the property "**shade**". In this example, the colors _Green_ and _Olive_ will appear under the group "**Greenish**" (`shade`) whereas the color _Yellow_ will have no group.
 - **identity**: The `identity()` function is used to determine uniqueness of each suggestion. It receives the suggestion as a parameter and must return a string unique to the given suggestion. This is an optional property and it defaults to returning the value associated with **the first key** i.e. `keys[0]`. However, the default value might not work everytime. For example, consider the following code -
 ```javascript

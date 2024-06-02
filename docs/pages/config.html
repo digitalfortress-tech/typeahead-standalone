@@ -301,16 +301,16 @@ typeahead({
 <div class="tabContainer padding-v15">
   <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      <a class="nav-link active simple-link tab-link" id="nav-gkey-tab" data-toggle="tab" href="#nav-gkey" role="tab"
-        aria-controls="nav-gkey" aria-selected="true">groupKey</a>
-      <a class="nav-link simple-link tab-link" id="nav-dtokens-tab" data-toggle="tab" href="#nav-dtokens" role="tab"
-        aria-controls="nav-dtokens" aria-selected="false">keys</a>
+      <a class="nav-link simple-link tab-link active" id="nav-dtokens-tab" data-toggle="tab" href="#nav-dtokens" role="tab"
+        aria-controls="nav-dtokens" aria-selected="true">keys</a>
+      <a class="nav-link simple-link tab-link" id="nav-gkey-tab" data-toggle="tab" href="#nav-gkey" role="tab"
+        aria-controls="nav-gkey" aria-selected="false">groupKey</a>
       <a class="nav-link simple-link tab-link" id="nav-identity-tab" data-toggle="tab" href="#nav-identity" role="tab" aria-controls="nav-identity" aria-selected="false">identity</a>
       <a class="nav-link simple-link tab-link" id="nav-transform-tab" data-toggle="tab" href="#nav-transform" role="tab" aria-controls="nav-transform" aria-selected="false">transform</a>
     </div>
   </nav>
   <div class="tab-content" id="nav-tabContent">
-    <div class="tab-pane fade show active" id="nav-gkey" role="tabpanel" aria-labelledby="nav-gkey-tab">
+    <div class="tab-pane fade" id="nav-gkey" role="tabpanel" aria-labelledby="nav-gkey-tab">
       <p>
         The <code>groupKey</code> source config option is used when you wish to group suggestions together
       </p>
@@ -341,7 +341,7 @@ typeahead({
         whereas the color Yellow will have no group.
       </p>
     </div>
-    <div class="tab-pane fade" id="nav-dtokens" role="tabpanel" aria-labelledby="nav-dtokens-tab">
+    <div class="tab-pane fade show active" id="nav-dtokens" role="tabpanel" aria-labelledby="nav-dtokens-tab">
       <p>
         The <code>keys</code> config option accepts an array of strings (which are properties of the source object)
         that should be added to the search index. In other words, when you want your suggestions to be searchable
@@ -359,9 +359,9 @@ typeahead({
         <pre class="hljs language-js">
 // Local data source
 const colors = [
-  { id: 1, color: "Yellow", colorCode: "YW" },
-  { id: 2, color: "Green", colorCode: "GN", shade: "Greenish" },
-  { id: 3, color: "Olive", colorCode: "OV", shade: "Greenish" },
+  { id: 1, color: "Yellow", meta: { colorCode: "YW"} } ,
+  { id: 2, color: "Green", meta: { colorCode: "GN" } },
+  { id: 3, color: "Olive", meta: {colorCode: "OV"} },
   // ...
 ];
 
@@ -369,14 +369,14 @@ typeahead({
   input: document.querySelector(".myInput"),
   source: {
     local: colors,
-    keys: ["color", "colorCode"],
+    keys: ["color", "meta.colorCode"],
   }
 });</pre>
       </div>
       <p>
         Given the data-source as seen in the example above, what if we wanted to search colors by another property(<b>colorCode</b>)
         and not just by its first key(i.e. <b>color</b>) ? By simply setting
-        <code>keys: ["color","colorCode"]</code>, we add the values defined in the colorCode property to the search index.
+        <code>keys: ["color", "meta.colorCode"]</code>, we add the values defined in the colorCode property to the search index.
         Thereafter, if we search for "YW" (case-insensitive), the suggestion "Yellow" pops up as expected.
       </p>
 
