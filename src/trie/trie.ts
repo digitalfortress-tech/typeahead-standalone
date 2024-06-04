@@ -27,7 +27,7 @@ export const Trie: TrieType<any> = (config = {}) => {
    * Method used to add the given data to the trie.
    * key is optional when data is a string|string[], but mandatory for Dictionary[]
    */
-  function add(data: string | string[] | Dictionary[], key = '', identity?: (item?: unknown) => void) {
+  function add(data: string | string[] | Dictionary[], key = '', identity?: (item?: unknown) => string): void {
     if (!data) return;
 
     let node: Record<string, unknown>;
@@ -68,11 +68,9 @@ export const Trie: TrieType<any> = (config = {}) => {
 
     // Performing DFS (Depth-First Search) from prefix to traverse the tree
     const stack = [{ node, prefix }];
-    let current;
 
     while (stack.length) {
-      current = stack.pop() as { node: Record<string, unknown>; prefix: string };
-      const { node, prefix } = current;
+      const { node, prefix } = stack.pop() as { node: Record<string, unknown>; prefix: string };
 
       for (const k in node) {
         if (k === SENTINEL) {
