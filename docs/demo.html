@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=5.0, minimum-scale=1.0" />
+    <title>Typeahead-standalone.js - Autocomplete Javascript Library Example</title>
+    <meta name="description" content="An example demonstrating the performance of Typeahead-standalone.js" />
+    <meta name="keywords" content="typeahead demo, typeahaed-standalone example, typeahead js example, auto complete js performance, autocomplete performance, autosuggest performance example, autosuggest js speed test, autocomplete full text search speed, autocomplete in javascript performance, performance of autocomplete in js, autocomplete input javascript demo, autocomplete input js speed test, autocomplete javascript example, autocomplete select library performance, autocomplete text library example, autocomplete textbox library example, autocomplete tutorial, autocomplete tutorial ajax, autocomplete using pure javascript example, autocomplete vanilla js example, autocomplete with javascript speed test, autocomplete-js example, autocomplete.js examples, typeahead examples, autocompletejs, autofill js demo, autosuggest dropdown example">
+    <meta name="subject" content="autoComplete Javascript Library example and performance test">
+    <meta name="author" content="Niket Anant Pathak">
+    <meta name="copyright" content="DigitalFortress">
+    <meta name="owner" content="DigitalFortress">
+    <meta property="og:site_name" content="typeahead-standalone.js performance test">
+    <meta property="og:title" content="typeahead-standalone.js performance test">
+    <meta property="og:description" content="An example demonstrating the performance of Typeahead-standalone.js">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://typeahead.digitalfortress.tech/demo.html">
+    <meta property="og:image" content="https://typeahead.digitalfortress.tech/assets/img/typeahead-standalone-main.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="1200">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-63687183-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'UA-63687183-8');
+    </script>
+
+    <!-- *********************************************************************************** -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeahead-standalone/dist/basic.css" />
+    <!-- local -->
+    <!-- <script src="./../dist/typeahead-standalone.umd.js"></script> -->
+
+    <!-- remote -->
+    <script src="https://cdn.jsdelivr.net/npm/typeahead-standalone"></script>
+
+    <style>
+      body {
+        font-size: 18px;
+        background-color: #1a1a1a;
+        color: white;
+      }
+      a, a:visited {
+        color: white;
+        text-decoration-color: #dc3545;
+      }
+      a:hover {
+        color: #dc3545;
+        text-decoration-color: gray;
+      }
+      [class^='tt-'] {
+        color: white;
+      }
+
+      .search,
+      .tt-hint {
+        padding: 8px;
+        line-height: 10px;
+        font-size: 16px;
+        border: 1px solid gray;
+        border-radius: 4px;
+      }
+      .tt-highlight {
+        color: #dc3545;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 0 16px;
+      }
+      .footerArea {
+        position: absolute;
+        bottom: 30px;
+      }
+      .typeahead-standalone .tt-list div[class^=tt-] {
+        padding: 8px;
+      }
+
+      .typeahead-standalone .tt-list {
+        background: black;
+      }
+
+      .typeahead-standalone .tt-list .tt-header {
+        background: black;
+        border-bottom: 1px solid red;
+      }
+      .typeahead-standalone .tt-list .tt-suggestion {
+        color: gray;
+        border-bottom: 1px solid #80808047;
+      }
+      .font-bold {
+        font-weight: 900;
+      }
+      .typeahead-standalone .tt-input {
+        color: white;
+      }
+      .typeahead-standalone .tt-hint {
+        background-color: #1a1a1a;
+        color: silver;
+      }
+      .typeahead-standalone .tt-list .tt-suggestion:hover, .typeahead-standalone .tt-list .tt-suggestion.tt-selected {
+        background: #dc35455e;
+        color: white;
+      }
+      .valWrapper {
+        opacity: 0;
+      }
+      .visible {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container text-center">
+      <h3>
+        <a href="./">Typeahead-standalone.js</a> Performance Test
+      </h3>
+      <div class="mainContent">
+        <h4>Steam Games (50k+ records)</h4>
+        <input type="search" class="search" autocomplete="off" placeholder="Search..." oninput="startPerf()" />
+        <h5 class="valWrapper">Submitted Value: <span class="selectedVal tt-highlight"></span></h5>
+      </div>
+      <div class="footerArea">
+        Complete Tutorial on
+        <a
+          href="https://digitalfortress.tech/tutorial/all-in-one-smart-search-with-typeahead-standalone/"
+          target="_blank"
+          >Digital Fortress</a
+        >
+      </div>
+    </div>
+
+    <script>
+      let timerStart;
+
+      function startPerf() {
+        document.querySelector('.valWrapper').classList.remove('visible')
+        timerStart = performance.now();
+      }
+
+      // document.querySelector('.search').addEventListener('onkeydown', startPerf)
+      /* Initialise typeahead-standalone.js */
+      typeahead({
+        input: document.querySelector('.search'),
+        source: {
+          prefetch: {
+            // url: './../docs/assets/json/steam-games.json', // local
+            url: "https://raw.githubusercontent.com/digitalfortress-tech/typeahead-standalone/master/docs/assets/json/steam-games.json", // remote
+          },
+        },
+        highlight: true,
+        limit: 10,
+        onSubmit: (e, selectedSuggestion) => {
+          document.querySelector('.valWrapper').classList.add('visible');
+          document.querySelector('.selectedVal').innerHTML = e.target.value;
+          //alert(`Submitted value -> ${e.target.value}, ${JSON.stringify(selectedSuggestion)}`);
+        },
+        templates: {
+          header: (resultSet) => {
+            const execTime = Math.round(performance.now() - timerStart);
+            return `showing <span class="font-bold">${resultSet.hits.length}</span> of  <span class="font-bold">${resultSet.count}</span> in  <span class="font-bold">${execTime}ms</span>`;
+          },
+          notFound: (resultSet) => `No matches for "${resultSet.query}"`,
+        },
+      });
+    </script>
+  </body>
+</html>
