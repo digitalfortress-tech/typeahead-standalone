@@ -270,7 +270,7 @@ export interface ResultSet<T extends Dictionary> {
   /** The input search query */
   query: string;
   /** The found suggestions */
-  items: T[];
+  hits: T[];
   /** The total number of matching suggestions */
   count: number;
   /** The max number of suggestions to be displayed */

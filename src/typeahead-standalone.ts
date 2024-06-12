@@ -80,7 +80,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
   const resultSet: ResultSet<T> = {
     query: '',
-    items: [], // suggestions
+    hits: [], // suggestions
     count: 0,
     limit: config.limit || 5,
     wrapper,
@@ -200,7 +200,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    * Clear typeahead state and hide listContainer
    */
   const clear = (): void => {
-    resultSet.items = [];
+    resultSet.hits = [];
     inputHint.value = '';
     storedInput = '';
     hide();
@@ -225,7 +225,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    * @returns true if no suggestions are found, else returns undefined
    */
   const noSuggestionsHandler = (asyncRender = false) => {
-    if (!resultSet.items.length && resultSet.query) {
+    if (!resultSet.hits.length && resultSet.query) {
       // clear the list and the DOM
       clear();
       clearListDOM();
@@ -334,7 +334,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     }
 
     // loop over suggestions
-    for (const [index, item] of resultSet.items.entries()) {
+    for (const [index, item] of resultSet.hits.entries()) {
       if (index === resultSet.limit) break;
 
       // attach group if available
@@ -375,7 +375,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     listContainer.appendChild(fragment);
 
     // update hint if its enabled
-    hint && updateHint(selected || resultSet.items[0]);
+    hint && updateHint(selected || resultSet.hits[0]);
 
     // scroll when not in view
     listContainer.querySelector(`.${classNames.selected}`)?.scrollIntoView({ block: 'center' });
@@ -397,20 +397,20 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    * Select the previous item in suggestions
    */
   const selectPrev = (ev: KeyboardEvent): void => {
-    const maxLength = resultSet.items.length >= resultSet.limit ? resultSet.limit : resultSet.items.length;
+    const maxLength = resultSet.hits.length >= resultSet.limit ? resultSet.limit : resultSet.hits.length;
     // if first item is selected and UP Key is pressed, focus input and restore original input
-    if (selected === resultSet.items[0]) {
+    if (selected === resultSet.hits[0]) {
       selected = undefined;
       input.value = storedInput;
       return;
     }
     // if focus is on input, and UP Key is pressed, select last item
     if (!selected) {
-      selected = resultSet.items[maxLength - 1];
+      selected = resultSet.hits[maxLength - 1];
     } else {
       for (let i = maxLength - 1; i > 0; i--) {
-        if (selected === resultSet.items[i] || i === 1) {
-          selected = resultSet.items[i - 1];
+        if (selected === resultSet.hits[i] || i === 1) {
+          selected = resultSet.hits[i - 1];
           break;
         }
       }
@@ -423,23 +423,23 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    * Select the next item in suggestions
    */
   const selectNext = (ev: KeyboardEvent): void => {
-    const maxLength = resultSet.items.length >= resultSet.limit ? resultSet.limit : resultSet.items.length;
+    const maxLength = resultSet.hits.length >= resultSet.limit ? resultSet.limit : resultSet.hits.length;
     // if nothing selected, select the first suggestion
     if (!selected) {
-      selected = resultSet.items[0];
+      selected = resultSet.hits[0];
       input.value = display(selected, ev);
       return;
     }
     // if we're at the end of the list, go to input box and restore original input
-    if (selected === resultSet.items[maxLength - 1]) {
+    if (selected === resultSet.hits[maxLength - 1]) {
       selected = undefined;
       input.value = storedInput;
       return;
     }
 
     for (let i = 0; i < maxLength - 1; i++) {
-      if (selected === resultSet.items[i]) {
-        selected = resultSet.items[i + 1];
+      if (selected === resultSet.hits[i]) {
+        selected = resultSet.hits[i + 1];
         break;
       }
     }
@@ -449,11 +449,11 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
     // if raw input is empty if Esc is hit, clear out everything
-    if (ev.key === 'Escape' || (!input.value.length && !resultSet.items.length)) {
+    if (ev.key === 'Escape' || (!input.value.length && !resultSet.hits.length)) {
       return clear();
     }
 
-    if (resultSet.items.length && (ev.key === 'ArrowUp' || ev.key === 'ArrowDown')) {
+    if (resultSet.hits.length && (ev.key === 'ArrowUp' || ev.key === 'ArrowDown')) {
       ev.key === 'ArrowDown' ? selectNext(ev) : selectPrev(ev);
       update();
 
@@ -464,8 +464,8 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     }
 
     const useSelectedValue = function (fallback = false) {
-      if (!selected && fallback && resultSet.items.length) {
-        selected = resultSet.items[0];
+      if (!selected && fallback && resultSet.hits.length) {
+        selected = resultSet.hits[0];
       }
       if (selected) {
         clear();
@@ -506,7 +506,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
       // inject default suggestions if they were updated in the empty() template
       if (Array.isArray(emptyTemplateResp) && emptyTemplateResp.length) {
-        resultSet.items = normalizer(emptyTemplateResp, keys[0]) as T[];
+        resultSet.hits = normalizer(emptyTemplateResp, keys[0]) as T[];
         return update();
       }
 
@@ -530,14 +530,14 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
       // if remote source exists, first check remote cache before making any query
       const thumbprint = JSON.stringify(resultSet.query);
-      if (remote && resultSet.items.length < resultSet.limit && (remoteResponseCache[thumbprint] as [])?.length) {
+      if (remote && resultSet.hits.length < resultSet.limit && (remoteResponseCache[thumbprint] as [])?.length) {
         calcSuggestions(remoteResponseCache[thumbprint] as []);
       }
 
       update(); // update view
 
       remoteDebounceTimer = setTimeout(() => {
-        if (resultSet.items.length < resultSet.limit && !fetchInProgress) {
+        if (resultSet.hits.length < resultSet.limit && !fetchInProgress) {
           fetchDataFromRemote();
         }
       }, remote?.debounce || 200);
@@ -580,12 +580,12 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     }
 
     // update items with available suggestions
-    resultSet.items = suggestions;
+    resultSet.hits = suggestions;
     resultSet.count = count;
 
     selected = undefined; // unselect previously calculated/cached suggestion
-    if (autoSelect && resultSet.items.length) {
-      selected = resultSet.items[0];
+    if (autoSelect && resultSet.hits.length) {
+      selected = resultSet.hits[0];
     }
   };
 

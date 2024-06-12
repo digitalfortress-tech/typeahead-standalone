@@ -324,7 +324,7 @@ As seen above, each template takes a callback that **must return a `string`** wh
 ```js
 resultSet = {
   query: '...', // the input query
-  items: [...], // found suggestions
+  hits: [...], // found suggestions
   count: 0,     // the total suggestions found in the search index
   limit: 5,     // the number of suggestions to show
   wrapper: DOMElement,  // the container DOM element

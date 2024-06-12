@@ -509,11 +509,11 @@ const test4 = typeahead({
   highlight: true,
   templates: {
     suggestion: (item, resultSet) => {
-      return `<span class="preview" data-resultset="${resultSet.items[0].hash}" style="background-color:${item.hash}"></span>
+      return `<span class="preview" data-resultset="${resultSet.hits[0].hash}" style="background-color:${item.hash}"></span>
         <div class="text">${item.name}</div>`;
     },
     group: (name, resultSet) => {
-      const count = resultSet.items.filter((i) => i.group === name).length;
+      const count = resultSet.hits.filter((i) => i.group === name).length;
       return `<div class="custom-group">${name} (count: ${count})</div>`;
     },
     header: (resultSet) => {
