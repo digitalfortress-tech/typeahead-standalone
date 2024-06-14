@@ -138,9 +138,9 @@ function loadFragment(fragment, firstLoad = true) {
       document.querySelector('#navbarToggleSubmenuMobile').classList.remove('show');
     }
 
-    /* scroll to top of fragment */
     if (!subSection) {
-      mainSectionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      /* scroll to top of fragment if subsection does not exist */
+      mainSectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else if (!firstLoad) {
       /* subSection exists, scroll to subSection */
       document.getElementById(subSection)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
