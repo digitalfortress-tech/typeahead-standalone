@@ -535,7 +535,7 @@ typeahead({
 
 <p>
   The <code>highlight</code> <i>(Type: Boolean)</i> config option causes the matching letters between the search query and the available suggestions to be highlighted.
-  When set to <code>true</code>, the basic styling makes the matched letters <b>bold</b>.
+  When enabled, the basic styling makes the matched letters <b>bold</b>.
   A class <code>tt-highlight</code> is added to facilitate further styling.
 </p>
 <div class="codeContainer">
@@ -547,11 +547,11 @@ typeahead({
   source: {
     local: ['Superman', 'Batman', 'Flash', 'Aquaman', 'Wonder woman'],
   },
-  highlight: true, // default - undefined
+  // highlight: false, // default - true
 });</pre>
 </div>
 <p>
-  By default, this option is <code>undefined</code>, i.e. matching letters are not highlighted.
+  By default, this option is set to <code>true</code>, i.e. matching letters are highlighted. Set to <code>false</code> to disable this behaviour.
 </p>
 
 <hr>

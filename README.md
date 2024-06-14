@@ -116,7 +116,7 @@ You can pass the following config options to `typeahead-standalone`:
 |`source`|This is the source of Data from which suggestions will be calculated. The source can be local, prefetched or retrieved from a remote endpoint. [Details](#source) |`-` (Required)|
 |`minLength`|Specify the minimum length, when suggestions should appear on the screen.|`1`|
 |`limit`|Specify the maximum number of suggestions that should be displayed.|`5`|
-|`highlight`| If set to true, the matched letters are highlighted in the list of suggestions. A class `tt-highlight` is added to facilitate styling|`undefined`|
+|`highlight`| The matched letters from the query are highlighted in the list of suggestions. A class `tt-highlight` is added to facilitate styling|`true`|
 |`autoSelect`| If set to true, pre-selects the first displayed suggestion |`false`|
 |`hint`| Updates the input placeholder to be equal to the first matched suggestion. A class `tt-hint` is added to facilitate styling|`true`|
 |`diacritics`| Flag to enable/disable language diacritics supported search (i.e. search by converting accented characters into their non-accented counterparts)|`undefined`|
@@ -404,7 +404,7 @@ This API is useful in situations where you need to invalidate data after a certa
 
 #### <a id="typeaheadaddtoindex">typeahead.`addToIndex()`</a>
 
-Adds items to the search index. Intended to use after calling the `reset()` method. Similar to adding items via the Local source.
+Adds items to the search index. Useful when you want to fetch data yourself and then add it to the search index. It is similar to adding items via the Local source.
 
 ```javascript
 const instance = typeahead({ /* options */ });

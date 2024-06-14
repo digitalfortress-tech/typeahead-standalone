@@ -360,7 +360,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
       fragment.appendChild(div);
 
       // highlight matched text
-      config.highlight && highlight(div, resultSet.query);
+      config.highlight !== false && highlight(div, resultSet.query);
     }
 
     // Add footer template
