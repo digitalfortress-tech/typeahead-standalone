@@ -106,10 +106,13 @@ export const Trie: TrieType<any> = (config = {}) => {
   function search(query: string, limit?: number): SearchResults<Dictionary | string> {
     const queryTokens = tokenize(query);
 
+    // limit input queries to 20 tokens/words for improved performance
+    const queryTokenLimit = queryTokens.length <= 20 ? queryTokens.length : 20;
+
     // Search for multiple tokens/queries and get initial matches
     let suggestions: Dictionary | Dictionary[] = find(queryTokens[0]);
 
-    for (let i = 1; i < queryTokens.length; i++) {
+    for (let i = 1; i < queryTokenLimit; i++) {
       suggestions = intersectDictionaries(suggestions, find(queryTokens[i])); // get intersection of found suggestions
       if (!Object.keys(suggestions).length) break; // exit if no matches are found
     }
