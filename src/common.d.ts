@@ -1,4 +1,4 @@
-import type { TrieType } from './trie/types.d.ts';
+import type { TrieAPI } from './trie/types.d.ts';
 
 export type Dictionary<T = unknown> = Record<string, T>;
 
@@ -295,7 +295,7 @@ export interface typeaheadResult<T extends Dictionary> {
   /** Destroys the typeahead instance, clears search index, removes all event handlers and cleans up the DOM. Can be used if you wish to deactivate typeahead. */
   destroy: () => void;
   /** The internal Trie instance. Available only in "dev" mode */
-  trie?: TrieType<T>;
+  trie?: TrieAPI<T>;
 }
 
 // Types can be verified at https://arethetypeswrong.github.io/

@@ -138,7 +138,7 @@ source: {
   remote: {
     url: 'https://remoteapi.com/%QUERY', // OR "url: (inputQuery: string) => `https://remoteapi.com/${inputQuery}`"
     wildcard: '%QUERY',
-    debounce: 300             // optional, default => 300ms
+    debounce: 300             // optional, default => 200ms
     requestOptions: {}        // optional, default => undefined
   },
   prefetch: {
@@ -152,7 +152,7 @@ source: {
   groupKey: '...',     // optional, default => undefined
   identity: (item) => string, // optional (determines uniqueness of each suggestion)
   transform: function (data) {
-    // modify received data if needed & return it
+    // modify source data if needed & return it
     return data;
   }
 }
@@ -195,7 +195,7 @@ If you wish to add more properties to the search index, you can specify those pr
  ```
 It is **highly recommended** to set the `identity()` config option to return a unique string when your data source is an array of Objects.
 
-Checkout the **[Live Examples](https://typeahead.digitalfortress.tech/)** for further clarification.
+Checkout the **[Live Examples](https://typeahead.digitalfortress.tech/#playground)** for further clarification.
 
 ---
 ## 🎨 Styling (css)

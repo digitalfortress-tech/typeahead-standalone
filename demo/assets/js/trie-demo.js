@@ -7,7 +7,7 @@ const test = typeahead({
   className: 'typeahead-test-one',
 });
 
-const trie = test.trie();
+const trie = test.trie;
 trie.clear();
 console.log(' **** CLEARED **** ');
 
