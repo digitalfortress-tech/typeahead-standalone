@@ -377,8 +377,35 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     // update hint if its enabled
     hint && updateHint(selected || resultSet.hits[0]);
 
+    const scrollIntoViewIfNeeded = (element: HTMLDivElement) => {
+      if (element === null) return;
+      const rect = element.getBoundingClientRect();
+
+      const isAbove = rect.top < 0;
+      const isBelow = rect.bottom > (window.innerHeight || document.documentElement.clientHeight);
+      const isLeft = rect.left < 0;
+      const isRight = rect.right > (window.innerWidth || document.documentElement.clientWidth);
+
+      if (isAbove) {
+        window.scrollBy({ top: rect.top - 10, behavior: 'smooth' });
+      } else if (isBelow) {
+        window.scrollBy({
+          top: rect.bottom - (window.innerHeight || document.documentElement.clientHeight) + 10,
+          behavior: 'smooth',
+        });
+      }
+
+      if (isLeft) {
+        window.scrollBy({ left: rect.left - 10, behavior: 'smooth' });
+      } else if (isRight) {
+        window.scrollBy({
+          left: rect.right - (window.innerWidth || document.documentElement.clientWidth) + 10,
+          behavior: 'smooth',
+        });
+      }
+    };
     // scroll when not in view
-    listContainer.querySelector(`.${classNames.selected}`)?.scrollIntoView({ block: 'center' });
+    scrollIntoViewIfNeeded(listContainer.querySelector(`.${classNames.selected}`) as HTMLDivElement);
 
     show();
   };
@@ -609,9 +636,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
     fetchWrapper
       .get(
-        typeof remote.url === 'function'
-          ? remote.url(frozenInput)
-          : remote.url.replace(remote.wildcard!, frozenInput),
+        typeof remote.url === 'function' ? remote.url(frozenInput) : remote.url.replace(remote.wildcard!, frozenInput),
         remote.requestOptions
       )
       .then(
