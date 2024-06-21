@@ -609,10 +609,9 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
     fetchWrapper
       .get(
-        (typeof remote.url === 'function' ? remote.url(frozenInput) : remote.url).replace(
-          remote.wildcard || '',
-          frozenInput
-        ),
+        typeof remote.url === 'function'
+          ? remote.url(frozenInput)
+          : remote.url.replace(remote.wildcard!, frozenInput),
         remote.requestOptions
       )
       .then(

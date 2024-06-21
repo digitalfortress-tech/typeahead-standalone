@@ -542,8 +542,7 @@ const test4A = typeahead({
   input: document.getElementById('input-fourA'),
   source: {
     remote: {
-      url: () => 'https://restcountries.com/v2/name/%QUERY',
-      wildcard: '%QUERY',
+      url: (query) => `https://restcountries.com/v2/name/${query}`,
     },
     keys: ['name', 'capital'],
   },
@@ -570,8 +569,7 @@ const test4B = typeahead({
   input: document.getElementById('input-fourB'),
   source: {
     remote: {
-      url: () => 'https://restcountries.com/v2/name/%QUERY',
-      wildcard: '%QUERY',
+      url: (query) => `https://restcountries.com/v2/name/${query}`,
     },
     keys: ['name', 'capital'],
   },
@@ -631,8 +629,7 @@ const test6andhalf = typeahead({
   input: document.getElementById('input-six-and-half'),
   source: {
     remote: {
-      url: () => 'https://restcountries.com/v2/name/%QUERY?test1=data1&test2=data2',
-      wildcard: '%QUERY',
+      url: (query) => `https://restcountries.com/v2/name/${query}?test1=data1&test2=data2`,
     },
     keys: ['name', 'capital'],
   },

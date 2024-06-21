@@ -191,7 +191,7 @@
     `;
       },
       header: (data) => {
-        return `SUPERHEROES ${data.query ? `(Displaying ${data.items.length} of ${data.count})` : ""}`;
+        return `SUPERHEROES ${data.query ? `(Displaying ${data.hits.length} of ${data.count})` : ""}`;
       },
       notFound: (data) => `Found <b>0</b> matching results for <b>"${data.query}"</b>`,
       empty: (resultSet) => {
