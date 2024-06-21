@@ -377,8 +377,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     hint && updateHint(selected || resultSet.hits[0]);
 
     // scroll when not in view
-    listContainer.querySelector(`.${classNames.selected}`)?.scrollIntoView({ block: 'center' });
-
+    listContainer.querySelector(`.${classNames.selected}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth'});
     show();
   };
 
