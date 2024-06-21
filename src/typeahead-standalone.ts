@@ -634,7 +634,6 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
     let transformed: T[] = [];
 
-
     fetchWrapper
       .get(
         typeof remote.url === 'function'
