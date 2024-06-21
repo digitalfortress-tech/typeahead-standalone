@@ -130,7 +130,6 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
   hint && injectHintEl(inputHint);
 
   listContainer.classList.add(classNames.list, classNames.hide);
-  listContainer.tabIndex = 0;
   listContainer.setAttribute('aria-label', 'menu-options');
   listContainer.setAttribute('role', 'listbox');
 
