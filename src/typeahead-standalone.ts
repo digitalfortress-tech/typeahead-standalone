@@ -189,7 +189,9 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    * Flag to indicate if the list of suggestions is open or not
    * @returns Boolean
    */
-  const isListOpen = (): boolean => !listContainer.classList.contains(classNames.hide);
+  const isListOpen = (): boolean =>
+    !listContainer.classList.contains(classNames.hide) &&
+    !!Array.from(listContainer.children).find((item) => item.classList.contains(classNames.suggestion));
 
   /**
    * Clear remote debounce timer if assigned
@@ -447,7 +449,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
   };
 
   const keydownEventHandler = (ev: KeyboardEvent): void => {
-    // if raw input is empty if Esc is hit, clear out everything
+    // if raw input is empty & if Esc is hit, clear out everything
     if (ev.key === 'Escape' || (!input.value.length && !resultSet.hits.length)) {
       return clear();
     }
@@ -462,7 +464,10 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
       return;
     }
 
-    const useSelectedValue = function (fallback = false) {
+    // if empty query, do nothing
+    if (!resultSet.query) return;
+
+    const useSelectedValue = (fallback = false) => {
       if (!selected && fallback && resultSet.hits.length) {
         selected = resultSet.hits[0];
       }
