@@ -374,6 +374,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
     listContainer.appendChild(fragment);
 
+    // update hint if its enabled
     hint && updateHint(selected || resultSet.hits[0]);
 
     // scroll when not in view
