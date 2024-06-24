@@ -885,7 +885,35 @@ typeahead({
 </p>
 
 <hr>
-<h4><a href="#config?id=templates" id="templates" title="templates config param - typeahead-standalone.js" class="submenu-link section-link">14. 🎨 templates</h4></a>
+<h4><a href="#config?id=scrolloptions" id="scrolloptions" title="listScrollOptions config param - typeahead-standalone.js" class="submenu-link section-link">14. 🪙 listScrollOptions</h4></a>
+
+<p>
+  The <code>listScrollOptions</code> config option is used to have fine control over the scroll behaviour for a large list of suggestions that needs scrolling.
+  These options are passed to the <a href="https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView" rel="noopener noreferrer"><code>scrollIntoView()</code></a> function.
+</p>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    // ...
+  },
+  listScrollOptions: {
+    block: 'center',   // default -> block: 'nearest'
+    // inline: 'nearest'  // default is the same
+    // behaviour: 'smooth', // default -> behaviour: 'auto',
+  }
+});</pre>
+</div>
+<p>
+  Using this config parameter is completely optional. The default values are<br>
+  <code>{ block: 'nearest', inline: 'nearest', behaviour: 'auto' }</code>
+</p>
+
+<hr>
+<h4><a href="#config?id=templates" id="templates" title="templates config param - typeahead-standalone.js" class="submenu-link section-link">15. 🎨 templates</h4></a>
 
 <p>
   The <code>templates</code> config option is used to customize the
