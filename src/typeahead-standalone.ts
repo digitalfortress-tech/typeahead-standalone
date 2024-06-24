@@ -67,6 +67,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     notFound: 'tt-notFound',
     ...(config.classNames || {}),
   };
+  const listScrollOptions: ScrollIntoViewOptions = { block: 'nearest', ...(config.listScrollOptions || {}) };
 
   // validate presence of atleast one data-source
   if (!local && !prefetch && !remote) throw new Error('e02');
@@ -377,7 +378,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     hint && updateHint(selected || resultSet.hits[0]);
 
     // scroll when not in view
-    listContainer.querySelector(`.${classNames.selected}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    listContainer.querySelector(`.${classNames.selected}`)?.scrollIntoView(listScrollOptions);
     show();
   };
 

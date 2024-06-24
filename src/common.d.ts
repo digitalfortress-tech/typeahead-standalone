@@ -264,6 +264,11 @@ export interface typeaheadConfig<T extends Dictionary> {
   source: LocalDataSource<T> | PrefetchDataSource<T> | RemoteDataSource<T>;
   /** Templates that allow you to return custom HTML and also to customise styling */
   templates?: typeaheadHtmlTemplates<T>;
+  /**
+   * Allows customizing the options passed to scrollIntoView() [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView)
+   * when the list of suggestions contains many items that require scrolling. It defaults to { inline: 'nearest', block: 'nearest' }
+   */
+  listScrollOptions?: ScrollIntoViewOptions;
 }
 
 export interface ResultSet<T extends Dictionary> {
