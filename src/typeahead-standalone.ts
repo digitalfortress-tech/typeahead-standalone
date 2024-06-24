@@ -377,35 +377,31 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     // update hint if its enabled
     hint && updateHint(selected || resultSet.hits[0]);
 
-    const scrollIntoViewIfNeeded = (element: HTMLDivElement) => {
-      if (element === null) return;
-      const rect = element.getBoundingClientRect();
+    const scrollIntoViewIfNeeded = (container: HTMLDivElement, element: HTMLDivElement) => {
+      if (container === null || element === null) return;
 
-      const isAbove = rect.top < 0;
-      const isBelow = rect.bottom > (window.innerHeight || document.documentElement.clientHeight);
-      const isLeft = rect.left < 0;
-      const isRight = rect.right > (window.innerWidth || document.documentElement.clientWidth);
+      const containerRect = container.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+
+      const isAbove = elementRect.top < containerRect.top;
+      const isBelow = elementRect.bottom > containerRect.bottom;
+      const isLeft = elementRect.left < containerRect.left;
+      const isRight = elementRect.right > containerRect.right;
 
       if (isAbove) {
-        window.scrollBy({ top: rect.top - 10, behavior: 'smooth' });
+        container.scrollBy({ top: elementRect.top - containerRect.top - 10, behavior: 'smooth' });
       } else if (isBelow) {
-        window.scrollBy({
-          top: rect.bottom - (window.innerHeight || document.documentElement.clientHeight) + 10,
-          behavior: 'smooth',
-        });
+        container.scrollBy({ top: elementRect.bottom - containerRect.bottom + 10, behavior: 'smooth' });
       }
 
       if (isLeft) {
-        window.scrollBy({ left: rect.left - 10, behavior: 'smooth' });
+        container.scrollBy({ left: elementRect.left - containerRect.left - 10, behavior: 'smooth' });
       } else if (isRight) {
-        window.scrollBy({
-          left: rect.right - (window.innerWidth || document.documentElement.clientWidth) + 10,
-          behavior: 'smooth',
-        });
+        container.scrollBy({ left: elementRect.right - containerRect.right + 10, behavior: 'smooth' });
       }
     };
     // scroll when not in view
-    scrollIntoViewIfNeeded(listContainer.querySelector(`.${classNames.selected}`) as HTMLDivElement);
+    scrollIntoViewIfNeeded(listContainer, listContainer.querySelector(`.${classNames.selected}`) as HTMLDivElement);
 
     show();
   };
