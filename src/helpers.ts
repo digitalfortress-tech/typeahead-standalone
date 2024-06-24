@@ -33,14 +33,14 @@ export const diacritics = (txt = '') => txt.normalize('NFD').replace(/\p{Diacrit
 
 /****** helpers specific to typeahead  *****/
 
-export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionary[] | T[], key: string): T[] => {
+export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionary[] | T[], key?: string): T[] => {
   if (!listItems.length) return [];
 
   // validate array of objects
   if (isObject(listItems[0])) {
     // verify if key exists (i.e. normalized already)
     for (const item of listItems) {
-      if (!getNestedValue(item, key)) {
+      if (!getNestedValue(item, key as string)) {
         throw new Error('e03');
       }
     }
@@ -50,7 +50,7 @@ export const normalizer = <T extends Dictionary>(listItems: string[] | Dictionar
 
   // normalize array of strings
   return (listItems as string[]).map((item) => ({
-    [key]: isString(item) ? item : JSON.stringify(item),
+    [key as string]: isString(item) ? item : JSON.stringify(item),
   })) as T[];
 };
 

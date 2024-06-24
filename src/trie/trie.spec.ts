@@ -1,4 +1,5 @@
-import { Trie } from './trie';
+import { expect } from 'vitest';
+import { Trie } from './trie.js';
 
 const colors = [
   { label: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },

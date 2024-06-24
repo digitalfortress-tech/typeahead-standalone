@@ -24,7 +24,7 @@ export default defineConfig({
     },
   },
   test: {
-    include: ['**/*.spec.js'],
+    include: ['**/*.spec.ts'],
     globals: true,
   },
   server: {

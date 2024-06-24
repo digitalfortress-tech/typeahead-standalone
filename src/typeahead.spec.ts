@@ -1,5 +1,5 @@
-// import { typeahead } from './typeahead-standalone';
-import { normalizer } from './helpers';
+import { expect } from 'vitest';
+import { normalizer } from './helpers.js';
 
 const colorsObj = [
   { id: 'Red', value: 'RD', hash: 'red' },
