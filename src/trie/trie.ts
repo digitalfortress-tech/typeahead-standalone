@@ -3,6 +3,7 @@ import type { SearchResults, TrieType } from './types.d.ts';
 import { spaceTokenizer, diacritics, getNestedValue, isString } from '../helpers.js';
 
 // Trie algorithm (inspired by data structures @https://github.com/Yomguithereal/mnemonist)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Trie: TrieType<any> = (config = {}) => {
   const { hasDiacritics, tokenizer } = config;
   let root: Record<string, unknown> = {};
@@ -58,7 +59,7 @@ export const Trie: TrieType<any> = (config = {}) => {
    */
   function find(prefix: string): Dictionary {
     let node = root;
-    let matches: Dictionary = {};
+    const matches: Dictionary = {};
 
     // traverse the root until you reach the end of prefix
     for (const char of prefix) {

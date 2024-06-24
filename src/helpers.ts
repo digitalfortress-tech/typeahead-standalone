@@ -1,5 +1,6 @@
 import type { Dictionary } from './common.d.ts';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const NOOP = (...args: unknown[]): void => undefined;
 
 export const escapeRegExp = (text: string): string => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
@@ -11,7 +12,7 @@ export const isObject = (item: unknown): item is Dictionary => {
 export const isString = (item: unknown): item is string => typeof item === 'string';
 
 export const getNestedValue = (obj: unknown, selector: string): string => {
-  let ref: any = obj;
+  let ref: unknown = obj;
   const keys = selector.split('.');
 
   for (const key of keys) {

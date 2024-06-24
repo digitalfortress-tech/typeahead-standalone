@@ -1,7 +1,7 @@
 // A custom FETCH API wrapper
 // inspired by https://jasonwatmore.com/post/2020/04/18/fetch-a-lightweight-fetch-wrapper-to-simplify-http-requests
 
-const get = async function (url: RequestInfo | URL, requestOptions?: RequestInit): Promise<any> {
+const get = async function (url: RequestInfo | URL, requestOptions?: RequestInit): Promise<unknown> {
   const response = await fetch(
     url,
     requestOptions || {

@@ -8,7 +8,7 @@ export interface typeaheadDataSource<T> {
    * @param data The input data to be transformed
    * @returns The transformed data
    */
-  transform?: (data: string[] | Dictionary[]) => string[] | Dictionary[];
+  transform?: (data: unknown) => string[] | Dictionary[];
   /**
    * Keys are used when the source is an array of objects to identify the properties
    * whose value should be added to the search index.

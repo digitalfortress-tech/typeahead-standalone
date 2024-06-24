@@ -51,7 +51,7 @@ describe('Trie algorithm', () => {
     const trie = Trie();
     trie.add('John');
     trie.add('James');
-    let { suggestions, count } = trie.search('j');
+    const { suggestions, count } = trie.search('j');
     expect(suggestions).toStrictEqual(['James', 'John']);
     expect(count).toEqual(2);
   });
@@ -59,7 +59,7 @@ describe('Trie algorithm', () => {
   it('search(): Passing empty string returns all items in tree', () => {
     const trie = Trie();
     trie.add(['roman', 'romanesque']);
-    let { suggestions, count } = trie.search('');
+    const { suggestions, count } = trie.search('');
     expect(suggestions).toStrictEqual(['roman', 'romanesque']);
     expect(count).toEqual(2);
   });
@@ -118,6 +118,7 @@ describe('Trie algorithm', () => {
     const words = ['Kraków', 'Łódź', 'Wrocław', 'Gdańsk', 'Częstochowa', 'Bielsko-Biała', 'Rzeszów', 'Ruda Śląska'];
     const trie = Trie({ hasDiacritics: true });
     trie.add(words);
+    // eslint-disable-next-line prefer-const
     let { suggestions, count } = trie.search('Krako');
     expect(suggestions).toStrictEqual(['Kraków']);
     expect(count).toEqual(1);
