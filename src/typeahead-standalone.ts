@@ -374,35 +374,8 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
     listContainer.appendChild(fragment);
 
-    // update hint if its enabled
-    hint && updateHint(selected || resultSet.hits[0]);
-
-    const scrollIntoViewIfNeeded = (container: HTMLDivElement, element: HTMLDivElement) => {
-      if (container === null || element === null) return;
-
-      const containerRect = container.getBoundingClientRect();
-      const elementRect = element.getBoundingClientRect();
-
-      const isAbove = elementRect.top < containerRect.top;
-      const isBelow = elementRect.bottom > containerRect.bottom;
-      const isLeft = elementRect.left < containerRect.left;
-      const isRight = elementRect.right > containerRect.right;
-
-      if (isAbove) {
-        container.scrollBy({ top: elementRect.top - containerRect.top - 10, behavior: 'smooth' });
-      } else if (isBelow) {
-        container.scrollBy({ top: elementRect.bottom - containerRect.bottom + 10, behavior: 'smooth' });
-      }
-
-      if (isLeft) {
-        container.scrollBy({ left: elementRect.left - containerRect.left - 10, behavior: 'smooth' });
-      } else if (isRight) {
-        container.scrollBy({ left: elementRect.right - containerRect.right + 10, behavior: 'smooth' });
-      }
-    };
     // scroll when not in view
-    scrollIntoViewIfNeeded(listContainer, listContainer.querySelector(`.${classNames.selected}`) as HTMLDivElement);
-
+    listContainer.querySelector(`.${classNames.selected}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth'});
     show();
   };
 
