@@ -68,7 +68,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     ...(config.classNames || {}),
   };
   const listScrollOptions: ScrollIntoViewOptions = { block: 'nearest', ...(config.listScrollOptions || {}) };
-  const preventDefaultTabKeyWhenListOpen = config.preventDefaultTabKeyWhenListOpen || true;
+  const preventDefaultTabKeyWhenListOpen = config.preventDefaultTabKeyWhenListOpen === false ? false : true;
 
   // validate presence of atleast one data-source
   if (!local && !prefetch && !remote) throw new Error('e02');
