@@ -3,7 +3,7 @@
   "type": "module",
   "title": "typeahead-standalone",
   "description": "A fast fully-featured standalone autocomplete library",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "homepage": "https://typeahead.digitalfortress.tech",
   "license": "MIT",
   "scripts": {
