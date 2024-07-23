@@ -269,6 +269,11 @@ export interface typeaheadConfig<T extends Dictionary> {
    * when the list of suggestions contains many items that require scrolling. It defaults to { inline: 'nearest', block: 'nearest' }
    */
   listScrollOptions?: ScrollIntoViewOptions;
+  /**
+   * Prevents the default tab action when the list of suggestions is open. Disable this if you want to allow the default tab action to occur.
+   * It defaults to true.
+   */
+  retainFocus?: boolean;
 }
 
 export interface ResultSet<T extends Dictionary> {

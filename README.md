@@ -127,6 +127,7 @@ You can pass the following config options to `typeahead-standalone`:
 |`display(selectedItem, event?) => string`|This callback is executed when the user selects an item from the suggestions. The current suggestion/item is passed as a parameter and it **must return a string** which is set as the input's value. The 2nd *optional* parameter `event` is a Mouse/Keyboard event which can be used to track user interaction or for analytics. It defaults to `null`. |Returns the string representation of the selected item|
 |`tokenizer?: (words: string) => string[]`|The tokenizer function is used to split the search query and the search data by a given character(s). This function is useful when you wish to search hypenated-words or words with a certain prefix/suffix |words are split by space characters (new line, tab, spaces)|
 |`listScrollOptions?: ScrollIntoViewOptions`| Allows fine control over the scroll behaviour for a large list of suggestions that needs scrolling. These options are passed to the `scrollIntoView()` function. [MDN Ref](https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView)  | `{ block: "nearest", inline: "nearest", behaviour: "auto"}`|
+|`retainFocus`| Prevents the default tab key behavior when the list of suggestions is open. Disable this if you want to allow the default tab action to occur, for example, if you want to apply the suggestion and immediately move the focus to the next element on the page afterwards without having to press the tab key again. | `true`|
 
 ---
 
