@@ -68,7 +68,6 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     ...(config.classNames || {}),
   };
   const listScrollOptions: ScrollIntoViewOptions = { block: 'nearest', ...(config.listScrollOptions || {}) };
-  const retainFocus = config.retainFocus === false ? false : true;
 
   // validate presence of atleast one data-source
   if (!local && !prefetch && !remote) throw new Error('e02');
@@ -488,9 +487,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     }
 
     if (ev.key === 'Tab' && isListOpen()) {
-      if (retainFocus) {
-        ev.preventDefault();
-      }
+      config.retainFocus !== false && ev.preventDefault();
       useSelectedValue(true);
     }
   };

@@ -885,7 +885,7 @@ typeahead({
 </p>
 
 <hr>
-<h4><a href="#config?id=scrolloptions" id="scrolloptions" title="listScrollOptions config param - typeahead-standalone.js" class="submenu-link section-link">14. 🪙 listScrollOptions</h4></a>
+<h4><a href="#config?id=scrolloptions" id="scrolloptions" title="listScrollOptions config param - typeahead-standalone.js" class="submenu-link section-link">14. 📜 listScrollOptions</h4></a>
 
 <p>
   The <code>listScrollOptions</code> config option is used to have fine control over the scroll behaviour for a large list of suggestions that needs scrolling.
@@ -913,17 +913,29 @@ typeahead({
 </p>
 
 <hr>
-<h4><a href="#config?id=retainFocus" id="retainFocus" title="retainFocus config param - typeahead-standalone.js" class="submenu-link section-link">15. 🪙 retainFocus</h4></a>
+<h4><a href="#config?id=retainFocus" id="retainFocus" title="retainFocus config param - typeahead-standalone.js" class="submenu-link section-link">15. 🎯 retainFocus</h4></a>
 
 <p>
-  The <code>retainFocus</code> config option is used to prevent the default action of the <kbd>Tab</kbd> key when the list of suggestions is open.
-  By default, when the list of suggestions is open, pressing the <kbd>Tab</kbd> key will select the first suggestion and stay in the input field. By pressing the <kbd>Tab</kbd> key again, the focus will move to the next element on the page.
+  The <code>retainFocus</code> config option is useful to control the focus on pressing the <kbd>Tab</kbd> key when the list of suggestions is open.
+  When enabled (this is the default behaviour), pressing the <kbd>Tab</kbd> key will select the first suggestion & the focus will return to the input field.
+  By pressing the <kbd>Tab</kbd> key again, the focus will move to the next element on the page.
   When this option is set to <code>false</code>, pressing the <kbd>Tab</kbd> key will select the first suggestion and immediately move the focus to the next element on the page.
-  This option is set to <code>true</code> by default.
 </p>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    // ...
+  },
+  retainFocus: false,   // default -> true
+});</pre>
+</div>
 
 <hr>
-<h4><a href="#config?id=templates" id="templates" title="templates config param - typeahead-standalone.js" class="submenu-link section-link">15. 🎨 templates</h4></a>
+<h4><a href="#config?id=templates" id="templates" title="templates config param - typeahead-standalone.js" class="submenu-link section-link">16. 🎨 templates</h4></a>
 
 <p>
   The <code>templates</code> config option is used to customize the
