@@ -273,7 +273,7 @@ export interface typeaheadConfig<T extends Dictionary> {
    * Prevents the default tab action when the list of suggestions is open. Disable this if you want to allow the default tab action to occur.
    * It defaults to true.
    */
-  preventDefaultTabKeyWhenListOpen?: boolean;
+  retainFocus?: boolean;
 }
 
 export interface ResultSet<T extends Dictionary> {
