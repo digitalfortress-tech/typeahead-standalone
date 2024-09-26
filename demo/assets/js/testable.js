@@ -507,6 +507,11 @@ const test4 = typeahead({
     wrapper: 'typeahead-standalone typeahead-test-four',
   },
   highlight: true,
+  // autoSelect: true,
+  onSubmit: (e) => {
+    e.preventDefault();
+    document.querySelector('#input-4-submit-val').innerHTML = e.target.value;
+  },
   templates: {
     suggestion: (item, resultSet) => {
       return `<span class="preview" data-resultset="${resultSet.hits[0].hash}" style="background-color:${item.hash}"></span>
@@ -982,5 +987,3 @@ const test19 = typeahead({
     `,
   },
 });
-
-

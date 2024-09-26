@@ -454,6 +454,11 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
       return clear();
     }
 
+    // clear selected items on deleting characters
+    if (ev.key === 'Backspace') {
+      selected = undefined;
+    }
+
     if (resultSet.hits.length && (ev.key === 'ArrowUp' || ev.key === 'ArrowDown')) {
       ev.key === 'ArrowDown' ? selectNext(ev) : selectPrev(ev);
       update();
@@ -465,7 +470,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     }
 
     // if empty query, do nothing
-    if (!resultSet.query) return;
+    if (!resultSet.query && !input.value.length) return;
 
     const useSelectedValue = (fallback = false) => {
       if (!selected && fallback && resultSet.hits.length) {

@@ -175,6 +175,9 @@
           className: 'typeahead-example',
           minLength: 1,
           limit: 10,
+          onSubmit: (e, selectedSuggestion) => {
+            console.log(`Submitted value -> ${e.target.value}`);
+          },
           templates: {
             suggestion: (item) => {
               const date = item.release_date
