@@ -186,6 +186,13 @@ context('Typeahead', () => {
 
     cy.get('.section-two button').click();
     cy.url().should('include', 'color-test-2=Blue+Extra+Light+-+LBLX');
+
+    // should submit via keyboard when showing default/empty list items
+    cy.get('#input-four').as('inputWithDefaultItems').clear();
+    cy.get('@inputWithDefaultItems').type('{downarrow}{downarrow}{enter}');
+    cy.get('@inputWithDefaultItems').should('have.value', 'Green');
+    cy.get('#input-4-submit-val').should('have.text', 'Green');
+    cy.get('@inputWithDefaultItems').clear();
   });
 
   it('Displays grouped results', () => {
