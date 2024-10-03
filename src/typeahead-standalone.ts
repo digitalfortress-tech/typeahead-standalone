@@ -139,6 +139,14 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
   listContainer.style.width = `${input.offsetWidth}px`;
   listContainer.style.marginTop = `${input.offsetHeight + parseInt(computedInputStyle.marginTop)}px`;
 
+  // watch the input for changes in width and update the list container accordingly
+  const inputResizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      listContainer.style.width = `${(entry.target as HTMLElement).offsetWidth}px`;
+    }
+  });
+  inputResizeObserver.observe(input);
+
   // Attach list container
   wrapper.appendChild(listContainer);
 
