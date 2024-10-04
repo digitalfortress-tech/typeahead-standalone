@@ -128,6 +128,15 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
   // generate markup for hints
   const inputHint: HTMLInputElement = input.cloneNode() as HTMLInputElement;
+
+  // remove special attributes like those used with alpineJS or htmx from hint element
+  const specialAttrRegex = /^(x-|hx-|data-|@)/;
+  for (let i = inputHint.attributes.length - 1; i >= 0; i--) {
+    if (specialAttrRegex.test(inputHint.attributes[i].name)) {
+      inputHint.removeAttribute(inputHint.attributes[i].name);
+    }
+  }
+
   hint && injectHintEl(inputHint);
 
   listContainer.classList.add(classNames.list, classNames.hide);
