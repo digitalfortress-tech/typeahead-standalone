@@ -281,7 +281,7 @@ export interface typeaheadConfig<T extends Dictionary> {
     /**
      * The updateHits hook allows you to modify/filter/sort the search results before being rendered
      * @param hits The found results
-     * @returns
+     * @returns A promise containing nothing/void or with the ResultSet
      */
     updateHits: (
       resultSet: Pick<ResultSet<T>, 'hits' | 'query' | 'count'>

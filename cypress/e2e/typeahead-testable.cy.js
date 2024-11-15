@@ -472,7 +472,8 @@ context('Typeahead', () => {
   });
 
   it('Highlights all words of multiple space-separated queries', () => {
-    cy.get('#input-eight').as('input8').clear().type('come th', { delay: 100 });
+    cy.get('#input-eight').as('input8').clear();
+    cy.get('@input8').type('come th', { delay: 100 });
     cy.get('.typeahead-test-eight .tt-highlight').should('have.length', 5);
   });
 
@@ -623,11 +624,13 @@ context('Typeahead', () => {
     cy.get('#input-eighteen').as('input18').type('ca', { delay: 100 });
     cy.get('.typeahead-test-eighteen .tt-list').as('list').should('not.be.visible');
 
-    cy.get('@input18').clear().type('ch', { delay: 100 });
+    cy.get('@input18').clear();
+    cy.get('@input18').type('ch', { delay: 100 });
     cy.get('@list').should('exist');
     cy.get('@list').children('.tt-suggestion').eq(0).should('have.text', 'editor-in-chief');
 
-    cy.get('@input18').clear().type('fa', { delay: 100 });
+    cy.get('@input18').clear();
+    cy.get('@input18').type('fa', { delay: 100 });
     cy.get('@list').children('.tt-suggestion').should('have.length', 3);
   });
 
@@ -636,13 +639,16 @@ context('Typeahead', () => {
     cy.get('.typeahead-test-nineteen .tt-suggestion').as('suggestions').should('have.length', 5);
     cy.get('.typeahead-test-nineteen .tt-hint').should('have.value', 'cake');
 
-    cy.get('@input19').clear().type('ca', { delay: 100 });
+    cy.get('@input19').clear();
+    cy.get('@input19').type('ca', { delay: 100 });
     cy.get('@suggestions').should('have.length', 2);
 
-    cy.get('@input19').clear().type('1', { delay: 100 });
+    cy.get('@input19').clear();
+    cy.get('@input19').type('1', { delay: 100 });
     cy.get('@suggestions').should('have.length', 1);
 
-    cy.get('@input19').clear().type('mil', { delay: 100 });
+    cy.get('@input19').clear();
+    cy.get('@input19').type('mil', { delay: 100 });
     cy.get('.typeahead-test-nineteen .tt-hint').should('have.value', '');
     cy.get('@suggestions').should('have.length', 2);
   });
@@ -655,6 +661,17 @@ context('Typeahead', () => {
     // groups should be ordered alphabetically
     cy.get('.typeahead-test-nineteen .tt-list').as('list').children().eq(1).should('have.text', 'Desserts');
     cy.get('@list').children().eq(3).should('have.text', 'Main Course');
+  });
+
+  it('Hooks: updateHits hook works as expected', () => {
+    cy.get('#input-twenty').as('input20').focus();
+    cy.get('.typeahead-test-twenty .tt-suggestion').as('defaultSuggestions').should('have.length', 3);
+    cy.get('@defaultSuggestions').first().should('contain.text', 'deR');
+    cy.get('@input20').type('g', { delay: 100 });
+    cy.get('.typeahead-test-twenty .tt-suggestion').first().should('contain.text', 'yerG');
+    cy.get('@input20').type('r', { delay: 100 });
+    cy.get('.typeahead-test-twenty .tt-suggestion').first().should('contain.text', 'Grey');
+    cy.get('@input20').clear();
   });
 
   // https://on.cypress.io/interacting-with-elements

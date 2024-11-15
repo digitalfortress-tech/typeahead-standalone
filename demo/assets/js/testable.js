@@ -987,3 +987,74 @@ const test19 = typeahead({
     `,
   },
 });
+
+const test20 = typeahead({
+  input: document.getElementById('input-twenty'),
+  source: {
+    local: colors,
+    keys: ['name'],
+    groupKey: 'group',
+  },
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-twenty',
+  },
+  highlight: true,
+  // autoSelect: true,
+  onSubmit: (e) => {
+    e.preventDefault();
+    document.querySelector('#input-twenty-submit-val').innerHTML = e.target.value;
+  },
+  hooks: {
+    updateHits: async (resultSet) => {
+      // to test a fetch request
+      // const response = await fetch(
+      //   'https://raw.githubusercontent.com/digitalfortress-tech/typeahead-standalone/master/docs/assets/json/superheroes.json',
+      //   {
+      //     method: 'GET',
+      //   }
+      // );
+      // const text = await response.text();
+      // const data = text && JSON.parse(text);
+
+      // const hits = data.results.slice(0, 10);
+
+      // reverse characters of words
+      const hits = resultSet.hits.map((i) => {
+        i.name = i.name.split('').reverse().join('');
+        return i;
+      });
+
+      return {
+        hits,
+        count: resultSet.count,
+      };
+    },
+  },
+  templates: {
+    suggestion: (item, resultSet) => {
+      return `<div class="text" style="background-color:${item.hash}">${item.name}</div>`;
+    },
+    group: (name, resultSet) => {
+      const count = resultSet.hits.filter((i) => i.group === name).length;
+      return `<div class="custom-group">${name} (count: ${count})</div>`;
+    },
+    header: (resultSet) => {
+      if (!resultSet.query) return 'Top Colors';
+      return `Colors Found (Total: ${resultSet.count})`;
+    },
+    footer: (resultSet) => {
+      if (!resultSet.query) return '';
+      return `<a href="#">See${
+        resultSet.count > resultSet.limit ? ` ${resultSet.count - resultSet.limit}` : ''
+      } more...</a>`;
+    },
+    notFound: (resultSet) => `Oops...Nothing Found for query - ${resultSet.query} 😪 <br>Try another color...`,
+    empty: () => {
+      return [
+        { name: 'Red', value: 'RD', hash: 'red' },
+        { name: 'Green', value: 'GR', hash: 'green' },
+        { name: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
+      ];
+    },
+  },
+});

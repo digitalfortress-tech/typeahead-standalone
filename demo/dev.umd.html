@@ -182,29 +182,6 @@
           minLength: 1,
           limit: 10,
           retainFocus: true,
-          hooks: {
-            updateHits: async (resultSet) => {
-
-              const response = await fetch(
-                "https://raw.githubusercontent.com/digitalfortress-tech/typeahead-standalone/master/docs/assets/json/superheroes.json",
-                {
-                  method: 'GET',
-                }
-              );
-
-              const text = await response.text();
-              const data = text && JSON.parse(text);
-
-              const hits = data.results.slice(0,10)
-
-              // const hits = resultSet.hits.filter(hit => hit.popularity && hit.popularity > 50);
-
-              return {
-                hits,
-                count: hits.length,
-              };
-            }
-          },
           templates: {
             suggestion: (item) => {
               const date = item.release_date
