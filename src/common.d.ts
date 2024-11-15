@@ -274,6 +274,19 @@ export interface typeaheadConfig<T extends Dictionary> {
    * It defaults to true.
    */
   retainFocus?: boolean;
+  /**
+   * Hooks to be able to perform fine-tuning of results
+   */
+  hooks?: {
+    /**
+     * The updateHits hook allows you to modify/filter/sort the search results before being rendered
+     * @param hits The found results
+     * @returns
+     */
+    updateHits: (
+      resultSet: Pick<ResultSet<T>, 'hits' | 'query' | 'count'>
+    ) => Promise<void> | Promise<Pick<ResultSet<T>, 'hits' | 'count'>>;
+  };
 }
 
 export interface ResultSet<T extends Dictionary> {

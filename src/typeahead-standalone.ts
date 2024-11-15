@@ -68,6 +68,9 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     ...(config.classNames || {}),
   };
   const listScrollOptions: ScrollIntoViewOptions = { block: 'nearest', ...(config.listScrollOptions || {}) };
+  const hooks = {
+    updateHits: config.hooks?.updateHits || NOOP,
+  };
 
   // validate presence of atleast one data-source
   if (!local && !prefetch && !remote) throw new Error('e02');
@@ -305,7 +308,18 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
   /**
    * Responsible for drawing/updating the view
    */
-  const update = (): void => {
+  const update = async (): Promise<void> => {
+    // hook to update Hits before displaying results from tree
+    const results_mod = await hooks.updateHits({
+      hits: resultSet.hits,
+      query: resultSet.query,
+      count: resultSet.count,
+    });
+    if (results_mod?.hits?.length) {
+      resultSet.hits = results_mod.hits;
+      resultSet.count = results_mod.count ?? results_mod.hits.length;
+    }
+
     // No Matches
     if (noSuggestionsHandler()) return;
 
@@ -521,7 +535,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     startFetch();
   };
 
-  const startFetch = (): void => {
+  const startFetch = async (): Promise<void> => {
     clearRemoteDebounceTimer();
     const val = input.value.replace(/\s{2,}/g, ' ').trim();
 
@@ -533,7 +547,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
       // inject default suggestions if they were updated in the empty() template
       if (Array.isArray(emptyTemplateResp) && emptyTemplateResp.length) {
         resultSet.hits = normalizer(emptyTemplateResp, keys[0]) as T[];
-        return update();
+        return await update();
       }
 
       // inject empty html template only if default suggestions aren't provided
