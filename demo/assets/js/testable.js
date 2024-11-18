@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const colors = [
   { name: 'Red', value: 'RD', hash: 'red' },
   { name: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
@@ -988,6 +989,7 @@ const test19 = typeahead({
   },
 });
 
+// eslint-disable-next-line no-undef
 const test20 = typeahead({
   input: document.getElementById('input-twenty'),
   source: {
@@ -1056,5 +1058,38 @@ const test20 = typeahead({
         { name: 'Blue', value: 'BL', hash: 'blue', group: 'Shades of Blue' },
       ];
     },
+  },
+});
+
+// eslint-disable-next-line no-undef
+const test20A = typeahead({
+  input: document.getElementById('input-twentyA'),
+  source: {
+    local: [],
+    keys: ['name', 'capital'],
+  },
+  hooks: {
+    updateHits: async (resultSet, loader) => {
+      loader();
+      const response = await fetch(`https://restcountries.com/v2/name/${resultSet.query}`);
+      const text = await response.text();
+      resultSet.hits = text && JSON.parse(text);
+      loader(false);
+
+      return resultSet;
+    },
+  },
+  classNames: {
+    wrapper: 'typeahead-standalone typeahead-test-twentyA',
+  },
+  highlight: true,
+  templates: {
+    suggestion: (item) => {
+      return item.name + ', ' + item.capital;
+    },
+    loader: () => 'LOADING...',
+    header: () => '',
+    footer: () => '',
+    notFound: () => 'Oops...Nothing Found 😪 <br>Try another country...',
   },
 });

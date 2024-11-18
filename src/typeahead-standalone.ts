@@ -283,16 +283,23 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     }
   };
 
-  const loader = () => {
+  /**
+   * Display/Hide a loader
+   * @param visible A boolean to indicate whether the loader template should be rendered or not. Defaults to true
+   * @returns void
+   */
+  const loader = (visible = true) => {
     if (!templates?.loader) {
       return;
     }
 
-    if (!fetchInProgress) {
-      const loaderEl = listContainer.querySelector(`.${classNames.loader}`);
+    const loaderEl = listContainer.querySelector(`.${classNames.loader}`);
+    if (!visible) {
       loaderEl && listContainer.removeChild(loaderEl);
       return;
     }
+
+    if (loaderEl) return; // loader is already displayed, do nothing
 
     // display spinner/loader
     const loaderDiv = document.createElement('div');
@@ -303,6 +310,8 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     } else {
       listContainer.appendChild(loaderDiv);
     }
+
+    show();
   };
 
   /**
@@ -310,11 +319,14 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    */
   const update = async (): Promise<void> => {
     // hook to update Hits before displaying results from tree
-    const results_mod = await hooks.updateHits({
-      hits: resultSet.hits,
-      query: resultSet.query,
-      count: resultSet.count,
-    });
+    const results_mod = await hooks.updateHits(
+      {
+        hits: resultSet.hits,
+        query: resultSet.query,
+        count: resultSet.count,
+      },
+      loader
+    );
     if (results_mod?.hits?.length) {
       resultSet.hits = results_mod.hits;
       resultSet.count = results_mod.count ?? results_mod.hits.length;
@@ -643,7 +655,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
       return;
     }
 
-    loader();
+    loader(fetchInProgress);
 
     let transformed: T[] = [];
 
@@ -667,7 +679,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
         remoteQueryCache[thumbprint] = true;
         remoteResponseCache[thumbprint] = transformed || [];
         fetchInProgress = false;
-        loader();
+        loader(fetchInProgress);
         if (transformed.length && resultSet.query.length) {
           calcSuggestions(transformed);
           update();

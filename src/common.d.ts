@@ -284,7 +284,8 @@ export interface typeaheadConfig<T extends Dictionary> {
      * @returns A promise containing nothing/void or with the ResultSet
      */
     updateHits: (
-      resultSet: Pick<ResultSet<T>, 'hits' | 'query' | 'count'>
+      resultSet: Pick<ResultSet<T>, 'hits' | 'query' | 'count'>,
+      loader: (visible: boolean) => void
     ) => Promise<void> | Promise<Pick<ResultSet<T>, 'hits' | 'count'>>;
   };
 }

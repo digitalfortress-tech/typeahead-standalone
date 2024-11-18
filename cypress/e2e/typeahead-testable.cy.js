@@ -672,6 +672,20 @@ context('Typeahead', () => {
     cy.get('@input20').type('r', { delay: 100 });
     cy.get('.typeahead-test-twenty .tt-suggestion').first().should('contain.text', 'Grey');
     cy.get('@input20').clear();
+
+    // should display loader template within the updateHits hooks
+    cy.intercept('GET', 'https://restcountries.com/v2/name/a', {
+      fixture: 'countries.json',
+      throttleKbps: 1000,
+      delay: 1000,
+    }).as('getCountries');
+    cy.get('#input-twentyA').as('input20A').type('a', { delay: 0 });
+    cy.get('.typeahead-test-twentyA .tt-loader').should('exist');
+    cy.get('.typeahead-test-twentyA .tt-list').as('list20A').children().should('have.length', 5);
+    cy.wait('@getCountries');
+    cy.get('.typeahead-test-twentyA .tt-header').should('not.exist');
+    cy.get('.typeahead-test-twentyA .tt-footer').should('not.exist');
+    cy.get('@input20A').clear();
   });
 
   // https://on.cypress.io/interacting-with-elements
