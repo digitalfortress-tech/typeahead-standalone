@@ -281,12 +281,12 @@ export interface typeaheadConfig<T extends Dictionary> {
     /**
      * The updateHits hook allows you to modify/filter/sort the search results before being rendered
      * @param hits The found results
-     * @returns A promise containing nothing/void or with the ResultSet
+     * @returns A promise containing nothing/void or with the ResultSet. You can set the "updateSearchIndex" flag to true if you wish for the returned items to be added to the search index. By default, the search index is not updated
      */
     updateHits: (
       resultSet: Pick<ResultSet<T>, 'hits' | 'query' | 'count'>,
       loader: (visible: boolean) => void
-    ) => Promise<void> | Promise<Pick<ResultSet<T>, 'hits' | 'count'>>;
+    ) => Promise<void> | Promise<Pick<ResultSet<T>, 'hits'> & { count?: number; updateSearchIndex?: boolean }>;
   };
 }
 

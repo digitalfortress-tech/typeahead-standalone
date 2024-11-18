@@ -318,7 +318,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    * Responsible for drawing/updating the view
    */
   const update = async (): Promise<void> => {
-    // hook to update Hits before displaying results from tree
+    // hook to update Hits before displaying results from search index/trie
     const results_mod = await hooks.updateHits(
       {
         hits: resultSet.hits,
@@ -329,7 +329,8 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     );
     if (results_mod?.hits?.length) {
       resultSet.hits = results_mod.hits;
-      resultSet.count = results_mod.count ?? results_mod.hits.length;
+      results_mod.count && (resultSet.count = results_mod.count);
+      results_mod.updateSearchIndex && addToIndex(results_mod.hits);
     }
 
     // No Matches

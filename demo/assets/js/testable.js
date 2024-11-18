@@ -1071,10 +1071,15 @@ const test20A = typeahead({
   hooks: {
     updateHits: async (resultSet, loader) => {
       loader();
-      const response = await fetch(`https://restcountries.com/v2/name/${resultSet.query}`);
-      const text = await response.text();
-      resultSet.hits = text && JSON.parse(text);
-      loader(false);
+      try {
+        const response = await fetch(`https://restcountries.com/v2/name/${resultSet.query}`);
+        const text = await response.text();
+        resultSet.hits = text && JSON.parse(text);
+      } catch (e) {
+        console.error('typeahead-20A failed request', e);
+      } finally {
+        loader(false);
+      }
 
       return resultSet;
     },
