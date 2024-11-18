@@ -128,7 +128,7 @@ You can pass the following config options to `typeahead-standalone`:
 |`tokenizer?: (words: string) => string[]`|The tokenizer function is used to split the search query and the search data by a given character(s). This function is useful when you wish to search hypenated-words or words with a certain prefix/suffix |words are split by space characters (new line, tab, spaces)|
 |`listScrollOptions?: ScrollIntoViewOptions`| Allows fine control over the scroll behaviour for a large list of suggestions that needs scrolling. These options are passed to the `scrollIntoView()` function. [MDN Ref](https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView)  | `{ block: "nearest", inline: "nearest", behaviour: "auto"}`|
 |`retainFocus`| This parameter is useful to control the focus on pressing the "Tab" key when the list of suggestions is open. If enabled, it selects the highlighted option & then returns the focus to the search input. If disabled, pressing "Tab" will select the highlighted option & take the focus away to the next focussable item in your form  | `true`|
-|`hooks`| The hooks config option has currently has 1 hook available `updateHits: (resultSet) => resultSet` which is executed just before the search results are displayed to the user & can be used to override the search results returned by the search index. (useful for custom sorting, filtering, adding or removing results. Note that that this hook is an async function allowing you to make AJAX requests to fetch new results if needed) | undefined |
+|`hooks`| The hooks config option is useful to execute arbitrary code at specific moments in typeahead's lifecycle. [Details](#hooksLink) | undefined |
 
 ---
 
@@ -199,6 +199,46 @@ If you wish to add more properties to the search index, you can specify those pr
 It is **highly recommended** to set the `identity()` config option to return a unique string when your data source is an array of Objects.
 
 Checkout the **[Live Examples](https://typeahead.digitalfortress.tech/#playground)** for further clarification.
+
+---
+## <a id="hooksLink">🪝 Hooks </a>
+
+Currently there is only 1 hook available:
+
+1. `updateHits: async (resultSet, loader) => Promise<resultSet>` which is executed just before the search results are displayed to the user & can be used to override the suggestions returned by the search index. (useful for custom sorting, filtering, adding or removing results. This hook is an async function allowing you to make AJAX requests to fetch new results if needed)
+
+```typescript
+// Example usage of "updateHits" hook
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    local: [],
+    // ...
+  },
+  hooks: {
+    updateHits: async (resultSet, loader) => {
+      resultSet.hits.push({name: "new suggestion"}); // add new suggestion
+      // resultSet.hits.filter( ... ); // filter the suggestions
+      // resultSet.hits.sort( ... );   // custom sort the suggestions
+      // resultSet.count = 5000;       // to set the total results found
+
+      /*** You can also make an AJAX request to fetch results ***/
+      // loader(); // display the loader template
+      // const response = await fetch('https://example.com');
+      // const text = await response.text();
+      // resultSet.hits = text && JSON.parse(text);
+      // loader(false); // hide the loader template
+
+      // resultSet.updateSearchIndex = true; // updates search index if necessary. Default `false`
+
+      return resultSet; // you must return the resultSet
+    },
+  },
+  templates: {
+    loader: () => { ... },
+  }
+});
+ ```
 
 ---
 ## 🎨 Styling (css)

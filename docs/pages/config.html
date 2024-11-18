@@ -940,16 +940,17 @@ typeahead({
 
 <p>
   The <code>hooks</code> config option is useful to execute arbitrary code at specific moments in typeahead's lifecycle.
-  Currently, there is 1 hook available - <code>updateHits</code> which is am async function that receives 1 parameter <b>resultSet</b>
+  Currently, there is 1 hook available - <code>updateHits</code> which is an async function that receives 2 parameters. The first one is <b>resultSet</b>
   containing 3 properties:
   <ul>
     <li>- hits (the suggestions returned by the search index)</li>
     <li>- query (the users input query),</li>
     <li>- count (the total number of suggestions found in the search index).</li>
   </ul>
+  and the second one is the <b>loader</b> function that can be used to display/hide the loader template when making requests.
   This hook is executed before the suggestions are displayed to the user and allows you to override the results returned by
   the search index in any way that you'd like. You can add, remove, modify, filter, sort suggestions and being an async function,
-  you can also make AJAX requests to fetch new results if needed.
+  you can also make AJAX requests to fetch new suggestions if needed.
 </p>
 <div class="codeContainer">
   <span class="lang">JS</span>
@@ -958,25 +959,38 @@ typeahead({
 typeahead({
   input: document.querySelector(".myInput"),
   source: {
+    local: [],
     // ...
   },
   hooks: {
-    updateHits: (resultSet) => {
+    updateHits: async (resultSet, loader) => {
       resultSet.hits.push({name: "new suggestion"}); // add new suggestion
       // resultSet.hits.filter( ... ); // filter the suggestions
       // resultSet.hits.sort( ... );   // custom sort the suggestions
       // resultSet.count = 5000;       // to set the total results found
 
-      // you can also make an AJAX request to fetch results
+      /*** You can also make an AJAX request to fetch results ***/
+      // loader(); // display the loader template
       // const response = await fetch('https://example.com');
       // const text = await response.text();
       // resultSet.hits = text && JSON.parse(text);
+      // loader(false); // hide the loader template
+
+      // resultSet.updateSearchIndex = true; // updates search index if necessary. Default `false`
 
       return resultSet; // you must return the resultSet
     },
+  },
+  templates: {
+    loader: () => { ... },
   }
 });</pre>
 </div>
+<p>
+  <b>Note:</b> that this hook is used to bypass the results returned by the search index and can technically be used as a "custom source" of
+  suggestions as well. By default, the newly returned results ( <code>resultSet.hits</code> ) are not added to the search index.
+  If you want them to be added to the search index, set the <b>updateSearchIndex</b> flag to true. ( <code>resultSet.updateSearchIndex = true;</code> )
+</p>
 
 <hr>
 <h4><a href="#config?id=templates" id="templates" title="templates config param - typeahead-standalone.js" class="submenu-link section-link">16. 🎨 templates</h4></a>
