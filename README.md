@@ -128,6 +128,7 @@ You can pass the following config options to `typeahead-standalone`:
 |`tokenizer?: (words: string) => string[]`|The tokenizer function is used to split the search query and the search data by a given character(s). This function is useful when you wish to search hypenated-words or words with a certain prefix/suffix |words are split by space characters (new line, tab, spaces)|
 |`listScrollOptions?: ScrollIntoViewOptions`| Allows fine control over the scroll behaviour for a large list of suggestions that needs scrolling. These options are passed to the `scrollIntoView()` function. [MDN Ref](https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView)  | `{ block: "nearest", inline: "nearest", behaviour: "auto"}`|
 |`retainFocus`| This parameter is useful to control the focus on pressing the "Tab" key when the list of suggestions is open. If enabled, it selects the highlighted option & then returns the focus to the search input. If disabled, pressing "Tab" will select the highlighted option & take the focus away to the next focussable item in your form  | `true`|
+|`hooks`| The hooks config option has currently has 1 hook available `updateHits: (resultSet) => resultSet` which is executed just before the search results are displayed to the user & can be used to override the search results returned by the search index. (useful for custom sorting, filtering, adding or removing results. Note that that this hook is an async function allowing you to make AJAX requests to fetch new results if needed) | undefined |
 
 ---
 

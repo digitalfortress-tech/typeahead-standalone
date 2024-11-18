@@ -935,6 +935,49 @@ typeahead({
 </div>
 
 <hr>
+
+<h4><a href="#config?id=hooks" id="hooks" title="Hooks config param - typeahead-standalone.js" class="submenu-link section-link">15. 🪝 hooks</h4></a>
+
+<p>
+  The <code>hooks</code> config option is useful to execute arbitrary code at specific moments in typeahead's lifecycle.
+  Currently, there is 1 hook available - <code>updateHits</code> which is am async function that receives 1 parameter <b>resultSet</b>
+  containing 3 properties:
+  <ul>
+    <li>- items (the suggestions returned by the search index)</li>
+    <li>- query (the users input query),</li>
+    <li>- count (the total number of suggestions found in the search index).</li>
+  </ul>
+  This hook is executed before the suggestions are displayed to the user and allows you to override the results returned by
+  the search index in any way that you'd like. You can add, remove, modify, filter, sort suggestions and being an async function,
+  you can also make AJAX requests to fetch new results if needed.
+</p>
+<div class="codeContainer">
+  <span class="lang">JS</span>
+  <span class="copy" title="Copy to Clipboard"><i class="far fa-copy"></i></span>
+  <pre class="hljs language-js">
+typeahead({
+  input: document.querySelector(".myInput"),
+  source: {
+    // ...
+  },
+  hooks: {
+    updateHits: (resultSet) => {
+      resultSet.items.push({name: "new suggestion"}); // add new suggestion
+      // resultSet.items.filter( ... ); // filter the suggestions
+      // resultSet.items.sort( ... );  // custom sort the suggestions
+
+      // you can also make an AJAX request to fetch results
+      // const response = await fetch('https://example.com', { method: 'GET'});
+      // const text = await response.text();
+      // resultSet.items = text && JSON.parse(text);
+
+      return resultSet; // you must return the resultSet
+    },
+  }
+});</pre>
+</div>
+
+<hr>
 <h4><a href="#config?id=templates" id="templates" title="templates config param - typeahead-standalone.js" class="submenu-link section-link">16. 🎨 templates</h4></a>
 
 <p>
