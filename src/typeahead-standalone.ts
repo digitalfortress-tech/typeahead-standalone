@@ -90,11 +90,11 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     wrapper,
   };
 
-  let remoteQueryCache: Dictionary = {};
-  let remoteResponseCache: Dictionary = {};
+  let remoteQueryCache: Dictionary = Object.create(null);
+  let remoteResponseCache: Dictionary = Object.create(null);
 
   let selected: T | undefined;
-  let remoteDebounceTimer: NodeJS.Timeout;
+  let remoteDebounceTimer: ReturnType<typeof setTimeout>;
   let fetchInProgress = false;
   let storedInput = ''; // used only for keyboard navigation
 
@@ -149,7 +149,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
   // set listContainer positioning
   listContainer.style.position = 'absolute'; // IOS implementation for fixed positioning has many bugs, so we will use absolute positioning
   listContainer.style.width = `${input.offsetWidth}px`;
-  listContainer.style.marginTop = `${input.offsetHeight + parseInt(computedInputStyle.marginTop)}px`;
+  listContainer.style.marginTop = `${input.offsetHeight + parseInt(computedInputStyle.marginTop, 10)}px`;
 
   // watch the input for changes in width and update the list container accordingly
   const inputResizeObserver = new ResizeObserver((entries) => {
@@ -211,12 +211,14 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    */
   const isListOpen = (): boolean =>
     !listContainer.classList.contains(classNames.hide) &&
-    !!Array.from(listContainer.children).find((item) => item.classList.contains(classNames.suggestion));
+    !!listContainer.querySelector(`.${classNames.suggestion}`);
 
   /**
    * Clear remote debounce timer if assigned
    */
-  const clearRemoteDebounceTimer = (): void => remoteDebounceTimer && clearTimeout(remoteDebounceTimer);
+  const clearRemoteDebounceTimer = (): void => {
+    if (remoteDebounceTimer) clearTimeout(remoteDebounceTimer);
+  };
 
   /**
    * Clear typeahead state and hide listContainer
@@ -278,9 +280,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    * Delete all children from typeahead DOM listContainer
    */
   const clearListDOM = () => {
-    while (listContainer.firstChild) {
-      listContainer.firstChild.remove();
-    }
+    listContainer.replaceChildren();
   };
 
   /**
@@ -662,7 +662,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
     fetchWrapper
       .get(
-        typeof remote.url === 'function' ? remote.url(frozenInput) : remote.url.replace(remote.wildcard!, frozenInput),
+        typeof remote.url === 'function' ? remote.url(frozenInput) : remote.url.replace(remote.wildcard!, encodeURIComponent(frozenInput)),
         remote.requestOptions
       )
       .then(
@@ -831,7 +831,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     ['id', 'name', 'placeholder', 'required', 'aria-label'].forEach((attr) => inputHint.removeAttribute(attr));
     inputHint.setAttribute('readonly', 'true');
     inputHint.setAttribute('aria-hidden', 'true');
-    inputHint.style.marginTop = `-${input.offsetHeight + parseInt(computedInputStyle.marginBottom)}px`; // super-impose hint on input
+    inputHint.style.marginTop = `-${input.offsetHeight + parseInt(computedInputStyle.marginBottom, 10)}px`; // super-impose hint on input
     inputHint.tabIndex = -1;
     inputHint.className = classNames.hint;
 
@@ -910,8 +910,8 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     clear();
     trie.clear();
     local && !clearLocalSrc && addToIndex(local);
-    remoteQueryCache = {};
-    remoteResponseCache = {};
+    remoteQueryCache = Object.create(null);
+    remoteResponseCache = Object.create(null);
     if (prefetch) {
       prefetch.done = false;
     }
@@ -922,6 +922,11 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    */
   const destroy = (): void => {
     clearRemoteDebounceTimer();
+    input.removeEventListener('keydown', keydownEventHandler);
+    input.removeEventListener('input', inputEventHandler as EventListenerOrEventListenerObject);
+    input.removeEventListener('blur', blurEventHandler);
+    input.removeEventListener('focus', focusEventHandler);
+    inputResizeObserver.disconnect();
     reset();
     wrapper.replaceWith(input.cloneNode());
   };

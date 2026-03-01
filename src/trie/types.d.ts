@@ -24,7 +24,7 @@ export interface TrieAPI<T extends Dictionary> {
    * // to add an array of objects
    * trie.add([{ title: 'Yeshua'}, {title: 'Yahweh'}], 'title');
    */
-  add(data: string | string[] | Dictionary[], key?: string, identity?: (param: T) => string): void;
+  add(data?: string | string[] | Dictionary[], key?: string, identity?: (param: T) => string): void;
   /**
    * Performs a DFS within the search index and retrives matches
    * @param query the search query

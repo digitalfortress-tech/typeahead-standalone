@@ -6,7 +6,7 @@ import { spaceTokenizer, diacritics, getNestedValue, isString } from '../helpers
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Trie: TrieType<any> = (config = {}) => {
   const { hasDiacritics, tokenizer } = config;
-  let root: Record<string, unknown> = {};
+  let root: Record<string, unknown> = Object.create(null);
 
   // marks the end of a string
   const SENTINEL = String.fromCharCode(0);
@@ -28,7 +28,7 @@ export const Trie: TrieType<any> = (config = {}) => {
    * Method used to add the given data to the trie.
    * key is optional when data is a string|string[], but mandatory for Dictionary[]
    */
-  function add(data: string | string[] | Dictionary[], key = '', identity?: (item?: unknown) => string): void {
+  function add(data?: string | string[] | Dictionary[], key = '', identity?: (item?: unknown) => string): void {
     if (!data) return;
 
     let node: Record<string, unknown>;
@@ -44,11 +44,11 @@ export const Trie: TrieType<any> = (config = {}) => {
         node = root;
 
         for (const char of prefix) {
-          node = (node[char] ||= {}) as Record<string, unknown>;
+          node = (node[char] ||= Object.create(null)) as Record<string, unknown>;
         }
 
         const uniqueId = isStringArr ? value : (identity && identity(value)) || JSON.stringify(value);
-        const sentinelNode = (node[SENTINEL] ??= {});
+        const sentinelNode = (node[SENTINEL] ??= Object.create(null));
         (sentinelNode as Dictionary)[uniqueId as string] = value;
       }
     }
@@ -59,12 +59,12 @@ export const Trie: TrieType<any> = (config = {}) => {
    */
   function find(prefix: string): Dictionary {
     let node = root;
-    const matches: Dictionary = {};
+    const matches: Dictionary = Object.create(null);
 
     // traverse the root until you reach the end of prefix
     for (const char of prefix) {
       node = node?.[char] as Record<string, unknown>;
-      if (typeof node === 'undefined') return {};
+      if (typeof node === 'undefined') return Object.create(null);
     }
 
     // Performing DFS (Depth-First Search) from prefix to traverse the tree
@@ -91,7 +91,7 @@ export const Trie: TrieType<any> = (config = {}) => {
 
   // Returns the intersection of two dictionaries
   const intersectDictionaries = (dict1: Dictionary, dict2: Dictionary): Dictionary => {
-    const result: Dictionary = {};
+    const result: Dictionary = Object.create(null);
     for (const key in dict1) {
       if (key in dict2) {
         result[key] = dict1[key];
@@ -134,7 +134,7 @@ export const Trie: TrieType<any> = (config = {}) => {
   }
 
   function clear() {
-    root = {};
+    root = Object.create(null);
   }
 
   return {

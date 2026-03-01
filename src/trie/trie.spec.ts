@@ -19,7 +19,9 @@ const songs = [
 
 describe('Trie algorithm', () => {
   it('Calling Trie methods directly must throw', () => {
+    // @ts-expect-error -- intentionally calling non-existent method on factory
     expect(() => Trie.update()).toThrow();
+    // @ts-expect-error -- intentionally calling non-existent method on factory
     expect(() => Trie.search('romane')).toThrow();
   });
 

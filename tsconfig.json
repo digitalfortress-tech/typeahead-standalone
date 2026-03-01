@@ -2,6 +2,7 @@
   "compilerOptions": {
     "noImplicitAny": true,
     "noImplicitThis": true,
+    "rootDir": "./src",
     "outDir": "./dist/",
     "module": "NodeNext",
     "target": "es2020",
@@ -14,7 +15,8 @@
     "declarationMap": true,
     "verbatimModuleSyntax": true,
     "lib": ["es2020", "esnext", "dom", "dom.iterable"],
-    "types": ["cypress", "cypress-axe", "node", "vitest/globals"]
+    "types": ["vitest/globals"]
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/index.d.ts", "src/index.d.mts"]
 }

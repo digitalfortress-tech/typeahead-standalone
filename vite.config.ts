@@ -1,24 +1,23 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { resolve, dirname } from 'path';
+import { resolve } from 'path';
 import { defineConfig } from 'vite';
 // import dts from 'vite-plugin-dts';
-
-const __dirname = dirname(__filename);
 
 export default defineConfig({
   build: {
     target: 'es2020', // default is 'modules' which is a vite special value
     sourcemap: 'hidden',
     lib: {
-      entry: resolve(__dirname, 'src/typeahead-standalone.ts'),
+      entry: resolve(import.meta.dirname, 'src/typeahead-standalone.ts'),
       name: 'typeahead',
       fileName: (format) => `typeahead-standalone.${format}${format === 'umd' ? '.js' : '.mjs'}`,
     },
     rollupOptions: {
       output: {
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name == 'style.css') return 'basic.css';
-          return assetInfo.name;
+          const name = assetInfo.name ?? assetInfo.names?.[0] ?? '';
+          if (name.endsWith('.css')) return 'basic.css';
+          return name;
         },
       },
     },
