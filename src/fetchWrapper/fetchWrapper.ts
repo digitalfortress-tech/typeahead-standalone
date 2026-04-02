@@ -14,7 +14,12 @@ const get = async function (url: RequestInfo | URL, requestOptions?: RequestInit
 // helper function
 const handleResponse = async function (response: Response) {
   const text = await response.text();
-  const data = text && JSON.parse(text);
+  let data: unknown;
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch (error) {
+    data = null;
+  }
   if (!response.ok) {
     return Promise.reject((data && data.message) || response.statusText);
   }
