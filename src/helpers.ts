@@ -6,7 +6,11 @@ export const NOOP = (...args: unknown[]): void => undefined;
 export const escapeRegExp = (text: string): string => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 
 export const isObject = (item: unknown): item is Dictionary => {
-  return item !== null && (item as Dictionary)?.constructor.name === 'Object';
+  if (item === null || typeof item !== 'object') return false;
+  // treat plain object literals and null-prototype objects as objects;
+  // getPrototypeOf avoids throwing on Object.create(null) (which has no `.constructor`)
+  const proto = Object.getPrototypeOf(item);
+  return proto === Object.prototype || proto === null;
 };
 
 export const isString = (item: unknown): item is string => typeof item === 'string';

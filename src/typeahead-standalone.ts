@@ -69,7 +69,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
   };
   const listScrollOptions: ScrollIntoViewOptions = { block: 'nearest', ...(config.listScrollOptions || {}) };
   const hooks = {
-    updateHits: config.hooks?.updateHits || NOOP,
+    updateHits: config.hooks?.updateHits,
   };
 
   // validate presence of atleast one data-source
@@ -318,19 +318,23 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    * Responsible for drawing/updating the view
    */
   const update = async (): Promise<void> => {
-    // hook to update Hits before displaying results from search index/trie
-    const results_mod = await hooks.updateHits(
-      {
-        hits: resultSet.hits,
-        query: resultSet.query,
-        count: resultSet.count,
-      },
-      loader
-    );
-    if (results_mod?.hits?.length) {
-      resultSet.hits = results_mod.hits;
-      results_mod.count && (resultSet.count = results_mod.count);
-      results_mod.updateSearchIndex && addToIndex(results_mod.hits);
+    // hook to update Hits before displaying results from search index/trie.
+    // Only await when a hook is actually configured, otherwise rendering stays
+    // fully synchronous (no per-keystroke microtask deferral).
+    if (hooks.updateHits) {
+      const results_mod = await hooks.updateHits(
+        {
+          hits: resultSet.hits,
+          query: resultSet.query,
+          count: resultSet.count,
+        },
+        loader
+      );
+      if (results_mod?.hits?.length) {
+        resultSet.hits = results_mod.hits;
+        results_mod.count && (resultSet.count = results_mod.count);
+        results_mod.updateSearchIndex && addToIndex(results_mod.hits);
+      }
     }
 
     // No Matches
@@ -370,6 +374,10 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     const fragment = document.createDocumentFragment();
     const prevGroups: string[] = [];
 
+    // precompute the highlight regex once per render (the query is constant for the pass)
+    const highlightRegex =
+      config.highlight !== false && resultSet.query ? buildHighlightRegex(resultSet.query) : null;
+
     // Add header template
     if (templates?.header) {
       const headerDiv = document.createElement('div');
@@ -406,7 +414,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
       fragment.appendChild(div);
 
       // highlight matched text
-      config.highlight !== false && highlight(div, resultSet.query);
+      highlightRegex && highlight(div, highlightRegex);
     }
 
     // Add footer template
@@ -589,11 +597,14 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
       update(); // update view
 
-      remoteDebounceTimer = setTimeout(() => {
-        if (resultSet.hits.length < resultSet.limit && !fetchInProgress) {
-          fetchDataFromRemote();
-        }
-      }, remote?.debounce || 200);
+      // only arm the debounce timer when a remote source is configured
+      if (remote) {
+        remoteDebounceTimer = setTimeout(() => {
+          if (resultSet.hits.length < resultSet.limit && !fetchInProgress) {
+            fetchDataFromRemote();
+          }
+        }, remote.debounce || 200);
+      }
     } else {
       resultSet.query = '';
       clear();
@@ -615,7 +626,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     if (newItems?.length) {
       newItems.push(...suggestions); // merge suggestions
 
-      const uniqueItems = {} as Dictionary<T>;
+      const uniqueItems: Dictionary<T> = Object.create(null);
       for (const item of newItems) {
         uniqueItems[identity(item)] = item;
       }
@@ -711,16 +722,17 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    */
   const sortByStartingLetter = (suggestions: T[]): void => {
     const query = resultSet.query.toLowerCase();
-    suggestions.sort((one: Dictionary, two: Dictionary) => {
-      const a = getNestedValue(one, keys[0]).toLowerCase();
-      const b = getNestedValue(two, keys[0]).toLowerCase();
+    // decorate once (compute each sort key a single time) then sort - avoids
+    // re-deriving the nested value & lowercasing on every comparison
+    const decorated = suggestions.map((item) => ({ item, key: getNestedValue(item, keys[0]).toLowerCase() }));
 
-      const startsWithA = a.startsWith(query);
-      const startsWithB = b.startsWith(query);
+    decorated.sort((one, two) => {
+      const startsWithA = one.key.startsWith(query);
+      const startsWithB = two.key.startsWith(query);
 
       if (startsWithA && startsWithB) {
         // If both start with the given string, sort by shortest length first
-        return a.length - b.length;
+        return one.key.length - two.key.length;
       }
       if (startsWithA) {
         // If only A starts with the given string, it should come first
@@ -734,15 +746,20 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
       // If neither start with the given string, maintain original order
       return 0;
     });
+
+    for (let i = 0; i < decorated.length; i++) suggestions[i] = decorated[i].item;
   };
 
   /**
    * Sorts(in-place) array by group
    */
   const sortByGroup = (suggestions: T[]) => {
-    suggestions.sort((a: Dictionary, b: Dictionary) => {
-      const aVal = getNestedValue(a, groupKey);
-      const bVal = getNestedValue(b, groupKey);
+    // decorate once (compute each group value a single time) then sort
+    const decorated = suggestions.map((item) => ({ item, key: getNestedValue(item, groupKey) }));
+
+    decorated.sort((a, b) => {
+      const aVal = a.key;
+      const bVal = b.key;
 
       // if no groupKey was found, do not sort
       if (!aVal && !bVal) return 0;
@@ -762,6 +779,8 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
       return 0;
     });
+
+    for (let i = 0; i < decorated.length; i++) suggestions[i] = decorated[i].item;
   };
 
   /**
@@ -769,20 +788,16 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    * @param Elm The listContainer element
    * @param pattern the string to highlight
    */
-  const highlight = (Elm: HTMLElement, pattern: string): void => {
-    if (!pattern) return;
+  const buildHighlightRegex = (pattern: string): RegExp => {
+    const escapedQueries = tokenizer(pattern.trim())
+      .map((item) => escapeRegExp(item))
+      .sort((a, b) => b.length - a.length); // sort by string length to correctly highlight words
+    // @deprecated [selection by words]
+    // const regexStr = wordsOnly ? '\\b(' + escapedQueries.join('|') + ')\\b' : '(' + escapedQueries.join('|') + ')';
+    return new RegExp(`(${escapedQueries.join('|')})`, 'i');
+  };
 
-    const getRegex = (query: string) => {
-      const escapedQueries = tokenizer(query.trim())
-        .map((item) => escapeRegExp(item))
-        .sort((a, b) => b.length - a.length); // sort by string length to correctly highlight words
-      // @deprecated [selection by words]
-      // const regexStr = wordsOnly ? '\\b(' + escapedQueries.join('|') + ')\\b' : '(' + escapedQueries.join('|') + ')';
-      return new RegExp(`(${escapedQueries.join('|')})`, 'i');
-    };
-
-    const regex = getRegex(pattern);
-
+  const highlight = (Elm: HTMLElement, regex: RegExp): void => {
     const highlightTextNode = (textNode: Text) => {
       let match = regex.exec(textNode.data);
 
