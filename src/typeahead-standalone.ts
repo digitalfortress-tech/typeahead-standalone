@@ -92,6 +92,9 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
   let remoteQueryCache: Dictionary = Object.create(null);
   let remoteResponseCache: Dictionary = Object.create(null);
+  // cap the remote caches to avoid unbounded memory growth during long sessions.
+  // Set high enough to be a no-op for typical usage; oldest entries are evicted first (FIFO).
+  const REMOTE_CACHE_LIMIT = 200;
 
   let selected: T | undefined;
   let remoteDebounceTimer: ReturnType<typeof setTimeout>;
@@ -690,6 +693,15 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
         // cache XHR requests so that same calls aren't made multiple times
         remoteQueryCache[thumbprint] = true;
         remoteResponseCache[thumbprint] = transformed || [];
+
+        // evict the oldest cached entry once the cap is exceeded (keeps both caches in sync)
+        const cachedKeys = Object.keys(remoteQueryCache);
+        if (cachedKeys.length > REMOTE_CACHE_LIMIT) {
+          const oldestKey = cachedKeys[0];
+          delete remoteQueryCache[oldestKey];
+          delete remoteResponseCache[oldestKey];
+        }
+
         fetchInProgress = false;
         loader(fetchInProgress);
         if (transformed.length && resultSet.query.length) {

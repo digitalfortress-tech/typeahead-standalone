@@ -41,22 +41,24 @@ the config/type contracts in [src/common.d.ts](../src/common.d.ts), and the CSS 
     ([src/typeahead-standalone.ts:351](../src/typeahead-standalone.ts#L351)) and is safe.
 - **Why:** this is the single most likely real-world vulnerability introduced *through* the library.
 
-### 1.2 Harden `fetchWrapper` — **[BEHAVIOUR] · M**
+### 1.2 Harden `fetchWrapper` — **[BEHAVIOUR] · M** — *partially shipped (PR3 safe subset)*
 File: [src/fetchWrapper/fetchWrapper.ts](../src/fetchWrapper/fetchWrapper.ts)
-- `JSON.parse(text)` is unguarded — a non-JSON 200 response throws a raw `SyntaxError` that
-  escapes the wrapper's rejection contract. Wrap in `try/catch` and reject with a typed error.
-- No request **timeout / cancellation**. Add `AbortController` support (and abort the in-flight
-  remote request when a newer query supersedes it — see 2.4). Prevents hung requests and
-  out-of-order responses.
-- Consider rejecting with an `Error` object (not a bare string) so callers get `.message`/stack.
-- Remove the dead commented-out `post` block (see 4.3).
+- ✅ **Done:** `JSON.parse(text)` is now guarded with `try/catch` — a non-JSON body rejects cleanly
+  instead of letting a raw `SyntaxError` escape the wrapper's rejection contract.
+- ✅ **Done:** opt-in request **timeout** via `AbortController` — pass `timeout` (ms) inside
+  `requestOptions` to auto-abort a slow request. Default is off, so default behaviour is unchanged.
+  (Native `signal` in `requestOptions` was already honoured and still is.)
+- ⏸️ **Deferred:** rejecting with an `Error` object (instead of the current string reason) — this
+  changes the reject-reason type and needs a changelog note + minor bump.
+- ⏸️ **Deferred:** aborting the in-flight request when a newer query supersedes it — see 2.4.
+- ✅ Dead commented-out `post` block already removed in PR1 (4.3).
 
-### 1.3 Cap the remote caches (memory-growth / soft-DoS) — **[BEHAVIOUR] · M**
-- `remoteQueryCache` and `remoteResponseCache` ([src/typeahead-standalone.ts:93-94](../src/typeahead-standalone.ts#L93))
-  are keyed by `JSON.stringify(query)` and **never evicted** within a session. A long-lived input
-  with many distinct queries grows both maps (and the trie) unbounded.
-- Add a bounded LRU (small fixed cap, e.g. 50–100 entries) or a `cacheSize` config option.
-  Document that `reset()` already clears them.
+### 1.3 Cap the remote caches (memory-growth / soft-DoS) — **[BEHAVIOUR] · M** — *shipped (PR3)*
+- `remoteQueryCache` and `remoteResponseCache` ([src/typeahead-standalone.ts](../src/typeahead-standalone.ts))
+  were keyed by `JSON.stringify(query)` and **never evicted** within a session.
+- ✅ **Done:** both caches are now capped (`REMOTE_CACHE_LIMIT = 200`, FIFO eviction, kept in sync).
+  Set high enough to be a no-op for typical usage; `reset()` still clears them entirely.
+- ⏸️ **Optional follow-up:** expose the cap as a `cacheSize` config option (additive, public-type change).
 
 ### 1.4 Avoid prototype-pollution-shaped object literals — **[SAFE] · S**
 - `calcSuggestions` builds `const uniqueItems = {} as Dictionary<T>` then assigns
@@ -219,8 +221,12 @@ File: [src/fetchWrapper/fetchWrapper.ts](../src/fetchWrapper/fetchWrapper.ts)
    one lockfile (4.4); add `eslint` dep + fix config (4.2); add `engines`/`packageManager`/`.nvmrc` (5.1);
    add `typecheck`/`lint:check` scripts (5.3); modernise CodeQL + build CI (5.2).
 2. **PR 2 — Safe perf [SAFE]:** 2.1, 2.2, 2.3, 2.5 + the proto-safe map (1.4) and `isObject` (1.5).
-3. **PR 3 — Security/robustness [BEHAVIOUR]:** fetchWrapper hardening + AbortController (1.2),
-   cache cap (1.3), superseded-request cancellation (2.4). Changelog + minor bump.
+3. **PR 3 — Security/robustness [BEHAVIOUR]:**
+   - ✅ *Safe subset shipped:* guarded `JSON.parse` + opt-in `AbortController` timeout (1.2), cache cap (1.3).
+     No public-API or default-behaviour change.
+   - ⏸️ *Deferred (needs changelog + minor bump):* `Error`-object reject reasons (1.2),
+     superseded-request cancellation (2.4) — changes search-index accumulation semantics, and value is
+     limited because remote requests are already serialized via the `fetchInProgress` flag.
 4. **PR 4 — Correctness review [BEHAVIOUR]:** 3.1–3.6 with accompanying regression tests.
 5. **PR 5 — Docs & tests [CHORE]:** security section (1.1), core unit tests + coverage thresholds (5.4).
 
