@@ -41,7 +41,7 @@ prod:	## Build for Production environment
 
 deploy-docs:	## Sync docs/ to the static server (nikslab:/srv/static/typeahead-docs/)
 	@printf "$(BOLD)$(YELLOW)→ Deploying docs to nikslab...$(RESET)\n"
-	@rsync -avz --delete /var/www/html/typeahead-standalone/docs/ nikslab:/srv/static/typeahead-docs/
+	@rsync -avz --delete docs/ nikslab:/srv/static/typeahead-docs/
 	@printf "$(BOLD)$(GREEN)✓ Docs deployed.$(RESET)\n"
 
 publish:	## Publish to NPM
