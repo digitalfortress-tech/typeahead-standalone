@@ -9,15 +9,14 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true,
-    'jest/globals': true,
+    es2020: true,
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     sourceType: 'module',
-    ecmaVersion: 2017,
+    ecmaVersion: 2020,
   },
-  plugins: ['@typescript-eslint', 'prettier', 'jest'],
+  plugins: ['@typescript-eslint', 'prettier'],
   rules: {
     // enable additional rules
     indent: ['error', 2],

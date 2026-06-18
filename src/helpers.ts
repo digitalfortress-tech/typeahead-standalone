@@ -25,11 +25,6 @@ export const getNestedValue = (obj: unknown, selector: string): string => {
   return `${ref}`;
 };
 
-/** @deprecated */
-export const deduplicateArr = (iterable: Dictionary[], prop: string): Dictionary[] => [
-  ...new Map(iterable.map((item) => [item[prop], item])).values(),
-];
-
 export const diacritics = (txt = '') => txt.normalize('NFD').replace(/\p{Diacritic}/gu, '');
 
 /****** helpers specific to typeahead  *****/

@@ -20,6 +20,8 @@
     "cy:run": "npx cypress run --headless --browser chrome",
     "cy:open": "npx cypress open --browser chrome",
     "lint": "eslint ./src --ext .ts --fix",
+    "lint:check": "eslint ./src --ext .ts",
+    "typecheck": "tsc --noEmit",
     "copy-dts-declarations": "copyfiles -u 1 \"src/**/*.d.*ts\" dist"
   },
   "author": {
@@ -88,6 +90,7 @@
     "copyfiles": "^2.4.1",
     "cypress": "^15.11.0",
     "cypress-axe": "^1.7.0",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-cypress": "^6.1.0",
     "eslint-plugin-prettier": "^5.5.5",
@@ -97,5 +100,9 @@
     "vite": "^7.3.1",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.0.18"
+  },
+  "packageManager": "pnpm@10.28.1",
+  "engines": {
+    "node": ">=20"
   }
 }

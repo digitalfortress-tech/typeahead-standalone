@@ -154,7 +154,6 @@ export interface typeaheadHtmlTemplates<T extends Dictionary> {
    *  `<div class="info">${item.id} - ${item.color}</div>`
    */
   suggestion?: (item: T, resultSet: ResultSet<T>) => string;
-  /** A callback that returns a string/HTML used to render a group heading. */
   /**
    * The group template is used to render a group heading.
    * @param groupName The name of the group
@@ -192,7 +191,6 @@ export interface typeaheadHtmlTemplates<T extends Dictionary> {
    *  `<span class="warning">Oops... Nothing Found</span>`;
    */
   notFound?: (resultSet: ResultSet<T>) => string;
-  /** A callback that returns a string/HTML used to render a loading state (while awaiting data from a remote endpoint). */
   /**
    * The loader template is used to render a loading state (for example: while awaiting data from a remote endpoint).
    * @param resultSet An object containing data about the matched suggestions.

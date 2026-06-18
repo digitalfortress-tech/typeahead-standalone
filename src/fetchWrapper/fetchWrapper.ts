@@ -24,16 +24,3 @@ const handleResponse = async function (response: Response) {
 export const fetchWrapper = {
   get,
 };
-
-/*
- * @deprecated: Post method not required at the moment
- */
-// const post = async function (url: string, body: unknown): Promise<any> {
-//   const requestOptions = {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify(body),
-//   };
-//   const response = await fetch(url, requestOptions);
-//   return handleResponse(response);
-// };
