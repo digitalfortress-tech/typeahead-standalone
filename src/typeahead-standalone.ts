@@ -213,8 +213,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
    * @returns Boolean
    */
   const isListOpen = (): boolean =>
-    !listContainer.classList.contains(classNames.hide) &&
-    !!listContainer.querySelector(`.${classNames.suggestion}`);
+    !listContainer.classList.contains(classNames.hide) && !!listContainer.querySelector(`.${classNames.suggestion}`);
 
   /**
    * Clear remote debounce timer if assigned
@@ -378,8 +377,7 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
     const prevGroups: string[] = [];
 
     // precompute the highlight regex once per render (the query is constant for the pass)
-    const highlightRegex =
-      config.highlight !== false && resultSet.query ? buildHighlightRegex(resultSet.query) : null;
+    const highlightRegex = config.highlight !== false && resultSet.query ? buildHighlightRegex(resultSet.query) : null;
 
     // Add header template
     if (templates?.header) {
@@ -676,7 +674,9 @@ const typeahead = <T extends Dictionary>(config: typeaheadConfig<T>): typeaheadR
 
     fetchWrapper
       .get(
-        typeof remote.url === 'function' ? remote.url(frozenInput) : remote.url.replace(remote.wildcard!, encodeURIComponent(frozenInput)),
+        typeof remote.url === 'function'
+          ? remote.url(frozenInput)
+          : remote.url.replace(remote.wildcard!, encodeURIComponent(frozenInput)),
         remote.requestOptions
       )
       .then(

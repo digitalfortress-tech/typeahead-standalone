@@ -25,6 +25,17 @@ export default defineConfig({
   test: {
     include: ['**/*.spec.ts'],
     globals: true,
+    coverage: {
+      provider: 'v8',
+      // thresholds are set just below the current baseline to catch regressions
+      // without flaking; raise them as coverage improves (remote/fetch paths are still light)
+      thresholds: {
+        statements: 60,
+        branches: 48,
+        functions: 60,
+        lines: 60,
+      },
+    },
   },
   server: {
     open: '/demo/index.umd.html',

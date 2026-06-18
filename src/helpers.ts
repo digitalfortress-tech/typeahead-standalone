@@ -5,6 +5,20 @@ export const NOOP = (...args: unknown[]): void => undefined;
 
 export const escapeRegExp = (text: string): string => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 
+/**
+ * Escapes HTML-significant characters so untrusted strings can be safely interpolated
+ * into the HTML returned from a template callback (which is injected via innerHTML).
+ * Use this around any consumer/remote data placed inside `templates.*` output.
+ */
+export const escapeHtml = (text: unknown): string =>
+  `${text}`.replace(/[&<>"']/g, (ch) => {
+    if (ch === '&') return '&amp;';
+    if (ch === '<') return '&lt;';
+    if (ch === '>') return '&gt;';
+    if (ch === '"') return '&quot;';
+    return '&#39;'; // single quote
+  });
+
 export const isObject = (item: unknown): item is Dictionary => {
   if (item === null || typeof item !== 'object') return false;
   // treat plain object literals and null-prototype objects as objects;

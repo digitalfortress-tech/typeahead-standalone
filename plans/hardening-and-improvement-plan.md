@@ -32,13 +32,14 @@ the config/type contracts in [src/common.d.ts](../src/common.d.ts), and the CSS 
   consumer trivially creates a DOM-XSS sink (e.g. `suggestion: (i) => \`<div>${i.label}</div>\``
   with attacker-controlled `label`).
 - This is by-design (templates "can contain HTML"), so the fix is **defensive documentation + tooling**, not removal:
-  - Add a prominent "Security / escaping responsibilities" section to the README and to the
-    `templates` JSDoc in [src/common.d.ts](../src/common.d.ts) stating that template output is
-    injected as raw HTML and that consumer data must be escaped.
-  - Export a small `escapeHtml(str)` helper from `helpers.ts` and reference it in docs/examples
-    so the safe path is the easy path. (Additive, non-breaking.)
-  - Note in docs that the built-in (non-template) render path already uses `textContent`
-    ([src/typeahead-standalone.ts:351](../src/typeahead-standalone.ts#L351)) and is safe.
+  - ✅ **Done (PR5):** added a "Security: escape untrusted data in templates" callout to the README
+    (with a copy-paste escaping snippet) and a security note to the `templates` JSDoc in
+    [src/common.d.ts](../src/common.d.ts).
+  - ✅ **Done (PR5):** added an `escapeHtml()` helper in [src/helpers.ts](../src/helpers.ts) (unit-tested).
+    Kept it an internal utility rather than a package named export — adding a named export would
+    nest the function under `.default` in the UMD build and **break existing global consumers**.
+    The README documents the equivalent snippet for consumers.
+  - ✅ Documented that the built-in (non-template) render path uses `textContent` and is safe.
 - **Why:** this is the single most likely real-world vulnerability introduced *through* the library.
 
 ### 1.2 Harden `fetchWrapper` — **[BEHAVIOUR] · M** — *partially shipped (PR3 safe subset)*
@@ -202,12 +203,15 @@ File: [src/fetchWrapper/fetchWrapper.ts](../src/fetchWrapper/fetchWrapper.ts)
 - Add `"typecheck": "tsc --noEmit"` and run it in CI (the build currently emits via Vite/`vite-plugin-dts`
   but there's no standalone type gate).
 
-### 5.4 Raise test coverage of the core — **[CHORE] · L**
-- Unit tests cover only `normalizer` and the trie; the entire `typeahead()` controller
-  (keyboard nav, caching, remote flow, hooks, hint, highlight) is exercised **only** via Cypress e2e.
-  Add JSDOM/Vitest unit tests for: keyboard navigation (`selectNext`/`selectPrev` wrap-around),
-  cache hit/miss, `updateHits` hook return-flags, `reset()`/`destroy()` cleanup, and highlight output.
-- Add coverage thresholds to `vitest` config once a baseline exists.
+### 5.4 Raise test coverage of the core — **[CHORE] · L** — *shipped (PR5)*
+- ✅ **Done:** added jsdom-based controller tests in [src/typeahead.dom.spec.ts](../src/typeahead.dom.spec.ts)
+  (rendering, limit/minLength, keyboard navigation + wrap-around, `addToIndex`/`reset` cleanup) and
+  helper tests in [src/helpers.spec.ts](../src/helpers.spec.ts). Added `jsdom` + `@vitest/coverage-v8`
+  devDeps. Coverage rose from the normalizer/trie-only baseline to ~64% statements.
+- ✅ **Done:** coverage thresholds added to [vite.config.ts](../vite.config.ts) (set just below the
+  current baseline) and enforced in CI via `pnpm coverage`.
+- ⏸️ **Still light:** the remote/prefetch fetch flow (cache hit/miss, `updateHits` hook return-flags,
+  hint/highlight DOM output). Worth a follow-up with a mocked `fetch`.
 
 ### 5.5 Documentation — **[CHORE] · S**
 - Add the security/escaping section (1.1).
@@ -228,7 +232,13 @@ File: [src/fetchWrapper/fetchWrapper.ts](../src/fetchWrapper/fetchWrapper.ts)
      superseded-request cancellation (2.4) — changes search-index accumulation semantics, and value is
      limited because remote requests are already serialized via the `fetchInProgress` flag.
 4. **PR 4 — Correctness review [BEHAVIOUR]:** 3.1–3.6 with accompanying regression tests.
-5. **PR 5 — Docs & tests [CHORE]:** security section (1.1), core unit tests + coverage thresholds (5.4).
+   - ✅ *Regression tests shipped* (in PR5's test commit): the current behaviour of Enter/Tab selection
+     (3.1), Escape (3.2), and `destroy()` (3.4) is now locked in by tests so it can't change silently.
+   - ⏸️ *Behavioural fixes deferred (need your decision):* 3.2 Escape `preventDefault`, 3.3 blur-timeout
+     removal, 3.4 `destroy()` restore-vs-clone, 3.5 `normalizer` no-key. These change existing behaviour,
+     so they're not "safe" even as a minor bump — best done behind opt-in flags if desired.
+5. **PR 5 — Docs & tests [CHORE]:** ✅ *shipped* — security section + `escapeHtml` (1.1),
+   jsdom controller tests + helper tests + coverage thresholds (5.4).
 
 Each PR must keep the public API (§0) intact and pass `lint:check`, `typecheck`, unit + e2e suites.
 

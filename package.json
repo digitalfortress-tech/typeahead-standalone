@@ -86,20 +86,21 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
+    "@vitest/coverage-v8": "^4.1.9",
     "axe-core": "^4.11.1",
     "copyfiles": "^2.4.1",
     "cypress": "^15.11.0",
     "cypress-axe": "^1.7.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-cypress": "^6.1.0",
     "eslint-plugin-prettier": "^5.5.5",
+    "jsdom": "^29.1.1",
     "less": "^4.5.1",
     "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.9"
   },
   "packageManager": "pnpm@10.28.1",
   "engines": {

@@ -1,10 +1,11 @@
 module.exports = {
+  // Note: the lint scripts only target ./src, so the Cypress plugin (flat-config only,
+  // requires eslint>=9) is intentionally not extended here.
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier',
-    'plugin:cypress/recommended',
   ],
   env: {
     browser: true,
@@ -26,6 +27,10 @@ module.exports = {
 
     // override default options for rules from base configurations
     'no-cond-assign': ['error', 'always'],
+
+    // the codebase intentionally uses short-circuit/ternary expressions for side effects
+    // (e.g. `local && addToIndex(local)`), so allow them
+    '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
 
     // disable rules from base configurations
     'no-console': 'warn',

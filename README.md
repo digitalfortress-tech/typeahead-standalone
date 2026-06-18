@@ -364,6 +364,23 @@ templates: {
 ```
 As seen above, each template takes a callback that **must return a `string`** which is later interpreted as HTML. The templates also receive a parameter `resultSet` that has a structure as shown below.
 
+> ⚠️ **Security: escape untrusted data in templates.** The string returned by a template is injected
+> into the DOM as **raw HTML** (via `innerHTML`). If you interpolate untrusted data — such as remote
+> results or the user's own query — without escaping it, you create a DOM-based XSS vulnerability.
+> Always escape such values before placing them in template markup. The built-in (no-template)
+> rendering path uses `textContent` and is safe by default.
+>
+> ```js
+> // Minimal escaping helper
+> const escapeHtml = (str) =>
+>   `${str}`.replace(/[&<>"']/g, (c) =>
+>     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+>
+> templates: {
+>   suggestion: (item) => `<div class="custom-suggestion">${escapeHtml(item.label)}</div>`,
+> }
+> ```
+
 ```js
 resultSet = {
   query: '...', // the input query

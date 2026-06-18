@@ -124,6 +124,12 @@ export interface RemoteDataSource<T> extends typeaheadDataSource<T> {
   };
 }
 
+/**
+ * Templates that return strings of raw HTML. The returned markup is injected into the DOM
+ * via `innerHTML`, so it is **your responsibility** to escape any untrusted data (e.g. remote
+ * results or the user's query) before interpolating it — otherwise you risk DOM-based XSS.
+ * The built-in (non-template) rendering path uses `textContent` and is not affected.
+ */
 export interface typeaheadHtmlTemplates<T extends Dictionary> {
   /**
    * The header template is rendered at the top of the dataset.
