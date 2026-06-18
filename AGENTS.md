@@ -45,6 +45,10 @@ pnpm lint             # eslint --fix over src/ (mutates files)
 
 The `Makefile` wraps the common targets (`make install|prod|tests|test-unit|test-e2e`).
 
+`make deploy-docs` rsyncs `docs/` to the static server
+(`nikslab:/srv/static/typeahead-docs/`, `--delete` mirrors removals). Requires SSH access
+to the `nikslab` host.
+
 > Note: `lint` runs with `--fix` and mutates files — don't rely on it as a CI gate.
 > There is currently no standalone `typecheck`/`lint:check` script (see the plan, §5.3).
 

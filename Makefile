@@ -1,5 +1,12 @@
+# ── Colors ──────────────────────────────────────────────────────────────
+CYAN   := \033[36m
+GREEN  := \033[32m
+YELLOW := \033[33m
+BOLD   := \033[1m
+RESET  := \033[0m
+
 help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(CYAN)%-30s$(RESET) %s\n", $$1, $$2}'
 
 install:	## Install Dependencies
 	@pnpm i
@@ -31,6 +38,11 @@ types-test:	## Build and generate a version to test for types
 
 prod:	## Build for Production environment
 	@pnpm prod
+
+deploy-docs:	## Sync docs/ to the static server (nikslab:/srv/static/typeahead-docs/)
+	@printf "$(BOLD)$(YELLOW)→ Deploying docs to nikslab...$(RESET)\n"
+	@rsync -avz --delete /var/www/html/typeahead-standalone/docs/ nikslab:/srv/static/typeahead-docs/
+	@printf "$(BOLD)$(GREEN)✓ Docs deployed.$(RESET)\n"
 
 publish:	## Publish to NPM
 	@make prod
